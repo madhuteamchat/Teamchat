@@ -1,2 +1,2 @@
 # Teamchat
-This will have all the interns 
+This will have all the interns integrations
