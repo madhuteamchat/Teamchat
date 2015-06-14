@@ -66,14 +66,14 @@ public class YouTubeBot {
 		+"<br>Type <b>Connect</b> "
 		+ "to connect to your Youtube account."
 		+"<br>Type <b>Disconnect</b> to sign out your youtube account"
-		+"<br>Type <b>searchbykeyword</b> to search videos related to the keyword"
-		+"<br>Type <b>searchbytopic</b> to search videos under a category"
-		+"<br>Type <b>searchchannel</b> to search channel related to the keyword"
-		+"<br>Type <b>subscribechannel</b> to subscribe a channel using channel id"
-		+"<br>Type <b>channelbulletin</b> to post a video in your channel by providing video id"
-		+"<br>Type <b>createplaylist</b> to ceate a playlist by providing video id"
+		+"<br>Type <b>search by keyword</b> to search videos related to the keyword"
+		+"<br>Type <b>search by topic</b> to search videos under a category"
+		+"<br>Type <b>search channel</b> to search channel related to the keyword"
+		+"<br>Type <b>subscribe channel</b> to subscribe a channel using channel id"
+		+"<br>Type <b>channel bulletin</b> to post a video in your channel by providing video id"
+		+"<br>Type <b>create playlist</b> to ceate a playlist by providing video id"
 		+"<br>Type <b>upload</b> to upload a video into your channel by providing the location"
-		+"<br>Type <b>myuploads</b> to reterive the details of the video uploaded by you")));
+		+"<br>Type <b>my uploads</b> to reterive the details of the video uploaded by you")));
 		
 	}
 
@@ -127,12 +127,12 @@ public class YouTubeBot {
 	
 // Search By Keyword
 			
-			@OnKeyword("Searchbykeyword")
+			@OnKeyword("Search by keyword")
 			public void Searchbykeyword(TeamchatAPI api) {
 				searchbykeyword(api);
 			}
 	
-	@OnKeyword("searchbykeyword")
+	@OnKeyword("search by keyword")
 	public void searchbykeyword(TeamchatAPI api) {
 		api.perform(
 				api.context().currentRoom().post(
@@ -168,12 +168,12 @@ public class YouTubeBot {
 	
 // Search Channel
 	
-	@OnKeyword("Searchchannel")
+	@OnKeyword("Search channel")
 	public void SearchChannel(TeamchatAPI api) {
 		searchChannel(api);
 	}
 	
-		@OnKeyword("searchchannel")
+		@OnKeyword("search channel")
 		public void searchChannel(TeamchatAPI api) {
 			api.perform(
 					api.context().currentRoom().post(
@@ -207,12 +207,12 @@ public class YouTubeBot {
 	
 // Search By Topic
 	
-		@OnKeyword("Searchbytopic")
+		@OnKeyword("Search by topic")
 		public void Searchbytopic(TeamchatAPI api) {
 			searchbytopic(api);
 		}
 		
-		@OnKeyword("searchbytopic")
+		@OnKeyword("search by topic")
 		public void searchbytopic(TeamchatAPI api) {
 			api.perform(
 					api.context().currentRoom().post(
@@ -298,12 +298,12 @@ public class YouTubeBot {
 		}
 // Subscribe channel
 		
-		@OnKeyword("Subscribechannel")
+		@OnKeyword("Subscribe channel")
 		public void SubscribeChannel(TeamchatAPI api) {
 			subscribeChannel(api);
 		}
 		
-		@OnKeyword("subscribechannel")
+		@OnKeyword("subscribe channel")
 		public void subscribeChannel(TeamchatAPI api) {
 			api.perform(
 					api.context().currentRoom().post(
@@ -408,12 +408,12 @@ public class YouTubeBot {
 		
 // Uploaded video
 		
-		@OnKeyword("Myuploads")
+		@OnKeyword("My uploads")
 		public void MyUploads(TeamchatAPI api) {
 			myUploads(api);
 		}
 		
-				@OnKeyword("myuploads")
+				@OnKeyword("my uploads")
 				public void myUploads(TeamchatAPI api) {
 					MyUploads mu=new MyUploads(client_id,client_secret);
 					String sname=api.context().currentSender().getEmail();
@@ -430,12 +430,12 @@ public class YouTubeBot {
 				}				
 // Creating Playlist
 				
-				@OnKeyword("Createplaylist")
+				@OnKeyword("Create playlist")
 				public void CreatePlaylist(TeamchatAPI api) {
 					createPlaylist(api);
 				}
 				
-				@OnKeyword("createplaylist")
+				@OnKeyword("create playlist")
 				public void createPlaylist(TeamchatAPI api) {
 					
 					api.perform(
@@ -510,12 +510,12 @@ public class YouTubeBot {
 				
 // Channel Bulletin
 				
-				@OnKeyword("Channelbulletin")
+				@OnKeyword("Channel bulletin")
 				public void ChannelBulletin(TeamchatAPI api) {
 					channelBulletin(api);
 				}
 				
-				@OnKeyword("channelbulletin")
+				@OnKeyword("channel bulletin")
 				public void channelBulletin(TeamchatAPI api) {
 					api.perform(
 							api.context().currentRoom().post(

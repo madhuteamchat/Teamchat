@@ -146,7 +146,7 @@ public class MyUploads {
 	      res+="<br> Video Name  = " + playlistItem.getSnippet().getTitle();
 	      res+="<br> Video Id    = " + playlistItem.getContentDetails().getVideoId();
 	      res+="<br> Upload Date = " +playlistItem.getSnippet().getPublishedAt();
-	      res+="<br> Link = "+urlEncoded;
+	      res+="<br> Link = <a href=\""+urlEncoded+"\" target=\"_blank\">"+url+"</a>";
 	      res+="<br>";
 	    }
 	  }

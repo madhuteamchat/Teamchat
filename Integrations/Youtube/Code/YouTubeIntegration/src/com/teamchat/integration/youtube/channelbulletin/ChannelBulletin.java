@@ -140,7 +140,7 @@ public class ChannelBulletin {
 	          TeamchatURLlink urlLink = new TeamchatURLlink();
 	          String url="https://www.youtube.com/watch?v="+newActivityInserted.getContentDetails().getBulletin().getResourceId().getVideoId();
 	          String urlEncoded = urlLink.createEmbeddedLink(url,"Youtube Bot","http");
-	          res+="<br> - Link : "+urlEncoded;
+	          res+="<br> - Link : <a href=\""+urlEncoded+"\" target=\"_blank\">"+url+"</a>";
 	          
 	        } else {
 	          res+="<br>Activity failed.";

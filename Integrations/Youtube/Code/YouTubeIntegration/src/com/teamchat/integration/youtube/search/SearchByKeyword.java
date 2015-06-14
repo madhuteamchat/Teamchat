@@ -71,7 +71,7 @@ public class SearchByKeyword {
 	        res+="<div align=\"center\" ><br><h4> "+singleVideo.getSnippet().getTitle()+"</h4>";
 	        res+="<br> Video Id : "+rId.getVideoId();
 //	        res+="<br><img src=\""+thumbnail.getUrl()+"\"/>";  //"\" height=\"278\" width=\"419\"/>";
-	        res+="<br> link : "+urlEncoded;
+	        res+="<br> link : <a href=\""+urlEncoded+"\" target=\"_blank\">"+url+"</a>";
 //	        res+="<br><object width=\"425\" height=\"350\">";
 //	        res+="<br><param name=\"movie\" value=\"https://www.youtube.com/v/"+rId.getVideoId()+"\" />";
 //	        res+="<embed src=\"https://www.youtube.com/v/"+rId.getVideoId()+"\" type=\"application/x-shockwave-flash\" width=\"425\" height=\"350\" />";
