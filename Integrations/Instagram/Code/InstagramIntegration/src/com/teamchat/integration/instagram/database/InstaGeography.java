@@ -11,7 +11,7 @@ import com.teamchat.integration.instagram.properties.DBProperty;
 public class InstaGeography {
 
 	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";  
-	   static final String DB_URL = "jdbc:mysql://localhost/Bot";
+	   static final String DB_URL = "jdbc:mysql://localhost/Instagram";
 
 	   //  Database credentials
 //	   static final String USER = "tcinterns";
