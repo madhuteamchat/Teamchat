@@ -17,7 +17,7 @@ function launchOneDriveDownloader() {
  			    var rid=document.getElementById("roomid").value;
  			    var form=document.createElement("form");
  			    form.setAttribute("method","POST");
- 			    form.setAttribute("action","http://interns.teamchat.com:8085/OneDriveIntegration/GetFileList?link="+link+"&rid="+rid);
+ 			    form.setAttribute("action","http://integration.teamchat.com:8085/OneDriveIntegration/GetFileList?link="+link+"&rid="+rid);
  			    
  			    var filenames=[];
  			    var filelinks=[];
@@ -63,7 +63,7 @@ function launchOneDrivePicker() {
     			    var rid=document.getElementById("roomid").value;
     			    var form=document.createElement("form");
     			    form.setAttribute("method","POST");
-    			    form.setAttribute("action","http://interns.teamchat.com:8085/OneDriveIntegration/GetFileList?link="+link+"&rid="+rid);
+    			    form.setAttribute("action","http://integration.teamchat.com:8085/OneDriveIntegration/GetFileList?link="+link+"&rid="+rid);
     			    
     			    var filenames=[];
     			    var filelinks=[];
@@ -110,7 +110,7 @@ function launchOneDrivePicker() {
     		 //   alert("Success");
     		    
     			    var rid=document.getElementById("roomid").value;
-    			  location.href="http://interns.teamchat.com:8085/OneDriveIntegration/SaveFile?msg=success&rid="+rid;
+    			  location.href="http://integration.teamchat.com:8085/OneDriveIntegration/SaveFile?msg=success&rid="+rid;
     		  },
     		  progress: function(p) {
     		    // upload is progressing
@@ -120,14 +120,14 @@ function launchOneDrivePicker() {
     		//    alert("cancel");
     		    
     			    var rid=document.getElementById("roomid").value;
-    			  location.href="http://interns.teamchat.com:8085/OneDriveIntegration/SaveFile?msg=cancel&rid="+rid;
+    			  location.href="http://integration.teamchat.com:8085/OneDriveIntegration/SaveFile?msg=cancel&rid="+rid;
     		  },
     		  error: function(e) {
     		    // an error occured
     		  //  alert("error");
     		    
     			    var rid=document.getElementById("roomid").value;
-    			  location.href="http://interns.teamchat.com:8085/OneDriveIntegration/SaveFile?msg=error&rid="+rid;
+    			  location.href="http://integration.teamchat.com:8085/OneDriveIntegration/SaveFile?msg=error&rid="+rid;
     		  }
     };
     OneDrive.save(saverOptions);

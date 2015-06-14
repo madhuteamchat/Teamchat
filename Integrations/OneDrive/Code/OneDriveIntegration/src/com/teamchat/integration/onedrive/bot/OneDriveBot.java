@@ -13,7 +13,7 @@ public class OneDriveBot {
 		TeamchatPost.tpapi=api;
 		String rid=api.context().currentRoom().getId();
 		TeamchatURLlink urlLink = new TeamchatURLlink();
-		String url="http://interns.teamchat.com:8085/OneDriveIntegration/filepicker.html?rid="+rid;
+		String url="http://integration.teamchat.com:8085/OneDriveIntegration/filepicker.html?rid="+rid;
 //		String urlEncoded = urlLink.createEmbeddedLink(url,"OneDrive Bot","http");
 		api.perform(api.context().currentRoom().post(new PrimaryChatlet()
 						.setQuestionHtml("Hey! I am <strong>OneDrive bot</strong>. You can upload files, "
@@ -45,7 +45,7 @@ public class OneDriveBot {
 		TeamchatPost.tpapi=api;
 		String rid=api.context().currentRoom().getId();
 		TeamchatURLlink urlLink = new TeamchatURLlink();
-		String url="http://interns.teamchat.com:8085/OneDriveIntegration/filepicker.html?rid="+rid;
+		String url="http://integration.teamchat.com:8085/OneDriveIntegration/filepicker.html?rid="+rid;
 //		String urlEncoded = urlLink.createEmbeddedLink(url,"OneDrive Bot","http");
 		api.perform(api.context().currentRoom().post(new PrimaryChatlet()
 						.setQuestionHtml("<a href=\""+url+"\" target=\"_blank\">Connect to OneDrive</a>")

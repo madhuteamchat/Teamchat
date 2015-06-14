@@ -52,6 +52,8 @@ public class SaveFile extends HttpServlet {
 		}
 		PrintWriter out=res.getWriter();
 		out.println("<script>window.close();</script>");
+		out.flush();
+		out.close();
 	}
 
 	/**

@@ -91,6 +91,8 @@ public class GetFileList extends HttpServlet {
 //		res.sendRedirect(res.encodeRedirectURL("http://interns.teamchat.com:8085/OneDriveIntegration/filepicker.html?rid="+rid));
 		PrintWriter out=res.getWriter();
 		out.println("<script>window.close();</script>");
+		out.flush();
+		out.close();
 	}
 
 }
