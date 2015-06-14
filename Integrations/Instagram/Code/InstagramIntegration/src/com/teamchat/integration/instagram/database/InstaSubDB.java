@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 import com.teamchat.integration.instagram.notification.DeleteSub;
+import com.teamchat.integration.instagram.properties.DBProperty;
 
 public class InstaSubDB {
 	
@@ -15,10 +16,13 @@ public class InstaSubDB {
 	   static final String DB_URL = "jdbc:mysql://localhost/Bot";
 
 	   //  Database credentials
-	   static final String USER = "tcinterns";
-	   static final String PASS = "PakyovBosh7";
+//	   static final String USER = "tcinterns";
+//	   static final String PASS = "PakyovBosh7";
 //	   static final String USER = "root";
 //	   static final String PASS = "gupshup";
+	   
+	   static String USER="null";
+	   static String PASS="null";
 	   Connection conn = null;
 	   Statement stmt = null;
 	
@@ -26,6 +30,15 @@ public class InstaSubDB {
 		ArrayList<String> sidlist=new ArrayList<String>();
 		ArrayList<String> oidlist=new ArrayList<String>();
 		ArrayList<String> objlist=new ArrayList<String>();
+		
+		
+		public InstaSubDB()
+		{
+			DBProperty dbp=new DBProperty();
+			dbp.loadParams();
+			USER=dbp.getDBUser();
+			PASS=dbp.getDBPass();
+		}
 	
 	public ArrayList<String> retreiveUidList(String sid)
 	{

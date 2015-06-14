@@ -38,7 +38,7 @@ public class CallBack extends HttpServlet {
 		{
 			String huchg=request.getParameter("hub.challenge");			
 //			response.sendRedirect(response.encodeRedirectURL("https://api.instagram.com/v1/subscriptions/?hub.challenge="+huchg));
-			System.out.println("$$$$$$$$$$$$$$$$$$$$$$ Success  "+huchg);
+			
 			PrintWriter out=response.getWriter();
 			out.print(huchg);
 			out.flush();
@@ -51,7 +51,7 @@ public class CallBack extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		System.out.println("############webhook###################");
+		System.out.println("############Instagram Notification###################");
 		String res="";
 		BufferedReader in = new BufferedReader(new InputStreamReader(request.getInputStream()));
 				                StringBuffer sb = new StringBuffer("");

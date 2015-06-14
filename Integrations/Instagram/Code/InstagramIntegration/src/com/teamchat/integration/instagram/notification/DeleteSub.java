@@ -8,14 +8,25 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.impl.client.DefaultHttpClient;
 
+import com.teamchat.integration.instagram.properties.InstagramProperty;
+
 
 public class DeleteSub {
 	
-	String callbackurl="http://interns.teamchat.com:8086/InstagramIntegration/CallBack";
-	String client_id="858afa5bc35e419c82d02ad8c58d037e";
-	String client_secret="f4dde757b8074f7893ce7fb4a5010ccc";
+	String callbackurl="null";
+	String client_id="null";
+	String client_secret="null";
 	String result="";
 
+	public DeleteSub()
+	{
+		InstagramProperty ip=new InstagramProperty();
+		ip.loadParams();
+		client_id=ip.getClientId();
+		client_secret=ip.getClientSecret();
+		callbackurl=ip.getWebhookUrl();
+	}
+	
 	public void unSub(String sid)
 	{
 		String geturl="https://api.instagram.com/v1/subscriptions?client_secret="+client_secret+"&id="+sid+"&client_id="+client_id;

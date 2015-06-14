@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.teamchat.integration.instagram.properties.InstagramProperty;
+
 /**
  * Servlet implementation class InstagramServlet
  */
@@ -18,9 +20,15 @@ public class InstagramServlet extends HttpServlet {
     /**
      * @see HttpServlet#HttpServlet()
      */
+	
+	String redirecturi,client_id;
     public InstagramServlet() {
         super();
         // TODO Auto-generated constructor stub
+        InstagramProperty ip=new InstagramProperty();
+        ip.loadParams();
+        redirecturi=ip.getRedirectUrl();
+        client_id=ip.getClientId();
     }
 
 	/**
@@ -29,11 +37,8 @@ public class InstagramServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		
-		String redirecturi="http://interns.teamchat.com:8086/InstagramIntegration/InstagramCallBack";
-		String client_id="858afa5bc35e419c82d02ad8c58d037e";
-//		String client_secret="f4dde757b8074f7893ce7fb4a5010ccc";
-//		String rid=request.getParameter("rid");
-//    	InstagramToken.rid=rid;
+		redirecturi="http://interns.teamchat.com:8086/InstagramIntegration/InstagramCallBack";
+		client_id="858afa5bc35e419c82d02ad8c58d037e";
     	InstagramToken.uid=request.getParameter("name");
 		String url="https://api.instagram.com/oauth/authorize/?client_id="+client_id+"&redirect_uri="+redirecturi+"&scope=likes+comments&response_type=code";
 		response.setContentType("application/x-www-form-urlencoded");

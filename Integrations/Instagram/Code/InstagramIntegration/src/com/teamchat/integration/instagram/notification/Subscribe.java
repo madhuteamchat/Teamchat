@@ -19,13 +19,23 @@ import org.json.JSONObject;
 import com.teamchat.integration.instagram.database.InstaGeography;
 import com.teamchat.integration.instagram.database.InstaLocation;
 import com.teamchat.integration.instagram.database.InstaSubDB;
+import com.teamchat.integration.instagram.properties.InstagramProperty;
 
 public class Subscribe {
 	
-	String callbackurl="http://interns.teamchat.com:8086/InstagramIntegration/CallBack";
-	String client_id="858afa5bc35e419c82d02ad8c58d037e";
-	String client_secret="f4dde757b8074f7893ce7fb4a5010ccc";
+	String callbackurl="null";
+	String client_id="null";
+	String client_secret="null";
 	String result="";
+	
+	public Subscribe()
+	{
+		InstagramProperty ip=new InstagramProperty();
+		ip.loadParams();
+		client_id=ip.getClientId();
+		client_secret=ip.getClientSecret();
+		callbackurl=ip.getWebhookUrl();
+	}
 	
 	public String getsubscribelist()
 	{

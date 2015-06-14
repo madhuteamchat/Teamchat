@@ -17,6 +17,7 @@ import com.teamchat.integration.instagram.database.InstaSubDB;
 import com.teamchat.integration.instagram.database.JDBCConnection;
 import com.teamchat.integration.instagram.notification.InstagramURLlink;
 import com.teamchat.integration.instagram.notification.Subscribe;
+import com.teamchat.integration.instagram.properties.InstagramProperty;
 import com.teamchat.integration.instagram.search.GMapAPI;
 import com.teamchat.integration.instagram.search.Location;
 
@@ -30,6 +31,14 @@ public class InstagramBot {
 	ArrayList<String> latlist=new ArrayList<String>();
 	ArrayList<String> lnglist=new ArrayList<String>();
 	ArrayList<String> placelist=new ArrayList<String>();
+	String servlet_url;
+	
+	public InstagramBot() {
+		// TODO Auto-generated constructor stub
+		InstagramProperty ip=new InstagramProperty();
+		ip.loadParams();
+		servlet_url=ip.getServletUrl();
+	}
 
 	// Help
 	@OnKeyword("help")
@@ -68,7 +77,7 @@ public class InstagramBot {
 				TeamchatPost.tpapi=api;
 				if(gc.equals("access_token"))
 				{
-					String login_href="http://interns.teamchat.com:8086/InstagramIntegration/InstagramServlet?name="+sname;
+					String login_href=servlet_url+"?name="+sname;
 					InstagramURLlink urlLink=new InstagramURLlink();
 					String tc_href=urlLink.createEmbeddedLink(login_href, "Instagram_Bot", "http");
 					api.perform(api.context().currentRoom().post(new PrimaryChatlet()
@@ -119,7 +128,7 @@ public class InstagramBot {
 			String gc=db.retreive(sname);
 			if(gc.equals("access_token"))
 			{
-				String login_href="http://interns.teamchat.com:8086/InstagramIntegration/InstagramServlet?name="+sname;
+				String login_href=servlet_url+"?name="+sname;
 				InstagramURLlink urlLink=new InstagramURLlink();
 				String tc_href=urlLink.createEmbeddedLink(login_href, "Instagram_Bot", "http");
 				api.perform(api.context().currentRoom().post(new PrimaryChatlet()
@@ -212,6 +221,7 @@ public class InstagramBot {
 			if(oid.matches("^[a-zA-Z0-9_]*$"))
 			{
 //				System.out.println("valid");
+				oid=oid.toLowerCase();
 				String id=api.context().currentReply().senderEmail();
 				InstaSubDB isdb=new InstaSubDB();
 				if(isdb.inInstaSubsDB(id,"tag", oid))
@@ -502,7 +512,7 @@ public class InstagramBot {
 			String gc=db.retreive(sname);
 			if(gc.equals("access_token"))
 			{
-				String login_href="http://interns.teamchat.com:8086/InstagramIntegration/InstagramServlet?name="+sname;
+				String login_href=servlet_url+"?name="+sname;
 				InstagramURLlink urlLink=new InstagramURLlink();
 				String tc_href=urlLink.createEmbeddedLink(login_href, "Instagram_Bot", "http");
 				api.perform(api.context().currentRoom().post(new PrimaryChatlet()
@@ -558,7 +568,7 @@ public class InstagramBot {
 			String gc=db.retreive(sname);
 			if(gc.equals("access_token"))
 			{
-				String login_href="http://interns.teamchat.com:8086/InstagramIntegration/InstagramServlet?name="+sname;
+				String login_href=servlet_url+"?name="+sname;
 				InstagramURLlink urlLink=new InstagramURLlink();
 				String tc_href=urlLink.createEmbeddedLink(login_href, "Instagram_Bot", "http");
 				api.perform(api.context().currentRoom().post(new PrimaryChatlet()

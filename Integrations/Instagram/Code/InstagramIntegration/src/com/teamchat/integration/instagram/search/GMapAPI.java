@@ -11,18 +11,28 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.teamchat.integration.instagram.properties.GMapProperty;
+
 public class GMapAPI {
 	
 	ArrayList<String> latlist=new ArrayList<String>();
 	ArrayList<String> lnglist=new ArrayList<String>();
 	ArrayList<String> placelist=new ArrayList<String>();
 	String result = "";
+	String apikey="null";
+	
+	public GMapAPI()
+	{
+		GMapProperty gmp=new GMapProperty();
+		gmp.loadParams();
+		apikey=gmp.getApiKey();
+	}
 	
 	public String searchlocation(String place)
 	{
 		try
 		{
-			String url="https://maps.googleapis.com/maps/api/geocode/json?address="+place+"&key=AIzaSyB3JwLzdzu6jurbKG18YPkW9UCjpDLdtCg";
+			String url="https://maps.googleapis.com/maps/api/geocode/json?address="+place+"&key="+apikey;
 			
 			HttpGet hget=new HttpGet(url);
 		    HttpClient httpclient=new DefaultHttpClient();

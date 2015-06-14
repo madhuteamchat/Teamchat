@@ -11,11 +11,19 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.teamchat.integration.instagram.notification.InstagramURLlink;
+import com.teamchat.integration.instagram.properties.InstagramProperty;
 
 public class Geography {
 	
-	String client_id="858afa5bc35e419c82d02ad8c58d037e";
+	String client_id="null";
 	public static String geoprev="";
+	
+	public Geography()
+	{
+		InstagramProperty ip=new InstagramProperty();
+		ip.loadParams();
+		client_id=ip.getClientId();
+	}
 
 	public String recentUpdate(String geoid)
 	{

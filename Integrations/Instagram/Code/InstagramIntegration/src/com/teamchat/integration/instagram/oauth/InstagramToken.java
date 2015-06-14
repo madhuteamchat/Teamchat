@@ -17,6 +17,7 @@ import org.json.JSONObject;
 
 import com.teamchat.integration.instagram.bot.TeamchatPost;
 import com.teamchat.integration.instagram.database.JDBCConnection;
+import com.teamchat.integration.instagram.properties.InstagramProperty;
 
 public class InstagramToken {
 
@@ -24,9 +25,18 @@ public class InstagramToken {
 	public static String uid="";
 	
 	String scopes="wl.basic+wl.offline_access+wl.signin+wl.skydrive+wl.skydrive_update";
-	String redirecturi="http://interns.teamchat.com:8086/InstagramIntegration/InstagramCallBack";
-	String client_id="858afa5bc35e419c82d02ad8c58d037e";
-	String client_secret="f4dde757b8074f7893ce7fb4a5010ccc";
+	String redirecturi="null";
+	String client_id="null";
+	String client_secret="null";
+	
+	public InstagramToken()
+	{
+		InstagramProperty ip=new InstagramProperty();
+        ip.loadParams();
+        redirecturi=ip.getRedirectUrl();
+        client_id=ip.getClientId();
+        client_secret=ip.getClientSecret();
+	}
 	
 	
 	public void getaccesstoken(String acode)
