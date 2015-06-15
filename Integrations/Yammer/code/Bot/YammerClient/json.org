@@ -1,0 +1,8 @@
+{
+"email": "botteamchat@gmail.com",
+"token": "kDk8c-2046063572",
+"userId": "20851",
+"lastMsgTimestamp": "1433506101780",
+"password": "hellmasterbot"
+}
+{}
