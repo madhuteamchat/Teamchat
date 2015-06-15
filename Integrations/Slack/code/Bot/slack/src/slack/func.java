@@ -6,9 +6,13 @@
 package slack;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.HashMap;
+import java.util.Properties;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -78,7 +82,7 @@ public class func {
 	String name[]=new String[100];
 	String id[]=new String[100];
 
-	@OnKeyword("getchannels")
+	@OnAlias("getchannels")
 	public void getChannels(TeamchatAPI api) throws ClientProtocolException,
 			IOException {
 		HttpClient client = new DefaultHttpClient();
@@ -145,6 +149,18 @@ public class func {
 														.label("Name of Channel")
 														.name("channel")))
 						.alias("chname")));
+	}
+	
+	@OnKeyword("invite")
+	public void inviteToChannel(TeamchatAPI api)
+	{
+		api.perform(api
+				.context()
+				.currentRoom()
+				.post(new PrimaryChatlet()
+						.setQuestion(
+								"Please enter following details to invite a user to channel")
+						.setReplyScreen() ));
 	}
 
 	@OnAlias("chname")
@@ -287,11 +303,15 @@ public class func {
 				JSONObject name = (JSONObject) mem.get(i);
 
 				String names = (String) name.get("name");
+				String userid = (String) name.get("id");
+				
 				out[i] = names;
 				Boolean isadmin = (Boolean) name.get("is_admin");
 				if (isadmin) {
 					names = names.concat("(admin)");
 				}
+				
+				
 				int k = i + 1;
 				api.perform(api
 						.context()
@@ -303,6 +323,46 @@ public class func {
 			api.perform(api.context().currentRoom()
 					.post(new TextChatlet("Invalid")));
 		}
+	}
+	
+	@OnKeyword("url")
+	public void getURl(TeamchatAPI api) throws IllegalStateException, IOException{
+		
+		HttpClient client = new DefaultHttpClient();
+		HttpGet request = new HttpGet(
+				"https://slack.com/api/rtm.start?token=xoxp-5090557084-5090557086-5142984056-81c64e&pretty=1");
+
+		HttpResponse response = client.execute(request);
+		
+		BufferedReader rd = new BufferedReader(new InputStreamReader(response
+				.getEntity().getContent()));
+		String line = "";
+		
+		StringBuilder sb = new StringBuilder();
+		while ((line = rd.readLine()) != null)
+			sb.append(line);
+		String output = sb.toString();
+
+		JSONObject j = new JSONObject(output);
+		
+		String url = j.get("url").toString();
+		System.out.println(url);
+		
+		try {
+			Properties properties = new Properties();
+			properties.setProperty("url", url);
+			
+			File file = new File("test.properties");
+			FileOutputStream fileOut = new FileOutputStream(file);
+			properties.store(fileOut, "URL");
+			fileOut.close();
+		}
+		catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 	}
 
 	@OnKeyword("search")
