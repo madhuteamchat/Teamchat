@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
+	<classpathentry kind="lib" path="/home/intern12/Downloads/httpunit-1.7.2.jar"/>
+	<classpathentry kind="lib" path="/home/intern12/Downloads/httpcomponents-core-4.4.1/lib/httpcore-4.4.1.jar"/>
+	<classpathentry kind="lib" path="/home/intern12/Downloads/httpclient-4.3.4.jar"/>
+	<classpathentry kind="lib" path="/home/intern12/Downloads/OAuth2.0_clientCredentials/lib/commons-logging-1.1.1.jar"/>
+	<classpathentry kind="lib" path="/home/intern12/Downloads/rhino1_7R4/js.jar"/>
+	<classpathentry kind="lib" path="/home/intern12/Downloads/jtidy-r938/jtidy-r938.jar"/>
+	<classpathentry kind="lib" path="/home/intern12/Downloads/java-json.jar"/>
+	<classpathentry kind="lib" path="/home/intern12/Downloads/teamchat-client-sdk.1.2.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
