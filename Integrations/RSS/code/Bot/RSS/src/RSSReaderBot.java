@@ -17,15 +17,18 @@ private static String botPsswrd="abhishek";
 private static TeamchatAPI api;
 private static String channelURLs[]=
 {"http://static.cricinfo.com/rss/livescores.xml",
-"http://feeds.feedburner.com/digit/latest-news",
 "http://dynamic.feedsportal.com/pf/555218/http://toi.timesofindia.indiatimes.com/rssfeedstopstories.cms",
 "http://feeds.feedburner.com/NDTV-LatestNews",
-"http://www.bollywoodhungama.com/rss/release_dates.xml"};
+"http://www.bollywoodhungama.com/rss/release_dates.xml",
+"http://feeds.feedburner.com/digit/latest-news"
+};
+
 private static String channelNames[]={"Cricket Live Score",
-	                                  "Digit Technologies",
 	                                  "Times Of India",
 	                                  "NDTV News",
-	                                  "Movie Release Dates"};
+	                                  "Movie Release Dates",
+	                                  "Digit Technologies"};
+
 private static Map map=new HashMap();
 
 public static void main(String[] args) {
@@ -72,9 +75,20 @@ public void postChannels(String email,Room r)
 		Field field=api.objects().select();
 		field.label(channelNames[i]).name(channelNames[i]);
 		if(sub[i])
-		field.addOption("Unsubscribe").addOption("Subscribed");
-		else field.addOption("Subscribe").addOption("Not Subscribed");
+		field.addOption("Unsubscribe");
+		else field.addOption("Subscribe");
 	    f.addField(field);
+	}
+	Channel temp=b.CustomChannels;
+	while(temp!=null)
+	{
+		Field field=api.objects().select();
+		field.label(temp.getName()).name(temp.getName());
+		if(temp.getSubscription())
+		field.addOption("Unsubscribe");
+		else field.addOption("Subscribe");
+	    f.addField(field);
+	    temp=temp.next;
 	}
 	
 	  api.perform(r.post(new PrimaryChatlet().setQuestion("View All Channels")
@@ -94,7 +108,35 @@ public void changeSubscription(TeamchatAPI api)
 		sub[i]=api.context().currentReply().getField(channelNames[i]);
 	}
 	RSSBot bot=(RSSBot)map.get(api.context().currentReply().senderEmail());
-
+    Channel temp=bot.CustomChannels;
+    Channel prev=temp;
+    while(temp!=null)
+    {
+    	if(api.context().currentReply().getField(temp.getName()).compareTo("Unsubscribe")==0)
+    	{
+    		if(prev==temp)
+    		{
+    			if(temp.next==null)
+    				{bot.CustomChannels=null;
+    				temp=null;
+    				prev=null;
+    				break;}
+    			else{
+    				bot.CustomChannels=temp.next;
+    				temp=temp.next;
+    				prev=temp;
+    				continue;
+    			}
+    		}
+    		else{
+    			prev.next=temp.next;
+    			temp=temp.next;
+    			continue;
+    		}
+    	}
+    	prev=temp;
+    	temp=temp.next;
+    }
 	bot.setSubscription(sub);
 	if(!bot.isStarted)
 		bot.start();
@@ -127,6 +169,42 @@ public void unsubscribeAll(TeamchatAPI api)
 	           +"<br/>Type subscribe to get Subscribed.</font></b>")
 	           ));
 	           }
+
+@OnKeyword("custom")
+public void CustomChannel(TeamchatAPI api)
+{
+	 Form f=api.objects().form();
+	 f.addField(api.objects().input().label("Enter URL").name("url"));
+	 f.addField(api.objects().input().label("Channel Name").name("chname"));
+	 api.perform(api.context().currentRoom().post(new PrimaryChatlet().setQuestion("Add your custom Channel")
+			                                                          .setReplyScreen(f)
+			                                                          .setReplyLabel("Add")
+			                                                          .alias("addChannel")
+			                                                          ));
+	}
+
+@OnAlias("addChannel")
+public void addCustomChannel(TeamchatAPI api)
+{
+	String email=api.context().currentReply().senderEmail();
+	RSSBot bot=(RSSBot)map.get(email);
+	if(bot==null)
+	{
+		bot=new RSSBot();
+		bot.setup();
+		bot.setRoom(api.context().currentRoom().getId());
+		map.put(email,bot);
+	}
+	String url=api.context().currentReply().getField("url");
+	String name=api.context().currentReply().getField("chname");
+	Channel ch=new Channel(url);
+	ch.setName(name);
+	ch.subscribe();
+	ch.next=bot.CustomChannels;
+	bot.CustomChannels=ch;
+	if(!bot.isStarted)
+		bot.start();
+	}
 @OnKeyword("timer")
 public void timer(TeamchatAPI api)
 {  RSSBot bot=(RSSBot)map.get(api.context().currentSender().getEmail());
@@ -183,7 +261,9 @@ class RSSBot extends Thread{
 	double lastTime;
 	String roomID;
 	Boolean isStarted=false;
-	public void run()
+	Channel CustomChannels=null;
+
+    public void run()
 	{
 	 isStarted=true;
 	 currentTime=d.getTime();	
@@ -217,8 +297,21 @@ class RSSBot extends Thread{
 	    	Channels[i].feeds=null;	
 	    	}
 	    }
+		Channel temp=CustomChannels;
+		while(temp!=null)
+		{System.out.println("Found CHannel: "+temp.getName()
+				+"URL: "+temp.url);
+			if(temp.getSubscription())
+	    	{
+	    		temp.getFeeds();
+	    	temp.postFeeds(api,roomID);
+	    	temp.feeds=null;	
+	    	}
+			temp=temp.next;
+		}
 	     hrs=0;
 	}
+	
 	public void setup()
 	{
 		Channels=new Channel[channelURLs.length];
@@ -227,6 +320,7 @@ class RSSBot extends Thread{
 		  Channels[i]=new Channel(channelURLs[i]);
 		  Channels[i].setName(channelNames[i]);
 		}
+		
 		
 		       //ADD CUSTOM CHANNELS HERE
 	}
@@ -269,5 +363,4 @@ class RSSBot extends Thread{
 	}
 }
 }
-
 

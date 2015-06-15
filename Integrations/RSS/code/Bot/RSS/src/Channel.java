@@ -28,7 +28,8 @@ public class Channel{
 	String lastUpdated;
 	String lastFeedId;
 	String lastFeedTime;
-	String channelName;
+	private String channelName;
+	Channel next=null;
 	URL url;
 	private TeamchatAPI api;
 	
@@ -40,16 +41,17 @@ public class Channel{
 	Channel(String URL)
 	{
 	 try{
-	  url=new URL(URL);
+	  url=generateURL(URL);
 	 }
 	 catch(MalformedURLException e)
 	 {
 	  System.out.println(e);	 
 	 }
 	}
-//	private URL generateURL(String URL)
+//	
+	private URL generateURL(String url) throws MalformedURLException
 	{
-		
+		return new URL(url);
 	}
 	
 	public void setTeamchatAPI(TeamchatAPI API)
@@ -256,16 +258,19 @@ public class Channel{
 	 
 	 public void postFeeds(TeamchatAPI api, String roomID)
 	 {   Feed feed=feeds;
-	 	while(feed!=null)
+	 String html="";
+	 html+="<b><u><font color='green'><h4>"+title+"</h4></font></b></u>";
+     Boolean check=false;
+	 while(feed!=null)
 	 	{
 	 	  String blog=feed.getFeed();
-	      String html="<b><u><h4>"+title+"</h4></b></u>";
 	      html+=blog;
-	      api.perform(api.context().byId(roomID).post(new PrimaryChatlet().setQuestionHtml(html)));
-
-	 	feed=feed.Next;
-	 	System.out.println("CHatlet Psted \n\n");
+	      feed=feed.Next;
+	      check=true;
 	 	}
+	 if(check)
+	 api.perform(api.context().byId(roomID).post(new PrimaryChatlet().setQuestionHtml(html)));
+
 	 }
 	
 }

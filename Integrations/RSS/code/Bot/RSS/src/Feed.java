@@ -19,13 +19,14 @@ public class Feed{
 	}
 	
 	public String getFeed()
-	{  String html="";
+	{ 
+		String html="<b><font color='green'><h3>*</h3></font></b>";
 	if(pubdate!=null)
-		html+=pubdate+"<br/>";
+		html+=pubdate.substring(0, 16)+"<br/>";
 	else html+="<br/>";
 		if(description!=null)
-	   html="<a href='"+link+"'><h4>"+title+"</h4></a>"+description;
-		else  html="<a href='"+link+"'><h5>"+title+"</h5></a>";
+	   html+="<a href='"+link+"'><h4>"+title+"</h4></a>"+description;
+		else  html+="<a href='"+link+"'><h5>"+title+"</h5></a>";
 		
 	System.out.println("Link of this is :"+link);
 	   return html;
