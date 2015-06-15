@@ -1,0 +1,6 @@
+botemail = playitabhi@gmail.com
+botpass = playit
+dbname = zendesk
+dbuser = root
+dbpass = abhi
+tablename = ticketdata
