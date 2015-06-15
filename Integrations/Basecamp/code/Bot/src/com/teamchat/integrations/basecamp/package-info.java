@@ -2,7 +2,7 @@
  * 
  */
 /**
- * @author intern19
+ * @author Puranjay Jain
  *
  */
 package com.teamchat.integrations.basecamp;
