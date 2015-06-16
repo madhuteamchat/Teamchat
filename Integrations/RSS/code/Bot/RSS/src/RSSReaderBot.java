@@ -38,12 +38,14 @@ public static void main(String[] args) {
                              .startReceivingEvents(new RSSReaderBot()); 
 }
 
-@OnKeyword("RSS")
+
+@OnKeyword("help")
 public void provideChannels(TeamchatAPI api)
 {   
 	String HtmlInstructions="<b><u><font color='red'>Type:</font><br/><font color='blue'></u></b>"+
                              "<b>subscribe:</b> To Subscribe or Unsubscribe to Channels<br/>"+
-			                 "<b>blogs:</b> To get new blogs<br/>"+
+			                 "<b>custom:</b>To add custom Channel<br/>"+
+                             "<b>blogs:</b> To get new blogs<br/>"+
                              "<b>timer:</b> To reset Timer<br/>"+
 			                 "<b>unsubscribeAll:</b> To Unsubscribe to RSS";
 	
@@ -60,7 +62,6 @@ public void subscribe(TeamchatAPI api)
 	bot.setup();
 	bot.setRoom(api.context().currentRoom().getId());
 	map.put(email,bot);
-	System.out.println("AB: Bot started");
 	}
     postChannels(email,api.context().currentRoom());
 }
@@ -138,6 +139,9 @@ public void changeSubscription(TeamchatAPI api)
     	temp=temp.next;
     }
 	bot.setSubscription(sub);
+	api.perform(api.context().currentRoom().post(new PrimaryChatlet()
+	.setQuestionHtml("<b><font color='green'>Subscription Set Successfully</font></b>")
+			           ));
 	if(!bot.isStarted)
 		bot.start();
 	}
@@ -204,6 +208,9 @@ public void addCustomChannel(TeamchatAPI api)
 	bot.CustomChannels=ch;
 	if(!bot.isStarted)
 		bot.start();
+	api.perform(api.context().currentRoom().post(new PrimaryChatlet()
+	.setQuestionHtml("<b><font color='green'>Channel added Successfully</font></b>")
+			           ));
 	}
 @OnKeyword("timer")
 public void timer(TeamchatAPI api)
@@ -235,6 +242,9 @@ public void setTimer(TeamchatAPI api)
 	{
 		int x=Integer.parseInt(api.context().currentReply().getField("hours"));
 		bot.setTime(x);
+		api.perform(api.context().currentRoom().post(new PrimaryChatlet()
+		.setQuestionHtml("<b><font color='green'>Timer set</font></b>")
+				           ));
 		}
     }
 @OnKeyword("blogs")
@@ -363,4 +373,3 @@ class RSSBot extends Thread{
 	}
 }
 }
-
