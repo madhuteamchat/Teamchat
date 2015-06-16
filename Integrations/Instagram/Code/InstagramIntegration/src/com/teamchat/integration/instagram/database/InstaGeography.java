@@ -11,7 +11,7 @@ import com.teamchat.integration.instagram.properties.DBProperty;
 public class InstaGeography {
 
 	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";  
-	   static final String DB_URL = "jdbc:mysql://localhost/Instagram";
+	   static String DB_URL = "jdbc:mysql://localhost/";
 
 	   //  Database credentials
 //	   static final String USER = "tcinterns";
@@ -21,6 +21,7 @@ public class InstaGeography {
 	   
 	   static String USER="null";
 	   static String PASS="null";
+	   static String dbname="null";
 	   Connection conn = null;
 	   Statement stmt = null;
 	   
@@ -30,6 +31,8 @@ public class InstaGeography {
 		dbp.loadParams();
 		USER=dbp.getDBUser();
 		PASS=dbp.getDBPass();
+		dbname=dbp.getDBName();
+		DB_URL="jdbc:mysql://localhost/"+dbname;
 	}
 	
 	public String retreive(String geoid)

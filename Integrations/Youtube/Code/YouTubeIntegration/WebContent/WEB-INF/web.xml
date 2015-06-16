@@ -41,6 +41,18 @@
 		<param-value>PakyovBosh7</param-value>
 	</context-param>
 	<context-param>
+		<param-name>log-location</param-name>
+		<param-value>./logs</param-value>
+	</context-param>
+	<context-param>
+		<param-name>log-level</param-name>
+		<param-value>ERROR</param-value>
+	</context-param>
+	<context-param>
+		<param-name>log-filename</param-name>
+		<param-value>Youtube</param-value>
+	</context-param>
+	<context-param>
    		<param-name>threading</param-name>
    		<param-value>SINGLE</param-value>
 	</context-param>

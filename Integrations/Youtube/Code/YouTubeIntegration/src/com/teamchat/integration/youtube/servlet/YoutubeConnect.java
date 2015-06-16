@@ -31,13 +31,12 @@ public class YoutubeConnect {
 	
 	YouTube youtube;
 	JSONObject json;
-	static String client_id;
-	static String client_secret; 
-	static String rid;
+	String client_id;
+	String client_secret; 
 	String redirecturi;
 	private HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
 	  private JsonFactory JSON_FACTORY = new JacksonFactory();
-	  public static String uid="";
+	  public String sname="";
 	  GoogleCredential credentials;
 	  
 	  public YoutubeConnect() {
@@ -50,7 +49,7 @@ public class YoutubeConnect {
 	}
 	
 	
-	public void getaccesstoken(String acode) throws ClientProtocolException, IOException
+	public void getaccesstoken(String acode,String sname) throws ClientProtocolException, IOException
 	{
 		 
 		
@@ -99,8 +98,8 @@ public class YoutubeConnect {
 //								        props.store(out, "This is an optional header comment string");
 								 
 								        JDBCConnection db=new JDBCConnection();
-								        db.insert(uid, json.getString("access_token"), json.getString("refresh_token"));
-								        new TeamchatPost().postMsg("Successfully connected to Youtube!!", rid);
+								        db.insert(sname, json.getString("access_token"), json.getString("refresh_token"));
+								        new TeamchatPost().postMsg("Successfully connected to Youtube!!", sname);
 								      
 							      
 								

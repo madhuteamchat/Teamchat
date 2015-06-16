@@ -10,6 +10,6 @@
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/servlet-api.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/httpclient-4.2.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/teamchat-client-sdk.1.4.jar"/>
+	<classpathentry kind="lib" path="lib/teamchat-client-sdk.1.5.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

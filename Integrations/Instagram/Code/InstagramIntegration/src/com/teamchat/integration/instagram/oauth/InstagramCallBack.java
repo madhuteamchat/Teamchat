@@ -30,7 +30,7 @@ public class InstagramCallBack extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		InstagramToken it=new InstagramToken();
-		it.getaccesstoken(request.getParameter("code"));
+		it.getaccesstoken(request.getParameter("code"),request.getParameter("state"));
 		PrintWriter out=response.getWriter();
 		out.println("You have Successfully Logged in........");
 	}

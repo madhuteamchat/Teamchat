@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.node.ArrayNode;
+import org.json.JSONException;
 
 import com.teamchat.client.annotations.OnAlias;
 import com.teamchat.client.annotations.OnKeyword;
@@ -53,10 +54,10 @@ public class YouTubeBot {
 	
 // Help
 	
-	@OnKeyword("help")
-	public void youtubehelp(TeamchatAPI api) {
-		youtubeHelp(api);
-	}
+//	@OnKeyword("help")
+//	public void youtubehelp(TeamchatAPI api) {
+//		youtubeHelp(api);
+//	}
 	@OnKeyword("Help")
 	public void youtubeHelp(TeamchatAPI api) {
 		
@@ -66,29 +67,27 @@ public class YouTubeBot {
 		+"<br>Type <b>Connect</b> "
 		+ "to connect to your Youtube account."
 		+"<br>Type <b>Disconnect</b> to sign out your youtube account"
-		+"<br>Type <b>search by keyword</b> to search videos related to the keyword"
-		+"<br>Type <b>search by topic</b> to search videos under a category"
-		+"<br>Type <b>search channel</b> to search channel related to the keyword"
-		+"<br>Type <b>subscribe channel</b> to subscribe a channel using channel id"
-		+"<br>Type <b>channel bulletin</b> to post a video in your channel by providing video id"
-		+"<br>Type <b>create playlist</b> to ceate a playlist by providing video id"
+		+"<br>Type <b>searchbykeyword</b> to search videos related to the keyword"
+		+"<br>Type <b>searchbytopic</b> to search videos under a category"
+		+"<br>Type <b>searchchannel</b> to search channel related to the keyword"
+		+"<br>Type <b>subscribechannel</b> to subscribe a channel using channel id"
+		+"<br>Type <b>channelbulletin</b> to post a video in your channel by providing video id"
+		+"<br>Type <b>createplaylist</b> to ceate a playlist by providing video id"
 		+"<br>Type <b>upload</b> to upload a video into your channel by providing the location"
-		+"<br>Type <b>my uploads</b> to reterive the details of the video uploaded by you")));
+		+"<br>Type <b>myuploads</b> to reterive the details of the video uploaded by you")));
 		
 	}
 
 // Youtube Connect
 	
-	@OnKeyword("connect")
-	public void connect(TeamchatAPI api) {
-		connect(api);
-	}
+//	@OnKeyword("connect")
+//	public void connect(TeamchatAPI api) {
+//		connect(api);
+//	}
 	
 		@OnKeyword("Connect")
-		public void Connect(TeamchatAPI api) {
+		public void Connect(TeamchatAPI api) throws JSONException {
 			String sname=api.context().currentSender().getEmail();
-			sname=sname.replace('@', '_');
-			sname=sname.replace('.', '_');
 			JDBCConnection db=new JDBCConnection();
 			String[] gc=db.retreive(sname);
 			TeamchatPost.tpapi=api;
@@ -108,16 +107,15 @@ public class YouTubeBot {
 		
 // Youtube Disconnect
 		
-		@OnKeyword("Disconnect")
-		public void Disconnect(TeamchatAPI api) {
-			disconnect(api);
-		}
+//		@OnKeyword("Disconnect")
+//		public void Disconnect(TeamchatAPI api) {
+//			disconnect(api);
+//		}
 		
 			@OnKeyword("disconnect")
 			public void disconnect(TeamchatAPI api) {
 				String sname=api.context().currentSender().getEmail();
-				sname=sname.replace('@', '_');
-				sname=sname.replace('.', '_');
+				
 				YoutubeConnect ytc=new YoutubeConnect();
 				ytc.youtubeLogout(sname);
 				api.perform(api.context().currentRoom().post( new PrimaryChatlet()
@@ -127,18 +125,15 @@ public class YouTubeBot {
 	
 // Search By Keyword
 			
-			@OnKeyword("Search by keyword")
-			public void Searchbykeyword(TeamchatAPI api) {
-				searchbykeyword(api);
-			}
+//			@OnKeyword("Search by keyword")
+//			public void Searchbykeyword(TeamchatAPI api) {
+//				searchbykeyword(api);
+//			}
 	
-	@OnKeyword("search by keyword")
+	@OnKeyword("searchbykeyword")
 	public void searchbykeyword(TeamchatAPI api) {
-		api.perform(
-				api.context().currentRoom().post(
-				new PrimaryChatlet()
-			
-				.setQuestion("Enter the Keyword to Search")
+		api.perform(api.context().currentRoom().post(new PrimaryChatlet()			
+				.setQuestionHtml("Enter the Keyword to Search")
 				.setReplyScreen(api.objects().form()
 				.addField(api.objects().input().label("Keyword").name("keyword"))
 				.addField(api.objects().input().label("Max Result").name("maxresult"))
@@ -168,18 +163,17 @@ public class YouTubeBot {
 	
 // Search Channel
 	
-	@OnKeyword("Search channel")
-	public void SearchChannel(TeamchatAPI api) {
-		searchChannel(api);
-	}
+//	@OnKeyword("Search channel")
+//	public void SearchChannel(TeamchatAPI api) {
+//		searchChannel(api);
+//	}
 	
-		@OnKeyword("search channel")
+		@OnKeyword("searchchannel")
 		public void searchChannel(TeamchatAPI api) {
 			api.perform(
 					api.context().currentRoom().post(
-					new PrimaryChatlet()
-				
-					.setQuestion("Enter the Keyword to Search")
+					new PrimaryChatlet()				
+					.setQuestionHtml("Enter the Keyword to Search")
 					.setReplyScreen(api.objects().form()
 					.addField(api.objects().input().label("Channel Name").name("cname"))
 					
@@ -207,17 +201,16 @@ public class YouTubeBot {
 	
 // Search By Topic
 	
-		@OnKeyword("Search by topic")
-		public void Searchbytopic(TeamchatAPI api) {
-			searchbytopic(api);
-		}
+//		@OnKeyword("Search by topic")
+//		public void Searchbytopic(TeamchatAPI api) {
+//			searchbytopic(api);
+//		}
 		
-		@OnKeyword("search by topic")
+		@OnKeyword("searchbytopic")
 		public void searchbytopic(TeamchatAPI api) {
 			api.perform(
 					api.context().currentRoom().post(
-					new PrimaryChatlet()
-				
+					new PrimaryChatlet()				
 					.setQuestionHtml("Enter the Topic")
 					.setReplyScreen(api.objects().form()
 					.addField(api.objects().input().label("Topic").name("topic"))
@@ -298,16 +291,14 @@ public class YouTubeBot {
 		}
 // Subscribe channel
 		
-		@OnKeyword("Subscribe channel")
-		public void SubscribeChannel(TeamchatAPI api) {
-			subscribeChannel(api);
-		}
+//		@OnKeyword("Subscribe channel")
+//		public void SubscribeChannel(TeamchatAPI api) {
+//			subscribeChannel(api);
+//		}
 		
-		@OnKeyword("subscribe channel")
+		@OnKeyword("subscribechannel")
 		public void subscribeChannel(TeamchatAPI api) {
-			api.perform(
-					api.context().currentRoom().post(
-					new PrimaryChatlet()				
+			api.perform(api.context().currentRoom().post(new PrimaryChatlet()				
 					.setQuestion("Enter the ChannelId or ChannelName")
 					.setReplyScreen(api.objects().form()
 					.addField(api.objects().input().label("ChannelId").name("channelId"))
@@ -328,8 +319,6 @@ public class YouTubeBot {
 			{
 				String channelId=rpl.getField("channelId");
 				String sname=rpl.senderEmail();
-				sname=sname.replace('@', '_');
-				sname=sname.replace('.', '_');
 				AddSubscription sub=new AddSubscription(client_id,client_secret);
 				try {
 						api.perform(api.context().currentRoom().post( new PrimaryChatlet()
@@ -384,8 +373,6 @@ public class YouTubeBot {
 			
 			Reply rpl=api.context().currentReply();
 			String sname=rpl.senderEmail();
-			sname=sname.replace('@', '_');
-			sname=sname.replace('.', '_');
 			String ch="";
 			ch=rpl.getField("choice");
 			if(ch.length()<1)
@@ -408,17 +395,15 @@ public class YouTubeBot {
 		
 // Uploaded video
 		
-		@OnKeyword("My uploads")
-		public void MyUploads(TeamchatAPI api) {
-			myUploads(api);
-		}
+//		@OnKeyword("My uploads")
+//		public void MyUploads(TeamchatAPI api) {
+//			myUploads(api);
+//		}
 		
-				@OnKeyword("my uploads")
+				@OnKeyword("myuploads")
 				public void myUploads(TeamchatAPI api) {
 					MyUploads mu=new MyUploads(client_id,client_secret);
 					String sname=api.context().currentSender().getEmail();
-					sname=sname.replace('@', '_');
-					sname=sname.replace('.', '_');
 					try {
 						api.perform(api.context().currentRoom().post(new PrimaryChatlet()
 						.setQuestionHtml(mu.myUpload(sname))));
@@ -430,19 +415,16 @@ public class YouTubeBot {
 				}				
 // Creating Playlist
 				
-				@OnKeyword("Create playlist")
-				public void CreatePlaylist(TeamchatAPI api) {
-					createPlaylist(api);
-				}
+//				@OnKeyword("Create playlist")
+//				public void CreatePlaylist(TeamchatAPI api) {
+//					createPlaylist(api);
+//				}
 				
-				@OnKeyword("create playlist")
+				@OnKeyword("createplaylist")
 				public void createPlaylist(TeamchatAPI api) {
 					
-					api.perform(
-							api.context().currentRoom().post(
-							new PrimaryChatlet()
-						
-							.setQuestion("Enter the Playlist Details ")
+					api.perform(api.context().currentRoom().post(new PrimaryChatlet()						
+							.setQuestionHtml("Enter the Playlist Details ")
 							.setReplyScreen(api.objects().form()
 							.addField(api.objects().input().label("Playlist Title").name("pltitle"))
 							.addField(api.objects().input().label("Playlist Description").name("pldes"))
@@ -464,7 +446,7 @@ public class YouTubeBot {
 						api.perform(
 								api.context().currentRoom().post(
 										new PrimaryChatlet()
-										.setQuestion("Enter the Details")
+										.setQuestionHtml("Enter the Details")
 										.setReplyScreen(ninputField(api))
 										.alias("playlist")));
 					} catch (Exception e) {
@@ -490,8 +472,6 @@ public class YouTubeBot {
 					String[] vid=new String[vno];
 					Reply rpl=api.context().currentReply();
 					String sname=rpl.senderEmail();
-					sname=sname.replace('@', '_');
-					sname=sname.replace('.', '_');
 					for(int i=0;i<vno;i++)
 					{
 						vid[i]=rpl.getField("v"+(i+1)+"id");
@@ -510,18 +490,15 @@ public class YouTubeBot {
 				
 // Channel Bulletin
 				
-				@OnKeyword("Channel bulletin")
-				public void ChannelBulletin(TeamchatAPI api) {
-					channelBulletin(api);
-				}
+//				@OnKeyword("Channel bulletin")
+//				public void ChannelBulletin(TeamchatAPI api) {
+//					channelBulletin(api);
+//				}
 				
-				@OnKeyword("channel bulletin")
+				@OnKeyword("channelbulletin")
 				public void channelBulletin(TeamchatAPI api) {
-					api.perform(
-							api.context().currentRoom().post(
-							new PrimaryChatlet()
-						
-							.setQuestion("Enter the Details")
+					api.perform(api.context().currentRoom().post(new PrimaryChatlet()						
+							.setQuestionHtml("Enter the Details")
 							.setReplyScreen(api.objects().form()
 							.addField(api.objects().input().label("Video ID ").name("videoid"))
 							.addField(api.objects().input().label("Description ").name("description"))
@@ -536,8 +513,6 @@ public class YouTubeBot {
 					
 					Reply rpl=api.context().currentReply();
 					String sname=rpl.senderEmail();
-					sname=sname.replace('@', '_');
-					sname=sname.replace('.', '_');
 					String videoid=rpl.getField("videoid");
 					String description=rpl.getField("description");
 					ChannelBulletin cb=new ChannelBulletin(client_id,client_secret);
@@ -552,13 +527,13 @@ public class YouTubeBot {
 				}
 // Uploading Video
 				
-				@OnKeyword("Upload")
-				public void UploadVideo(TeamchatAPI api) {
-					uploadVideo(api);
-				}
+//				@OnKeyword("Upload")
+//				public void UploadVideo(TeamchatAPI api) {
+//					uploadVideo(api);
+//				}
 				
 				@OnKeyword("upload")
-				public void uploadVideo(TeamchatAPI api) {
+				public void uploadVideo(TeamchatAPI api) throws JSONException {
 
 					TeamchatURLlink urlLink = new TeamchatURLlink();
 					String url=upload_url;

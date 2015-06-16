@@ -8,10 +8,11 @@ public class TeamchatPost {
 	
 	public static TeamchatAPI tpapi;
 	
-	public void postMsg(String msg,String rid)
+	public void postMsg(String msg,String sname)
 	{
 		System.out.println(msg);
-		Room r=tpapi.context().byId(rid);
+		Room r=tpapi.context().create().setName("Library")
+				.add(sname);
 		tpapi.perform(r.post(new PrimaryChatlet()
 					.setQuestionHtml(msg)));
 	}

@@ -7,6 +7,7 @@ public class DBProperty {
 
 	String dbuser="null";
 	String dbpass="null";
+	String dbname="null";
 	
 	public static Properties loadPropertyFromClasspath(String fileName, Class<?> type) throws IOException
 	{
@@ -30,6 +31,7 @@ public class DBProperty {
 	 
 	    dbuser = props.getProperty("dbuser", "null");
 	    dbpass = props.getProperty("dbpass", "null");
+	    dbname = props.getProperty("dbname", "null");
 	}
 	
 	public String getDBUser()
@@ -42,5 +44,8 @@ public class DBProperty {
 		return dbpass;
 	}
 	
-	
+	public String getDBName()
+	{
+		return dbname;
+	}
 }

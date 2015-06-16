@@ -40,16 +40,14 @@ public class YoutubeBotServelet extends HttpServlet {
     	String rid=request.getParameter("rid");
     	client_id=request.getParameter("client_id");
     	client_secret=request.getParameter("client_secret");
-    	YoutubeConnect.rid=rid;
-    	YoutubeConnect.client_id=client_id;
-    	YoutubeConnect.client_secret=client_secret;
-    	YoutubeConnect.uid=request.getParameter("name");
+    	String sname=request.getParameter("name");
     	String requestUrl ="https://accounts.google.com/o/oauth2/auth?"
 				+"client_id="+client_id+"&"
 				+"redirect_uri="+redirecturi +"&"
 				+"scope=https://www.googleapis.com/auth/youtube&"
 				+"response_type=code&"
 				+"approval_prompt=force&"
+				+ "state="+sname+"&"
 				+"access_type=offline";
 		response.setContentType("application/x-www-form-urlencoded");
     	 response.sendRedirect(response.encodeRedirectURL(requestUrl));

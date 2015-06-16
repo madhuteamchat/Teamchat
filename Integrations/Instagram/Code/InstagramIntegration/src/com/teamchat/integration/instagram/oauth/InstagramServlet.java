@@ -37,10 +37,8 @@ public class InstagramServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		
-		redirecturi="http://interns.teamchat.com:8086/InstagramIntegration/InstagramCallBack";
-		client_id="858afa5bc35e419c82d02ad8c58d037e";
-    	InstagramToken.uid=request.getParameter("name");
-		String url="https://api.instagram.com/oauth/authorize/?client_id="+client_id+"&redirect_uri="+redirecturi+"&scope=likes+comments&response_type=code";
+    	
+		String url="https://api.instagram.com/oauth/authorize/?client_id="+client_id+"&redirect_uri="+redirecturi+"&state="+request.getParameter("name")+"&scope=likes+comments&response_type=code";
 		response.setContentType("application/x-www-form-urlencoded");
 		response.sendRedirect(response.encodeRedirectURL(url));
 	}

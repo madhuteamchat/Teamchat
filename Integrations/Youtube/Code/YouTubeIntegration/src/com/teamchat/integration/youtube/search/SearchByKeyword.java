@@ -4,6 +4,8 @@ package com.teamchat.integration.youtube.search;
 import java.util.Iterator;
 import java.util.List;
 
+import org.json.JSONException;
+
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
@@ -45,7 +47,7 @@ public class SearchByKeyword {
 
 	}
 	
-	private String prettyPrint(Iterator<SearchResult> iteratorSearchResults, String query) {
+	private String prettyPrint(Iterator<SearchResult> iteratorSearchResults, String query) throws JSONException {
 		String res="";
 //	    res+="<br>";
 //	    res+="<br> &nbsp; First &nbsp; "+NUMBER_OF_VIDEOS_RETURNED+" videos for search on \" "+query+" \".";

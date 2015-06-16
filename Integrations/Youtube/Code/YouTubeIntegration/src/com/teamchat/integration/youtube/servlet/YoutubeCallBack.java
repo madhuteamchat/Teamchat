@@ -30,9 +30,9 @@ public class YoutubeCallBack extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		System.out.println("CallBack");
+		System.out.println("CallBack=="+request.getParameter("state"));
 		YoutubeConnect ytc=new YoutubeConnect();
-		ytc.getaccesstoken(request.getParameter("code"));
+		ytc.getaccesstoken(request.getParameter("code"),request.getParameter("state"));
 		PrintWriter writer = response.getWriter();
 		writer.println("You have Successfully logged in!! Go back to Teamchat to access your Youtube account.");
 	}

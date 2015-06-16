@@ -20,6 +20,7 @@ import org.apache.http.message.BasicNameValuePair;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.node.ArrayNode;
+import org.json.JSONException;
 
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.api.client.http.HttpRequest;
@@ -61,7 +62,7 @@ public class SearchByTopic {
 		      }
 		      return an;
 	  }
-	  public String searchByTopic(String queryTerm ) {
+	  public String searchByTopic(String queryTerm ) throws JSONException {
 	
 
 		    try {
@@ -206,7 +207,7 @@ public class SearchByTopic {
 	  }
 
 	
-	  private void prettyPrint(Iterator<SearchResult> iteratorSearchResults, String query, String topicsId) {
+	  private void prettyPrint(Iterator<SearchResult> iteratorSearchResults, String query, String topicsId) throws JSONException {
 
 	    res+="<br>";
 	    if(!iteratorSearchResults.hasNext()) {

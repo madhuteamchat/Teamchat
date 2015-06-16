@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.json.JSONException;
+
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.api.client.http.HttpTransport;
@@ -134,7 +136,7 @@ public class MyUploads {
 	  }
 
 	
-	  private void prettyPrint(int size, Iterator<PlaylistItem> playlistEntries) {
+	  private void prettyPrint(int size, Iterator<PlaylistItem> playlistEntries) throws JSONException {
 	    res+="<br><br>Total Videos Uploaded: " + size+"<br>";
 	    while (playlistEntries.hasNext()) {
 	      PlaylistItem playlistItem = playlistEntries.next();	 

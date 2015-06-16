@@ -22,7 +22,6 @@ import com.teamchat.integration.instagram.properties.InstagramProperty;
 public class InstagramToken {
 
 	
-	public static String uid="";
 	
 	String scopes="wl.basic+wl.offline_access+wl.signin+wl.skydrive+wl.skydrive_update";
 	String redirecturi="null";
@@ -39,10 +38,9 @@ public class InstagramToken {
 	}
 	
 	
-	public void getaccesstoken(String acode)
+	public void getaccesstoken(String acode,String sname)
 	{
 		 try { 
-			 String uid=InstagramToken.uid;
 		
 	    HttpPost httppost = new
 	    		HttpPost("https://api.instagram.com/oauth/access_token");
@@ -82,7 +80,7 @@ public class InstagramToken {
 //						        props.store(out, "This is an optional header comment string");
 								
 								 JDBCConnection db=new JDBCConnection();
-							        db.insert(uid, json.getString("access_token"));
+							        db.insert(sname, json.getString("access_token"));
 							        JSONObject juser=json.getJSONObject("user");
 							        String usrname=juser.getString("username");
 							        String fullname=juser.getString("full_name");
@@ -91,7 +89,7 @@ public class InstagramToken {
 							        			+"<img src=\""+dp+"\" height=\"120\" width=\"120\" /><br><h4>"
 							        			+fullname+" ("+usrname+")</h4><div>";
 //							        System.out.println("@@@@@@@@@@@ uid="+uid);
-							        new TeamchatPost().postMsg(msg, uid);
+							        new TeamchatPost().postMsg(msg, sname);
 							     
 								
 				           	} catch (Exception e) {

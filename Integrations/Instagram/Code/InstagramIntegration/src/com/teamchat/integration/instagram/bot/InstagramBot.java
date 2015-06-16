@@ -41,10 +41,10 @@ public class InstagramBot {
 	}
 
 	// Help
-	@OnKeyword("help")
-	public void instagramhelp(TeamchatAPI api) {
-		instagramHelp(api);
-	}
+//	@OnKeyword("help")
+//	public void instagramhelp(TeamchatAPI api) {
+//		instagramHelp(api);
+//	}
 		@OnKeyword("Help")
 		public void instagramHelp(TeamchatAPI api) {
 			TeamchatPost.tpapi=api;
@@ -64,10 +64,10 @@ public class InstagramBot {
 
 	// Instagram Connect
 		
-		@OnKeyword("connect")
-		public void connectinstagram(TeamchatAPI api) throws JSONException {
-			connectInstagram(api);
-		}
+//		@OnKeyword("connect")
+//		public void connectinstagram(TeamchatAPI api) throws JSONException {
+//			connectInstagram(api);
+//		}
 		
 			@OnKeyword("Connect")
 			public void connectInstagram(TeamchatAPI api) throws JSONException {
@@ -89,10 +89,10 @@ public class InstagramBot {
 			}
 			
 	// Instagram Disconnect
-			@OnKeyword("disconnect")
-			public void disconnectinstagram(TeamchatAPI api) {
-				disconnectInstagram(api);
-			}
+//			@OnKeyword("disconnect")
+//			public void disconnectinstagram(TeamchatAPI api) {
+//				disconnectInstagram(api);
+//			}
 			
 				@OnKeyword("Disconnect")
 				public void disconnectInstagram(TeamchatAPI api) {
@@ -115,10 +115,10 @@ public class InstagramBot {
 				}
 		
 
-				@OnKeyword("subscribe")
-				public void ssubscribe(TeamchatAPI api) throws JSONException {
-					subscribe(api);
-				}
+//				@OnKeyword("subscribe")
+//				public void ssubscribe(TeamchatAPI api) throws JSONException {
+//					subscribe(api);
+//				}
 		
 		@OnKeyword("Subscribe")
 		public void subscribe(TeamchatAPI api) throws JSONException {
@@ -497,11 +497,11 @@ public class InstagramBot {
 			}
 		}
 		
-		@OnKeyword("sublist")
-		public void subscribelist(TeamchatAPI api) throws JSONException
-		{
-			subscribeList(api);
-		}
+//		@OnKeyword("sublist")
+//		public void subscribelist(TeamchatAPI api) throws JSONException
+//		{
+//			subscribeList(api);
+//		}
 		
 		@OnKeyword("Sublist")
 		public void subscribeList(TeamchatAPI api) throws JSONException
@@ -553,11 +553,11 @@ public class InstagramBot {
 			}
 		}
 		
-		@OnKeyword("unsubscribe")
-		public void unssubscribe(TeamchatAPI api) throws JSONException
-		{
-			unsubscribe(api);
-		}
+//		@OnKeyword("unsubscribe")
+//		public void unssubscribe(TeamchatAPI api) throws JSONException
+//		{
+//			unsubscribe(api);
+//		}
 		
 		@OnKeyword("Unsubscribe")
 		public void unsubscribe(TeamchatAPI api) throws JSONException
