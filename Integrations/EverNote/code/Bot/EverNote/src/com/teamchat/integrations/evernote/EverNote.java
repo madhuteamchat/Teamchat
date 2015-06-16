@@ -23,6 +23,8 @@ import com.evernote.edam.notestore.NoteList;
 import com.evernote.edam.type.Note;
 import com.evernote.edam.type.NoteSortOrder;
 import com.evernote.edam.type.Notebook;
+import com.evernote.edam.type.SharedNotebook;
+import com.evernote.edam.type.SharedNotebookPrivilegeLevel;
 import com.evernote.thrift.TException;
 import com.teamchat.client.annotations.OnAlias;
 import com.teamchat.client.annotations.OnKeyword;
@@ -45,7 +47,6 @@ public class EverNote {
 	@OnKeyword("help")
 	public void help(TeamchatAPI api){
 		String print= "WELCOME!!!<br>Type \"myevernote\" to start your EverNote and select the task you need.<br><br>A simple BOT can do a LOT..!<br><br>Thank You...";
-		//print="<en-todo checked=\"true\"></en-todo>Eat</div><div><en-todo checked=\"true\"></en-todo>Sleep</div><div><en-todo checked=\"true\"></en-todo>Repeat";
 		api.perform(api.context().currentRoom().post(new TextChatlet(print)));
 	}
 	@OnKeyword("myevernote")
@@ -66,6 +67,7 @@ public class EverNote {
 				.addOption("Search Notes")
 				.addOption("List Reminders")
 				.addOption("Edit Note")
+				.addOption("Share NoteBook")
 				)
 				)
 				.alias("taskToDo")
@@ -74,8 +76,41 @@ public class EverNote {
 	@OnAlias("taskToDo")
 	public void taskToDo(TeamchatAPI api){
 		task=(api.context().currentReply().getField("task"));
-		try {
-			if(task.equals("List NoteBooks")){
+		try {			
+			if(task.equals("Share NoteBook")){
+				String nb="";
+		    	String nbGuid="";
+		    	List<Notebook> notebooks = noteStore.listNotebooks();
+		    	if(notebooks.size()<1){
+		    		api.perform(api.context().currentRoom().post(new TextChatlet("No Notebooks to edit")));
+		    	}
+		    	else
+		    	{
+		    		for (Notebook notebook : notebooks) {
+		    			nb=nb+":"+notebook.getName();
+		    			nbGuid=nbGuid+":"+notebook.getGuid();
+		    		}
+		    		nb=nb.substring(1);
+		    		nbGuid=nbGuid.substring(1);
+		    		nbArray=nb.split(":");
+		    		nbGuidArray=nbGuid.split(":");
+		    		String label1="Notebook";
+		    		String name1="notebook";
+		    		api.perform(
+		    				api.context().currentRoom().post(
+		    						new PrimaryChatlet()
+		    						.setQuestion("Select the NoteBook to share.")
+		    						.setReplyScreen
+		    						(
+		    								api.objects().form()
+		    								.addField(getOptions(api,label1,name1,nbArray))
+		    								.addField(api.objects().input().label("E-mail").name("mailid"))
+		    						)
+		    						.alias("share")
+					));
+			}
+			}
+			else if(task.equals("List NoteBooks")){
 				String nb="";
 				nb=nb+"<ol>";
 				List<Notebook> notebooks = noteStore.listNotebooks();
@@ -192,6 +227,26 @@ public class EverNote {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+	}
+	@OnAlias("share")
+	public void shareNoteBook(TeamchatAPI api) throws EDAMUserException, EDAMSystemException, TException, EDAMNotFoundException{
+		nBook=api.context().currentReply().getField("notebook");
+		String mailId=api.context().currentReply().getField("mailid");
+		SharedNotebook sharedNotebook = new SharedNotebook();
+		String mail[]=mailId.split(",");
+		List<Notebook> notebooks = noteStore.listNotebooks();
+		for (Notebook notebook : notebooks) {
+			if(notebook.getName().equals(nBook)){
+				sharedNotebook.setNotebookGuid(notebook.getGuid());
+				sharedNotebook.setAllowPreview(true);
+				sharedNotebook.setPrivilege(SharedNotebookPrivilegeLevel.MODIFY_NOTEBOOK_PLUS_ACTIVITY);
+				for(int i=0;i<mail.length;i++){
+					sharedNotebook.setEmail(mail[i]);
+				}
+				sharedNotebook = noteStore.createSharedNotebook(sharedNotebook); 
+				}
+			break;
+		}
 	}
 	@OnAlias("edit")
 	public void selectNoteToEdit(TeamchatAPI api) throws EDAMUserException, EDAMSystemException, EDAMNotFoundException, TException{
