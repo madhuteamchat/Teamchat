@@ -96,7 +96,6 @@ public class LinkIt {
 		JSONObject j2 = new JSONObject (response.getBody());
 		System.out.println(j2.toString());
 		
-		if (j2.length() == 3)	
 		api.perform(api
 				.context()
 				.currentRoom()
@@ -105,15 +104,6 @@ public class LinkIt {
 								+ "</td></tr><tr><td>" + j1.getString ("firstName") + " " + j1.getString ("lastName") + "</td></tr>"
 								+ "<tr><td>\"" + j1.getString("headline") + "\"</td></tr>"
 								+ "<tr><td>Connections-" + j2.getInt("numConnections") + "</td></tr></table>")));
-		else
-			api.perform(api
-					.context()
-					.currentRoom()
-					.post(new PrimaryChatlet()
-							.setQuestionHtml("<table border=0 width=378px><tr><td rowspan=4><img src='" + "" + "'></img>"
-									+ "</td></tr><tr><td>Name - " + j1.getString ("firstName") + " " + j1.getString ("lastName") + "</td></tr>"
-									+ "<tr><td>Headline - \"" + j1.getString("headline") + "\"</td></tr>"
-									+ "<tr><td>Connections-" + j2.getInt("numConnections") + "</td></tr></table>")));
 	}
 	
 	@OnKeyword ("share")
