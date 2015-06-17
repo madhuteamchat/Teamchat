@@ -22,6 +22,8 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONObject;
+import com.slack.auth.getjson;
+import java.util.Properties;
 
 /**
  * Servlet implementation class slack_auth
@@ -60,29 +62,23 @@ public class slack_auth extends HttpServlet {
 	public void process(HttpServletRequest request, HttpServletResponse response)
 			throws IOException {
 		System.out.println(request.getParameter("code"));
-
 		String code = request.getParameter("code");
-		String s = "https://slack.com/api/oauth.access?client_id=5090557084.5108581326&client_secret=6f41ca2089675e9cadddae278f18b3cc&code="
-				+ code
-				+ "&redirect_uri=http://localhost:8080/slack_auth/slack_auth&pretty=1";
-		// https://slack.com/oauth/authorize?client_id=5090557084.5108581326&redirect_uri=http://localhost:8080/slack_auth/slack_auth&scope=identify,read,post,client,admin
-		response.sendRedirect(s); //Need to extract the JSON output of this url since it contains access token. Do it tomorrow.
 
-		
-		/*
-		HttpClient clt = new DefaultHttpClient();
-		HttpGet req = new HttpGet(s);
+		// Save the code in a properties file
+		try {
+			Properties prop = new Properties();
+			prop.setProperty("code", code);
+			File file = new File("code.properties");
+			FileOutputStream fileOut = new FileOutputStream(file);
+			prop.store(fileOut, null);
+			fileOut.close();
 
-		HttpResponse resp = clt.execute(req);
-		BufferedReader rd = new BufferedReader(new InputStreamReader(resp
-				.getEntity().getContent()));
-		String line = "";
-		StringBuilder sb = new StringBuilder();
-		while ((line = rd.readLine()) != null)
-			sb.append(line);
-		String output = sb.toString();
-		JSONObject j = new JSONObject(output);
-*/
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
 	}
 
 }
