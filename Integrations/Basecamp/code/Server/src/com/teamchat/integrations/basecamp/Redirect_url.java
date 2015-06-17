@@ -23,7 +23,6 @@ import org.json.JSONObject;
 
 import com.google.gson.Gson;
 
-
 /**
  * Servlet implementation class Redirect_url
  */
@@ -87,7 +86,7 @@ public class Redirect_url extends HttpServlet {
 			response.append(inputLine);
 		}
 		in.close();
-		//print result
+		// print result
 		Gson gson = new Gson();
 		Token token = (Token) gson.fromJson(response.toString(), Token.class);
 		System.out.println(token.access_token());
@@ -99,19 +98,16 @@ public class Redirect_url extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		String user_agent = request.getHeader("User-Agent"),
-				code = request.getParameter("code"),
-				client_id = "8f6bc64ea4e27e738ab826f47832df331009feb9",
-				client_secret = "4ab6e59509ac6fe6878c88c5a6face6f9d253afb",
-				redirect_uri = "http://localhost:8080/Basecamp_servlet/Redirect_url";
+		String user_agent = request.getHeader("User-Agent"), code = request
+				.getParameter("code"), client_id = "8f6bc64ea4e27e738ab826f47832df331009feb9", client_secret = "4ab6e59509ac6fe6878c88c5a6face6f9d253afb", redirect_uri = "http://localhost:8080/Basecamp_servlet/Redirect_url";
 		PrintWriter out = response.getWriter();
 		try {
-			out.println(code);			
+			out.println(code);
 			sendPost("https://launchpad.37signals.com/authorization/token",
-					user_agent,"type=web_server&client_id=" + client_id +
-					"&redirect_uri=" + redirect_uri
-					+"&client_secret=" + client_secret
-					+"&code=" + code);
+					user_agent, "type=web_server&client_id=" + client_id
+							+ "&redirect_uri=" + redirect_uri
+							+ "&client_secret=" + client_secret + "&code="
+							+ code);
 		} catch (Exception e) {
 			// TODO: handle exception
 			out.println(e);
