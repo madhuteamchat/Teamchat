@@ -30,7 +30,6 @@ import com.google.gson.Gson;
 @WebServlet(description = "get the verfication code from this url", urlPatterns = { "/Redirect_url" })
 public class Redirect_url extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	public static String code;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
@@ -55,37 +54,6 @@ public class Redirect_url extends HttpServlet {
 		// TODO Auto-generated method stub
 	}
 
-	//	/**
-	//	 * @see HttpServlet#service(HttpServletRequest request, HttpServletResponse
-	//	 *      response)
-	//	 */
-	//	protected void service(HttpServletRequest request,
-	//			HttpServletResponse response) throws ServletException, IOException {
-	//		String code = request.getParameter("code"), user_agent = request
-	//				.getHeader("User-Agent"), client_id = "8f6bc64ea4e27e738ab826f47832df331009feb9", 
-	//				client_secret = "4ab6e59509ac6fe6878c88c5a6face6f9d253afb", 
-	//				redirect_uri = "http://localhost:8080/Basecamp_servlet/Redirect_url",
-	//				access_token, refresh_token = request
-	//				.getParameter("refresh_token"), expires_in = request
-	//				.getParameter("expires_in");
-	//		PrintWriter out = response.getWriter();
-	//		out.println("To out-put All the request-attributes received from request - ");
-	//		try {
-	//			//JSONObject uriparam = new JSONObject(request);
-	//			//access_token = (String) uriparam.get("access_token");
-	////			response.getWriter().print(code + "or" + access_token);
-	//			response.getWriter().print(request.toString());
-	//			 sendPost("https://launchpad.37signals.com/authorization/token?",
-	//			 user_agent,"type=web_server&client_id=" + client_id +
-	//			 "&redirect_uri=" + redirect_uri
-	//			 +"&client_secret=" + client_secret
-	//			 +"&code=" + code);
-	//		} catch (Exception e) {
-	//			// TODO: handle exception
-	//			out.println(e);
-	//		}
-	//	}
-
 	// HTTP POST request
 	private void sendPost(String url, String User_agent, String urlParameters)
 			throws Exception {
@@ -105,8 +73,10 @@ public class Redirect_url extends HttpServlet {
 		wr.writeBytes(urlParameters);
 		wr.flush();
 		wr.close();
-
 		int responseCode = con.getResponseCode();
+		System.out.println("\nSending 'POST' request to URL : " + url);
+		System.out.println("Post parameters : " + urlParameters);
+		System.out.println("Response Code : " + responseCode);
 
 		BufferedReader in = new BufferedReader(new InputStreamReader(
 				con.getInputStream()));
@@ -117,6 +87,10 @@ public class Redirect_url extends HttpServlet {
 			response.append(inputLine);
 		}
 		in.close();
+		//print result
+		Gson gson = new Gson();
+		Token token = (Token) gson.fromJson(response.toString(), Token.class);
+		System.out.println(token.access_token());
 	}
 
 	/**
@@ -125,95 +99,24 @@ public class Redirect_url extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		// retrieve verification code
-		code = request.getParameter("code");
-		String user_agent = request
-				.getHeader("User-Agent"), client_id = "8f6bc64ea4e27e738ab826f47832df331009feb9", client_secret = "4ab6e59509ac6fe6878c88c5a6face6f9d253afb", redirect_uri = "http://localhost:8080/Basecamp_servlet/Redirect_url",
-				access_token = new String(), refresh_token, expires_in;
+		String user_agent = request.getHeader("User-Agent"),
+				code = request.getParameter("code"),
+				client_id = "8f6bc64ea4e27e738ab826f47832df331009feb9",
+				client_secret = "4ab6e59509ac6fe6878c88c5a6face6f9d253afb",
+				redirect_uri = "http://localhost:8080/Basecamp_servlet/Redirect_url";
 		PrintWriter out = response.getWriter();
-		boolean isPost = "POST".equals(request.getMethod());
-		out.println(isPost);
 		try {
-			out.println(code + "or" + access_token);			
+			out.println(code);			
 			sendPost("https://launchpad.37signals.com/authorization/token",
 					user_agent,"type=web_server&client_id=" + client_id +
 					"&redirect_uri=" + redirect_uri
 					+"&client_secret=" + client_secret
 					+"&code=" + code);
-			//doPost(request, response);
 		} catch (Exception e) {
 			// TODO: handle exception
 			out.println(e);
 		}
 		// TODO retrieve CLIENT_ID ,etc from db
-		// if (code.equals("null")) {
-		// try {
-		// Redirect_url r_url = new Redirect_url();
-		// r_url.sendPost("https://launchpad.37signals.com/authorization/token",
-		// user_agent,"?type=web_server&client_id=" + client_id +
-		// "&redirect_uri=" + redirect_uri
-		// +"&client_secret=" + client_secret
-		// +"&code=" + code);
-		// doPost("", response);
-		// } catch (Exception e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// }
-
-		// }
-		out.println("man this is not the post!!!");
-		try{
-			StringBuilder sb = new StringBuilder();
-			String s;
-			while ((s = request.getReader().readLine()) != null) {
-				sb.append(s);
-			}
-			//Token token = (Token) gson.fromJson(sb.toString(), Token.class);
-			JSONObject jobj = new JSONObject(sb.toString());
-			out.println(jobj);
-		}
-		catch(Exception e){
-			out.println(e);
-		}
-	}
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
-	protected void doPost(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
-		// System.out.println(request.getParameter("token"));
-		// TODO Auto-generated method stub
-		// String user = request.getParameter("user");
-		// String pass = request.getParameter("password");
-		// if ("edu4java".equals(user) && "eli4java".equals(pass)) {
-		// response(response, "login ok");
-		// } else {
-		// response(response, "invalid login");
-		// }
-		//		String code = request.getParameter("code"), user_agent = request
-		//				.getHeader("User-Agent"), client_id = "8f6bc64ea4e27e738ab826f47832df331009feb9", client_secret = "4ab6e59509ac6fe6878c88c5a6face6f9d253afb", redirect_uri = "http://localhost:8080/Basecamp_servlet/Redirect_url", access_token = request
-		//				.getParameter("access_token"), refresh_token = request
-		//				.getParameter("refresh_token"), expires_in = request
-		//				.getParameter("expires_in");
-		//		response.getWriter().print(code + "or" + access_token);
-		String access_token, refresh_token, expires_in;
-		PrintWriter out = response.getWriter();
-		out.println("man this is the post!!!");
-		try{
-			StringBuilder sb = new StringBuilder();
-			String s;
-			while ((s = request.getReader().readLine()) != null) {
-				sb.append(s);
-			}
-			//Token token = (Token) gson.fromJson(sb.toString(), Token.class);
-			JSONObject jobj = new JSONObject(sb.toString());
-			out.println(jobj);
-		}
-		catch(Exception e){
-			out.println(e);
-		}
 	}
 
 }
