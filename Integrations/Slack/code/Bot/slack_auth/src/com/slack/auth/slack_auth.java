@@ -36,26 +36,23 @@ public class slack_auth extends HttpServlet {
 	 * Default constructor.
 	 */
 	public slack_auth() {
-		// TODO Auto-generated constructor stub
+	
 	}
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+	
 		process(request, response);
+	
 	}
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
+	
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		
+		String token = request.getParameter("token");
+		System.out.println(request.getRequestURI());
+		System.out.println(token);
+		
 		process(request, response);
 	}
 
@@ -64,6 +61,11 @@ public class slack_auth extends HttpServlet {
 		System.out.println(request.getParameter("code"));
 		String code = request.getParameter("code");
 
+		System.out.println(request.getHeaderNames());
+		
+		//boolean isPost = "POST".equals(request.getMethod());
+		//System.out.println(isPost);
+		
 		// Save the code in a properties file
 		try {
 			Properties prop = new Properties();

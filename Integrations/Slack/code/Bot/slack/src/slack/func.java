@@ -90,7 +90,7 @@ public class func {
 				+ code
 				+ "&redirect_uri=http://localhost:8080/slack_auth/slack_auth&pretty=1";
 
-		HttpClient client = new DefaultHttpClient();
+		HttpClient client = new DefaultHttpClient(); //this default is deprecated, I could instead use HttpClientBuilder.create().build();
 		HttpGet request = new HttpGet(s);
 
 		HttpResponse response = client.execute(request);
