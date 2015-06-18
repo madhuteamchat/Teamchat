@@ -6,27 +6,21 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.URL;
-import java.util.Enumeration;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
-import javax.servlet.ServletOutputStream;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.apache.jasper.tagplugins.jstl.core.ForEach;
-import org.apache.jasper.tagplugins.jstl.core.Out;
-import org.json.JSONObject;
 
 import com.google.gson.Gson;
 
 /**
  * Servlet implementation class Redirect_url
  */
-@WebServlet(description = "get the verfication code from this url", urlPatterns = { "/Redirect_url" })
+@WebServlet(description = "get the verification code from this url", urlPatterns = { "/Redirect_url" })
 public class Redirect_url extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -77,19 +71,24 @@ public class Redirect_url extends HttpServlet {
 		System.out.println("Post parameters : " + urlParameters);
 		System.out.println("Response Code : " + responseCode);
 
-		BufferedReader in = new BufferedReader(new InputStreamReader(
-				con.getInputStream()));
-		String inputLine;
-		StringBuffer response = new StringBuffer();
+		if (responseCode == 200) {
+			BufferedReader in = new BufferedReader(new InputStreamReader(
+					con.getInputStream()));
+			String inputLine;
+			StringBuffer response = new StringBuffer();
 
-		while ((inputLine = in.readLine()) != null) {
-			response.append(inputLine);
+			while ((inputLine = in.readLine()) != null) {
+				response.append(inputLine);
+			}
+			in.close();
+			Gson gson = new Gson();
+			// put response in token class
+			Token token = (Token) gson.fromJson(response.toString(),
+					Token.class);
+			System.out.println(token.access_token());
+		} else {
+
 		}
-		in.close();
-		// print result
-		Gson gson = new Gson();
-		Token token = (Token) gson.fromJson(response.toString(), Token.class);
-		System.out.println(token.access_token());
 	}
 
 	/**
@@ -98,21 +97,27 @@ public class Redirect_url extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		String user_agent = request.getHeader("User-Agent"), code = request
-				.getParameter("code"), client_id = "8f6bc64ea4e27e738ab826f47832df331009feb9", client_secret = "4ab6e59509ac6fe6878c88c5a6face6f9d253afb", redirect_uri = "http://localhost:8080/Basecamp_servlet/Redirect_url";
+		// get configuration info from config file
+		Config_handler config = new Config_handler();
+		if (config.isEmpty()) {
+			config.initProperties();
+			System.out
+					.println("Properties file has been created on the Server!");
+		}
 		PrintWriter out = response.getWriter();
 		try {
-			out.println(code);
 			sendPost("https://launchpad.37signals.com/authorization/token",
-					user_agent, "type=web_server&client_id=" + client_id
-							+ "&redirect_uri=" + redirect_uri
-							+ "&client_secret=" + client_secret + "&code="
-							+ code);
+					request.getHeader("User-Agent"),
+					"type=web_server&client_id=" + config.getclient_id()
+							+ "&redirect_uri=" + config.getredirect_uri()
+							+ "&client_secret=" + config.getclient_secret()
+							+ "&code=" + request.getParameter("code"));
 		} catch (Exception e) {
 			// TODO: handle exception
 			out.println(e);
 		}
 		// TODO retrieve CLIENT_ID ,etc from db
+		out.println("<script>window.close();</script>");
 	}
 
 }

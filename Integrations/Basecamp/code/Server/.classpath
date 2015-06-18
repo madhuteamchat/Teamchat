@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="resources"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/java-7-openjdk-amd64">
 		<attributes>
 			<attribute name="owner.project.facets" value="java"/>
@@ -13,9 +14,9 @@
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
-	<classpathentry kind="lib" path="/home/intern19/Documents/Teamchat/Integrations/Basecamp/code/teamchat-client-sdk.1.4.jar"/>
+	<classpathentry exported="true" kind="lib" path="/home/intern19/Documents/Teamchat/Integrations/Basecamp/code/teamchat-client-sdk.1.4.jar"/>
 	<classpathentry exported="true" kind="lib" path="/home/intern19/Documents/Teamchat/Integrations/Basecamp/code/gson-2.3.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="/home/intern19/Documents/Teamchat/Integrations/Basecamp/code/gson-2.3.1-javadoc.jar"/>
-	<classpathentry kind="lib" path="/home/intern19/Documents/Teamchat/Integrations/Basecamp/code/mysql-connector-java-5.1.35-bin.jar"/>
+	<classpathentry exported="true" kind="lib" path="/home/intern19/Documents/Teamchat/Integrations/Basecamp/code/mysql-connector-java-5.1.35-bin.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

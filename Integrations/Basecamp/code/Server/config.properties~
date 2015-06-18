@@ -1,0 +1,15 @@
+#client_id
+#Thu Jun 18 11:44:10 IST 2015
+client_secret=4ab6e59509ac6fe6878c88c5a6face6f9d253afb
+redirect_uri=http\://localhost\:8080/Basecamp_servlet/Redirect_url
+client_id=8f6bc64ea4e27e738ab826f47832df331009feb9
+#client_secret
+#Thu Jun 18 11:44:10 IST 2015
+client_secret=4ab6e59509ac6fe6878c88c5a6face6f9d253afb
+redirect_uri=http\://localhost\:8080/Basecamp_servlet/Redirect_url
+client_id=8f6bc64ea4e27e738ab826f47832df331009feb9
+#redirect_uri
+#Thu Jun 18 11:44:10 IST 2015
+client_secret=4ab6e59509ac6fe6878c88c5a6face6f9d253afb
+redirect_uri=http\://localhost\:8080/Basecamp_servlet/Redirect_url
+client_id=8f6bc64ea4e27e738ab826f47832df331009feb9

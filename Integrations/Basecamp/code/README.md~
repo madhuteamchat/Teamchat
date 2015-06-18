@@ -16,6 +16,8 @@ Gson
 
 my-sql-connector
 
+[config](https://github.com/typesafehub/config)
+
 Usage
 ----------
 
