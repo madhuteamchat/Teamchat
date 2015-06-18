@@ -16,7 +16,17 @@ Gson
 
 my-sql-connector
 
+Setup
+----------
+
+For db:
+http://www.vogella.com/tutorials/MySQLJava/article.html
+create database configdb;
+use configdb; 
+
 Usage
 ----------
 
     coming soon
+
+

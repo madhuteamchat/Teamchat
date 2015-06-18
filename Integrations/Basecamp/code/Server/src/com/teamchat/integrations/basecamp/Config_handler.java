@@ -63,7 +63,7 @@ public class Config_handler {
 
 	// methods
 	// initiate a Properties file with defaults
-	public void initProperties() {
+	public void init_auth_Properties() {
 		String client_id = "d48fa4605608e6bc3405232a71051aeb171eda35", client_secret = "cd7f2cc27a364efe2b7299621a265a788d17a24a", redirect_uri = "http://localhost:8080/Basecamp_servlet/Redirect_url";
 		// set local properties equal to these
 		this.client_id = client_id;

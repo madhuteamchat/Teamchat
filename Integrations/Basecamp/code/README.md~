@@ -16,9 +16,16 @@ Gson
 
 my-sql-connector
 
-[config](https://github.com/typesafehub/config)
+Setup
+----------
+
+For db:
+http://www.vogella.com/tutorials/MySQLJava/article.html
+create database configdb
 
 Usage
 ----------
 
     coming soon
+
+

@@ -5,6 +5,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.net.HttpURLConnection;
 import java.net.URL;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -16,6 +17,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 /**
  * Servlet implementation class Redirect_url
@@ -85,9 +88,39 @@ public class Redirect_url extends HttpServlet {
 			// put response in token class
 			Token token = (Token) gson.fromJson(response.toString(),
 					Token.class);
-			System.out.println(token.access_token());
+//			System.out.println(token.access_token());
+			Db_handler db = new Db_handler();
+			String get_response = sendGet_auth("https://launchpad.37signals.com/authorization.json",
+					"Teamchat (http://www.teamchat.com/en/)", "", token.access_token());
+			//parsing a json like this
+//			{
+//				  "accounts": [
+//				    {
+//				      "product": "bcx",
+//				      "name": "Teamchat",
+//				      "id": 2965117,
+//				      "href": "https://basecamp.com/2965117/api/v1"
+//				    }
+//				  ],
+//				  "identity": {
+//				    "email_address": "puru1joy@gmail.com",
+//				    "last_name": "Jain",
+//				    "first_name": "Puranjay",
+//				    "id": 11321861
+//				  },
+//				  "expires_at": "2015-07-02T14:08:18Z"
+//				}
+			JsonParser jsonParser = new JsonParser();
+			JsonObject accounts = (JsonObject)jsonParser.parse(get_response)
+			    .getAsJsonObject().getAsJsonArray("accounts").get(0);
+			String href = accounts.get("href").getAsString();
+			String email = accounts.get("email_address").getAsString();
+			System.out.println(href);
+			System.out.println(email);
+			//db.StoreToken(email, href, token);
+			//System.out.println("Successfully authenticated");
 		} else {
-
+			// handle bad response here
 		}
 	}
 
@@ -100,7 +133,7 @@ public class Redirect_url extends HttpServlet {
 		// get configuration info from config file
 		Config_handler config = new Config_handler();
 		if (config.isEmpty()) {
-			config.initProperties();
+			config.init_auth_Properties();
 			System.out
 					.println("Properties file has been created on the Server!");
 		}
@@ -120,4 +153,40 @@ public class Redirect_url extends HttpServlet {
 		out.println("<script>window.close();</script>");
 	}
 
+	// HTTP GET request
+	private String sendGet_auth(String url, String User_agent, String urlParameters, String token)
+			throws Exception {
+		// url example http://www.google.com/search
+		// urlParameters example q=Search&browser=chrome
+		URL obj = null;
+		if (urlParameters.isEmpty()) {
+			obj = new URL(url);
+		} else {
+
+			obj = new URL(url + "?" + urlParameters);
+		}
+		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+
+		// optional default is GET
+		con.setRequestMethod("GET");
+
+		// add request header
+		con.setRequestProperty("User-Agent", User_agent);
+		con.setRequestProperty("Authorization", "Bearer " + token);
+
+		int responseCode = con.getResponseCode();
+		System.out.println("\nSending 'GET' request to URL : " + url);
+		System.out.println("Response Code : " + responseCode);
+
+		BufferedReader in = new BufferedReader(new InputStreamReader(
+				con.getInputStream()));
+		String inputLine;
+		StringBuffer response = new StringBuffer();
+
+		while ((inputLine = in.readLine()) != null) {
+			response.append(inputLine);
+		}
+		in.close();
+		return response.toString();
+	}
 }
