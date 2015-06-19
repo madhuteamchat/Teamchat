@@ -35,25 +35,67 @@ import com.teamchat.client.sdk.chatlets.TextChatlet;
 import com.teamchat.client.sdk.impl.TeamchatAPIImpl;
 
 public class EverNote {
-	
-	private static UserStoreClient userStore;
+		
+	static final String consumerKey="botbegins";
+	static final String consumerSecret="1344399f32a08272";
+	static final EvernoteService EVERNOTE_SERVICE = EvernoteService.SANDBOX;
 	public static NoteStoreClient noteStore;
+	public static UserStoreClient userStore;
 	String nbGuidArray[]=null,nbArray[]=null,nArray[]=null,nGuidArray[]=null,nBook,noteName;
 	private String task;
-	private static final String AUTH_TOKEN = "S=s1:U=90f18:E=15516318697:C=14dbe805900:P=1cd:A=en-devtoken:V=2:H=d361e4b64f1994d8728d7ad91fb92398";
-	public  static String token = System.getenv("AUTH_TOKEN");
 	TeamchatAPI api;
+	
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		TeamchatAPI api = TeamchatAPIImpl.fromFile("teamchat.data")
+				.setEmail("botbegins@gmail.com")  //change to your teamchat registered email id
+				.setPassword("botbeginsit"); //change to your teamchat password
+				api.startReceivingEvents(new EverNote()); //Wait for other user to send message
+	}
+	
+	@OnKeyword("connect")
+	public void connect(TeamchatAPI api) throws EDAMUserException, EDAMSystemException, TException, IOException{
+		String mail=api.context().currentSender().getEmail();
+		String temp=null;
+		temp=PropertyFile.getProperty(mail);
+		if(temp == null){
+			String print= "<a href=\"http://localhost:8080/EverNote/EverNoteServlet?name="+mail+"\" target=\"_blank\">Login to EverNote</a>";
+			api.perform(api.context().currentRoom().post(new TextChatlet(print)));
+			while(temp != null){
+				temp=PropertyFile.getProperty(mail);
+				}
+			
+		}
+		else{
+			//api.perform(api.context().currentRoom().post(new TextChatlet("Token is there")));
+		}
+		EvernoteAuth evernoteAuth = new EvernoteAuth(EvernoteService.SANDBOX, temp);
+		ClientFactory factory = new ClientFactory(evernoteAuth);
+		userStore = factory.createUserStoreClient();
+		noteStore = factory.createNoteStoreClient();
+		boolean versionOk = userStore.checkVersion("Evernote Evernotebot (Java)",
+			       com.evernote.edam.userstore.Constants.EDAM_VERSION_MAJOR,
+			       com.evernote.edam.userstore.Constants.EDAM_VERSION_MINOR);
+		if (!versionOk) {
+				      System.err.println("Incompatible Evernote client protocol version");
+				      System.err.println("Incompatible Evernote client protocol version");
+						
+				      System.exit(1);
+		}
+		api.perform(api.context().currentRoom().post(new TextChatlet("Connected...")));
+	}
 	
 	@OnKeyword("help")
 	public void help(TeamchatAPI api){
-		String print= "WELCOME!!!<br>Type \"myevernote\" to start your EverNote and select the task you need.<br><br>A simple BOT can do a LOT..!<br><br>Thank You...";
+		String print= "Type \"connect\" to connect your Evernote.<br>Type \"myevernote\" to start your EverNote and select the task you need.";
 		api.perform(api.context().currentRoom().post(new TextChatlet(print)));
 	}
+	
 	@OnKeyword("myevernote")
 	public void myEverNote(TeamchatAPI api) throws EDAMUserException, EDAMSystemException, TException, EDAMNotFoundException{
+		
 		new AddReminders(api,noteStore);
-		api.perform(
-				api.context().currentRoom().post(
+		api.perform(api.context().currentRoom().post(
 				new PrimaryChatlet()
 				.setQuestion("Select your task")
 				.setReplyScreen
@@ -72,6 +114,7 @@ public class EverNote {
 				)
 				.alias("taskToDo")
 		));
+		
 	}
 	@OnAlias("taskToDo")
 	public void taskToDo(TeamchatAPI api){
@@ -440,45 +483,5 @@ public class EverNote {
 	public void searchNotes(TeamchatAPI api) throws Exception {
 		String query= (api.context().currentReply().getField("query"));
 		new SearchNotes(api,query,noteStore);
-	}
-	
-	public static void main(String[] args) throws TException, EDAMUserException, EDAMSystemException, EDAMNotFoundException {
-		if (token == null) {
-		      token = AUTH_TOKEN;
-		}
-		if ("your developer token".equals(token)) {
-		      System.err.println("Please fill in your developer token");
-		      System.err
-		          .println("To get a developer token, go to https://sandbox.evernote.com/api/DeveloperToken.action");
-		return;
-		}
-		EvernoteAuth evernoteAuth = new EvernoteAuth(EvernoteService.SANDBOX, token);
-		ClientFactory factory = new ClientFactory(evernoteAuth);
-		userStore = factory.createUserStoreClient();
-		boolean versionOk = userStore.checkVersion("Evernote Evernotebot (Java)",
-		       com.evernote.edam.userstore.Constants.EDAM_VERSION_MAJOR,
-		       com.evernote.edam.userstore.Constants.EDAM_VERSION_MINOR);
-		if (!versionOk) {
-			      System.err.println("Incompatible Evernote client protocol version");
-			      System.err.println("Incompatible Evernote client protocol version");
-					
-			      System.exit(1);
-		}
-		try {
-			factory.createNoteStoreClient();
-		} catch (EDAMUserException e) {
-			e.printStackTrace();
-		} catch (EDAMSystemException e) {
-			e.printStackTrace();
-		}
-		noteStore = factory.createNoteStoreClient();
-		
-
-		TeamchatAPI api = TeamchatAPIImpl.fromFile("teamchat6.data")
-				.setEmail("botbegins@gmail.com")  //change to your teamchat registered email id
-				.setPassword("botbeginsit"); //change to your teamchat password
-				api.startReceivingEvents(new EverNote()); //Wait for other user to send message
-		
-
 	}
 }

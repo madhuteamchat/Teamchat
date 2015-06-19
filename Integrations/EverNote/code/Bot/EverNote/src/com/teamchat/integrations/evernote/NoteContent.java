@@ -41,21 +41,12 @@ public class NoteContent {
         doc.getDocumentElement ().normalize ();
         NodeList info = doc.getElementsByTagName("div");
         Node currNode=info.item(0);
-        Node tempNode;
         Element element=(Element)currNode;
         NodeList child=element.getChildNodes();
         String data="";
         if(child.getLength()>0){
         	data=data+((Node)child.item(0)).getNodeValue();
-        }/*for(int i=0;i<child.getLength();i++){
-        	tempNode=(Node)child.item(i);
-        	data=data+((Node)child.item(i)).getNodeValue();
-        	while(tempNode.hasChildNodes()){
-        		System.out.println("done");
-        		data=data+tempNode.getFirstChild().getNodeValue();
-        		tempNode=tempNode.getFirstChild();
-        	}
-        }*/
+        }
         return data;
 	}
 
