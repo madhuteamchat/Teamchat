@@ -112,13 +112,14 @@ public class Redirect_url extends HttpServlet {
 //				}
 			JsonParser jsonParser = new JsonParser();
 			JsonObject accounts = (JsonObject)jsonParser.parse(get_response)
-			    .getAsJsonObject().getAsJsonArray("accounts").get(0);
+			    .getAsJsonObject().getAsJsonArray("accounts").get(0).getAsJsonObject();
+			JsonObject identity = (JsonObject)jsonParser.parse(get_response)
+			    .getAsJsonObject().get("identity").getAsJsonObject();
 			String href = accounts.get("href").getAsString();
-			String email = accounts.get("email_address").getAsString();
-			System.out.println(href);
-			System.out.println(email);
+			String email = identity.get("email_address").getAsString();
 			//db.StoreToken(email, href, token);
-			//System.out.println("Successfully authenticated");
+			System.out.println("Authenticated: " + 
+					db.StorageHandler(email, href, token));
 		} else {
 			// handle bad response here
 		}

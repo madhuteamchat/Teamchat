@@ -1,0 +1,2 @@
+use configdb;
+drop table authorized;

@@ -21,9 +21,41 @@ public class Db_handler {
 	private PreparedStatement preparedStatement = null;
 	private ResultSet resultSet = null;
 	private static final String DB_URL = "jdbc:mysql://localhost/configdb?user=root&password=pappupasshogaya";
-	
-	//set the authentication data into the table
-	public void StoreToken(String email,String href,Token token){
+
+	// storing data handler
+	public boolean StorageHandler(String email, String href, Token token) {
+		// check if token already exists or not
+		if (CheckToken(email, href, token)) {
+			return StoreToken(email, href, token);
+		} else {
+			return UpdateToken(email, href, token);
+		}
+	}
+
+	// check if data exists in the server against that email
+	private boolean CheckToken(String email, String href, Token token) {
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			connect = DriverManager.getConnection(DB_URL);
+			statement = connect.createStatement();
+			resultSet = statement
+					.executeQuery("select email from authorized where email='"
+							+ email + "'");
+			// check if result set is empty or not
+			while (resultSet.next()) {
+				return false;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			close();
+		}
+		// default case
+		return true;
+	}
+
+	// set the authentication data into the table
+	private boolean StoreToken(String email, String href, Token token) {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			connect = DriverManager.getConnection(DB_URL);
@@ -37,16 +69,39 @@ public class Db_handler {
 			preparedStatement.setString(5, token.expires_in());
 			preparedStatement.setBoolean(6, true);
 			preparedStatement.executeUpdate();
-			preparedStatement.executeQuery();
+			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
+			return false;
 		} finally {
 			close();
 		}
 	}
-	
-	//helper classes for future reference (should be removed in production version)
-	
+
+	// update the authentication data into the table
+	private boolean UpdateToken(String email, String href, Token token) {
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			connect = DriverManager.getConnection(DB_URL);
+			statement = connect.createStatement();
+			preparedStatement = connect
+					.prepareStatement("update authorized set access_token = ?, refresh_token = ?, expires_in = ?, authenticated = ? where email = ?");
+			preparedStatement.setString(0, token.access_token());
+			preparedStatement.setString(1, token.refresh_token());
+			preparedStatement.setString(2, token.expires_in());
+			preparedStatement.setBoolean(3, true);
+			preparedStatement.setString(4, email);
+			preparedStatement.executeUpdate();
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	// helper classes for future reference (should be removed in production
+	// version)
+
 	public void readDataBase() throws Exception {
 		try {
 			// This will load the MySQL driver, each DB has its own driver
@@ -140,12 +195,13 @@ public class Db_handler {
 				connect.close();
 			}
 		} catch (Exception e) {
-
+			e.printStackTrace();
 		}
 	}
 
-	public static void main(String[] args){// This will load the MySQL driver, each DB has its own driver
-//		 Setup the connection with the DB
+	public static void main(String[] args) {// This will load the MySQL driver,
+											// each DB has its own driver
+	// Setup the connection with the DB
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection connect = DriverManager.getConnection(DB_URL);
