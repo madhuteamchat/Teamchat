@@ -2,8 +2,11 @@ package com.teamchat.youtube_integration.channelbulletin;
 
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Properties;
 
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
@@ -11,6 +14,7 @@ import com.google.api.client.extensions.java6.auth.oauth2.FileCredentialStore;
 import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
 import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
+import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
@@ -34,43 +38,40 @@ public class ChannelBulletin {
 	  String res="";
 
 	
-	  private Credential authorize(List<String> scopes) throws Exception {
-
-	    // Load client secrets.
-	    GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(
-	        JSON_FACTORY, ChannelBulletin.class.getResourceAsStream("/client_secrets.json"));
-
+	  
 	
-	    // Set up file credential store.
-	    FileCredentialStore credentialStore = new FileCredentialStore(
-	        new File(System.getProperty("user8.home"), ".credentials/youtube-api.json"),
-	        JSON_FACTORY);
-
-	    // Set up authorization code flow.
-	    GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(
-	        HTTP_TRANSPORT, JSON_FACTORY, clientSecrets, scopes).setCredentialStore(credentialStore)
-	        .build();
-
-	    // Build the local server and bind it to port 8080
-	    LocalServerReceiver localReceiver = new LocalServerReceiver.Builder().setPort(8080).build();
-
-	    // Authorize.
-	    return new AuthorizationCodeInstalledApp(flow, localReceiver).authorize("user");
-	  }
-
-	
-	  public String postvideo(String videoid,String description) {
+	  public String postvideo(String videoid,String description,String uid) {
 
 	    // Scope required to upload to YouTube.
 		  VIDEO_ID=videoid;
-	    List<String> scopes = Lists.newArrayList("https://www.googleapis.com/auth/youtube");
 
-	    try {
 	      // Authorization.
-	      Credential credential = authorize(scopes);
+//	      Credential credential = authorize(scopes);
+	    	 Properties props = new Properties();
+	    	    InputStream is = null;
+	    	 
+
+	    	    try {    // First try loading from the current directory
+	    	   
+	    	    File f = new File("/home/intern11/"+uid+".properties");
+	    	        is = new FileInputStream( f );  	  }
+	    catch ( Exception e ) { is = null; }
+	    
+	    try { 
+	    	        if(is==null)
+	    	        	return "You have to login";  
+//	    	 is=getClass().getResourceAsStream(uid+".properties");
+	    	  
+	    	        // Try loading properties from the file (if found)
+	    	        props.load( is );
+	    	   
+	    	GoogleCredential credentials = new GoogleCredential.Builder()
+		      .setClientSecrets(props.getProperty("client_id"), props.getProperty("client_secret"))
+		      .setJsonFactory(JSON_FACTORY).setTransport(HTTP_TRANSPORT).build()
+		      .setRefreshToken(props.getProperty("refresh_token")).setAccessToken(props.getProperty("access_token"));
 
 	      // YouTube object used to make all API requests.
-	      youtube = new YouTube.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential).setApplicationName(
+	      youtube = new YouTube.Builder(HTTP_TRANSPORT, JSON_FACTORY, credentials).setApplicationName(
 	          "youtube-cmdline-channelbulletin-sample").build();
 	   
 	      YouTube.Channels.List channelRequest = youtube.channels().list("contentDetails");
@@ -78,8 +79,15 @@ public class ChannelBulletin {
 	      /*
 	       * Limits the results to only the data we need making your app more efficient.
 	       */
+	      ChannelListResponse channelResult;
 	      channelRequest.setFields("items/contentDetails");
-	      ChannelListResponse channelResult = channelRequest.execute();
+	      try{
+	      channelResult = channelRequest.execute();
+	    }
+	      catch(Exception e)
+	      {
+	    	  return "You have to login";
+	      }
 
 	      /*
 	       * Gets the list of channels associated with the user.

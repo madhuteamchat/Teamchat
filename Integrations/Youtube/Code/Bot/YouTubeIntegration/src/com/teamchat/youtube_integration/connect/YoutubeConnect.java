@@ -1,10 +1,19 @@
 package com.teamchat.youtube_integration.connect;
 
 import java.io.File;
+import java.net.URL;
+import java.security.SecureRandom;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.util.List;
-import java.util.Properties;
 
-import org.json.Property;
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.KeyManager;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
@@ -16,8 +25,6 @@ import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
-import com.google.api.services.youtube.YouTube;
-import com.google.common.collect.Lists;
 import com.teamchat.youtube_integration.upload.MyUploads;
 
 public class YoutubeConnect {
@@ -27,52 +34,60 @@ public class YoutubeConnect {
 	  private JsonFactory JSON_FACTORY = new JacksonFactory();
 	  
 	  
-	  private Credential authorize(List<String> scopes) throws Exception {
+	 
+	 
+	  private static class DefaultTrustManager implements X509TrustManager {
 
-		    // Load client secrets.
-		    GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(
-		        JSON_FACTORY, MyUploads.class.getResourceAsStream("/client_secrets.json"));
+	        @Override
+	        public void checkClientTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {}
 
+	        @Override
+	        public void checkServerTrusted(X509Certificate[] arg0, String arg1) throws CertificateException {}
 
-		    // Set up file credential store.
-		    FileCredentialStore credentialStore = new FileCredentialStore(
-		        new File(System.getProperty("user8.home"), ".credentials/youtube-api.json"),
-		        JSON_FACTORY);
-
-		    // Set up authorization code flow.
-		    GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(
-		        HTTP_TRANSPORT, JSON_FACTORY, clientSecrets, scopes).setCredentialStore(credentialStore)
-		        .build();
-
-		    // Build the local server and bind it to port 9000
-		    LocalServerReceiver localReceiver = new LocalServerReceiver.Builder().setPort(8080).build();
-
-		    // Authorize.
-		    return new AuthorizationCodeInstalledApp(flow, localReceiver).authorize("user8");
-		  }
+	        @Override
+	        public X509Certificate[] getAcceptedIssuers() {
+	            return null;
+	        }
+	    }
 	  
-	  public void youtubeLogin()
+	  public void youtubeLogin(String sname)
 	  {
-		  youtubeLogout();
-		  List<String> scopes = Lists.newArrayList("https://www.googleapis.com/auth/youtube");
+		  System.out.println( "login fun()....................." );
+		  String line;
+		  
+			try 
+			{ 
+				SSLContext ctx = SSLContext.getInstance("TLS");
+	        ctx.init(new KeyManager[0], new TrustManager[] {new DefaultTrustManager()}, new SecureRandom());
+	        SSLContext.setDefault(ctx);
+				URL url = new URL( "https://localhost:8443/YoutubeIntegration/YoutubeBotServelet?name="+sname );
+				HttpsURLConnection uc=(HttpsURLConnection) url.openConnection();
+				
+				uc.setDoOutput(true);
+//				BufferedReader in = new BufferedReader(new InputStreamReader(uc.getInputStream())); 
+				 uc.setHostnameVerifier(new HostnameVerifier() {
+			            @Override
+			            public boolean verify(String arg0, SSLSession arg1) {
+			                return true;
+			            }
+			        });
+				int response=uc.getResponseCode();
+				
+//				while ( (response = in.readLine()) != null ) {
+					System.out.println( response );
+//					}
 
-		    
-		      // Authorization.
-		      try {
-				Credential credential = authorize(scopes);
-				YouTube youtube = new YouTube.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential).setApplicationName(
-				          "youtube-teamchat-integration").build();
-
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+//				in.close(); 
 			}
-		    
+			catch (Exception e)
+			{ 
+				e.printStackTrace(); 
+			} 		  		 
 	  }
 	  
-	  public void youtubeLogout()
+	  public void youtubeLogout(String sname)
 	  {
-		  File f=new File(System.getProperty("user8.home"), ".credentials/youtube-api.json");
+		  File f=new File("/home/intern11/"+sname+".properties");
 		  if(f.exists())
 		  {
 			  f.delete();

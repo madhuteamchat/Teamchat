@@ -3,8 +3,10 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
@@ -12,6 +14,7 @@ import com.google.api.client.extensions.java6.auth.oauth2.FileCredentialStore;
 import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
 import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
+import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.api.client.googleapis.media.MediaHttpUploader;
 import com.google.api.client.googleapis.media.MediaHttpUploaderProgressListener;
@@ -36,38 +39,38 @@ public class UploadVideo {
 	  private String VIDEO_FILE_FORMAT = "video/*";
 	  String res="";
 
-	  private Credential authorize(List<String> scopes) throws Exception {
-
-	    GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(
-	        JSON_FACTORY, UploadVideo.class.getResourceAsStream("/client_secrets.json"));
-
-
-	    FileCredentialStore credentialStore = new FileCredentialStore(
-	        new File(System.getProperty("user2.home"), ".credentials/youtube-api.json"),
-	        JSON_FACTORY);
-
-	    GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(
-	        HTTP_TRANSPORT, JSON_FACTORY, clientSecrets, scopes).setCredentialStore(credentialStore)
-	        .build();
-
-	    LocalServerReceiver localReceiver = new LocalServerReceiver.Builder().setPort(8080).build();
-
-	    // Authorize.
-	    return new AuthorizationCodeInstalledApp(flow, localReceiver).authorize("user");
-	  }
-
+	  
 	
-	  public String uploadVideo(String location,String vtitle, String vdescription,String[] vtags) {
+	  public String uploadVideo(String location,String vtitle, String vdescription,String[] vtags,String uid) {
 
 	    // Scope required to upload to YouTube.
-	    List<String> scopes = Lists.newArrayList("https://www.googleapis.com/auth/youtube.upload");
-
-	    try {
 	      // Authorization.
-	      Credential credential = authorize(scopes);
+//	      Credential credential = authorize(scopes);
+	    	 Properties props = new Properties();
+	    	    InputStream is = null;
+	    	 
+
+	    	    try {    // First try loading from the current directory
+	    	   
+	    	    File f = new File("/home/intern11/"+"uid"+".properties");
+	    	        is = new FileInputStream( f );  	  }
+	    catch ( Exception e ) { is = null; }
+	    
+	    try { 
+	    	        if(is==null)
+	    	        	return "You have to login";
+//	    	 is=getClass().getResourceAsStream(uid+".properties");
+	    	  
+	    	        // Try loading properties from the file (if found)
+	    	        props.load( is );
+	    	   
+	    	GoogleCredential credentials = new GoogleCredential.Builder()
+		      .setClientSecrets(props.getProperty("client_id"), props.getProperty("client_secret"))
+		      .setJsonFactory(JSON_FACTORY).setTransport(HTTP_TRANSPORT).build()
+		      .setRefreshToken(props.getProperty("refresh_token")).setAccessToken(props.getProperty("access_token"));
 
 	      // YouTube object used to make all API requests.
-	      youtube = new YouTube.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential).setApplicationName(
+	      youtube = new YouTube.Builder(HTTP_TRANSPORT, JSON_FACTORY, credentials).setApplicationName(
 	          "youtube-cmdline-uploadvideo-sample").build();
 
 	      // We get the user selected local video file to upload.
@@ -150,6 +153,7 @@ public class UploadVideo {
 	      System.err.println("GoogleJsonResponseException code: " + e.getDetails().getCode() + " : "
 	          + e.getDetails().getMessage());
 	      e.printStackTrace();
+	      return "You have to login";
 	    } catch (IOException e) {
 	      System.err.println("IOException: " + e.getMessage());
 	      res+="Upload Failed<br> Enter the location correctly.";

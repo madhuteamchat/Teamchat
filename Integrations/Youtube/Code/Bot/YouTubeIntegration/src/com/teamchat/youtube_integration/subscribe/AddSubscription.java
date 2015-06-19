@@ -2,8 +2,11 @@ package com.teamchat.youtube_integration.subscribe;
 
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
+import java.util.Properties;
 
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
@@ -11,6 +14,7 @@ import com.google.api.client.extensions.java6.auth.oauth2.FileCredentialStore;
 import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
 import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
+import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
@@ -29,42 +33,38 @@ public class AddSubscription {
 	  private  YouTube youtube;
 	  String res="";
 
-	  private Credential authorize(List<String> scopes) throws Exception {
-
-	    // Load client secrets.
-	    GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(
-	        JSON_FACTORY, AddSubscription.class.getResourceAsStream("/client_secrets.json"));
-
-
-	    // Set up file credential store.
-	    FileCredentialStore credentialStore = new FileCredentialStore(
-	        new File(System.getProperty("user8.home"), ".credentials/youtube-api.json"),
-	        JSON_FACTORY);
-
-	    // Set up authorization code flow.
-	    GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(
-	        HTTP_TRANSPORT, JSON_FACTORY, clientSecrets, scopes).setCredentialStore(credentialStore)
-	        .build();
-
-	    // Build the local server and bind it to port 8080
-	    LocalServerReceiver localReceiver = new LocalServerReceiver.Builder().setPort(8080).build();
-
-	    // Authorize.
-	    return new AuthorizationCodeInstalledApp(flow, localReceiver).authorize("user8");
-	  }
-
-	
-	  public String subscribe(String channelId) {
+	 
+	  public String subscribe(String channelId,String uid) {
 
 	    // An OAuth 2 access scope that allows for full read/write access.
-	    List<String> scopes = Lists.newArrayList("https://www.googleapis.com/auth/youtube");
 
-	    try {
 	      // Authorization.
-	      Credential credential = authorize(scopes);
+//	      Credential credential = authorize(scopes);
+	    	 Properties props = new Properties();
+	    	    InputStream is = null;
+	    	 
+
+	    	    try {    // First try loading from the current directory
+	    	   
+	    	    File f = new File("/home/intern11/"+uid+".properties");
+	    	        is = new FileInputStream( f );  	  }
+	    catch ( Exception e ) { is = null; }
+	    
+	    try { 
+	    	        if(is==null)
+	    	        	return "You have to login";	  
+//	    	 is=getClass().getResourceAsStream(uid+".properties");
+	    	  
+	    	        // Try loading properties from the file (if found)
+	    	        props.load( is );
+	    	   
+	    	GoogleCredential credentials = new GoogleCredential.Builder()
+		      .setClientSecrets(props.getProperty("client_id"), props.getProperty("client_secret"))
+		      .setJsonFactory(JSON_FACTORY).setTransport(HTTP_TRANSPORT).build()
+		      .setRefreshToken(props.getProperty("refresh_token")).setAccessToken(props.getProperty("access_token"));
 
 	      // YouTube object used to make all API requests.
-	      youtube = new YouTube.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential).setApplicationName(
+	      youtube = new YouTube.Builder(HTTP_TRANSPORT, JSON_FACTORY, credentials).setApplicationName(
 	          "youtube-cmdline-addsubscription-sample").build();
 
 	    
@@ -90,7 +90,15 @@ public class AddSubscription {
 	          youtube.subscriptions().insert("snippet,contentDetails", subscription);
 
 	      // Execute subscription.
-	      Subscription returnedSubscription = subscriptionInsert.execute();
+	      Subscription returnedSubscription;
+	      try
+	      {
+	      returnedSubscription = subscriptionInsert.execute();
+	    }
+	      catch(Exception e)
+	      {
+	    	  return "You have to login";
+	      }
 	      Thumbnail thumbnail = returnedSubscription.getSnippet().getThumbnails().get("default");
 	      res+="<br><p align=\"center\" >Channel Subscribed</p>";
 	      res+="<br> -Id : "+returnedSubscription.getId();

@@ -30,11 +30,11 @@ public class YouTubeBot {
 	String apikey="AIzaSyCuxRZHt5hjH-x-IQQG5MZFldxigM_4_W0";
 	SearchByTopic sbt=null;
 	ArrayList<String> lan,chId,chTitle;
+
 	/*
-	 copy and paste client_secrets.json in src folder
-	 where the clientid and client secret is stored
-	 youtube account used here is email=teambott2@gmail.com and password=gupshup8
-	 */
+	 	Specify the location to store/retrieve details from property file.
+	 	Both in bot code and in servlet code.
+	*/
 	String pltitle,pldes;
 	Integer vno;
 	public static void main(String[] args) {
@@ -68,18 +68,25 @@ public class YouTubeBot {
 	
 		@OnKeyword("connectyoutube")
 		public void connectYoutube(TeamchatAPI api) {
-			YoutubeConnect ytc=new YoutubeConnect();
-			ytc.youtubeLogin();
-			api.perform(api.context().currentRoom().post( new TextChatlet("Successfully, Connected to your Youtube account.")));
-			
+			String sname=api.context().currentSender().getEmail();
+			sname=sname.replace('@', '_');
+			sname=sname.replace('.', '_');
+			System.out.println("$$$$$$$$$$$$$$$$$$$"+sname);
+//			YoutubeConnect ytc=new YoutubeConnect();
+//			ytc.youtubeLogin(api.context().currentSender().getEmail());
+//			api.perform(api.context().currentRoom().post( new TextChatlet("Successfully, Connected to your Youtube account.")));
+			api.perform(api.context().currentRoom().post( new TextChatlet("<a href=\"https://localhost:8443/YoutubeIntegration/YoutubeBotServelet?name="+sname+"\"> Login</a>")));
 		}
 		
 // Youtube Disconnect
 		
 			@OnKeyword("disconnectyoutube")
 			public void disconnectYoutube(TeamchatAPI api) {
+				String sname=api.context().currentSender().getEmail();
+				sname=sname.replace('@', '_');
+				sname=sname.replace('.', '_');
 				YoutubeConnect ytc=new YoutubeConnect();
-				ytc.youtubeLogout();
+				ytc.youtubeLogout(sname);
 				api.perform(api.context().currentRoom().post( new TextChatlet("Successfully, Disconnected from your Youtube account.")));
 				
 			}
@@ -254,9 +261,12 @@ public class YouTubeBot {
 			if(chKeyword.isEmpty())
 			{
 				String channelId=rpl.getField("channelId");
+				String sname=rpl.senderEmail();
+				sname=sname.replace('@', '_');
+				sname=sname.replace('.', '_');
 				AddSubscription sub=new AddSubscription();
 				try {
-						api.perform(api.context().currentRoom().post( new TextChatlet(sub.subscribe(channelId))));
+						api.perform(api.context().currentRoom().post( new TextChatlet(sub.subscribe(channelId,sname))));
 				} catch (Exception e) {
 				// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -305,11 +315,14 @@ public class YouTubeBot {
 		{
 			
 			Reply rpl=api.context().currentReply();
+			String sname=rpl.senderEmail();
+			sname=sname.replace('@', '_');
+			sname=sname.replace('.', '_');
 			String chChoice=URLDecoder.decode(rpl.getField("choice"));
 			String channelId=chId.get(chTitle.indexOf(chChoice));
 			AddSubscription sub=new AddSubscription();
 				try {
-						api.perform(api.context().currentRoom().post( new TextChatlet(sub.subscribe(channelId))));
+						api.perform(api.context().currentRoom().post( new TextChatlet(sub.subscribe(channelId,sname))));
 				} catch (Exception e) {
 				// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -321,8 +334,11 @@ public class YouTubeBot {
 				@OnKeyword("myuploads")
 				public void myUploads(TeamchatAPI api) {
 					MyUploads mu=new MyUploads();
+					String sname=api.context().currentSender().getEmail();
+					sname=sname.replace('@', '_');
+					sname=sname.replace('.', '_');
 					try {
-						api.perform(api.context().currentRoom().post( new TextChatlet(mu.myUpload())));
+						api.perform(api.context().currentRoom().post( new TextChatlet(mu.myUpload(sname))));
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -386,13 +402,16 @@ public class YouTubeBot {
 				{
 					String[] vid=new String[vno];
 					Reply rpl=api.context().currentReply();
+					String sname=rpl.senderEmail();
+					sname=sname.replace('@', '_');
+					sname=sname.replace('.', '_');
 					for(int i=0;i<vno;i++)
 					{
 						vid[i]=rpl.getField("v"+(i+1)+"id");
 					}
 					PlaylistUpdates plu=new PlaylistUpdates();
 					try {
-						api.perform(api.context().currentRoom().post( new TextChatlet(plu.updatePlaylist(pltitle, pldes,vno, vid))));
+						api.perform(api.context().currentRoom().post( new TextChatlet(plu.updatePlaylist(pltitle, pldes,vno, vid,sname))));
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -423,11 +442,14 @@ public class YouTubeBot {
 				{
 					
 					Reply rpl=api.context().currentReply();
+					String sname=rpl.senderEmail();
+					sname=sname.replace('@', '_');
+					sname=sname.replace('.', '_');
 					String videoid=rpl.getField("videoid");
 					String description=rpl.getField("description");
 					ChannelBulletin cb=new ChannelBulletin();
 					try {
-						api.perform(api.context().currentRoom().post( new TextChatlet(cb.postvideo(videoid,description))));
+						api.perform(api.context().currentRoom().post( new TextChatlet(cb.postvideo(videoid,description,sname))));
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -458,13 +480,16 @@ public class YouTubeBot {
 				{
 					
 					Reply rpl=api.context().currentReply();
+					String sname=rpl.senderEmail();
+					sname=sname.replace('@', '_');
+					sname=sname.replace('.', '_');
 					String location=rpl.getField("location");
 					String vtitle=rpl.getField("vtitle");
 					String vdescription=rpl.getField("vdescription");
 					String[] vtags=rpl.getField("vtags").split("-");
 					UploadVideo uv=new UploadVideo();
 					try {
-						api.perform(api.context().currentRoom().post( new TextChatlet(uv.uploadVideo(location,vtitle,vdescription,vtags))));
+						api.perform(api.context().currentRoom().post( new TextChatlet(uv.uploadVideo(location,vtitle,vdescription,vtags,sname))));
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
