@@ -1,5 +1,6 @@
 package com.teamchat.integrations.evernote;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -53,6 +54,12 @@ public class EverNote {
 				api.startReceivingEvents(new EverNote()); //Wait for other user to send message
 	}
 	
+	@OnKeyword("help")
+	public void help(TeamchatAPI api){
+		String print= "Type \"connect\" to connect your Evernote.<br>Type \"myevernote\" to start your EverNote and select the task you need.<br>Type \"disconnect\" to disconnect your evernote";
+		api.perform(api.context().currentRoom().post(new TextChatlet(print)));
+	}
+	
 	@OnKeyword("connect")
 	public void connect(TeamchatAPI api) throws EDAMUserException, EDAMSystemException, TException, IOException{
 		String mail=api.context().currentSender().getEmail();
@@ -65,9 +72,6 @@ public class EverNote {
 				temp=PropertyFile.getProperty(mail);
 				}
 			
-		}
-		else{
-			//api.perform(api.context().currentRoom().post(new TextChatlet("Token is there")));
 		}
 		EvernoteAuth evernoteAuth = new EvernoteAuth(EvernoteService.SANDBOX, temp);
 		ClientFactory factory = new ClientFactory(evernoteAuth);
@@ -85,17 +89,24 @@ public class EverNote {
 		api.perform(api.context().currentRoom().post(new TextChatlet("Connected...")));
 	}
 	
-	@OnKeyword("help")
-	public void help(TeamchatAPI api){
-		String print= "Type \"connect\" to connect your Evernote.<br>Type \"myevernote\" to start your EverNote and select the task you need.";
-		api.perform(api.context().currentRoom().post(new TextChatlet(print)));
+	@OnKeyword("disconnect")
+	public void disconnect(TeamchatAPI api) throws FileNotFoundException{
+		String mail=api.context().currentSender().getEmail();
+		PropertyFile.remove(mail);
+		api.perform(api.context().currentRoom().post(new TextChatlet("Disconnected...")));
 	}
-	
-	@OnKeyword("myevernote")
-	public void myEverNote(TeamchatAPI api) throws EDAMUserException, EDAMSystemException, TException, EDAMNotFoundException{
 		
-		new AddReminders(api,noteStore);
-		api.perform(api.context().currentRoom().post(
+	@OnKeyword("myevernote")
+	public void myEverNote(TeamchatAPI api) throws EDAMUserException, EDAMSystemException, TException, EDAMNotFoundException, IOException{
+		String mail=api.context().currentSender().getEmail();
+		String temp=null;
+		temp=PropertyFile.getProperty(mail);
+		if(temp == null){
+			api.perform(api.context().currentRoom().post(new TextChatlet("Connect to access your Evernote")));
+		}
+		else{
+			new AddReminders(api,noteStore);
+			api.perform(api.context().currentRoom().post(
 				new PrimaryChatlet()
 				.setQuestion("Select your task")
 				.setReplyScreen
@@ -113,8 +124,8 @@ public class EverNote {
 				)
 				)
 				.alias("taskToDo")
-		));
-		
+				));
+		}
 	}
 	@OnAlias("taskToDo")
 	public void taskToDo(TeamchatAPI api){

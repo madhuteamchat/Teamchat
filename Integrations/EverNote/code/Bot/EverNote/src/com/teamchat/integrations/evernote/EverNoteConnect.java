@@ -14,12 +14,10 @@ public class EverNoteConnect {
 	//static final EvernoteService EVERNOTE_SERVICE = EvernoteService.SANDBOX;
 	static String temp;
 
-public void getStarted(Token accessToken) throws EDAMUserException, EDAMSystemException, TException, IOException{
+	public void getStarted(Token accessToken) throws EDAMUserException, EDAMSystemException, TException, IOException{
 		
 		new PropertyFile();
 		PropertyFile.setProperty(temp,accessToken.getToken());
 		
 	}
-	
-
 }

@@ -1,5 +1,6 @@
 package com.teamchat.integrations.evernote;
 
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
@@ -11,10 +12,10 @@ public class PropertyFile {
 	
 	static Properties prop = new Properties();
 	static InputStream input=null;
-	
 	static OutputStream output = null;
+	static String propFileName="/home/intern9/config.properties";
+	
 	public static void setProperty(String email,String accessToken) throws IOException{
-		String propFileName="/home/intern9/config.properties";
 		output = new FileOutputStream(propFileName);
 		prop.setProperty(email,accessToken);
 		prop.store(output,null);
@@ -22,9 +23,9 @@ public class PropertyFile {
 			output.close();
 		}
 	}
+	
 	public static String getProperty(String property) throws IOException{
 		String value="";
-		String propFileName="/home/intern9/config.properties";
 		try (FileReader reader = new FileReader(propFileName)) {
 			Properties properties = new Properties();
 			properties.load(reader);
@@ -35,5 +36,17 @@ public class PropertyFile {
 		}
 	return value;	
 	}
-
+	
+	public static void remove(String mail) throws FileNotFoundException {
+		// TODO Auto-generated method stub
+		output = new FileOutputStream(propFileName);
+		try (FileReader reader = new FileReader(propFileName)) {
+			Properties properties = new Properties();
+			properties.load(reader);
+			properties.remove(mail);
+			properties.store(output, null);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 }
