@@ -38,8 +38,9 @@ public class InstagramToken {
 	}
 	
 	
-	public void getaccesstoken(String acode,String sname)
+	public int getaccesstoken(String acode,String sname)
 	{
+		int resp_code=0;
 		 try { 
 		
 	    HttpPost httppost = new
@@ -58,7 +59,9 @@ public class InstagramToken {
 		System.out.println("request body=\n"+EntityUtils.toString(httppost.getEntity()));
             HttpResponse response = httpclient.execute(httppost);
 		System.out.println(response.getStatusLine());
-		
+		resp_code=response.getStatusLine().getStatusCode();
+		if(resp_code==200)
+		{
 		
 		BufferedReader in = new BufferedReader(new
 				InputStreamReader(response.getEntity().getContent()));
@@ -90,13 +93,16 @@ public class InstagramToken {
 							        			+fullname+" ("+usrname+")</h4><div>";
 //							        System.out.println("@@@@@@@@@@@ uid="+uid);
 							        new TeamchatPost().postMsg(msg, sname);
-							     
+
+						            return resp_code;
 								
-				           	} catch (Exception e) {
+				           	} 
+			}
+				catch (Exception e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
-				               
+			return resp_code;      
 				               
 	}
 }

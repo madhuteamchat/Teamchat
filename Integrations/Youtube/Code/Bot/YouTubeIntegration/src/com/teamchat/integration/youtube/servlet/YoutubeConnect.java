@@ -49,7 +49,7 @@ public class YoutubeConnect {
 	}
 	
 	
-	public void getaccesstoken(String acode,String sname) throws ClientProtocolException, IOException
+	public int getaccesstoken(String acode,String sname) throws ClientProtocolException, IOException
 	{
 		 
 		
@@ -70,6 +70,9 @@ public class YoutubeConnect {
             HttpResponse response = httpclient.execute(httppost);
 		System.out.println(response.getStatusLine());
 		
+		int resp_code=response.getStatusLine().getStatusCode();
+		if(resp_code==200)
+		{
 		
 		BufferedReader in = new BufferedReader(new
 				InputStreamReader(response.getEntity().getContent()));
@@ -107,7 +110,9 @@ public class YoutubeConnect {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
-				               
+				     return resp_code;
+		}
+		return resp_code;
 				               
 	}
 	

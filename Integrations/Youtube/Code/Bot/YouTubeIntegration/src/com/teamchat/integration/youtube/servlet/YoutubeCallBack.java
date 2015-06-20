@@ -32,9 +32,18 @@ public class YoutubeCallBack extends HttpServlet {
 		// TODO Auto-generated method stub
 		System.out.println("CallBack=="+request.getParameter("state"));
 		YoutubeConnect ytc=new YoutubeConnect();
-		ytc.getaccesstoken(request.getParameter("code"),request.getParameter("state"));
-		PrintWriter writer = response.getWriter();
-		writer.println("You have Successfully logged in!! Go back to Teamchat to access your Youtube account.");
+		int resp_code=ytc.getaccesstoken(request.getParameter("code"),request.getParameter("state"));
+		response.setContentType("text/html");
+		// New location to be redirected
+		String site = "";
+		if (resp_code <= 200) {
+			site = "success.html";
+		} else {
+			site = "error.html";
+		}
+		response.sendRedirect(site);
+//		PrintWriter writer = response.getWriter();
+//		writer.println("You have Successfully logged in!! Go back to Teamchat to access your Youtube account.");
 	}
 
 	/**
