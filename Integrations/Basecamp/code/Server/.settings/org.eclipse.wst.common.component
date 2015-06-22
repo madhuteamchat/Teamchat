@@ -8,9 +8,6 @@
         <dependent-module archiveName="mysql-connector-java-5.1.35-bin.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//home/intern19/Documents/Teamchat/Integrations/Basecamp/code/mysql-connector-java-5.1.35-bin.jar">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="teamchat-client-sdk.1.4.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//home/intern19/Documents/Teamchat/Integrations/Basecamp/code/teamchat-client-sdk.1.4.jar">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
         <property name="context-root" value="Basecamp_servlet"/>
         <property name="java-output-path" value="/Basecamp_servlet/build/classes"/>
     </wb-module>
