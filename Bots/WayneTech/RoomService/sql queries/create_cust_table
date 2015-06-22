@@ -1,0 +1,10 @@
+use configdb;
+CREATE TABLE customers (id INT NOT NULL AUTO_INCREMENT, 
+    email VARCHAR(128) NOT NULL,
+	customer_name VARCHAR(128),
+	worker_name VARCHAR(128),
+	room_number INT(4),
+    problem VARCHAR(160) NOT NULL, 
+	work_status boolean,
+	api_context VARCHAR(128),
+    PRIMARY KEY (ID));
