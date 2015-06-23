@@ -39,8 +39,8 @@ public class Db_handler {
 			statement = connect.createStatement();
 			resultSet = statement
 					.executeQuery("select * from authorized where email = '"
-							+ email + "';");
-			System.out.println(resultSet.toString());
+							+ email + "'");
+			resultSet.next();
 			bb.setAccess_token(resultSet.getString("access_token"));
 			bb.setEmail(resultSet.getObject("email").toString());
 			bb.setExpires_in(resultSet.getObject("expires_in").toString());
