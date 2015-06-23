@@ -1,8 +1,8 @@
 CREATE TABLE authorized (id INT NOT NULL AUTO_INCREMENT, 
-    email VARCHAR(30),
-	href VARCHAR(128),
-    access_token VARCHAR(512) NOT NULL, 
-    refresh_token VARCHAR(512) NOT NULL,
+    email VARCHAR(128),
+	href VARCHAR(256),
+    access_token VARCHAR(1024) NOT NULL, 
+    refresh_token VARCHAR(1024) NOT NULL,
     expires_in VARCHAR(16) NOT NULL,
 	authenticated boolean NOT NULL,
     PRIMARY KEY (ID));

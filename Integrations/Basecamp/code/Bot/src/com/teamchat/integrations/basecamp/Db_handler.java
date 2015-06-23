@@ -7,11 +7,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Date;
-
-import org.classpath.icedtea.Config;
 
 /**
  * @author Puranjay Jain
@@ -25,16 +21,15 @@ public class Db_handler {
 
 	private static Config_handler config = new Config_handler();
 	private static String DB_URL = "jdbc:mysql://localhost/configdb?user="
-			+ config.getSql_username()
-			+ "&password="
+			+ config.getSql_username() + "&password="
 			+ config.getSql_password();
-	
-	Db_handler(){
+
+	Db_handler() {
 		if (config.isEmpty()) {
 			config.init_bot_Properties();
 		}
 	}
-	
+
 	// get base camp api's basic stuff
 	public Basecamp_basics GetBasicStuff(String email) {
 		Basecamp_basics bb = new Basecamp_basics();
@@ -42,12 +37,15 @@ public class Db_handler {
 			Class.forName("com.mysql.jdbc.Driver");
 			connect = DriverManager.getConnection(DB_URL);
 			statement = connect.createStatement();
-			resultSet = statement.executeQuery("select * from customers");
-			bb.setAccess_token(resultSet.getObject("access_token").toString()); 
-			bb.setEmail(resultSet.getObject("email").toString()); 
-			bb.setExpires_in(resultSet.getObject("expires_in").toString()); 
-			bb.setHref(resultSet.getObject("href").toString()); 
-			bb.setRefresh_token(resultSet.getObject("refresh_token").toString()); 
+			resultSet = statement
+					.executeQuery("select * from authorized where email = '"
+							+ email + "';");
+			System.out.println(resultSet.toString());
+			bb.setAccess_token(resultSet.getString("access_token"));
+			bb.setEmail(resultSet.getObject("email").toString());
+			bb.setExpires_in(resultSet.getObject("expires_in").toString());
+			bb.setHref(resultSet.getObject("href").toString());
+			bb.setRefresh_token(resultSet.getObject("refresh_token").toString());
 			return bb;
 		} catch (Exception e) {
 			e.printStackTrace();
