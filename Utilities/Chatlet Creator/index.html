@@ -1,0 +1,78 @@
+<!doctype html>
+<html>
+<head>
+  <title>Form Builder</title>
+  <meta name="description" content="">
+  <link rel="stylesheet" href="vendor/css/vendor.css" />
+  <link rel="stylesheet" href="dist/formbuilder.css" />
+  <style>
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    background-color: #444;
+    font-family: sans-serif;
+  }
+
+  .fb-main {
+    background-color: #fff;
+    border-radius: 5px;
+    min-height: 600px;
+  }
+
+  input[type=text] {
+    height: 26px;
+    margin-bottom: 3px;
+  }
+
+  select {
+    margin-bottom: 5px;
+    font-size: 40px;
+  }
+  </style>
+</head>
+<body>
+  <div class='fb-main'></div>
+
+  <script src="vendor/js/vendor.js"></script>
+  <script src="dist/formbuilder.js"></script>
+  <script src="print.js"></script>	
+
+  <script>
+	var label;
+    $(function(){
+	var str1,str2,str3,strn;
+
+      fb = new Formbuilder({
+        selector: '.fb-main',
+       
+      });
+
+        fb.on('save', function(payload){
+        var out=JSON.parse(payload)
+	label=out.fields[0].label
+	console.log(payload)
+
+	 str1="{\"imgUrl\":\"\",\"type\":\"primary\",\"content\":{\"text\":\""+label+"\",\"html\":\"\"},\"xslt\":\"primary-2.7.2\",";
+	 str2="\"detailsLinkVisibility\":\"all\",\"actionreplace\": \"replace\",\"comments\": { \"addcomment\":\"true\"},";
+	 str3 ="\"displayname\":\"Primary Chatlet\",";
+	 strn="";					
+	
+	//download(str1+str2+str3+strn,'chatlet.json','text/plain');	
+	console.log(str1+str2+str3);
+	var str=str1+str2+str3;
+	
+	localStorage.setItem("head",str);
+	print_result();
+ })
+ 
+    
+});
+
+	
+</script>
+
+
+</body>
+</html>

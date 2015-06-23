@@ -1,0 +1,20 @@
+{'actionreplace':'replace',
+
+
+'detdesc':{'fields':[{ 'display':'Receiving Time', 'key': 'f0' },{ 'display':'Message', 'key': 'f1' },{ 'display':'Recipient', 'key': 'f2' }],'label':'Replies','showcount':'true'},
+
+
+'actions':{'actitem':[{'button':{'formjson':'{\'fields\':[{\'name\':\'f0\',\'type\':\'label\',\'value\':\'Receiving Time\'},{\'label\':\'Receiving Time\',\'name\':\'f0\',\'type\':\'input\'},{\'name\':\'f1\',\'type\':\'label\',\'value\':\'Message\'},{\'label\':\'Message\',\'name\':\'f1\',\'type\':\'input\'},{\'name\':\'f2\',\'type\':\'label\',\'value\':\'Recipient\'},{\'label\':\'Recipient\',\'name\':\'f1\',\'type\':\'input\'}],\'imgUrl\':\'\',\'type\':\'meta\'}','label':'Reply','respjson':'{\'action\':\'Reply\',\'formid\':\'\',\'maction\':\'\',\'f0\':\'\',
+\'f1\':\'\',\'f2\':\'\'}','resptype':'compose'}}]},
+'displayname':'Primary Chatlet',
+'imgUrl':'',
+
+'type':'primary',
+'xslt':'primary-2.7.2',
+
+'comments':{'addcomment':'false'},
+'content':{'html':'','text':'Please fill the following form for sending delayed message '},
+'detailsLinkVisibility':'hidden'
+}
+
+

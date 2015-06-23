@@ -1,0 +1,27 @@
+{'actionreplace': 'replace',
+'actions':{'actitem':[{'button':{'formjson':'{\'fields\':[{\'name\':\'timelbl\',\'type\':\'label\',\'value\':\'Receiving Time\'},{\'label\':\'Receiving Time\',\'name\':\'time\',\'type\':\'input\'},{\'name\':\'msglbl\',\'type\':\'label\',\'value\':\'Message\'},{\'label\':\'Message\',\'name\':\'msg\',\'type\':\'input\'},{\'name\':\'rcplbl\',\'type\':\'label\',\'value\':\'Recipient\'},{\'label\':\'Recipient\',\'name\':\'rcp\',\'type\':\'input\'}],\'\'imgUrl\':\'\',\'type\':\'meta\'},'label':'Reply','respjson': '{\'action\':\'Reply\',\'formid\':\'\',\'maction\':\'\',\'msg\':\'\',\'rcp\':\'\',\'time\':\'\'}','resptype': 'compose'}}]},
+'comments': { 'addcomment':'false'},
+'content':{'html':'','text':'hey there!'},
+'detailsLinkVisibility':'hidden',
+'detdesc':{'fields':[{ 'display':'Receving Time', 'key': 'time' },{ 'display':'Message', 'key': 'msg' },{ 'display':'Recipient', 'key': 'rcp' }],'label':'Replies','showcount':'true'},
+'displayname':'Primary Chatlet',
+'imgURL':'',
+'summdesc':{'fields':[]},
+'type':'primary',
+'xslt':'primary-2.7.2'
+}
+
+{'actionreplace':'replace',
+'actions':{'actitem':[{'button':{'formjson':'{\'fields\':[{\'name\':\'timelbl\',\'type\':\'label\',\'value\':\'Receiving Time\'},{\'label\':\'Receiving Time\',\'name\':\'time\',\'type\':\'input\'},{\'name\':\'msglbl\',\'type\':\'label\',\'value\':\'Message\'},{\'label\':\'Message\',\'name\':\'msg\',\'type\':\'input\'},{\'name\':\'rcplbl\',\'type\':\'label\',\'value\':\'Recipient\'},{\'label\':\'Recipient\',\'name\':\'rcp\',\'type\':\'input\'}],\'imgUrl\':\'\',\'type\':\'meta\'}','label':'Reply','respjson':'{\'action\':\'Reply\',\'formid\':\'\',\'maction\':\'\',\'msg\':\'\',
+\'rcp\':\'\',\'time\':\'\'}','resptype':'compose'}}]},
+'comments':{'addcomment':'false'},
+'content':{'html':'','text':'Please fill the following form for sending delayed message '},
+'detailsLinkVisibility':'hidden',
+'detdesc':{'fields':[{'display':'Receiving Time','key':'time'},{'display':'Message','key':'msg'},{'display':'Recipient','key':'rcp'}
+],'label':'Replies','showcount':'true'},
+'displayname':'Primary Chatlet',
+'imgUrl':'',
+'summdesc':{'fields':[]},
+'type':'primary',
+'xslt':'primary-2.7.2'
+}
