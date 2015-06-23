@@ -1,6 +1,5 @@
 package chatletcreator;
 
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -13,22 +12,16 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONObject;
 
-import com.teamchat.client.sdk.Room;
-import com.teamchat.client.sdk.TeamchatAPI;
-import com.teamchat.client.sdk.chatlets.PrimaryChatlet;
-import com.teamchat.client.sdk.chatlets.TextChatlet;
-import com.teamchat.client.sdk.impl.TeamchatAPIImpl;
-
 /**
- * Servlet implementation class CreateChatlet
+ * Servlet implementation class CreateChatletRoom
  */
-@WebServlet("/createchatlet")
-public class CreateChatlet extends HttpServlet {
+@WebServlet("/createchatletroom")
+public class CreateChatletRoom extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	
-	
 
-   	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	
+	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		System.out.println("Inside Chatlet Romm");
 		PrintWriter out=response.getWriter();
 		System.out.println("working...");
 		BufferedReader rdr=request.getReader();
@@ -40,12 +33,12 @@ public class CreateChatlet extends HttpServlet {
 		
 		JSONObject j=new JSONObject(output);
 		JSONObject data=j.getJSONObject("data");
-		String email=j.getString("email");
+		String roomId=j.getString("value");
 		
 		
 		try
 		{
-			new SendChatlet().p2pMessage(email, data.toString(), Token.getAuthEmail(), Token.getAuthPass());
+			new SendChatlet().roomMessage(roomId, data.toString());;
 		} catch (Exception e)
 		{
 			// TODO Auto-generated catch block
