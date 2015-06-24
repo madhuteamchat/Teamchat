@@ -3,6 +3,8 @@
  */
 package com.teamchat.integrations.basecamp;
 
+import com.basecamp.classes.Project;
+import com.basecamp.classes.Todolist;
 import com.teamchat.client.annotations.OnAlias;
 import com.teamchat.client.annotations.OnKeyword;
 import com.teamchat.client.sdk.Field;
@@ -15,16 +17,24 @@ import com.teamchat.client.sdk.chatlets.PrimaryChatlet;
  */
 public class Basecamp_Bot {
 	private Basecamp_basics bb = new Basecamp_basics();
+	private Basecamp_api_handler bah;
+	// if api is initialised using keyword 'basecamp' only then shall the
+	// functions work
+	private Boolean api_init = false;
 
 	// initiate the basecampbot
-	@OnKeyword("basecamp")
+	@OnKeyword(value = "basecamp")
 	public void basecamp(TeamchatAPI api) throws Exception {
 		String email = api.context().currentSender().getEmail();
 		Db_handler db = new Db_handler();
-		//check if the user email exists in the db or not
+		// check if the user email exists in the db or not
 		if (db.isAuthorized(email)) {
 			// get the basic info
 			bb = db.GetBasicStuff(email);
+			// initiate api handler
+			bah = new Basecamp_api_handler(bb);
+			// set flag true
+			api_init = true;
 			api.perform(api
 					.context()
 					.currentRoom()
@@ -50,15 +60,14 @@ public class Basecamp_Bot {
 	}
 
 	// help commands
-	@OnKeyword("help")
+	@OnKeyword(value = "help")
 	public void help(TeamchatAPI api) throws Exception {
 		api.perform(api
 				.context()
 				.currentRoom()
 				.post(new PrimaryChatlet()
 						.setQuestionHtml("<h4>List of commands: </h4>"
-								+ "<br/><b>getmessage:</b> To get message(s) in a particular project"
-								+ "<br/><b>createmessage:</b> To create message(s) in particular project"
+								+ "<br/><b>get_todo_list:</b> To get all todolist(s) in a particular project"
 								+ "<br/><b>getcomment:</b> To comments in particular topic"
 								+ "<br/><b>createcomment:</b> To create comment on particular topic"
 								+ "<br/><b>get_all_calender:</b> To get all calendar event related to a"
@@ -67,41 +76,66 @@ public class Basecamp_Bot {
 	}
 
 	// get messages from a project
-	@OnKeyword("getmessage")
-	public void getMessage(TeamchatAPI api) throws Exception {
-		Basecamp_api_handler bah = new Basecamp_api_handler(bb);
-		Field f = api.objects().select()
-				.name("project").label("Project");
-		for (String project : bah.getActiveProjects()) {
-			f.addOption(project);
+	@OnKeyword(value = "get_todo_list")
+	public void getTodoList(TeamchatAPI api) throws Exception {
+		// populating with project name list
+		Field f = api.objects().select().name("project").label("Project");
+		for (Project project : bah.getActiveProjects()) {
+			f.addOption(project.getName() + " | " + project.getId());
 		}
 		api.perform(api
 				.context()
 				.currentRoom()
-				.post(new PrimaryChatlet().setQuestion("Select your Project")
+				.post(new PrimaryChatlet()
+						.setQuestion("Get todolists from a project")
 						.setReplyScreen(api.objects().form().addField(f))
-						.setReplyLabel("Select Project").alias("getmessage2")));
+						.setReplyLabel("Select Project")
+						.alias("get_todo_list2")));
 	}
-	
-	// part 2 of get message
-	@OnAlias("getmessage2")
-	public void getMessage2(TeamchatAPI api) throws Exception {
-		
-	}
-	
-	@SuppressWarnings("unused")
-	public static void main(String[] args)// main function
-	{
-		// init config and get data from configuration file
-		Config_handler config = new Config_handler();
-		if (config.isEmpty()) {
-			config.init_bot_Properties();
-			System.out
-					.println("Properties file has been created on the Server!");
+
+	// part 2 of get todo
+	@OnAlias(value = "get_todo_list2")
+	public void getTodoList2(TeamchatAPI api) throws Exception {
+		// populating with todolist name list
+		// get option name
+		String[] project = api.context().currentReply().getField("project")
+				.split("\\|");
+		// get project id from option name
+		String projectId = project[(project.length - 1)].trim();
+		Field f = api.objects().select().name("project").label("Project");
+		for (Todolist todolist : bah.getActiveTodoLists(projectId)) {
+			f.addOption(todolist.getName() + " | " + todolist.getId());
 		}
-		// initiate api
-		TeamchatAPI api = TeamchatAPI.fromFile("teamchat.data")
-				.setEmail(config.getEmail()).setPassword(config.getPassword())
-				.startReceivingEvents(new Basecamp_Bot());
+		api.perform(api
+				.context()
+				.currentRoom()
+				.post(new PrimaryChatlet()
+						.setQuestion("Get todos from a Todolist")
+						.setReplyScreen(api.objects().form().addField(f))
+						.setReplyLabel("Select Todo").alias("get_todo_list3")));
 	}
+
+	// part 3 of get todo
+	@OnAlias(value = "get_todo_list3")
+	public void getTodoList3(TeamchatAPI api) throws Exception {
+		//
+	}
+
+	//the main function is no longer required from api 1.4
+//	@Deprecated
+//	@SuppressWarnings("unused")
+//	public static void main(String[] args)// main function
+//	{
+//		// init config and get data from configuration file
+//		Config_handler config = new Config_handler();
+//		if (config.isEmpty()) {
+//			config.init_bot_Properties();
+//			System.out
+//					.println("Properties file has been created on the Server!");
+//		}
+//		// initiate api
+//		TeamchatAPI api = TeamchatAPI.fromFile("teamchat.data")
+//				.setEmail(config.getEmail()).setPassword(config.getPassword())
+//				.startReceivingEvents(new Basecamp_Bot());
+//	}
 }

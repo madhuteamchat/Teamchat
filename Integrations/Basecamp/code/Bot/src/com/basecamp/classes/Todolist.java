@@ -13,7 +13,7 @@ public class Todolist {
 	public Todolist(int id, int remaining_count, int completed_count,
 			String name, String created_at, String updated_at, String position,
 			String url, String app_url, Boolean description, Boolean completed,
-			Boolean _private, Boolean trashed) {
+			Boolean _private, Boolean trashed, Creator creator) {
 		super();
 		this.id = id;
 		this.remaining_count = remaining_count;
@@ -28,6 +28,7 @@ public class Todolist {
 		this.completed = completed;
 		this._private = _private;
 		this.trashed = trashed;
+		this.creator = creator;
 	}
 	/**
 	 * @return the id
@@ -180,6 +181,18 @@ public class Todolist {
 		return trashed;
 	}
 	/**
+	 * @return the creator
+	 */
+	public Creator getCreator() {
+		return creator;
+	}
+	/**
+	 * @param creator the creator to set
+	 */
+	public void setCreator(Creator creator) {
+		this.creator = creator;
+	}
+	/**
 	 * @param trashed the trashed to set
 	 */
 	public void setTrashed(Boolean trashed) {
@@ -189,4 +202,5 @@ public class Todolist {
 	private String name, created_at, updated_at, position, url, app_url;
 	private Boolean description, completed, trashed;
 	@SerializedName("private")private Boolean _private;
+	private Creator creator;
 }

@@ -1,2 +1,2 @@
-use configdb;
+use Bot;
 select * from authorized;

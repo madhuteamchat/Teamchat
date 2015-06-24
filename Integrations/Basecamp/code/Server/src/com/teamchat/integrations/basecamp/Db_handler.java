@@ -20,7 +20,7 @@ public class Db_handler {
 	private Statement statement = null;
 	private PreparedStatement preparedStatement = null;
 	private ResultSet resultSet = null;
-	private static final String DB_URL = "jdbc:mysql://localhost/configdb?user=root&password=pappupasshogaya";
+	private static final String DB_URL = "jdbc:mysql://localhost/Bot?user=root&password=pappupasshogaya";
 
 	// storing data handler
 	public boolean StorageHandler(String email, String href, Token token) {

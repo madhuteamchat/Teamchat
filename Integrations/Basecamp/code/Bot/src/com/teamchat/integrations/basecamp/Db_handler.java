@@ -21,7 +21,7 @@ public class Db_handler {
 	private ResultSet resultSet = null;
 
 	private static Config_handler config = new Config_handler();
-	private static String DB_URL = "jdbc:mysql://localhost/configdb?user="
+	private static String DB_URL = "jdbc:mysql://localhost/Bot?user="
 			+ config.getSql_username() + "&password="
 			+ config.getSql_password();
 

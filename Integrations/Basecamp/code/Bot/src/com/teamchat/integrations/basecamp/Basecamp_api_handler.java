@@ -5,6 +5,7 @@ package com.teamchat.integrations.basecamp;
 
 //basic classes for json parsing help
 import java.util.ArrayList;
+
 import com.basecamp.classes.*;
 //json parsing
 import com.google.gson.Gson;
@@ -27,13 +28,44 @@ public class Basecamp_api_handler {
 	}
 
 	// public methods for api access
-	// return active project list (names)
-	public String[] getActiveProjects() {
+	// return todolists list
+	// for a particular project
+	public Todolist[] getActiveTodoLists(String projectId) {
+		ArrayList<String> data = new ArrayList<String>();
+		try {
+			String response = rh.sendGet_auth(bb.getHref() + "/projects/" + projectId + "/todolists.json",
+					ua, "", bb.getAccess_token());
+			// put response in class
+			return (Todolist[]) gson.fromJson(response, Todolist[].class);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	// return active project list
+	public Project[] getActiveProjects() {
 		ArrayList<String> data = new ArrayList<String>();
 		try {
 			String response = rh.sendGet_auth(bb.getHref() + "/projects.json",
 					ua, "", bb.getAccess_token());
-			// put response in token class
+			// put response in class
+			return (Project[]) gson.fromJson(response, Project[].class);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	// return active project list (names)
+	public String[] getActiveProjects_names() {
+		ArrayList<String> data = new ArrayList<String>();
+		try {
+			String response = rh.sendGet_auth(bb.getHref() + "/projects.json",
+					ua, "", bb.getAccess_token());
+			// put response in class
 			Project[] projects = gson.fromJson(response, Project[].class);
 			for (Project project : projects) {
 				data.add(project.getName());

@@ -1,2 +1,2 @@
-use configdb;
+use Bot;
 INSERT INTO authorized values (default, 'email', 'href', 'access_token','refresh_token', 'expires_in', true); 
