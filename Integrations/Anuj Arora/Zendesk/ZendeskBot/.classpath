@@ -6,9 +6,9 @@
 	<classpathentry exported="true" kind="lib" path="src/com.fasterxml.jackson.annotations.jar"/>
 	<classpathentry exported="true" kind="lib" path="src/com.fasterxml.jackson.databind.jar"/>
 	<classpathentry exported="true" kind="lib" path="src/com.fasterxml.jackson.core.jar"/>
-	<classpathentry exported="true" kind="lib" path="src/teamchat-client-sdk.1.3.jar" sourcepath="src/com/teamchat/integration/zendesk/main"/>
 	<classpathentry kind="lib" path="src/slf4j-api-1.7.12.jar"/>
 	<classpathentry kind="lib" path="src/handy-uri-templates-1.1.7.jar"/>
+	<classpathentry kind="lib" path="src/teamchat-client-sdk.1.4.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
 	<classpathentry exported="true" kind="lib" path="/home/anuj-intern22/Desktop/gup/Teamchat-master/Integrations/Abhishek Nama/Zendesk/Code/zendesk-java-client-master"/>
 	<classpathentry kind="output" path="bin"/>
