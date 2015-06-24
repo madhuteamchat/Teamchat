@@ -16,6 +16,7 @@ import java.sql.Statement;
 public class Db_handler {
 	private Connection connect = null;
 	private Statement statement = null;
+	@SuppressWarnings("unused")
 	private PreparedStatement preparedStatement = null;
 	private ResultSet resultSet = null;
 

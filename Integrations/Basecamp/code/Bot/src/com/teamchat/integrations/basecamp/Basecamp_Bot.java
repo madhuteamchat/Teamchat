@@ -3,9 +3,9 @@
  */
 package com.teamchat.integrations.basecamp;
 
-import com.sun.org.apache.bcel.internal.classfile.Field;
 import com.teamchat.client.annotations.OnAlias;
 import com.teamchat.client.annotations.OnKeyword;
+import com.teamchat.client.sdk.Field;
 import com.teamchat.client.sdk.TeamchatAPI;
 import com.teamchat.client.sdk.chatlets.PrimaryChatlet;
 
@@ -21,6 +21,7 @@ public class Basecamp_Bot {
 	public void basecamp(TeamchatAPI api) throws Exception {
 		String email = api.context().currentSender().getEmail();
 		Db_handler db = new Db_handler();
+		//check if the user email exists in the db or not
 		if (db.isAuthorized(email)) {
 			// get the basic info
 			bb = db.GetBasicStuff(email);
@@ -69,7 +70,7 @@ public class Basecamp_Bot {
 	@OnKeyword("getmessage")
 	public void getMessage(TeamchatAPI api) throws Exception {
 		Basecamp_api_handler bah = new Basecamp_api_handler(bb);
-		com.teamchat.client.sdk.Field f = api.objects().select()
+		Field f = api.objects().select()
 				.name("project").label("Project");
 		for (String project : bah.getActiveProjects()) {
 			f.addOption(project);
@@ -88,6 +89,7 @@ public class Basecamp_Bot {
 		
 	}
 	
+	@SuppressWarnings("unused")
 	public static void main(String[] args)// main function
 	{
 		// init config and get data from configuration file

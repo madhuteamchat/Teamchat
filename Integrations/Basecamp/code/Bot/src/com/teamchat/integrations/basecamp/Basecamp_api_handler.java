@@ -5,8 +5,6 @@ package com.teamchat.integrations.basecamp;
 
 //basic classes for json parsing help
 import java.util.ArrayList;
-import java.util.Iterator;
-
 import com.basecamp.classes.*;
 //json parsing
 import com.google.gson.Gson;

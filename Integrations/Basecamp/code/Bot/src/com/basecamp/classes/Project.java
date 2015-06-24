@@ -8,8 +8,10 @@ package com.basecamp.classes;
  *
  */
 public class Project {
-	String name, description, updated_at, url, app_url, color;
-	Boolean template, archived, starred, trashed, draft, is_client_project;
+	private String name, description, updated_at, url, app_url, color;
+	private Boolean template, archived, starred, trashed, draft,
+			is_client_project;
+	private int id;
 
 	public String getName() {
 		return name;
@@ -114,8 +116,6 @@ public class Project {
 	public void setId(int id) {
 		this.id = id;
 	}
-
-	int id;
 
 	public Project(String name, String description, String updated_at,
 			String url, String app_url, String color, Boolean template,
