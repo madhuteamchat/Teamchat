@@ -1,0 +1,4 @@
+client_id=352e7364-ed52-4756-aea2-25689244d5ee
+client_secret=NyRdOiqFCIH0Wo0itHPrrHzxUo11dOpctCKk5V8Dg68=
+redirect_url=http://interns.teamchat.com:8086/Office365Integration/RedirectURL
+login_url=http://interns.teamchat.com:8086/Office365Integration/LoginServlet
