@@ -1,0 +1,6 @@
+apikey=AIzaSyCuxRZHt5hjH-x-IQQG5MZFldxigM_4_W0
+client_id=494950415885-fqv27scptt61fknafej5is92kd1hrbfe.apps.googleusercontent.com
+client_secret=1HvoCJaWVFMciAfFyrZ9doSg
+servlet_url=http://integration.teamchat.com:8085/YouTubeIntegration/YoutubeBotServelet
+redirect_url=http://integration.teamchat.com:8085/YouTubeIntegration/YoutubeCallBack
+upload_url=http://integration.teamchat.com:8085/YouTubeIntegration/index.html

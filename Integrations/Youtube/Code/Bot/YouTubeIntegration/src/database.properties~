@@ -1,3 +1,16 @@
 dbuser=tcinterns
-dbpass=*********
+dbpass=PakyovBosh7
 dbname=Youtube
+dbdrivername=com.mysql.jdbc.Driver
+dburl=jdbc:mysql://localhost/
+
+
+#Create a table with the name Youtube
+
+
+#CREATE TABLE `Youtube` (
+#  `id` varchar(150) NOT NULL,
+#  `access_token` varchar(200) DEFAULT NULL,
+#  `refresh_token` varchar(200) DEFAULT NULL,
+#  PRIMARY KEY (`id`)
+#) ENGINE=InnoDB DEFAULT CHARSET=utf8 

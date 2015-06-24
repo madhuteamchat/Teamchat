@@ -8,6 +8,8 @@ public class DBProperty {
 	String dbuser="null";
 	String dbpass="null";
 	String dbname="null";
+	String dbdrivername="null";
+	String dburl="null";
 	
 	public static Properties loadPropertyFromClasspath(String fileName, Class<?> type) throws IOException
 	{
@@ -32,6 +34,8 @@ public class DBProperty {
 	    dbuser = props.getProperty("dbuser", "null");
 	    dbpass = props.getProperty("dbpass", "null");
 	    dbname = props.getProperty("dbname", "null");
+	    dbdrivername = props.getProperty("dbdrivername", "null");
+	    dburl = props.getProperty("dburl", "null");
 	}
 	
 	public String getDBUser()
@@ -47,5 +51,15 @@ public class DBProperty {
 	public String getDBName()
 	{
 		return dbname;
+	}
+	
+	public String getDBDriverName()
+	{
+		return dbdrivername;
+	}
+	
+	public String getDBURL()
+	{
+		return dburl;
 	}
 }

@@ -23,14 +23,6 @@ import com.teamchat.integration.instagram.search.Location;
 
 public class InstagramBot {
 	
-	ArrayList<String> sidlist=new ArrayList<String>();
-	ArrayList<String> oidlist=new ArrayList<String>();
-	ArrayList<String> objlist=new ArrayList<String>();
-	ArrayList<String> loclist=new ArrayList<String>();
-	ArrayList<String> locidlist=new ArrayList<String>();
-	ArrayList<String> latlist=new ArrayList<String>();
-	ArrayList<String> lnglist=new ArrayList<String>();
-	ArrayList<String> placelist=new ArrayList<String>();
 	String servlet_url;
 	
 	public InstagramBot() {
@@ -40,11 +32,6 @@ public class InstagramBot {
 		servlet_url=ip.getServletUrl();
 	}
 
-	// Help
-//	@OnKeyword("help")
-//	public void instagramhelp(TeamchatAPI api) {
-//		instagramHelp(api);
-//	}
 		@OnKeyword("Help")
 		public void instagramHelp(TeamchatAPI api) {
 			TeamchatPost.tpapi=api;
@@ -61,13 +48,6 @@ public class InstagramBot {
 			)));
 			
 		}
-
-	// Instagram Connect
-		
-//		@OnKeyword("connect")
-//		public void connectinstagram(TeamchatAPI api) throws JSONException {
-//			connectInstagram(api);
-//		}
 		
 			@OnKeyword("Connect")
 			public void connectInstagram(TeamchatAPI api) throws JSONException {
@@ -88,15 +68,10 @@ public class InstagramBot {
 					.setQuestionHtml("You are already connected with Instagram.")));
 			}
 			
-	// Instagram Disconnect
-//			@OnKeyword("disconnect")
-//			public void disconnectinstagram(TeamchatAPI api) {
-//				disconnectInstagram(api);
-//			}
 			
 				@OnKeyword("Disconnect")
 				public void disconnectInstagram(TeamchatAPI api) {
-//					TeamchatPost.tpapi=api;
+					TeamchatPost.tpapi=api;
 					String sname=api.context().currentSender().getEmail();
 					 try { 			    	    
 			    	JDBCConnection db=new JDBCConnection();
@@ -115,10 +90,6 @@ public class InstagramBot {
 				}
 		
 
-//				@OnKeyword("subscribe")
-//				public void ssubscribe(TeamchatAPI api) throws JSONException {
-//					subscribe(api);
-//				}
 		
 		@OnKeyword("Subscribe")
 		public void subscribe(TeamchatAPI api) throws JSONException {
@@ -178,18 +149,7 @@ public class InstagramBot {
 									.addField(api.objects().input().label("Address").name("place"))
 							)
 							.alias("aliaslocplace")));
-				/*api.perform(
-						api.context().currentRoom().post(
-						new PrimaryChatlet()
-					
-						.setQuestion("Enter the Locaton details for which you want to subscribe")
-						.setReplyScreen(api.objects().form()
-						.addField(api.objects().input().label("Latitude").name("lat"))
-						.addField(api.objects().input().label("Longitude").name("lng"))
-						.addField(api.objects().input().label("Radius in meters(max 5000)").name("radius"))
-						)
-						.alias("aliassubslocation")
-						));	*/
+		
 			}
 			else if(rpl.getField("substype").equals("GeographicRegion"))
 			{
@@ -199,18 +159,7 @@ public class InstagramBot {
 						.addField(api.objects().input().label("Address").name("place"))
 				)
 				.alias("aliasgeoplace")));
-				/*api.perform(
-						api.context().currentRoom().post(
-						new PrimaryChatlet()
-					
-						.setQuestion("Enter the Locaton details for which you want to subscribe")
-						.setReplyScreen(api.objects().form()
-						.addField(api.objects().input().label("Latitude").name("lat"))
-						.addField(api.objects().input().label("Longitude").name("lng"))
-						.addField(api.objects().input().label("Radius").name("radius"))
-						)
-						.alias("aliassubsgeo")
-						));	*/
+		
 			}
 		}
 		
@@ -220,7 +169,6 @@ public class InstagramBot {
 			String oid=api.context().currentReply().getField("oid");
 			if(oid.matches("^[a-zA-Z0-9_]*$"))
 			{
-//				System.out.println("valid");
 				oid=oid.toLowerCase();
 				String id=api.context().currentReply().senderEmail();
 				InstaSubDB isdb=new InstaSubDB();
@@ -261,15 +209,15 @@ public class InstagramBot {
 			else if(result.equals("success"))
 			{
 				System.out.println(result);
-				latlist=g.getlatlist();
-				lnglist=g.getlnglist();
-				placelist=g.getplacelist();
+				ArrayList<String> latlist=g.getlatlist();
+				ArrayList<String> lnglist=g.getlnglist();
+				ArrayList<String> placelist=g.getplacelist();
 				if(placelist.size()>0)
 				{
 					api.perform(api.context().currentRoom().post(new PrimaryChatlet()
 					.setQuestionHtml("Select from the list")
 					.setReplyScreen(api.objects().form()
-						.addField(loclatlngField(api)))
+						.addField(loclatlngField(api,placelist,latlist,lnglist)))
 						.alias("aliasloclatlng")
 						));
 				}
@@ -286,39 +234,18 @@ public class InstagramBot {
 			}
 		}
 		
-		public Field loclatlngField(TeamchatAPI api)
+		public Field loclatlngField(TeamchatAPI api,ArrayList<String> placelist,ArrayList<String> latlist,ArrayList<String> lnglist)
 		{
 			Field f=api.objects().select().label("Select").name("choice");
 			for(int i=0;i<placelist.size();i++)
 			{
 //			      System.out.println("list: "+placelist.get(i));
-			      f.addOption(placelist.get(i));
+			      f.addOption(placelist.get(i)+":"+latlist.get(i)+":"+lnglist.get(i));
 			}
 			return f;
 		}
 		
-	/*	@OnAlias("aliasloclatlng")
-		public void aliasloclatlng(TeamchatAPI api)
-		{
-			
-			Reply rpl=api.context().currentReply();
-			String sname=rpl.senderEmail();
-			String ch="";
-			ch=rpl.getField("choice");
-			if(ch.length()<1)
-				api.perform(api.context().currentRoom().post(new PrimaryChatlet()
-				.setQuestionHtml("Try Again")));
-			else
-			{
-				String choice=URLDecoder.decode(rpl.getField("choice"));
-				String lat=latlist.get(placelist.indexOf(choice));
-				String lng=lnglist.get(placelist.indexOf(choice));
-				System.out.println("lat="+lat+" lng"+lng);
-			}
-		}*/
 		
-		
-//		@OnAlias("aliassubslocation")
 		@OnAlias("aliasloclatlng")
 		public void aliassubslocation(TeamchatAPI api)
 		{
@@ -331,8 +258,9 @@ public class InstagramBot {
 			else
 			{
 				String choice=URLDecoder.decode(rpl.getField("choice"));
-				lat=latlist.get(placelist.indexOf(choice));
-				lng=lnglist.get(placelist.indexOf(choice));
+				String[] place=choice.split(":");
+				lat=place[1];
+				lng=place[2];
 //				System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@lat="+lat+" lng="+lng);
 				String id=api.context().currentReply().senderEmail();
 				Location l=new Location();
@@ -344,24 +272,24 @@ public class InstagramBot {
 				}
 				else
 				{
-					locidlist=l.getlocidlist();
-					loclist=l.getloclist();
+					ArrayList<String> locidlist=l.getlocidlist();
+					ArrayList<String> loclist=l.getloclist();
 					api.perform(api.context().currentRoom().post(new PrimaryChatlet()
 							.setQuestionHtml("Select the location from the list to subscribe")
 							.setReplyScreen(api.objects().form()
-									.addField(searchlocField(api)))
+									.addField(searchlocField(api,locidlist,loclist)))
 									.alias("aliaslocsearch")
 							));
 				}
 			}			
 		}
 		
-		public Field searchlocField(TeamchatAPI api)
+		public Field searchlocField(TeamchatAPI api,ArrayList<String> locidlist,ArrayList<String> loclist)
 		{
 			Field f=api.objects().select().label("Select").name("choice");
 			for(int i=0;i<locidlist.size();i++)
 			{
-			      f.addOption(loclist.get(i));
+			      f.addOption(loclist.get(i)+":"+locidlist.get(i));
 //			      System.out.println("%%%%%%"+loclist.get(i));
 			}
 			return f;
@@ -381,7 +309,8 @@ public class InstagramBot {
 			else
 			{
 				String choice=URLDecoder.decode(rpl.getField("choice"));
-				String locid=locidlist.get(loclist.indexOf(choice));
+				String[] loc=choice.split(":");
+				String locid=loc[1];
 				InstaSubDB isdb=new InstaSubDB();
 				if(isdb.inInstaSubsDB(sname,"location", locid))
 				{
@@ -415,16 +344,16 @@ public class InstagramBot {
 			else if(result.equals("success"))
 			{
 				System.out.println(result);
-				latlist=g.getlatlist();
-				lnglist=g.getlnglist();
-				placelist=g.getplacelist();
+				ArrayList<String> latlist=g.getlatlist();
+				ArrayList<String> lnglist=g.getlnglist();
+				ArrayList<String> placelist=g.getplacelist();
 				if(placelist.size()>0)
 				{
 					
 					api.perform(api.context().currentRoom().post(new PrimaryChatlet()
 						.setQuestionHtml("Select from the list")
 						.setReplyScreen(api.objects().form()
-								.addField(geolatlngField(api)))
+								.addField(geolatlngField(api,placelist,latlist,lnglist)))
 						.alias("aliasgeolatlng")
 						));
 				}
@@ -441,40 +370,18 @@ public class InstagramBot {
 			}
 		}
 		
-		public Field geolatlngField(TeamchatAPI api)
+		public Field geolatlngField(TeamchatAPI api,ArrayList<String> placelist,ArrayList<String> latlist,ArrayList<String> lnglist)
 		{
 			Field f=api.objects().select().label("Select").name("choice");
 			for(int i=0;i<placelist.size();i++)
 			{
 //			      System.out.println("list: "+placelist.get(i));
-			      f.addOption(placelist.get(i));
+			      f.addOption(placelist.get(i)+":"+latlist.get(i)+":"+lnglist.get(i));
 			}
 			return f;
 		}
 		
-	/*	@OnAlias("aliasgeolatlng")
-		public void aliasgeolatlng(TeamchatAPI api)
-		{
-			
-			Reply rpl=api.context().currentReply();
-			String sname=rpl.senderEmail();
-			String ch="";
-			ch=rpl.getField("choice");
-			if(ch.length()<1)
-				api.perform(api.context().currentRoom().post(new PrimaryChatlet()
-				.setQuestionHtml("Try Again")));
-			else
-			{
-				String choice=URLDecoder.decode(rpl.getField("choice"));
-				String lat=latlist.get(placelist.indexOf(choice));
-				String lng=lnglist.get(placelist.indexOf(choice));
-				System.out.println("lat="+lat+" lng"+lng);
-			}
-		}*/
 				
-		
-		
-//		@OnAlias("aliassubsgeo")
 		@OnAlias("aliasgeolatlng")
 		public void aliassubsgeo(TeamchatAPI api)
 		{
@@ -487,8 +394,9 @@ public class InstagramBot {
 			else
 			{
 				String choice=URLDecoder.decode(rpl.getField("choice"));
-				lat=latlist.get(placelist.indexOf(choice));
-				lng=lnglist.get(placelist.indexOf(choice));
+				String[] place=choice.split(":");
+				lat=place[1];
+				lng=place[2];
 				String id=api.context().currentReply().senderEmail();
 				Subscribe s=new Subscribe();
 				api.perform(api.context().currentRoom().post(new PrimaryChatlet()
@@ -497,11 +405,6 @@ public class InstagramBot {
 			}
 		}
 		
-//		@OnKeyword("sublist")
-//		public void subscribelist(TeamchatAPI api) throws JSONException
-//		{
-//			subscribeList(api);
-//		}
 		
 		@OnKeyword("Sublist")
 		public void subscribeList(TeamchatAPI api) throws JSONException
@@ -520,9 +423,6 @@ public class InstagramBot {
 			}
 			else
 			{
-//				Subscribe s=new Subscribe();
-//				api.perform(api.context().currentRoom().post(new PrimaryChatlet()
-//							.setQuestionHtml(s.getsubscribelist())));
 				InstaSubDB isdb=new InstaSubDB();
 				isdb.retreiveSubsList(sname);
 				ArrayList<String> sidlist=isdb.sidList();
@@ -553,11 +453,6 @@ public class InstagramBot {
 			}
 		}
 		
-//		@OnKeyword("unsubscribe")
-//		public void unssubscribe(TeamchatAPI api) throws JSONException
-//		{
-//			unsubscribe(api);
-//		}
 		
 		@OnKeyword("Unsubscribe")
 		public void unsubscribe(TeamchatAPI api) throws JSONException
@@ -578,19 +473,19 @@ public class InstagramBot {
 			{
 				InstaSubDB isdb=new InstaSubDB();
 				isdb.retreiveSubsList(sname);
-				sidlist=isdb.sidList();
-				oidlist=isdb.oidList();
-				objlist=isdb.objList();
+				ArrayList<String> sidlist=isdb.sidList();
+				ArrayList<String> oidlist=isdb.oidList();
+				ArrayList<String> objlist=isdb.objList();
 				api.perform(api.context().currentRoom().post(new PrimaryChatlet()
 				.setQuestionHtml("Select from the list")
 				.setReplyScreen(api.objects().form()
-						.addField(unsubField(api)))
+						.addField(unsubField(api,sidlist,oidlist,objlist)))
 				.alias("aliasunsubb")
 						));
 			}
 		}
 		
-		public Field unsubField(TeamchatAPI api)
+		public Field unsubField(TeamchatAPI api,ArrayList<String> sidlist,ArrayList<String> oidlist,ArrayList<String> objlist)
 		{
 			Field f=api.objects().select().label("Select").name("choice");
 			for(int i=0;i<sidlist.size();i++)
@@ -600,17 +495,17 @@ public class InstagramBot {
 					InstaLocation il=new InstaLocation();
 					String locname=il.retreive(oidlist.get(i));
 //					locname=locname.replace('-', ' ');         Assuming locname won't have "-"
-					f.addOption(locname+"-"+oidlist.get(i));
+					f.addOption(locname+":"+oidlist.get(i)+":"+sidlist.get(i));
 				}
 				else if(objlist.get(i).equals("geography"))
 				{
 					InstaGeography ig=new InstaGeography();
 					String geoname=ig.retreive(oidlist.get(i));
 //					geoname=geoname.replace('-', ' ');        Assuming geoname won't have "-"
-					f.addOption(geoname+"-"+oidlist.get(i));
+					f.addOption(geoname+":"+oidlist.get(i)+":"+sidlist.get(i));
 				}
 				else
-			      f.addOption(objlist.get(i)+"-"+oidlist.get(i));
+			      f.addOption(objlist.get(i)+":"+oidlist.get(i)+":"+sidlist.get(i));
 			}
 			return f;
 		}
@@ -629,8 +524,8 @@ public class InstagramBot {
 			else
 			{
 				String choice=URLDecoder.decode(rpl.getField("choice"));
-				String[] split=choice.split("-");
-				String sid=sidlist.get(oidlist.indexOf(split[1]));
+				String[] split=choice.split(":");
+				String sid=split[2];
 				InstaSubDB isdb=new InstaSubDB();
 				isdb.delete(sname, sid);
 				api.perform(api.context().currentRoom().post(new PrimaryChatlet()

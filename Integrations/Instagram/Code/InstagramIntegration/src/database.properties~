@@ -1,3 +1,38 @@
 dbuser=tcinterns
 dbpass=PakyovBosh7
 dbname=Instagram
+dbdrivername=com.mysql.jdbc.Driver
+dburl=jdbc:mysql://localhost/
+
+
+
+#Create tables with the names Instagram, instasubscribe, instalocation, instageography
+#
+#
+#CREATE TABLE `Instagram` (
+#  `id` varchar(42) NOT NULL,
+#  `access_token` varchar(150) DEFAULT NULL,
+#  PRIMARY KEY (`id`)
+#) ENGINE=InnoDB DEFAULT CHARSET=utf8 
+#
+#
+#CREATE TABLE `instasubscribe` (
+#  `id` varchar(42) DEFAULT NULL,
+#  `object` varchar(19) DEFAULT NULL,
+#  `object_id` varchar(27) DEFAULT NULL,
+#  `sid` varchar(44) DEFAULT NULL
+#) ENGINE=InnoDB DEFAULT CHARSET=utf8 
+#
+#
+#CREATE TABLE `instalocation` (
+#  `locid` varchar(19) DEFAULT NULL,
+#  `locname` varchar(88) DEFAULT NULL,
+#  `sid` varchar(31) DEFAULT NULL
+#) ENGINE=InnoDB DEFAULT CHARSET=utf8 
+#
+#
+#CREATE TABLE `instageography` (
+#  `geoid` varchar(27) DEFAULT NULL,
+#  `geoname` varchar(150) DEFAULT NULL,
+#  `sid` varchar(42) DEFAULT NULL
+#) ENGINE=InnoDB DEFAULT CHARSET=utf8 

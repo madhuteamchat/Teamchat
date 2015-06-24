@@ -13,14 +13,10 @@ import com.teamchat.integration.instagram.properties.DBProperty;
 public class JDBCConnection {
 
 
-	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";  
-	   static String DB_URL = "jdbc:mysql://localhost/";
+	static String JDBC_DRIVER = "null";  
+	   static String DB_URL = "null";
 
 	   //  Database credentials
-//	   static final String USER = "tcinterns";
-//	   static final String PASS = "PakyovBosh7";
-//	   static final String USER = "root";
-//	   static final String PASS = "gupshup";
 	   
 	   static String USER="null";
 	   static String PASS="null";
@@ -33,10 +29,11 @@ public class JDBCConnection {
 		{
 			DBProperty dbp=new DBProperty();
 			dbp.loadParams();
+			JDBC_DRIVER=dbp.getDBDriverName();
 			USER=dbp.getDBUser();
 			PASS=dbp.getDBPass();
 			dbname=dbp.getDBName();
-			DB_URL="jdbc:mysql://localhost/"+dbname;
+			DB_URL=dbp.getDBURL()+dbname;
 		}
 	
 	public String retreive(String id)
