@@ -33,4 +33,21 @@
 		<nature>org.eclipse.jdt.core.javanature</nature>
 		<nature>org.eclipse.wst.jsdt.core.jsNature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>WebContent/WEB-INF/lib/gson-2.3.1.jar</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/gson-2.3.1.jar</locationURI>
+		</link>
+		<link>
+			<name>WebContent/WEB-INF/lib/mysql-connector-java-5.1.35-bin.jar</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/mysql-connector-java-5.1.35-bin.jar</locationURI>
+		</link>
+		<link>
+			<name>WebContent/WEB-INF/lib/teamchat-client-sdk.1.4.jar</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/teamchat-client-sdk.1.4.jar</locationURI>
+		</link>
+	</linkedResources>
 </projectDescription>
