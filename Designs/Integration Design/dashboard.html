@@ -1,4 +1,3 @@
-<!-- TODO Uncomment it when using jsp <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%> -->
 <!doctype html>
 <html>
 
@@ -67,51 +66,42 @@
   <script src="scripts/registerFunctions.js"></script>
   <script src="scripts/mrjsontable.js"></script>
   <script>
-    $(document).ready(
-
-      function() {
-        var url = location.search;
-        if (url.indexOf('errMsg=') > 0) {
-          var errMsg = url.substring(url.indexOf('errMsg='),
-            url.length).split('=')[1];
-          console.log(errMsg);
-          errMsg = unescape(errMsg);
-          $('#errMsg').text(errMsg).show();
-        }
-      });
-
-    function showPopUp(id) {
-      $('#main-body').hide();
-      $(id).css("display", "block");
-
-    }
-
-    function hidePopup(id) {
-      $(id).css("display", "none");
-      $('#main-body').show();
-
-    }
+    // $(document).ready(
+    //
+    //   function() {
+    //     var url = location.search;
+    //     if (url.indexOf('errMsg=') > 0) {
+    //       var errMsg = url.substring(url.indexOf('errMsg='),
+    //         url.length).split('=')[1];
+    //       console.log(errMsg);
+    //       errMsg = unescape(errMsg);
+    //       $('#errMsg').text(errMsg).show();
+    //     }
+    //   });
+    //
+    // function showPopUp(id) {
+    //   $('#main-body').hide();
+    //   $(id).css("display", "block");
+    //
+    // }
+    //
+    // function hidePopup(id) {
+    //   $(id).css("display", "none");
+    //   $('#main-body').show();
+    //
+    // }
 
     var renderRegisteredUtils = function() {
 
       var client = new Object();
-      // client.adminEmail = '${sessionScope.email}';
       client.adminEmail = 'puranjay.jain@st.niituniversity.in';
       var application = new Object();
-      // application.adminEmail = '${sessionScope.email}';
       application.adminEmail = 'puranjay.jain@st.niituniversity.in';
 
       var service = new Object();
-      // service.adminEmail = '${sessionScope.email}';
       service.adminEmail = 'puranjay.jain@st.niituniversity.in';
 
       var workflow = new Object();
-      // workflow.adminEmail = '${sessionScope.email}';
-
-      // integration.user.name = '${sessionScope.email}';
-      // integration.user.email = '${sessionScope.email}';
-      // integration.user.userId = '${sessionScope.userId}';
-      // TODO remove this below code in production
       workflow.adminEmail = 'puranjay.jain@st.niituniversity.in';
 
       integration.user.name = 'puranjay.jain@st.niituniversity.in';
@@ -126,28 +116,18 @@
         getApplicationDataSuccess, getApplicationDataFailure);
       admin.workflow.getAllWorkflowsOfUser(workflow, getWorkflowDataSuccess,
         getWorkflowDataFailure);
-      // disableCallback(true);
     }
-
-
-    // var disableCallback = function(isTrue) {
-    //   if (isTrue) {
-    //     $("#reg-app-callbackurl").prop('disabled', true);
-    //     document.getElementById('reg-app-eventtype').value = "pull";
-    //   } else {
-    //     $("#reg-app-callbackurl").prop('disabled', false);
-    //     document.getElementById('reg-app-eventtype').value = "push";
-    //   }
-    // }
   </script>
 </head>
 
-<body class="fullbleed layout vertical" onload="renderRegisteredUtils();">
+<body class="fullbleed layout vertical" onload="renderRegisteredUtils()">
   <paper-toolbar class="tall">
     <paper-icon-button id="home_button" icon="extension"></paper-icon-button>
     <span title>Teamchat Integration Console</span>
-    <h4>Puranjay Jain</h4>
-    <paper-icon-button id="logout_button" icon="exit-to-app">Logout</paper-icon-button>
+    <div class="right-fixed">
+      <h4>Puranjay Jain</h4>
+      <paper-icon-button id="logout_button" icon="exit-to-app">Logout</paper-icon-button>
+    </div>
     <paper-tabs id="select_tab" selected="0" class="bottom self-end" style="width: 600px;">
       <paper-tab>PLATFORM CLIENT</paper-tab>
       <paper-tab>SERVICES</paper-tab>
@@ -172,16 +152,14 @@
       <paper-fab icon="add" class="corner-fab" id="register_client_button" title="Register a new client"></paper-fab>
       <!-- Overlays and dialogs here -->
       <form onsubmit="return false" id="client-form" method="post">
-        <paper-dialog style="max-height:460px;min-width:350px;" id="register_client" entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
+        <paper-dialog id="register_client" entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
           <h2>Register a new Client</h2>
-          <!-- <paper-dialog-scrollable> -->
-          <div>
+          <paper-dialog-scrollable>
             <paper-input name="reg-client-name" id="reg-client-name" required auto-validate label="Name" autofocus char-counter maxlength="128"></paper-input>
             <paper-input name="reg-client-org" id="reg-client-org" required auto-validate label="Organization" char-counter maxlength="128"></paper-input>
             <gold-email-input name="reg-client-email" id="reg-client-email" required auto-validate error-message="Please enter a valid email" label="Email"></gold-email-input>
             <paper-textarea name="reg-client-description" id="reg-client-description" label="Description" char-counter maxlength="256"></paper-textarea>
-          </div>
-          <!-- </paper-dialog-scrollable> -->
+          </paper-dialog-scrollable>
           <div class="buttons">
             <paper-button class="discard" dialog-dismiss raised>Discard</paper-button>
             <paper-button id="reg-client-save" onclick="registerClient()" class="submit-button" dialog-confirm raised>Create</paper-button>
@@ -247,18 +225,20 @@
         <paper-dialog id="register_service" with-backdrop entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
           <h2>Register a new Service</h2>
           <paper-dialog-scrollable>
-            <!-- drop down clickable -->
-            <div id="clientDrop" class="list drop-down">
-              <div class="flex">Select Client</div>
-              <iron-icon icon="arrow-drop-down"></iron-icon>
+            <div class="drop-down-container">
+              <!-- drop down clickable -->
+              <div id="clientDrop" class="list drop-down">
+                <div class="flex">Select Client</div>
+                <iron-icon icon="arrow-drop-down"></iron-icon>
+                <!-- drop down contents -->
+                <div id="clientDropBox" class="horizontal-section drop-down-data">
+                  <paper-menu class="list innerlist">
+                  </paper-menu>
+                </div>
+              </div>
+              <!-- drop down data -->
+              <input type="hidden" name="reg-service-cKey" id="reg-service-cKey" value="">
             </div>
-            <!-- drop down contents -->
-            <div id="clientDropBox" class="horizontal-section drop-down-data">
-              <paper-menu class="list innerlist">
-              </paper-menu>
-            </div>
-            <!-- drop down data -->
-            <input type="hidden" name="reg-service-cKey" id="reg-service-cKey" value="">
             <paper-input name="reg-service-name" id="reg-service-name" required auto-validate label="Name" char-counter maxlength="128"></paper-input>
             <paper-textarea name="reg-service-desc" id="reg-service-desc" label="Description" char-counter maxlength="256"></paper-textarea>
           </paper-dialog-scrollable>
@@ -283,31 +263,30 @@
       <paper-fab icon="add" class="corner-fab" id="register_app_button" onclick="addApplication()" title="Register a new application"></paper-fab>
       <!-- Overlays and dialogs here -->
       <form onsubmit="return false" id="app-form" method="post">
-        <paper-dialog style="max-height:460px;min-width:350px;" id="register_application" entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
+        <paper-dialog id="register_application" entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
           <h2>Register a new Application</h2>
           <paper-dialog-scrollable>
-            <!-- drop down clickable -->
-            <div id="appDrop" class="list drop-down">
-              <div class="flex">Select Client</div>
-              <iron-icon icon="arrow-drop-down"></iron-icon>
+            <div class="drop-down-container">
+              <!-- drop down clickable -->
+              <div id="appDrop" class="list drop-down">
+                <div class="flex">Select Client</div>
+                <iron-icon icon="arrow-drop-down"></iron-icon>
+              </div>
+              <!-- drop down contents -->
+              <div id="appDropBox" class="horizontal-section drop-down-data">
+                <paper-menu class="list innerlist">
+                </paper-menu>
+              </div>
+              <!-- drop down data -->
+              <input type="hidden" id="reg-app-cKey" name="reg-app-cKey" value="">
             </div>
-            <!-- drop down contents -->
-            <div id="appDropBox" class="horizontal-section drop-down-data">
-              <paper-menu class="list innerlist">
-              </paper-menu>
-            </div>
-            <!-- drop down data -->
-            <input type="hidden" id="reg-app-cKey" name="reg-app-cKey" value="">
             <paper-input name="reg-app-name" id="reg-app-name" required auto-validate label="Name" autofocus char-counter maxlength="128"></paper-input>
             <paper-textarea name="reg-app-description" id="reg-app-description" label="Description" char-counter maxlength="256"></paper-textarea>
             <h4>Event Type</h4>
-            <div class="">
-              <!-- onclick="document.getElementById('reg-app-cKey').value = this.selected" -->
-              <paper-radio-group selected="a">
-                <paper-radio-button name="a">Push</paper-radio-button>
-                <paper-radio-button name="b">Pull</paper-radio-button>
-              </paper-radio-group>
-            </div>
+            <paper-radio-group id="reg-event-group" selected="push">
+              <paper-radio-button name="push">Push</paper-radio-button>
+              <paper-radio-button name="pull">Pull</paper-radio-button>
+            </paper-radio-group>
             <input type="hidden" name="reg-app-eventtype" id="reg-app-eventtype" value="push">
             <paper-input name="reg-app-callbackurl" id="reg-app-callbackurl" required auto-validate label="Callback Url" char-counter maxlength="2083"></paper-input>
           </paper-dialog-scrollable>
@@ -319,8 +298,48 @@
       </form>
     </neon-animatable>
     <neon-animatable>
+      <div class="content">
+        <h3>
+          Register Workflows
+        </h3>
+        <p>
+          This section is used to create a workflow (app Id) on Teamchat Integration platfrom.
+        </p>
+      </div>
       <table id="registeredWorkflowsTable">
       </table>
+      <paper-fab icon="add" class="corner-fab" id="register_work_button" onclick="addWorkflow()" title="Register a new workflow"></paper-fab>
+      <!-- Overlays and dialogs here -->
+      <form onsubmit="return false" id="workflow-form" method="post">
+        <paper-dialog id="register_workflow" entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
+          <h2>Register a new Workflow</h2>
+          <paper-dialog-scrollable>
+            <div class="drop-down-container">
+              <!-- drop down clickable -->
+              <div id="workDrop" class="list drop-down">
+                <div class="flex">Select Client</div>
+                <iron-icon icon="arrow-drop-down"></iron-icon>
+              </div>
+              <!-- drop down contents -->
+              <div id="workDropBox" class="horizontal-section drop-down-data">
+                <paper-menu class="list innerlist">
+                </paper-menu>
+              </div>
+              <!-- drop down data -->
+              <input type="hidden" id="reg-workflow-cKey" name="reg-workflow-cKey" value="">
+            </div>
+            <paper-input name="reg-workflow-name" id="reg-workflow-name" required auto-validate label="Name" autofocus char-counter maxlength="128"></paper-input>
+            <gold-email-input name="reg-workflow-bot-email" id="reg-workflow-bot-email" required auto-validate error-message="Please enter a valid email" label="Bot Email"></gold-email-input>
+            <paper-input name="reg-workflow-bot-password" id="reg-workflow-bot-password" type="password" required auto-validate label="Bot Password"></paper-input>
+            <paper-input name="reg-workflow-callback-url" id="reg-workflow-callback-url" required auto-validate label="Callback Url" char-counter maxlength="2083"></paper-input>
+            <paper-input name="reg-workflow-failmessage" id="reg-workflow-failmessage" label="Failure Url" char-counter maxlength="2083"></paper-input>
+          </paper-dialog-scrollable>
+          <div class="buttons">
+            <paper-button class="discard" dialog-dismiss raised>Discard</paper-button>
+            <paper-button id="reg-app-save" onclick="registerWorkflow()" class="submit-button" dialog-confirm raised>Create</paper-button>
+          </div>
+        </paper-dialog>
+      </form>
     </neon-animatable>
   </neon-animated-pages>
   <!-- to display errors and status -->

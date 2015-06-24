@@ -1,11 +1,18 @@
 //helper functions
 //Puranjay Jain
 //find parent by type FORM,DIV,etc.
-function findParentById(el, type) {
+function findParentByType(el, type) {
   while (el = el.parentNode)
     if (el.nodeName == type)
       return el;
   return null;
+}
+function insideParentById(el, id) {
+  console.log(el.id);
+  while (el = el.parentNode)
+    if (el.id == id)
+      return true;
+  return false;
 }
 //makes string's first letter capitalize
 //usage "stirngxyz".capitalize()
@@ -34,31 +41,37 @@ String.format = function() {
   //select element so update the value of hidden
   // e.g
   // here clientDropBox is container,reg-service-cKey is hidden and clientDrop is inner
-  // <!-- drop down clickable -->
-  // <div id="clientDrop" class="list drop-down">
-  //   <div class="flex">Select Client</div>
-  //   <iron-icon icon="arrow-drop-down"></iron-icon>
+  // <div class="drop-down-container">
+  //   <!-- drop down clickable -->
+  //   <div id="clientDrop" class="list drop-down">
+  //     <div class="flex">Select Client</div>
+  //     <iron-icon icon="arrow-drop-down"></iron-icon>
+  //     <!-- drop down contents -->
+  //     <div id="clientDropBox" class="horizontal-section drop-down-data">
+  //       <paper-menu class="list innerlist">
+  //       </paper-menu>
+  //     </div>
+  //   </div>
+  //   <!-- drop down data -->
+  //   <input type="hidden" name="reg-service-cKey" id="reg-service-cKey" value="">
   // </div>
-  // <!-- drop down contents -->
-  // <div id="clientDropBox" class="horizontal-section drop-down-data">
-  //   <paper-menu class="list">
-  //    <paper-item>some option</paper-item>
-  //   </paper-menu>
-  // </div>
-  // <!-- drop down data -->
-  // <input type="hidden" name="reg-service-cKey" id="reg-service-cKey" value="">
-function addDropdownHandler(container, hidden, inner) {
+function addDropdownHandler(container, inner, hidden) { //drop down button
+  //open drop down and close it
+  document.getElementById(inner).onclick = function(e) {
+      document.getElementById(container).classList.toggle('open');
+  };
   var elements = document.querySelectorAll('#' + container + ' .innerlist paper-item');
   Array.prototype.forEach.call(elements, function(el, i) {
+    el.classList.remove('selected-item');
     el.addEventListener("click", function() {
-      document.getElementById(container).classList.toggle('open');
+      document.getElementById(container).classList.remove('open');
       //update the hidden
       document.getElementById(hidden).value = el.innerHTML.trim();
       //update the drop down
       document.querySelector('#' + inner + ' .flex').innerHTML = el.innerHTML.trim();
       document.querySelector('#' + inner + ' .flex').setAttribute('title', el.innerHTML.trim());
       //remove selected highlight from wrong item
-      var elementsx = document.querySelectorAll('innerlist paper-item');
+      var elementsx = document.querySelectorAll('#' + container + ' .innerlist paper-item');
       Array.prototype.forEach.call(elements, function(el, i) {
         el.classList.remove('selected-item');
       });

@@ -1,6 +1,6 @@
 //home button event
 document.getElementById('home_button').onclick = function() {
-  window.location = "dashboard.jsp";
+  window.location = "dashboard";
 };
 //logout button event
 document.getElementById('logout_button').onclick = function() {
@@ -19,12 +19,18 @@ document.getElementById('register_client_button').onclick = function() {
 };
 //close dialog for registration
 document.getElementById('register_close_button').onclick = function() {
-  findParentById(this, "IRON-COLLAPSE").toggle();
+  findParentByType(this, "IRON-COLLAPSE").toggle();
 };
-
-//open drop down and close it
-document.getElementById('clientDrop').onclick = function(event) {
-  document.getElementById('clientDropBox').classList.toggle('open');
+//radiobutton group on applications form
+document.getElementById('reg-event-group').onclick = function() {
+  document.getElementById('reg-app-eventtype').value = this.selected;
+  var callbackUrl = document.getElementById('reg-app-callbackurl');
+  //disable/enable callback url input
+  if (this.selected == "pull") {
+    callbackUrl.setAttribute("disabled", "");
+  } else {
+    callbackUrl.removeAttribute("disabled");
+  }
 };
 //open a particular service
 // var elements = document.querySelectorAll('.service');
