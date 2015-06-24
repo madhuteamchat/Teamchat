@@ -3,16 +3,18 @@
  */
 package com.teamchat.integrations.basecamp;
 
+import com.sun.org.apache.bcel.internal.classfile.Field;
+import com.teamchat.client.annotations.OnAlias;
 import com.teamchat.client.annotations.OnKeyword;
 import com.teamchat.client.sdk.TeamchatAPI;
 import com.teamchat.client.sdk.chatlets.PrimaryChatlet;
 
 /**
- * @author intern19
+ * @author Puranjay Jain
  *
  */
 public class Basecamp_Bot {
-	Basecamp_basics bb = new Basecamp_basics();
+	private Basecamp_basics bb = new Basecamp_basics();
 
 	// initiate the basecampbot
 	@OnKeyword("basecamp")
@@ -22,11 +24,12 @@ public class Basecamp_Bot {
 		if (db.isAuthorized(email)) {
 			// get the basic info
 			bb = db.GetBasicStuff(email);
-			api.context()
+			api.perform(api
+					.context()
 					.currentRoom()
 					.post(new PrimaryChatlet()
-							.setQuestionHtml("Hi, you may proceed to use your basecamp account. "
-									+ "<br />Type help to know more commands."));
+							.setQuestionHtml("Hi, you may proceed to use your <u>basecamp account</u>. "
+									+ "<br />Type <b>help</b> to know more commands.")));
 			// welcome message and continue
 		} else {
 			// display the button so the user can begin authentication
@@ -44,7 +47,7 @@ public class Basecamp_Bot {
 									+ "></a>")));
 		}
 	}
-	
+
 	// help commands
 	@OnKeyword("help")
 	public void help(TeamchatAPI api) throws Exception {
@@ -52,14 +55,37 @@ public class Basecamp_Bot {
 				.context()
 				.currentRoom()
 				.post(new PrimaryChatlet()
-						.setQuestionHtml("List of commands: "
-								+ "<br/>getmessage: To get message in a particular project"
-								+ "<br/>createmessage: To create message in particular project"
-								+ "<br/>getcomment: To comments in particular topic"
-								+ "<br/>createcomment To create comment on particular topic"
-								+ "<br/>get_all_calender: To get all calendar event related to a"
-								+ "<br/>create_calender_entry: To create event in calendar"
-								+ "<br/>create_todo_list: To create todo list")));
+						.setQuestionHtml("<h4>List of commands: </h4>"
+								+ "<br/><b>getmessage:</b> To get message(s) in a particular project"
+								+ "<br/><b>createmessage:</b> To create message(s) in particular project"
+								+ "<br/><b>getcomment:</b> To comments in particular topic"
+								+ "<br/><b>createcomment:</b> To create comment on particular topic"
+								+ "<br/><b>get_all_calender:</b> To get all calendar event related to a"
+								+ "<br/><b>create_calender_entry:</b> To create event in calendar"
+								+ "<br/><b>create_todo_list:</b> To create todo list")));
+	}
+
+	// get messages from a project
+	@OnKeyword("getmessage")
+	public void getMessage(TeamchatAPI api) throws Exception {
+		Basecamp_api_handler bah = new Basecamp_api_handler(bb);
+		com.teamchat.client.sdk.Field f = api.objects().select()
+				.name("project").label("Project");
+		for (String project : bah.getActiveProjects()) {
+			f.addOption(project);
+		}
+		api.perform(api
+				.context()
+				.currentRoom()
+				.post(new PrimaryChatlet().setQuestion("Select your Project")
+						.setReplyScreen(api.objects().form().addField(f))
+						.setReplyLabel("Select Project").alias("getmessage2")));
+	}
+	
+	// part 2 of get message
+	@OnAlias("getmessage2")
+	public void getMessage2(TeamchatAPI api) throws Exception {
+		
 	}
 	
 	public static void main(String[] args)// main function

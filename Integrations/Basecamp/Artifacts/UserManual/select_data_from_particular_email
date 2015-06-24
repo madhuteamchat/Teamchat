@@ -1,0 +1,2 @@
+use configdb;
+select * from authorized where email = 'puranjay.jain@st.niituniversity.in';
