@@ -4,7 +4,9 @@
 package com.teamchat.integrations.basecamp;
 
 import com.basecamp.classes.Project;
+import com.basecamp.classes.Todo;
 import com.basecamp.classes.Todolist;
+import com.basecamp.helpers.Bool_converter;
 import com.teamchat.client.annotations.OnAlias;
 import com.teamchat.client.annotations.OnKeyword;
 import com.teamchat.client.sdk.Field;
@@ -21,6 +23,9 @@ public class Basecamp_Bot {
 	// if api is initialised using keyword 'basecamp' only then shall the
 	// functions work
 	private Boolean api_init = false;
+
+	// inside values to be passed
+	private String projectId;
 
 	// initiate the basecampbot
 	@OnKeyword(value = "basecamp")
@@ -101,8 +106,8 @@ public class Basecamp_Bot {
 		String[] project = api.context().currentReply().getField("project")
 				.split("\\|");
 		// get project id from option name
-		String projectId = project[(project.length - 1)].trim();
-		Field f = api.objects().select().name("project").label("Project");
+		projectId = project[(project.length - 1)].trim();
+		Field f = api.objects().select().name("todolist").label("Todolist");
 		for (Todolist todolist : bah.getActiveTodoLists(projectId)) {
 			f.addOption(todolist.getName() + " | " + todolist.getId());
 		}
@@ -118,24 +123,44 @@ public class Basecamp_Bot {
 	// part 3 of get todo
 	@OnAlias(value = "get_todo_list3")
 	public void getTodoList3(TeamchatAPI api) throws Exception {
-		//
+		// using helper class
+		Bool_converter boolc = new Bool_converter();
+		// populating with todos name list
+		// get option name
+		String[] todolist = api.context().currentReply().getField("todolist")
+				.split("\\|");
+		// get project id from option name
+		String todolistId = todolist[(todolist.length - 1)].trim();
+		Todo[] todos = bah.getActiveTodos(projectId, todolistId);
+		String todolistName = todos[0].getTodolist().getName();
+		String htmlResponse = "<h4>" + todolistName + "</h4>"
+				+ "<h5>You can't edit the values</h5>";
+		for (Todo todo : todos) {
+			htmlResponse += "<label><input type=\"checkbox\" value=\""
+					+ todo.getId() + "\" "
+					+ boolc.toBoolHTML(todo.getCompleted()) + ">&nbsp;"
+					+ todo.getContent() + "</label><br />";
+		}
+		//show the user the current state
+		api.perform(api.context().currentRoom()
+				.post(new PrimaryChatlet().setQuestionHtml(htmlResponse)));
 	}
 
-	//the main function is no longer required from api 1.4
-//	@Deprecated
-//	@SuppressWarnings("unused")
-//	public static void main(String[] args)// main function
-//	{
-//		// init config and get data from configuration file
-//		Config_handler config = new Config_handler();
-//		if (config.isEmpty()) {
-//			config.init_bot_Properties();
-//			System.out
-//					.println("Properties file has been created on the Server!");
-//		}
-//		// initiate api
-//		TeamchatAPI api = TeamchatAPI.fromFile("teamchat.data")
-//				.setEmail(config.getEmail()).setPassword(config.getPassword())
-//				.startReceivingEvents(new Basecamp_Bot());
-//	}
+	// the main function is no longer required from api 1.4
+	// @Deprecated
+	// @SuppressWarnings("unused")
+	// public static void main(String[] args)// main function
+	// {
+	// // init config and get data from configuration file
+	// Config_handler config = new Config_handler();
+	// if (config.isEmpty()) {
+	// config.init_bot_Properties();
+	// System.out
+	// .println("Properties file has been created on the Server!");
+	// }
+	// // initiate api
+	// TeamchatAPI api = TeamchatAPI.fromFile("teamchat.data")
+	// .setEmail(config.getEmail()).setPassword(config.getPassword())
+	// .startReceivingEvents(new Basecamp_Bot());
+	// }
 }

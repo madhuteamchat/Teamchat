@@ -28,13 +28,29 @@ public class Basecamp_api_handler {
 	}
 
 	// public methods for api access
+	// return todos for a todolist inside a project
+	// for a particular project
+	public Todo[] getActiveTodos(String projectId, String todolistId) {
+		try {
+			String response = rh.sendGet_auth(bb.getHref() + "/projects/"
+					+ projectId + "/todolists/" + todolistId + "/todos.json",
+					ua, "", bb.getAccess_token());
+			// put response in class
+			return (Todo[]) gson.fromJson(response, Todo[].class);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}
+
 	// return todolists list
 	// for a particular project
 	public Todolist[] getActiveTodoLists(String projectId) {
-		ArrayList<String> data = new ArrayList<String>();
 		try {
-			String response = rh.sendGet_auth(bb.getHref() + "/projects/" + projectId + "/todolists.json",
-					ua, "", bb.getAccess_token());
+			String response = rh.sendGet_auth(bb.getHref() + "/projects/"
+					+ projectId + "/todolists.json", ua, "",
+					bb.getAccess_token());
 			// put response in class
 			return (Todolist[]) gson.fromJson(response, Todolist[].class);
 		} catch (Exception e) {
@@ -46,7 +62,6 @@ public class Basecamp_api_handler {
 
 	// return active project list
 	public Project[] getActiveProjects() {
-		ArrayList<String> data = new ArrayList<String>();
 		try {
 			String response = rh.sendGet_auth(bb.getHref() + "/projects.json",
 					ua, "", bb.getAccess_token());
@@ -58,7 +73,7 @@ public class Basecamp_api_handler {
 			return null;
 		}
 	}
-	
+
 	// return active project list (names)
 	public String[] getActiveProjects_names() {
 		ArrayList<String> data = new ArrayList<String>();
