@@ -64,9 +64,9 @@ public class Db_handler {
 					.prepareStatement("insert into authorized values (default, ?, ?, ?, ?, ?, ?)");
 			preparedStatement.setString(1, email);
 			preparedStatement.setString(2, href);
-			preparedStatement.setString(3, token.access_token());
-			preparedStatement.setString(4, token.refresh_token());
-			preparedStatement.setString(5, token.expires_in());
+			preparedStatement.setString(3, token.getAccess_token());
+			preparedStatement.setString(4, token.getRefresh_token());
+			preparedStatement.setString(5, token.getExpires_in());
 			preparedStatement.setBoolean(6, true);
 			preparedStatement.executeUpdate();
 			return true;
@@ -86,9 +86,9 @@ public class Db_handler {
 			statement = connect.createStatement();
 			preparedStatement = connect
 					.prepareStatement("update authorized set access_token = ?, refresh_token = ?, expires_in = ?, authenticated = ? where email = ?");
-			preparedStatement.setString(0, token.access_token());
-			preparedStatement.setString(1, token.refresh_token());
-			preparedStatement.setString(2, token.expires_in());
+			preparedStatement.setString(0, token.getAccess_token());
+			preparedStatement.setString(1, token.getRefresh_token());
+			preparedStatement.setString(2, token.getExpires_in());
 			preparedStatement.setBoolean(3, true);
 			preparedStatement.setString(4, email);
 			preparedStatement.executeUpdate();
