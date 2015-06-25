@@ -15,15 +15,15 @@
 	</listener>
 	<context-param>
 		<param-name>bot-email</param-name>
-		<param-value>manthan@webaroo.com</param-value>
+		<param-value>managerteamchat@gmail.com</param-value>
 	</context-param>
 	<context-param>
 		<param-name>bot-password</param-name>
-		<param-value>123456</param-value>
+		<param-value>hellmastermanager</param-value>
 	</context-param>
 	<context-param>
 		<param-name>bot-class</param-name>
-		<param-value>bot.PollBot</param-value>
+		<param-value>bot.FormBot</param-value>
 	</context-param>
 	<context-param>
 		<param-name>db-host</param-name>
@@ -35,11 +35,11 @@
 	</context-param>
 	<context-param>
 		<param-name>db-user</param-name>
-		<param-value>tcinterns</param-value>
+		<param-value>root</param-value>
 	</context-param>
 	<context-param>
 		<param-name>db-password</param-name>
-		<param-value>PakyovBosh7</param-value>
+		<param-value>root</param-value>
 	</context-param>
 	<context-param>
    		<param-name>threading</param-name>
