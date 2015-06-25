@@ -69,7 +69,7 @@ public class YammerBot {
 		{
 			 api.perform(
 						api.context().currentRoom().registerForEvents().post(
-						new TextChatlet("<a href='http://localhost:8080/Yammer/yammerlogin?email="+useremail+"'>Login to Yammer</a>"
+						new TextChatlet("<a href='http://localhost:8080/Yammer/yammerlogin?email="+useremail+"'>Login to Yammer (Please open in a seperate tab)</a>"
 								))
 			  );
 		}
@@ -97,7 +97,7 @@ public class YammerBot {
 		{
 			 api.perform(
 						api.context().currentRoom().registerForEvents().post(
-						new TextChatlet("<a href='http://localhost:8080/Yammer/yammerlogin?email="+useremail+"'>Login to Yammer</a>"
+						new TextChatlet("<a href='http://localhost:8080/Yammer/yammerlogin?email="+useremail+"'>Login to Yammer (Please open in a seperate tab)</a>"
 								))
 			  );
 		}
@@ -155,7 +155,7 @@ public class YammerBot {
 		{
 			 api.perform(
 						api.context().currentRoom().registerForEvents().post(
-						new TextChatlet("<a href='http://localhost:8080/Yammer/yammerlogin?email="+useremail+"'>Login to Yammer</a>"
+						new TextChatlet("<a href='http://localhost:8080/Yammer/yammerlogin?email="+useremail+"'>Login to Yammer (Please open in a seperate tab)</a>"
 								))
 			  );
 		}

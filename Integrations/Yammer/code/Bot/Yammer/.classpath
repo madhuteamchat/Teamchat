@@ -8,10 +8,5 @@
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
-	<classpathentry kind="lib" path="/home/intern12/Downloads/apache-tomcat-8.0.23/lib/servlet-api.jar"/>
-	<classpathentry kind="lib" path="/home/intern12/Downloads/htmlunit-2.16/lib/httpcore-4.4.1.jar"/>
-	<classpathentry kind="lib" path="/home/intern12/Downloads/httpunit-1.7.2.jar"/>
-	<classpathentry kind="lib" path="/home/intern12/Downloads/httpclient-4.3.4.jar"/>
-	<classpathentry kind="lib" path="/home/intern12/Downloads/java-json.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
