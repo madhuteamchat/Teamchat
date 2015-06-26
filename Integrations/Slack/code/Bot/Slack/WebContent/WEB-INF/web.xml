@@ -25,7 +25,7 @@
 	</context-param>
 	<context-param>
 		<param-name>bot-class</param-name>
-		<param-value>com.teamchat.integrations.slack.slack</param-value>
+		<param-value>com.teamchat.integrations.slack.Slack</param-value>
 	</context-param>
 	<context-param>
 		<param-name>db-host</param-name>
