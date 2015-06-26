@@ -21,6 +21,7 @@ public class Db_handler {
 	private ResultSet resultSet = null;
 
 	private static Config_handler config = new Config_handler();
+	//replace with server credentials
 	private static String DB_URL = "jdbc:mysql://localhost/Bot?user="
 			+ config.getSql_username() + "&password="
 			+ config.getSql_password();
@@ -39,7 +40,7 @@ public class Db_handler {
 			connect = DriverManager.getConnection(DB_URL);
 			statement = connect.createStatement();
 			resultSet = statement
-					.executeQuery("select * from authorized where email = '"
+					.executeQuery("select * from basecamp_authorized where email = '"
 							+ email + "'");
 			resultSet.next();
 			bb.setAccess_token(resultSet.getString("access_token"));
@@ -63,7 +64,7 @@ public class Db_handler {
 			connect = DriverManager.getConnection(DB_URL);
 			statement = connect.createStatement();
 			resultSet = statement
-					.executeQuery("select email from authorized where email='"
+					.executeQuery("select email from basecamp_authorized where email='"
 							+ email + "'");
 			// check if result set is empty or not
 			while (resultSet.next()) {

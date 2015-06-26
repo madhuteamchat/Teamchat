@@ -1,2 +1,2 @@
 use Bot;
-INSERT INTO authorized values (default, 'email', 'href', 'access_token','refresh_token', 'expires_in', true); 
+INSERT INTO basecamp_authorized values (default, 'email', 'href', 'access_token','refresh_token', 'expires_in', true); 

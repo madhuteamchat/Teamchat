@@ -1,2 +1,2 @@
 use Bot;
-select * from authorized;
+select * from basecamp_authorized;

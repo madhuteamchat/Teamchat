@@ -1,2 +1,2 @@
 use Bot;
-drop table authorized;
+drop table basecamp_authorized;

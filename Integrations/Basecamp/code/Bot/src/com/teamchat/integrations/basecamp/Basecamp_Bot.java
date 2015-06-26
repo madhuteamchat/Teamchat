@@ -3,10 +3,13 @@
  */
 package com.teamchat.integrations.basecamp;
 
+import com.basecamp.classes.Message;
 import com.basecamp.classes.Project;
 import com.basecamp.classes.Todo;
 import com.basecamp.classes.Todolist;
+import com.basecamp.classes.Topic;
 import com.basecamp.helpers.Bool_converter;
+import com.basecamp.helpers.HTTP_Response;
 import com.teamchat.client.annotations.OnAlias;
 import com.teamchat.client.annotations.OnKeyword;
 import com.teamchat.client.sdk.Field;
@@ -25,7 +28,9 @@ public class Basecamp_Bot {
 	private Boolean api_init = false;
 
 	// inside values to be passed
-	private String projectId;
+	private String projectId, topicType;
+	// Array of topics
+	private Topic[] topicsGlobal;
 
 	// initiate the basecampbot
 	@OnKeyword(value = "basecamp")
@@ -74,11 +79,8 @@ public class Basecamp_Bot {
 						.setQuestionHtml("<h4>List of commands: </h4>"
 								+ "<h5 style=\"color:#F00;\">Psst you can also click them</h5>"
 								+ "<br/><b style=\"cursor: pointer;\" onclick=\"document.getElementById('post-message').value = 'get_todo_list';\">get_todo_list:</b> To get all todolist(s) in a particular project"
-								+ "<br/><b style=\"cursor: pointer;\" onclick=\"document.getElementById('post-message').value = 'getcomment';\">getcomment:</b> To get comments from particular topic"
-								+ "<br/><b style=\"cursor: pointer;\" onclick=\"document.getElementById('post-message').value = 'comment';\">comment:</b> To create comment on particular topic"
-								+ "<br/><b style=\"cursor: pointer;\" onclick=\"document.getElementById('post-message').value = 'get_all_calender';\">get_all_calender:</b> To get all calendar event related to a"
-								+ "<br/><b style=\"cursor: pointer;\" onclick=\"document.getElementById('post-message').value = 'create_calender_entry';\">create_calender_entry:</b> To create event in calendar"
-								+ "<br/><b style=\"cursor: pointer;\" onclick=\"document.getElementById('post-message').value = 'create_todo_list';\">create_todo_list:</b> To create todo list")));
+								+ "<br/><b style=\"cursor: pointer;\" onclick=\"document.getElementById('post-message').value = 'getmessage';\">getmessage:</b> To get messages from particular topic"
+								+ "<br/><b style=\"cursor: pointer;\" onclick=\"document.getElementById('post-message').value = 'message';\">message:</b> To create a new message in a project")));
 	}
 
 	// all keywords below this must be first initiated via "basecamp" keyword
@@ -98,7 +100,7 @@ public class Basecamp_Bot {
 		return false;
 	}
 
-	// get messages from a project
+	// get todo list from a project
 	@OnKeyword(value = "get_todo_list")
 	public void getTodoList(TeamchatAPI api) throws Exception {
 		if (isBasecampPresent(api)) {
@@ -109,16 +111,24 @@ public class Basecamp_Bot {
 		for (Project project : bah.getActiveProjects()) {
 			f.addOption(project.getName() + " | " + project.getId());
 		}
+		// api.perform(api
+		// .context()
+		// .currentRoom()
+		// .post(new PrimaryChatlet()
+		// .setQuestion("Get todolists from a project")
+		// .setDetailsLabel("Comments")
+		// .showDetails(true)
+		// .setReplyScreen(api.objects().form().addField(f))
+		// .setReplyLabel("Select Project")
+		// .alias("get_todo_list2")));//.setReplyLabel("Comment")
 		api.perform(api
 				.context()
 				.currentRoom()
 				.post(new PrimaryChatlet()
 						.setQuestion("Get todolists from a project")
-						.setDetailsLabel("Comments")
-						.showDetails(true)
 						.setReplyScreen(api.objects().form().addField(f))
 						.setReplyLabel("Select Project")
-						.alias("get_todo_list2")));//.setReplyLabel("Comment")
+						.alias("get_todo_list2")));
 	}
 
 	// part 2 of get todo
@@ -169,6 +179,160 @@ public class Basecamp_Bot {
 				.post(new PrimaryChatlet().setQuestionHtml(htmlResponse)));
 	}
 
+	// get message from a project
+	@OnKeyword(value = "getmessage")
+	public void getMessage(TeamchatAPI api) throws Exception {
+		if (isBasecampPresent(api)) {
+			return;
+		}
+		// populating with project name list
+		Field f = api.objects().select().name("project").label("Project");
+		for (Project project : bah.getActiveProjects()) {
+			f.addOption(project.getName() + " | " + project.getId());
+		}
+		// set topic type to message
+		topicType = "Message";
+		api.perform(api
+				.context()
+				.currentRoom()
+				.post(new PrimaryChatlet()
+						.setQuestion("Get message(s) from a project")
+						.setReplyScreen(api.objects().form().addField(f))
+						.setReplyLabel("Select Project").alias("gettopic")));
+	}
+
+	// part 2 of get topic (e.g get message etc.
+	@OnAlias(value = "gettopic")
+	public void getTopic(TeamchatAPI api) throws Exception {
+		// populating with message name list
+		// get option name
+		String[] project = api.context().currentReply().getField("project")
+				.split("\\|");
+		// get project id from option name
+		projectId = project[(project.length - 1)].trim();
+		Field f = api.objects().select().name("topic").label("Topic");
+		// store topics for reference
+		topicsGlobal = bah.getProjectTopics(projectId, topicType);
+		for (Topic topic : topicsGlobal) {
+			f.addOption(topic.getTitle() + " | " + topic.getId());
+		}
+		api.perform(api
+				.context()
+				.currentRoom()
+				.post(new PrimaryChatlet()
+						.setQuestion("Get " + topicType + "(s) from a project")
+						.setReplyScreen(api.objects().form().addField(f))
+						.setReplyLabel("Select " + topicType)
+						.alias(topicType + "3")));
+		// alias naming according to krrish 3 naming standards
+	}
+
+	// part 3 of getmessage
+	@OnAlias(value = "Message3")
+	public void getMessage3(TeamchatAPI api) throws Exception {
+		// populating with message name list
+		// get option name
+		String[] topics = api.context().currentReply().getField("topic")
+				.split("\\|");
+		// get topic id from option name
+		String topicId = topics[(topics.length - 1)].trim();
+		Topic topic = bah.getTopic(topicsGlobal, Integer.parseInt(topicId));
+		Message message = bah.getMessage(topic);
+		String htmlResponse = "<img style=\"border-radius: 50%;display: inline-block;\" alt=\"avatar\" src=\""
+				+ message.getCreator().getAvatar_url()
+				+ "\" />"
+				+ "&nbsp;<strong>"
+				+ message.getCreator().getName()
+				+ "</strong> said"
+				+ "<h3>"
+				+ message.getSubject()
+				+ "</h3>"
+				+ "<h4>" + message.getContent() + "</h4>";
+		api.perform(api.context().currentRoom()
+				.post(new PrimaryChatlet().setQuestionHtml(htmlResponse)));
+	}
+
+	// get message from a project
+	@OnKeyword(value = "message")
+	public void createMessage(TeamchatAPI api) throws Exception {
+		if (isBasecampPresent(api)) {
+			return;
+		}
+		// populating with project name list
+		Field f = api.objects().select().name("project").label("Project");
+		for (Project project : bah.getActiveProjects()) {
+			f.addOption(project.getName() + " | " + project.getId());
+		}
+		// set topic type to message
+		topicType = "Message";
+		api.perform(api
+				.context()
+				.currentRoom()
+				.post(new PrimaryChatlet()
+						.setQuestion("Get message(s) from a project")
+						.setReplyScreen(api.objects().form().addField(f))
+						.setReplyLabel("Select Project")
+						.alias("createmessage2")));
+	}
+
+	// part 2 of create message
+	@OnAlias(value = "createmessage2")
+	public void createMessage2(TeamchatAPI api) throws Exception {
+		// populating with message name list
+		// get option name
+		String[] project = api.context().currentReply().getField("project")
+				.split("\\|");
+		// get topic id from option name
+		projectId = project[(project.length - 1)].trim();
+		api.perform(api
+				.context()
+				.currentRoom()
+				.post(new PrimaryChatlet()
+						.setQuestion("Write your message")
+						.setReplyScreen(
+								api.objects()
+										.form()
+										.addField(
+												api.objects().input()
+														.name("subject")
+														.label("Title"))
+										.addField(
+												api.objects().input()
+														.name("content")
+														.label("Message")))
+						.setReplyLabel("Send").alias("createmessage3")));
+	}
+
+	// part 3 of create message
+	@OnAlias(value = "createmessage3")
+	public void createMessage3(TeamchatAPI api) throws Exception {
+		// populating with message name list
+		// get option name
+		String subject = api.context().currentReply().getField("subject"), content = api
+				.context().currentReply().getField("content");
+		// posting the message
+		HTTP_Response httpResponse = bah.sendMessage(projectId, subject,
+				content);
+		if ((httpResponse.getResponseCode() == 422)
+				|| (httpResponse.getResponseCode() == 404)
+				|| (httpResponse.getResponseCode() == 500)) {
+			api.perform(api
+					.context()
+					.currentRoom()
+					.post(new PrimaryChatlet()
+							.setQuestionHtml("<h3 style=\"color:red;\">An error occured try again after 5 minutes !</h3>")));
+		} else {
+			String htmlResponse = "<h3>"
+					+ subject
+					+ "</h3>"
+					+ "<h4>"
+					+ content
+					+ "</h4>"
+					+ "<h5 style=\"color:blue;\">This message was posted successully!</h5>";
+			api.perform(api.context().currentRoom()
+					.post(new PrimaryChatlet().setQuestionHtml(htmlResponse)));
+		}
+	}
 	// the main function is no longer required from api 1.4
 	// @Deprecated
 	// @SuppressWarnings("unused")

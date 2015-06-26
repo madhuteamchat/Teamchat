@@ -1,2 +1,2 @@
 use Bot;
-select * from authorized where email = 'puranjay.jain@st.niituniversity.in';
+select * from basecamp_authorized where email = 'puranjay.jain@st.niituniversity.in';

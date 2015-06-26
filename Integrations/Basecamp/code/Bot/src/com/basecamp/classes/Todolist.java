@@ -10,6 +10,11 @@ import com.google.gson.annotations.SerializedName;
  *
  */
 public class Todolist {
+	private int id, remaining_count, completed_count;
+	private String name, created_at, updated_at, position, url, app_url;
+	private Boolean description, completed, trashed;
+	@SerializedName("private")private Boolean _private;
+	private Creator creator;
 	public Todolist(int id, int remaining_count, int completed_count,
 			String name, String created_at, String updated_at, String position,
 			String url, String app_url, Boolean description, Boolean completed,
@@ -198,9 +203,4 @@ public class Todolist {
 	public void setTrashed(Boolean trashed) {
 		this.trashed = trashed;
 	}
-	private int id, remaining_count, completed_count;
-	private String name, created_at, updated_at, position, url, app_url;
-	private Boolean description, completed, trashed;
-	@SerializedName("private")private Boolean _private;
-	private Creator creator;
 }

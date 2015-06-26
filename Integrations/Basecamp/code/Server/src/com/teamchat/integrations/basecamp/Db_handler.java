@@ -39,7 +39,7 @@ public class Db_handler {
 			connect = DriverManager.getConnection(DB_URL);
 			statement = connect.createStatement();
 			resultSet = statement
-					.executeQuery("select email from authorized where email='"
+					.executeQuery("select email from basecamp_authorized where email='"
 							+ email + "'");
 			// check if result set is empty or not
 			while (resultSet.next()) {
@@ -61,7 +61,7 @@ public class Db_handler {
 			connect = DriverManager.getConnection(DB_URL);
 			statement = connect.createStatement();
 			preparedStatement = connect
-					.prepareStatement("insert into authorized values (default, ?, ?, ?, ?, ?, ?)");
+					.prepareStatement("insert into basecamp_authorized values (default, ?, ?, ?, ?, ?, ?)");
 			preparedStatement.setString(1, email);
 			preparedStatement.setString(2, href);
 			preparedStatement.setString(3, token.getAccess_token());
@@ -85,7 +85,7 @@ public class Db_handler {
 			connect = DriverManager.getConnection(DB_URL);
 			statement = connect.createStatement();
 			preparedStatement = connect
-					.prepareStatement("update authorized set access_token = ?, refresh_token = ?, expires_in = ?, authenticated = ? where email = ?");
+					.prepareStatement("update basecamp_authorized set access_token = ?, refresh_token = ?, expires_in = ?, authenticated = ? where email = ?");
 			preparedStatement.setString(0, token.getAccess_token());
 			preparedStatement.setString(1, token.getRefresh_token());
 			preparedStatement.setString(2, token.getExpires_in());
