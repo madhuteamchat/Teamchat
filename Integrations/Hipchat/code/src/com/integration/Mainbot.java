@@ -142,14 +142,7 @@ public void onhelp(TeamchatAPI api){
 		String name = api.context().currentReply().getField("name");
 		for (Room room : rooms)
 		{
-			abc = room;
-			hp.deleteRoom(abc.getId());
-		}
-	}
-	api.perform(api.context().currentRoom().post(new PrimaryChatlet().setQuestionHtml("The room has been deleted succesfully")));
-}
-
-			if (name.equalsIgnoreCase(room.getName()))
+		if (name.equalsIgnoreCase(room.getName()))
 			{
 				abc = room;
 				hp.deleteRoom(abc.getId());
