@@ -91,7 +91,7 @@ public class Redirect_url extends HttpServlet {
 //			System.out.println(token.access_token());
 			Db_handler db = new Db_handler();
 			String get_response = sendGet_auth("https://launchpad.37signals.com/authorization.json",
-					"Teamchat (http://www.teamchat.com/en/)", "", token.access_token());
+					"Teamchat (http://www.teamchat.com/en/)", "", token.getAccess_token());
 			//parsing a json like this
 //			{
 //				  "accounts": [

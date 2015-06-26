@@ -1,2 +1,2 @@
-use configdb;
-select * from authorized where email = 'puranjay.jain@st.niituniversity.in';
+use Bot;
+select * from basecamp_authorized where email = 'puranjay.jain@st.niituniversity.in';

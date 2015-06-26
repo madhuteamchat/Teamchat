@@ -1,2 +1,2 @@
-use configdb;
-select * from authorized;
+use Bot;
+select * from basecamp_authorized;

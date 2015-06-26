@@ -20,7 +20,7 @@ public class Db_handler {
 	private Statement statement = null;
 	private PreparedStatement preparedStatement = null;
 	private ResultSet resultSet = null;
-	private static final String DB_URL = "jdbc:mysql://localhost/configdb?user=root&password=pappupasshogaya";
+	private static final String DB_URL = "jdbc:mysql://localhost/Bot?user=root&password=pappupasshogaya";
 
 	// storing data handler
 	public boolean StorageHandler(String email, String href, Token token) {
@@ -39,7 +39,7 @@ public class Db_handler {
 			connect = DriverManager.getConnection(DB_URL);
 			statement = connect.createStatement();
 			resultSet = statement
-					.executeQuery("select email from authorized where email='"
+					.executeQuery("select email from basecamp_authorized where email='"
 							+ email + "'");
 			// check if result set is empty or not
 			while (resultSet.next()) {
@@ -61,12 +61,12 @@ public class Db_handler {
 			connect = DriverManager.getConnection(DB_URL);
 			statement = connect.createStatement();
 			preparedStatement = connect
-					.prepareStatement("insert into authorized values (default, ?, ?, ?, ?, ?, ?)");
+					.prepareStatement("insert into basecamp_authorized values (default, ?, ?, ?, ?, ?, ?)");
 			preparedStatement.setString(1, email);
 			preparedStatement.setString(2, href);
-			preparedStatement.setString(3, token.access_token());
-			preparedStatement.setString(4, token.refresh_token());
-			preparedStatement.setString(5, token.expires_in());
+			preparedStatement.setString(3, token.getAccess_token());
+			preparedStatement.setString(4, token.getRefresh_token());
+			preparedStatement.setString(5, token.getExpires_in());
 			preparedStatement.setBoolean(6, true);
 			preparedStatement.executeUpdate();
 			return true;
@@ -85,10 +85,10 @@ public class Db_handler {
 			connect = DriverManager.getConnection(DB_URL);
 			statement = connect.createStatement();
 			preparedStatement = connect
-					.prepareStatement("update authorized set access_token = ?, refresh_token = ?, expires_in = ?, authenticated = ? where email = ?");
-			preparedStatement.setString(0, token.access_token());
-			preparedStatement.setString(1, token.refresh_token());
-			preparedStatement.setString(2, token.expires_in());
+					.prepareStatement("update basecamp_authorized set access_token = ?, refresh_token = ?, expires_in = ?, authenticated = ? where email = ?");
+			preparedStatement.setString(0, token.getAccess_token());
+			preparedStatement.setString(1, token.getRefresh_token());
+			preparedStatement.setString(2, token.getExpires_in());
 			preparedStatement.setBoolean(3, true);
 			preparedStatement.setString(4, email);
 			preparedStatement.executeUpdate();

@@ -4,17 +4,22 @@
 package com.teamchat.integrations.basecamp;
 
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+
+import javax.net.ssl.HttpsURLConnection;
+
+import com.basecamp.helpers.HTTP_Response;
 
 /**
  * @author Puranjay Jain
  *
  */
 public class Requests_handler {
-	//private methods and helper classes
-	
+	// private methods and helper classes
+
 	// HTTP GET request which is authorized
 	public String sendGet_auth(String url, String User_agent,
 			String urlParameters, String token) throws Exception {
@@ -49,5 +54,44 @@ public class Requests_handler {
 		}
 		in.close();
 		return response.toString();
+	}
+
+	// HTTP POST request which is authorized
+	// with data
+	public HTTP_Response sendPost_auth(String url, String User_agent,
+			String data, String token, Boolean isJson) throws Exception {
+		URL obj = new URL(url);
+		HttpsURLConnection con = (HttpsURLConnection) obj.openConnection();
+		// add request header
+		con.setRequestMethod("POST");
+		con.setRequestProperty("User-Agent", User_agent);
+		con.setRequestProperty("Authorization", "Bearer " + token);
+		if (isJson) {
+			con.setRequestProperty("Content-Type",
+					"application/json; charset=utf-8");
+		}
+
+		// Send post request
+		con.setDoOutput(true);
+		DataOutputStream wr = new DataOutputStream(con.getOutputStream());
+		wr.writeBytes(data);
+		wr.flush();
+		wr.close();
+
+		int responseCode = con.getResponseCode();
+		System.out.println("\nSending 'POST' request to URL : " + url);
+		System.out.println("Post data : " + data);
+		System.out.println("Response Code : " + responseCode);
+
+		BufferedReader in = new BufferedReader(new InputStreamReader(
+				con.getInputStream()));
+		String inputLine;
+		StringBuffer response = new StringBuffer();
+
+		while ((inputLine = in.readLine()) != null) {
+			response.append(inputLine);
+		}
+		in.close();
+		return new HTTP_Response(response.toString(), responseCode);
 	}
 }

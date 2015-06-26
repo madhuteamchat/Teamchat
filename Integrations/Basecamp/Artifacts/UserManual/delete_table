@@ -1,2 +1,2 @@
-use configdb;
-drop table authorized;
+use Bot;
+drop table basecamp_authorized;

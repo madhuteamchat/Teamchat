@@ -1,4 +1,5 @@
-CREATE TABLE authorized (id INT NOT NULL AUTO_INCREMENT, 
+use Bot;
+CREATE TABLE basecamp_authorized (id INT NOT NULL AUTO_INCREMENT, 
     email VARCHAR(128),
 	href VARCHAR(256),
     access_token VARCHAR(1024) NOT NULL, 
