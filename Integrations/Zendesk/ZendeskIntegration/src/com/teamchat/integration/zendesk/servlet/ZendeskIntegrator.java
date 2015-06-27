@@ -78,64 +78,29 @@ public class ZendeskIntegrator extends HttpServlet {
 			 } catch (Exception e1) {
 			 e1.printStackTrace();
 			 }
-
+			
+			 
 			 if(status.equals("solved"))
 				{
-			 try {
-					updatestatus(ticketId,status,configProps);
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				}
-//			 else
-//			 {
-//				 try {
-//					updatecommentzendesk(comment,ticketId,configProps);
-//				} catch (Exception e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				}
-//				 
-//			 }
-		
-	}
-	
-	public static void updatecommentzendesk(String comment,String ticketId,Properties configProps)throws Exception
-	{
-		
-		 DBHandler checkData = new DBHandler();
-		 String[] roomForm = checkData.getRoomForm(ticketId);
-		
-		
-		 
-		// System.out.println(roomForm);
-		
-		 TeamchatAPI api = TeamchatAPI.fromFile("teamchat99.data")
-		 .setEmail(configProps.getProperty("botemail").trim()).setPassword(configProps.getProperty("botpass").trim()).setEndPoint(configProps.getProperty("endpoint").trim());
-		
-		 Room r = api.context().byId(roomForm[0]);
-		 Chatlet c = api.context().chatletById(roomForm[1]);
-		 Reply rep = c.createReply().addField("upCom", comment);
-		
-		 System.out.println(rep);
-		
-		 api.perform(r.reply(rep));
-		
-	}
-	
-	public static void updatestatus(String ticketId,String status,Properties configProps)throws Exception
-	{
-		 DBHandler datacng = new DBHandler();
-		
-			datacng.rs = datacng.stmt.executeQuery("SELECT * FROM " + configProps.getProperty("dbname").trim() +"."+configProps.getProperty("tablename").trim() + " where ticketid='" + ticketId + "'");
-
-			        while (datacng.rs.next()) {
-			        	//String cng = datacng.rs.getStr/ng(columnLabel)
-			           	datacng.rs.updateString("TktStatus", status);
-			            datacng.rs.updateRow();
-			        }
 			
+					try {
+						updatestatus ob1 = new updatestatus(ticketId,status);
+						ob1.update();
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+			
+				}
+					
+		try {
+			updatecomment ob2 = new updatecomment(comment,ticketId);
+			ob2.updatecommentzendesk();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+				 
 		
 	}
 	
