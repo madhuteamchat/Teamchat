@@ -29,7 +29,7 @@ import com.teamchat.client.sdk.chatlets.PrimaryChatlet;
 public class Bot {
 	
 	String roomId, formId, ticketId, requesterId, comment;
-	String contact,status;
+	String contact,status,rating,Rcomment;
 	Zendesk zd;
 	long tarId;
 	DBHandler ticketData = new DBHandler();
@@ -58,28 +58,6 @@ public class Bot {
 		api.perform(api.context().currentRoom().post(prime));
 	}
 	
-//	@OnKeyword("tcfeedback")
-//public void tcfeedback(TeamchatAPI api) {
-//		
-//		
-//		zd = new Zendesk.Builder("https://teamchat.zendesk.com") // Zendesk account id
-//				.setUsername("savio.dmello@teamchat.com") // email of zendesk account
-//				.setPassword("webaroo").build(); // or setToken("0cf1d94606")
-//
-//		// Setting up Trigger
-//		// trigger ();
-//
-//		Form f = api.objects().form();
-//	    f.addField(api.objects().input().label("Comment").name("comment"));
-//	
-//		
-//		PrimaryChatlet prime = new PrimaryChatlet();
-//		prime.setQuestionHtml("<h4><b>Ticket Status:</b></h4>"+"<ul type=\"square\"; style=\"color:#359FD8\";><li><a1 style=\"color:black\";><b>Ticket ID- </b></a1><a2 style=\"color:#359FD8\";>" + ticketId + "</a2></li><li><a3 style=\"color:black\";><b>Requester ID- </b></a3><a4 style=\"color:#359FD8\";>" + requesterId + "</a4></li><li><a5 style=\"color:black\";><b>Subject - </b></a5><a6 style=\"color:#359FD8\";>" + sub + "</a6></li><li><a7 style=\"color:black\";><b>Comment - </b></a7><a8 style=\"color:#359FD8\";>" + com + "</a8></li></ul>").setReplyScreen(f)
-//				.setReplyLabel("Enter").setDetailsLabel("Queries")
-//				.showDetails(true).alias("query");
-//
-//		api.perform(api.context().currentRoom().post(prime));
-//	}
 
 	@OnAlias("query")
 	public void query(TeamchatAPI api) {
@@ -104,6 +82,8 @@ public class Bot {
 		ticketId = String.valueOf(ticket.getId());
 		requesterId = String.valueOf(ticket.getRequesterId());
 		String stat = "unsolved";
+		String rat = "";
+		String Rc = "";
 		
 		
 		Form f = api.objects().form();
@@ -121,13 +101,15 @@ public class Bot {
 		comment = com;
 		contact = con;
 		status = stat;
+		rating = rat;
+		Rcomment = Rc;
 		
 		//System.out.println("TICKET ID"+ticketId);
 	//	System.out.println("REQUESTER ID"+requesterId);
 	//	System.out.println("FORM ID"+formId);
 	//	System.out.println("ROOM ID"+roomId);
 	//	System.out.println(status);
-		ticketData.setData(roomId, formId, ticketId, requesterId, comment, contact, status);
+		ticketData.setData(roomId, formId, ticketId, requesterId, comment, contact, status, rating, Rcomment);
 
 		// Saving ticketid with formid for further replies
 		// api.data().addField (formId, "RoomID", roomId);

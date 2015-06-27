@@ -16,7 +16,7 @@ public class DBHandler {
 	Properties configProps;
 	
 	String roomId, formId, ticketId, requesterId, comment;
-	String contact, status;
+	String contact, status,rating,Rcomment;
 	
 	DBHandler () {
 		try {
@@ -46,7 +46,7 @@ public class DBHandler {
 		return configProp;
 	}
 	
-	public void setData (String roomId, String formId, String ticketId, String requesterId, String comment, String contact, String status) {
+	public void setData (String roomId, String formId, String ticketId, String requesterId, String comment, String contact, String status,String rating,String Rcomment) {
 		
 		this.roomId = roomId;
 		this.formId = formId;
@@ -55,13 +55,15 @@ public class DBHandler {
 		this.comment = comment;
 		this.contact = contact;
 		this.status = status;
+		this.rating = rating;
+		this.Rcomment = Rcomment;
 		
 		try {
 			System.out.println(status);
 			System.out.println("insert into " + configProps.getProperty("tablename").trim() + " values ('" + roomId + "', '" + formId + "', '" + ticketId + "', '"
-					+ requesterId + "', '" + comment + "', '" + contact + "', '" + status + "')");
+					+ requesterId + "', '" + comment + "', '" + contact + "', '" + status + "', '" + rating + "', '" + Rcomment + "')");
 			int c = stmt.executeUpdate("insert into " + configProps.getProperty("tablename").trim() + " values ('" + roomId + "', '" + formId + "', '" + ticketId + "', '"
-					+ requesterId + "', '" + comment + "', '" + contact + "', '" + status + "')");
+					+ requesterId + "', '" + comment + "', '" + contact + "', '" + status + "', '" + rating + "', '" + Rcomment + "')");
 			if (c==1)
 				System.out.println("Updated");
 		} catch (SQLException e) {
