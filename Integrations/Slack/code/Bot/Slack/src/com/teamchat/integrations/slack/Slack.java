@@ -46,44 +46,62 @@ public class Slack {
 	}
 
 	String code = new String();
+	public static String email = new String();
 
 	@OnKeyword("slack")
 	public void ConnectToSlack(TeamchatAPI api) throws IllegalStateException,
 			IOException, InterruptedException {
-		// api.perform(api.context().currentRoom().post(new
-		// PrimaryChatlet().setQuestionHtml("<html><body><a href=''>Click here to connect your Teamchat Account to Slack</a>")));
 		api.perform(api
 				.context()
 				.currentRoom()
 				.post(new PrimaryChatlet()
-						.setQuestionHtml("<a href='https://slack.com/oauth/authorize?client_id=5090557084.5108581326&redirect_uri=http://interns.teamchat.com:8080/slack_auth/slack_auth&scope=identify,read,post,client,admin' target='_blank'>Click Here to authorize</a>")));
+						.setQuestionHtml("<a href='https://slack.com/oauth/authorize?client_id=5090557084.5108581326&redirect_uri=http://interns.teamchat.com:8082/Slack/slack_auth&scope=identify,read,post,client,admin' target='_blank'>Click Here to authorize</a>")));
 		System.out.println("Haha, wait till I find your authorization info.");
-
-		Thread.sleep(30000); // You can find a better way, Amey
-		start(api);
+		
+		int wait = 0;
+		
+		email = api.context().currentSender().getEmail();
+		
+		slack_auth.email = email;
+		
+		System.err.println("email:"+ slack_auth.email);
+		
+		//File file = new File("code1.properties");
+		//System.err.println("file created in Slack.java");
+		//slack_auth.file = file;
+		//System.err.println(slack_auth.file.getName());
+		
+		Thread.sleep(20000); // You can find a better way, Amey
+		
+		code = SlackDB.useCode(email);
+		
+		start(api, code);
 		// To open new pop-up:
-		// onClick="MyWindow=window.open('https://slack.com/oauth/authorize?client_id=5090557084.5108581326&redirect_uri=http://interns.teamchat.com:8080/slack_auth/slack_auth&scope=identify,read,post,client,admin','MyWindow',width=600,height=300);
+		// onClick="MyWindow=window.open('https://slack.com/oauth/authorize?client_id=5090557084.5108581326&redirect_uri=http://interns.teamchat.com:8082/slack_auth/slack_auth&scope=identify,read,post,client,admin','MyWindow',width=600,height=300);
 		// return false;
 
 	}
 
-	public void start(TeamchatAPI api) throws IllegalStateException,
+	public void start(TeamchatAPI api, String code) throws IllegalStateException,
 			IOException {
 		// Get code from properties file created by servlet
-		try (FileReader reader = new FileReader("/opt/tomcat0.7/webapps/code.properties")) {
+	/*	try (FileReader reader = new FileReader("code1.properties")) {
 			Properties properties = new Properties();
 			properties.load(reader);
 			System.out.println("Getting code from properties file");
-			code = properties.getProperty("code");
-			System.out.println(code);
+			code = properties.getProperty(email);
+			System.out.println("EMAIL:"
+					+ email +"\n \n CODE"+ slack_auth.code);
+			System.out.println(code +"from slack.java");
 			properties.clear();
 		} catch (IOException e) {
+			System.out.println("IO Exception");
 			e.printStackTrace();
 		}
-
+*/
 		String s = "https://slack.com/api/oauth.access?client_id=5090557084.5108581326&client_secret=6f41ca2089675e9cadddae278f18b3cc&code="
 				+ code
-				+ "&redirect_uri=http://interns.teamchat.com:8080/slack_auth/slack_auth&pretty=1";
+				+ "&redirect_uri=http://interns.teamchat.com:8082/Slack/slack_auth&pretty=1";
 
 		HttpClient client = new DefaultHttpClient(); // this default is
 														// deprecated, I could

@@ -22,6 +22,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONObject;
+
 import java.util.Properties;
 
 /**
@@ -38,31 +39,35 @@ public class slack_auth extends HttpServlet {
 	
 	}
 
+	public static String email = new String();
+	public static File file;
+	public static String code;
+	
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 	
-	//	process(request, response);
-	
+		System.err.println(email);
+		
 		System.out.println(request.getParameter("code"));
-		String code = request.getParameter("code");
+		
+		code = request.getParameter("code");
+		
+		
 		System.err.println("in servlet");
-		System.out.println(request.getHeaderNames());
+	//	System.out.println(request.getHeaderNames());
 		
-		File file = new File("code.properties");
 		
-		// Save the code in a properties file
-		try {
+		/*	String filename = file.getName();
+			System.err.println(filename + "from slack_auth");
 			Properties prop = new Properties();
-			prop.setProperty("code", code);
+			prop.setProperty(email, code);
 			FileOutputStream fileOut = new FileOutputStream(file);
 			prop.store(fileOut, null);
 			fileOut.close();
-
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+			*/
+			SlackDB.saveCode(email, code);
+			
+			System.err.println("Saved to database");
 	}
 	
 	protected void doPost(HttpServletRequest request,
@@ -75,14 +80,15 @@ public class slack_auth extends HttpServlet {
 		//process(request, response);
 	}
 
-	public void process(HttpServletRequest request, HttpServletResponse response)
+/*	public void process(HttpServletRequest request, HttpServletResponse response)
 			throws IOException {
 		System.out.println(request.getParameter("code"));
 		String code = request.getParameter("code");
-		System.err.println("inside servlet");
+		System.err.println("Inside servlet");
 		System.out.println(request.getHeaderNames());
 		
 		// Save the code in a properties file
+		
 		try {
 			Properties prop = new Properties();
 			prop.setProperty("code", code);
@@ -96,7 +102,7 @@ public class slack_auth extends HttpServlet {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
+*/
 	}
 
-}
+
