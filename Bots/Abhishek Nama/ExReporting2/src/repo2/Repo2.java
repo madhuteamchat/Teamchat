@@ -40,8 +40,8 @@ public class Repo2 {
 	
 	public static void main(String[] args) {
 		TeamchatAPI api = TeamchatAPI.fromFile("teamchat.data")
-				.setEmail("playitabhi@gmail.com") // change to your teamchat registered email id
-				.setPassword("playit"); // change to your teamchat password
+				.setEmail("email") // change to your teamchat registered email id
+				.setPassword("pass"); // change to your teamchat password
 		api.startReceivingEvents(new Repo2());
 	}
 }

@@ -303,8 +303,8 @@ public class LinkIt {
 	
 	public static void main(String[] args) {
 		TeamchatAPI api = TeamchatAPI.fromFile("teamchat.data")
-				.setEmail("email")
-				.setPassword("pass");
+				.setEmail("playitabhi@gmail.com")
+				.setPassword("playit");
 		api.startReceivingEvents(new LinkIt());
 	}
 }

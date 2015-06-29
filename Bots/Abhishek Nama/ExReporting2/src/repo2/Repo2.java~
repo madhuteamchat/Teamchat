@@ -21,7 +21,7 @@ public class Repo2 {
 				.currentRoom()
 				.post(new PrimaryChatlet()
 						.setQuestion("Enter your area, product code and sales details")
-						.setReplyScreen(f).setReplyLabel("Reply")
+						.setReplyScreen(f).setReplyLabel￼("Reply")
 						.setDetailsLabel("Replies").showDetails(true)
 						.alias("prod")));
 	}
@@ -32,7 +32,7 @@ public class Repo2 {
 		String area = api.context().currentReply().getField("area");
 		int code = Integer.parseInt(api.context().currentReply().getField("code"));
 		double sales = Double.parseDouble(api.context().currentReply().getField("sales"));
-		if ((sales<1000 && area.equals("Goa") || sales<2000)) {
+		if ((sales<1000 && area.equals("Goa") || sales<2000 && !area.equals("Goa"))) {
 			api.perform(api.context().create().add(email).add("abhisheknama@outlook.com")
 				.setName("Report").post(new TextChatlet ("Below threshold sales for " + code + " of " + sales)));
 		}
