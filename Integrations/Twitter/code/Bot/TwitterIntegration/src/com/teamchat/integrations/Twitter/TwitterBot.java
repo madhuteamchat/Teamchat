@@ -32,8 +32,6 @@ public class TwitterBot {
 	static AccessToken accessToken;
 	static String consumerkey = "StVbhY7J8qc6dGsERO30cpffM";
 	static String consumersecret = "xAja5GM79qSpPN6yHbyEBYS1yxcqRcLyg7xYuiF5cJia3nalbW";
-	static String botemail = "bot17.teamchat@gmail.com";
-	static String botpassword = "teambot17";
 
 	static {
 		cb.setDebugEnabled(true).setOAuthConsumerKey(consumerkey)
@@ -42,38 +40,25 @@ public class TwitterBot {
 		twitter = tf.getInstance();
 	}
 
-	/**
-	 * public static void main(String[] args) { TeamchatAPI api =
-	 * TeamchatAPI.fromFile("TwitterBot.data")
-	 * .setEmail(botemail).setPassword(botpassword);
-	 * api.startReceivingEvents(new TwitterBot());
-	 * 
-	 * cb.setDebugEnabled(true).setOAuthConsumerKey(consumerkey)
-	 * .setOAuthConsumerSecret(consumersecret); tf = new
-	 * TwitterFactory(cb.build()); twitter = tf.getInstance(); }
-	 **/
-
 	@OnKeyword("help")
 	public void Help(TeamchatAPI api) {
-		String msg = "<html><table><tr><td><b>Keywords</b></td><td><b>Function</b></td></tr><tr><td>login</td><td>Log in to twitter</td></tr><tr><td>logout</td><td>Log out of twitter</td></tr><tr><td>tweet</td><td>Post a tweet</td></tr><tr><td>gettweet</td><td>Get feeds from your home timeline</td></tr><tr><td>directmsg</td><td>Send message to a user</td></tr><tr><td>search</td><td>Search a keyword</td></tr></table></html>";
+		String intro = "<b>Hey, this is</b><b style=color:red> Twitter Bot!</b><br><i style=color:blue>You can use me to tweet, send messages and get tweets on hashtags from twitter.<br>Use following keywords.</i>";
+		String msg = intro
+				+ "<br><table><tr><td><b>Keywords</b></td><td><b>Function</b></td></tr><tr><td>tweet</td><td>Post a tweet</td></tr><tr><td>gettweet</td><td>Get feeds from your home timeline</td></tr><tr><td>directmsg</td><td>Send message to a user</td></tr><tr><td>search</td><td>Search a keyword</td></tr><tr><td>logout</td><td>Log out of twitter</td></tr></table>";
 		api.perform(api.context().currentRoom().post(new TextChatlet(msg)));
-	}
-
-	@OnKeyword("login")
-	public void Chatlet1(TeamchatAPI api) {
 		twitter = tf.getInstance();
 		Form f = api.objects().form();
 		f.addField(api.objects().input().label("Pin").name("pin"));
 		try {
 			requestToken = twitter.getOAuthRequestToken();
-			String msg = "<html><b>Log in to twitter and enter the pin.</b> <a href="
+			String msg1 = "<html><b>Log in to twitter and enter the pin.</b> <a href="
 					+ requestToken.getAuthorizationURL()
 					+ ">"
 					+ requestToken.getAuthorizationURL() + "></a>";
 			api.perform(api
 					.context()
 					.currentRoom()
-					.post(new PrimaryChatlet().setQuestionHtml(msg)
+					.post(new PrimaryChatlet().setQuestionHtml(msg1)
 							.setReplyScreen(f).setReplyLabel("Enter")
 							.showDetails(true).alias("chatlet1")));
 		} catch (TwitterException te) {
@@ -95,7 +80,6 @@ public class TwitterBot {
 	@OnAlias("chatlet1")
 	public void Chatlet2(TeamchatAPI api) {
 		String pin = api.context().currentReply().getField("pin");
-		String msg = "<html><table><tr><td><b>Keywords</b></td><td><b>Function</b></td></tr><tr><td>tweet</td><td>Post a tweet</td></tr><tr><td>gettweet</td><td>Get feeds from your home timeline</td></tr><tr><td>directmsg</td><td>Send message to a user</td></tr><tr><td>search</td><td>Search a keyword</td></tr></table></html>";
 
 		try {
 			accessToken = twitter.getOAuthAccessToken(requestToken, pin);
@@ -121,7 +105,6 @@ public class TwitterBot {
 		if (twitter.getAuthorization().isEnabled()) {
 			api.perform(api.context().currentRoom()
 					.post(new TextChatlet("Successful Login!")));
-			api.perform(api.context().currentRoom().post(new TextChatlet(msg)));
 		}
 
 	}
