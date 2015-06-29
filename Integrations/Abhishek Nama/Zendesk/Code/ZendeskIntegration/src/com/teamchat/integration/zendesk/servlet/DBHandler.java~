@@ -12,7 +12,7 @@ public class DBHandler {
 	Connection conn;
 	Statement stmt;
 	ResultSet rs;
-	String path = "filepah";
+	String path = "/data/solutions-config/workflow-data/zendesk/zendesk-config.properties";
 	Properties configProps;
 	
 	String roomId, formId, ticketId, requesterId, comment;

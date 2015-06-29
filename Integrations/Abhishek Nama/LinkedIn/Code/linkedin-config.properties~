@@ -1,5 +1,7 @@
 botemail = playitabhi@gmail.com
 botpass = playit
-dbname = zendesk
+dbname = linkedin
 dbuser = root
 dbpass = abhi
+linktable = linkdata
+accesstable = accessdata
