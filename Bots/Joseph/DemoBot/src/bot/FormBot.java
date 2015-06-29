@@ -11,17 +11,46 @@ public class FormBot {
 	
 	@OnKeyword("help")
 	public void onhelpEntry(TeamchatAPI api) {
+		helpchatlet(api);
+	}
+	
+	@OnKeyword("Help")
+	public void onHelpEntry(TeamchatAPI api) {
+		helpchatlet(api);
+	}
+	
+	@OnKeyword("HElp")
+	public void onHElpEntry(TeamchatAPI api) {
+		helpchatlet(api);
+	}
+	
+	
+	public void helpchatlet(TeamchatAPI api) {
 		System.out.println("data entry typed");
 		api.perform(
 				api.context().currentRoom().registerForEvents().post(
-				new TextChatlet("Type 'report' to report an issue"
+				new TextChatlet("Type 'check' to report routine checks"
 						        )));
 			
 	}
 	
+	@OnKeyword("check")
+	public void onreportEntry(TeamchatAPI api) {
+		reportchatlet(api);
+	}
 	
-	@OnKeyword("report")
-	public void ondemoEntry(TeamchatAPI api) {
+	@OnKeyword("Check")
+	public void onReportEntry(TeamchatAPI api) {
+		reportchatlet(api);
+	}
+	
+	@OnKeyword("CHeck")
+	public void onREportEntry(TeamchatAPI api) {
+		reportchatlet(api);
+	}
+	
+
+	public void reportchatlet(TeamchatAPI api) {
 		api.perform(
 				api.context().currentRoom().registerForEvents().post(
 				new PrimaryChatlet()
@@ -49,31 +78,39 @@ public class FormBot {
 			    .addOption("Vikram")
 			    )
 				)
+				.showDetails(true)
 				.alias("Assign task"))
 				);
 	}
 	
 	@OnAlias("Assign task")
 	public void onTaskAssigned(TeamchatAPI api) {
+		String  useremail=api.context().currentReply().senderEmail();
 		String user = api.context().currentReply().getField("user");
 		String location = api.context().currentReply().getField("location");
-		String task = api.context().currentReply().getField("check");
+		String check = api.context().currentReply().getField("check");
+		String site = api.context().currentReply().getField("site");
 		String observation = api.context().currentReply().getField("observation");
 		String recommendation = api.context().currentReply().getField("recommendation");
 		api.perform(
 				api.context().currentRoom().registerForEvents().post(
 				new PrimaryChatlet()
-				.setQuestion("<b>"+user+"</b> assigned task <b>"+observation+"</b><br/><b> Recommendation: </b><br/>"+recommendation+" <b>Site:</b> "+task+" <br/><b>location:</b> "+location)
+				.setQuestionHtml("Assigned by- "+useremail+" Task-"+observation+" Assigned to-"+user+" Type of check-"+check+" Site-"+site+" location-"+location
+						         +"")
 				.setReplyScreen(api.objects().form()
 				.addField(api.objects().select().label("Select option").name("status")
 			    .addOption("Open")
 			    .addOption("Close")
 			    )
-			    .addField(api.objects().hidden().label("").name("location").value(task))
+			    .addField(api.objects().input().label("Action taken").name("action"))
+			    .addField(api.objects().hidden().label("").name("site").value(site))
+			    .addField(api.objects().hidden().label("").name("location").value(location))
 			    .addField(api.objects().hidden().label("").name("user").value(user))
 			    .addField(api.objects().hidden().label("").name("recommendation").value(recommendation))
 			    .addField(api.objects().hidden().label("").name("observation").value(observation))
+			    .addField(api.objects().hidden().label("").name("sender").value(useremail))
 				)
+				.showDetails(true)
 				.alias("Submit"))
 				);
 	}
@@ -82,14 +119,16 @@ public class FormBot {
 	public void onSubmit(TeamchatAPI api) {
 		
 		String status = api.context().currentReply().getField("status");
+		String sender = api.context().currentReply().getField("sender");
+		String action = api.context().currentReply().getField("action");
 		String location = api.context().currentReply().getField("location");
 		String user = api.context().currentReply().getField("user");
 		String observation = api.context().currentReply().getField("observation");
 		String recommendation = api.context().currentReply().getField("recommendation");
 		api.perform(
 				api.context().currentRoom().registerForEvents().post(
-				new TextChatlet("<b>Person: </b>"+user+" <b><br />Observation: </b>"+observation+" <br /><b>Recomendation: </b> "+recommendation+" <br /><b>Location:</b> "+location
-						       +"<br /> <b>Status:</b> "+status)
+				new TextChatlet("Task assigned by- "+sender+" Task assigned to-"+user+" Observation-"+observation+" Recomendation-"+recommendation+" Location-"+location
+						       +" Status-"+status+" Action Taken-"+action)
 		
 				));
 	}

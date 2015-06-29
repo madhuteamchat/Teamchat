@@ -19,7 +19,7 @@
 	</context-param>
 	<context-param>
 		<param-name>bot-password</param-name>
-		<param-value>hellmastermanager</param-value>
+		<param-value>12345</param-value>
 	</context-param>
 	<context-param>
 		<param-name>bot-class</param-name>
@@ -35,11 +35,11 @@
 	</context-param>
 	<context-param>
 		<param-name>db-user</param-name>
-		<param-value>root</param-value>
+		<param-value>tcinterns</param-value>
 	</context-param>
 	<context-param>
 		<param-name>db-password</param-name>
-		<param-value>root</param-value>
+		<param-value>PakyovBosh7</param-value>
 	</context-param>
 	<context-param>
    		<param-name>threading</param-name>
