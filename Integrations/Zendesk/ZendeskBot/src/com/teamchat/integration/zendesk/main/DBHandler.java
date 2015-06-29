@@ -10,10 +10,10 @@ import java.util.Properties;
 
 public class DBHandler {
 	Connection conn;
-	Statement stmt;
+	public Statement stmt;
 	ResultSet rs;
 	String path = "/home/anuj-intern22/Desktop/gup/eclipse/ZendeskBot/data/zendesk-config.properties";
-	Properties configProps;
+	public Properties configProps;
 	
 	String roomId, formId, ticketId, requesterId, comment;
 	String contact, status,rating,Rcomment;
