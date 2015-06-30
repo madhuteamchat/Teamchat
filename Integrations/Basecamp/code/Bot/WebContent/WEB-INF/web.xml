@@ -37,11 +37,11 @@
 	</context-param>
 	<context-param>
 		<param-name>db-user</param-name>
-		<param-value>root</param-value>
+		<param-value>tcinterns</param-value>
 	</context-param>
 	<context-param>
 		<param-name>db-password</param-name>
-		<param-value>pappupasshogaya</param-value>
+		<param-value>PakyovBosh7</param-value>
 	</context-param>
 	<context-param>
 		<param-name>threading</param-name>
