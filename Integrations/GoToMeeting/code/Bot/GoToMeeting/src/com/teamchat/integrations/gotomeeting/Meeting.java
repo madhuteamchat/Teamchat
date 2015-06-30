@@ -49,8 +49,8 @@ public class Meeting
 		accTok1=accTok;
 		groupID1=groupID;
 		String[] values = createMeeting(api, accTok);
-		initializeMeeting(api, accTok, values[1]);
-		postJoinURL(api, values[0],groupID);
+		int rno=initializeMeeting(api, accTok, values[1]);
+		postJoinURL(api, values[0],groupID,rno);
 	}
 
 	public String function(TeamchatAPI api)
@@ -89,7 +89,7 @@ public class Meeting
 		return values;
 	}
 	
-	public void initializeMeeting(TeamchatAPI api, String accTok, String meetingid) throws ClientProtocolException, IOException, URISyntaxException, JSONException
+	public int initializeMeeting(TeamchatAPI api, String accTok, String meetingid) throws ClientProtocolException, IOException, URISyntaxException, JSONException
 	{
 		HttpClient client = new DefaultHttpClient();
 		HttpGet request = new HttpGet("https://api.citrixonline.com/G2M/rest/meetings/" + meetingid + "/start");
@@ -106,13 +106,16 @@ public class Meeting
 		JSONObject jobject = new JSONObject(output);
 		String hostURL = (String) jobject.get("hostURL");
 		Room p2p = api.context().create().setName("Private").add(api.context().currentReply().senderEmail());
-
-		api.perform(p2p.post(new PrimaryChatlet().setQuestionHtml("<html><body>Organizer " + "<a href=" + hostURL +" target='_blank'"+ ">Click here</a> to start the meeting.</body></html>")));
+		int rno=(int) (Math.random()*1000);
+		rno=1000+rno;
+		
+		api.perform(p2p.post(new PrimaryChatlet().setQuestionHtml("<html><body>Organizer " + "<a href=" + hostURL +" target='_blank'"+ ">Click here</a> to start the meeting in the group with meeting ID "+rno+".</body></html>")));
+		return rno;
 	}
 
-	public void postJoinURL(TeamchatAPI api, String joinurl, String groupID)
+	public void postJoinURL(TeamchatAPI api, String joinurl, String groupID,int rno)
 	{
-		api.perform(api.context().byId(groupID).post(new PrimaryChatlet().setQuestionHtml("<html><body>" + "New Team Meeting Scheduled for now. " + "Members " + "<a href=" + joinurl +" target='_blank'"+ ">Click here</a> to join the meeting</body></html>")));
+		api.perform(api.context().byId(groupID).post(new PrimaryChatlet().setQuestionHtml("<html><body>" + "New Team Meeting Scheduled for now with meeting ID. "+rno + ". Members " + "<a href=" + joinurl +" target='_blank'"+ ">Click here</a> to join the meeting</body></html>")));
 	}
 	
 	public void scheduleMeeting(TeamchatAPI api)
