@@ -8,6 +8,16 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Properties;
 
+
+
+/*
+
+Author: Anuj Arora
+
+*/
+
+
+
 public class DBHandler {
 	Connection conn;
 	public Statement stmt;

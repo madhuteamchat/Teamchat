@@ -8,12 +8,6 @@ import com.teamchat.client.sdk.Reply;
 import com.teamchat.client.sdk.Room;
 import com.teamchat.client.sdk.TeamchatAPI;
 
-/*
-
-Author: Anuj Arora
-
-*/
-
 public class updatecomment {
 
 	String comment,ticketId;

@@ -1,15 +1,6 @@
 package com.teamchat.integration.zendesk.main;
 
 
-
-
-/*
-
-Author: Anuj Arora
-
-*/
-
-
 import java.io.FileInputStream;
 import java.sql.SQLException;
 import java.util.Properties;
@@ -26,6 +17,7 @@ import org.zendesk.client.v2.model.SatisfactionRating;
  import org.zendesk.client.v2.model.Action;
  import org.zendesk.client.v2.model.tarsets.UrlTarget;
  */
+
 
 
 

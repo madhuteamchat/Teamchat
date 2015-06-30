@@ -22,16 +22,8 @@ import com.teamchat.client.sdk.Reply;
 import com.teamchat.client.sdk.Room;
 import com.teamchat.client.sdk.TeamchatAPI;
 
-
-/*
-
-Author: Anuj Arora
-
-*/
-
 /**
  * Servlet implementation class Integrator
-
  */
 @WebServlet("/integrator")
 public class ZendeskIntegrator extends HttpServlet {

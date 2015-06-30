@@ -1,4 +1,4 @@
-package com.teamchat.integration.zendesk.servlet;
+package com.teamchat.integration.zendesk.main;
 
 import java.io.FileInputStream;
 import java.sql.Connection;
@@ -8,12 +8,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Properties;
 
-/*
-
-Author: Anuj Arora
-
-*/
-
 public class DBHandler {
 	Connection conn;
 	public Statement stmt;
@@ -22,10 +16,9 @@ public class DBHandler {
 	public Properties configProps;
 	
 	String roomId, formId, ticketId, requesterId, comment;
-	String contact,status,rating,Rcomment;
+	String contact, status,rating,Rcomment;
 	
-	
-	public DBHandler () {
+	DBHandler () {
 		try {
 			configProps = loadPropertyFileFromDisk(path);
 		} catch (Exception e1) {
@@ -45,16 +38,16 @@ public class DBHandler {
 	
 	public static Properties loadPropertyFileFromDisk(String filePath) throws Exception
 	{
-	
+		
 		Properties configProp = new Properties();
 		FileInputStream fIS = new FileInputStream(filePath);
 		configProp.load(fIS);
 		fIS.close();
 		return configProp;
-		
 	}
 	
-	public void setData (String roomId, String formId, String ticketId, String requesterId, String comment, String contact,String status,String rating,String Rcomment) {
+	public void setData (String roomId, String formId, String ticketId, String requesterId, String comment, String contact, String status,String rating,String Rcomment) {
+		
 		this.roomId = roomId;
 		this.formId = formId;
 		this.ticketId = ticketId;
@@ -66,8 +59,9 @@ public class DBHandler {
 		this.Rcomment = Rcomment;
 		
 		try {
+			System.out.println(status);
 			System.out.println("insert into " + configProps.getProperty("tablename").trim() + " values ('" + roomId + "', '" + formId + "', '" + ticketId + "', '"
-						+ requesterId + "', '" + comment + "', '" + contact + "', '" + status + "', '" + rating + "', '" + Rcomment + "')");
+					+ requesterId + "', '" + comment + "', '" + contact + "', '" + status + "', '" + rating + "', '" + Rcomment + "')");
 			int c = stmt.executeUpdate("insert into " + configProps.getProperty("tablename").trim() + " values ('" + roomId + "', '" + formId + "', '" + ticketId + "', '"
 					+ requesterId + "', '" + comment + "', '" + contact + "', '" + status + "', '" + rating + "', '" + Rcomment + "')");
 			if (c==1)
@@ -89,8 +83,6 @@ public class DBHandler {
 		}
 		return data;
 	}
-	
-
 	
 	public String[] getRoomForm (String ticketId) {
 		String[] roomForm = new String[2];

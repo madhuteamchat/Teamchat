@@ -8,13 +8,6 @@ import com.teamchat.client.sdk.Room;
 import com.teamchat.client.sdk.TeamchatAPI;
 import com.teamchat.client.sdk.chatlets.PrimaryChatlet;
 
-
-/*
-
-Author: Anuj Arora
-
-*/
-
 public class updatestatus {
 
 	String ticketId, status;
