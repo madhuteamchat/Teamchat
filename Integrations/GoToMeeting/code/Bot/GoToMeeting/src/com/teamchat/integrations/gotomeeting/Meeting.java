@@ -26,23 +26,27 @@ public class Meeting
 {
 	String []values=new String[5];
 	String date=null,time=null,subject=null;
-	String accTok1,groupID1;
+	String accTok1,groupID1,temail;
+	static String sub;
 	
-	public void showOptions(TeamchatAPI api,String teamchatUserEmail,String gID)
+	public void showOptions(TeamchatAPI api,String teamchatUserEmail,String gID,String subject)
 	{
+		
+		temail=teamchatUserEmail;
 		groupID1=gID;
-		api.perform(api.context().create().setName("p2p").add(teamchatUserEmail).post(new PrimaryChatlet().setQuestion("Successfully Authenticated with GoToMeeting.")));
-		/*api.perform(api
-				.context()
-				.create().setName("p2p").add(teamchatUserEmail)
-				.post(new PrimaryChatlet().setQuestion("What do you want to do? ")
-						.setReplyScreen(api.objects().form().addField(api.objects().select().label("Functions").name("functions").addOption("Instant Meeting").addOption("View All Previous Meetings").addOption("View Meetings by ID").addOption("Schedule a Meeting"))).alias("functions")));
-		 */
+		//api.perform(api.context().create().setName("p2p").add(teamchatUserEmail).post(new PrimaryChatlet().setQuestion("Successfully Authenticated with GoToMeeting.")));
 		api.perform(api
 				.context()
-				.byId(gID).post(new PrimaryChatlet().setQuestion("What do you want to do? ")
+				.create().setName("p2p").add(teamchatUserEmail)
+				.post(new PrimaryChatlet().setQuestion(Constants.SELECT_SUB_TEXT+subject+"'.")
 						.setReplyScreen(api.objects().form().addField(api.objects().select().label("Functions").name("functions").addOption("Instant Meeting").addOption("View All Previous Meetings").addOption("View Meetings by ID").addOption("Schedule a Meeting"))).alias("functions")));
-	}
+		 sub=subject;
+		/*String userName=api.context().currentSender().getName();
+		api.perform(api
+				.context()
+				.byId(gID).post(new PrimaryChatlet().setQuestion(userName+" has initializad this meeting. Please enter what you want to do by clicking on the 'reply' button ")
+						.setReplyScreen(api.objects().form().addField(api.objects().select().label("Functions").name("functions").addOption("Instant Meeting").addOption("View All Previous Meetings").addOption("View Meetings by ID").addOption("Schedule a Meeting"))).alias("functions")));
+*/	}
 	
 	public void instantMeeting(TeamchatAPI api,String accTok,String groupID) throws ClientProtocolException, IOException, JSONException, URISyntaxException
 	{
@@ -109,13 +113,19 @@ public class Meeting
 		int rno=(int) (Math.random()*1000);
 		rno=1000+rno;
 		
-		api.perform(p2p.post(new PrimaryChatlet().setQuestionHtml("<html><body>Organizer " + "<a href=" + hostURL +" target='_blank'"+ ">Click here</a> to start the meeting in the group with meeting ID "+rno+".</body></html>")));
+		
+		String  st = toString().format(Constants.ORGANISER_LINK, hostURL,sub);
+		
+		
+		api.perform(p2p.post(new PrimaryChatlet().setQuestionHtml(st)));
 		return rno;
 	}
 
 	public void postJoinURL(TeamchatAPI api, String joinurl, String groupID,int rno)
 	{
-		api.perform(api.context().byId(groupID).post(new PrimaryChatlet().setQuestionHtml("<html><body>" + "New Team Meeting Scheduled for now with meeting ID. "+rno + ". Members " + "<a href=" + joinurl +" target='_blank'"+ ">Click here</a> to join the meeting</body></html>")));
+		
+		String st=toString().format(Constants.PUBLIC_LINK, sub,joinurl);
+		api.perform(api.context().byId(groupID).post(new PrimaryChatlet().setQuestionHtml(st)));
 	}
 	
 	public void scheduleMeeting(TeamchatAPI api)
@@ -141,12 +151,12 @@ public class Meeting
 		return values;
 	}
 	
-	public void postSchedule(TeamchatAPI api, String accTok, String[] values,String groupID) throws ClientProtocolException, IOException, URISyntaxException, JSONException, ParseException
+	public void postSchedule(TeamchatAPI api, String accTok, String[] values,String groupID,String temail) throws ClientProtocolException, IOException, URISyntaxException, JSONException, ParseException
 	{
 		SchedulingOne sch1=new SchedulingOne();
-		sch1.setTimer(api, groupID, values, accTok);
+		sch1.setTimer(api, groupID, values, accTok,temail);
 		SchedulingTwo sch2=new SchedulingTwo();
-		sch2.setTimer(api, groupID, values, accTok);
+		sch2.setTimer(api, groupID, values, accTok,temail);
 	}
 	
 	public void post(TeamchatAPI api) throws ClientProtocolException, IOException, URISyntaxException, JSONException{

@@ -12,12 +12,13 @@ import java.util.TimerTask;
 
 import org.json.JSONException;
 
+import com.teamchat.client.sdk.Room;
 import com.teamchat.client.sdk.TeamchatAPI;
 import com.teamchat.client.sdk.chatlets.PrimaryChatlet;
 
 public class SchedulingTwo
 {
-	public void setTimer(final TeamchatAPI api, final String groupID, final String[] values,final String accTok) throws ParseException
+	public void setTimer(final TeamchatAPI api, final String groupID, final String[] values,final String accTok,final String temail) throws ParseException
 	{
 		TimerTask task = new TimerTask()
 		{
@@ -32,7 +33,8 @@ public class SchedulingTwo
 				
 				try
 				{
-					api.perform(api.context().currentRoom().post(new PrimaryChatlet()
+					Room rr=api.context().create().setName("p2p").add(temail);
+					api.perform(rr.post(new PrimaryChatlet()
                     .setQuestionHtml("<html><body>REMINDER: Your scheduled meeting with Meeting ID: "+values[1]+" is in 10 Minutes."
                     		)));
 

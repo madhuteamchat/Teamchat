@@ -21,7 +21,7 @@ import com.teamchat.integrations.gotomeeting.Meeting;
 
 public class SchedulingOne
 {
-	public void setTimer(final TeamchatAPI api, final String groupID, final String[] values,final String accTok) throws ParseException
+	public void setTimer(final TeamchatAPI api, final String groupID, final String[] values,final String accTok,final String temail) throws ParseException
 	{
 		TimerTask task = new TimerTask()
 		{
@@ -32,7 +32,8 @@ public class SchedulingOne
 				                                     .setQuestion("New Team Meeting Scheduled on "+values[2]+""
 				                                     		+ " at "+values[3]+" with subject '"
 				                                     		+values[4]+"'. Meeting ID: "+values[1])));
-				api.perform(api.context().currentRoom().post(new PrimaryChatlet().setQuestion("Meeting Scheduled on "+values[2]+""
+				Room rr=api.context().create().setName("p2p").add(temail);
+				api.perform(rr.post(new PrimaryChatlet().setQuestion("Meeting Scheduled on "+values[2]+""
 				                                     		+ " at "+values[3]+" with subject '"
 				                                     		+values[4]+"'. Meeting ID: "+values[1])));
 			}
@@ -42,7 +43,7 @@ public class SchedulingOne
 		java.util.Date date1 = d.parse(values[2]+" "+ values[3]);
 		Calendar c=d.getCalendar();
 		System.out.println(c.getTime());
-		c.add(c.HOUR, -2);
+		c.add(c.MINUTE, -120);
 		String [] str=c.getTime().toString().split(" ");
 		String time=c.get(Calendar.YEAR)+"-"+((int)c.get(Calendar.MONTH)+1)+"-"+c.get(Calendar.DATE)+" "+str[3];
 		Date date2=d.parse(time);

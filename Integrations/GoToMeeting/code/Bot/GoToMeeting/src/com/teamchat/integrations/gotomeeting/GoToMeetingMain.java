@@ -7,6 +7,8 @@ import java.net.URISyntaxException;
 import java.text.ParseException;
 import java.util.HashMap;
 
+import javax.security.auth.Subject;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
@@ -17,6 +19,7 @@ import org.json.JSONObject;
 
 import com.teamchat.client.annotations.OnAlias;
 import com.teamchat.client.annotations.OnKeyword;
+import com.teamchat.client.sdk.Form;
 import com.teamchat.client.sdk.Room;
 import com.teamchat.client.sdk.TeamchatAPI;
 import com.teamchat.client.sdk.chatlets.PrimaryChatlet;
@@ -30,7 +33,7 @@ public class GoToMeetingMain
 	private String[] values = new String[10];
 	Meeting meet=new Meeting();
 	
-	
+	String subject=null;
 	boolean exists = false;
 	private String teamchatUserEmail, email, pwd, accTok, groupID;
 
@@ -42,10 +45,15 @@ public class GoToMeetingMain
 		
 		if(new GetProperties().getDB(teamchatUserEmail)) {
 			
+			api.perform(api.context().create().setName("p2p").add(teamchatUserEmail).post(new PrimaryChatlet().setQuestion("Successfully Authenticated with GoToMeeting.")));
 			String str[]=new GetProperties().pullDB(teamchatUserEmail);
 			accTok=new Token().getAccessToken(str[0], str[1]);
+			Form f=api.objects().form();
+			f.addField(api.objects().input().name("subject").label("Subject"));
+			api.performPostInCurrentRoom(new PrimaryChatlet().setQuestion(Constants.SUBJECT_TEXT).setReplyScreen(f).setReplyLabel("Select").alias("subject"));
 			
-			new Meeting().showOptions(api,teamchatUserEmail,groupID);
+			
+			
 		}
 		
 		if(!new GetProperties().getDB(teamchatUserEmail))
@@ -53,6 +61,13 @@ public class GoToMeetingMain
 		
 		}
 
+	@OnAlias("subject")
+	public void onSubject(TeamchatAPI api){
+		subject=api.context().currentReply().getField("subject");
+		new Meeting().showOptions(api,teamchatUserEmail,groupID,subject);
+	}
+	
+	
 	@OnAlias("oncreds")
 	public void OnCredentials(TeamchatAPI api) throws Exception
 	{
@@ -63,7 +78,7 @@ public class GoToMeetingMain
 		{
 			accTok = new Token().getAccessToken(email, pwd);
 			new GetProperties().pushDB(teamchatUserEmail, email, pwd);
-			new Meeting().showOptions(api,teamchatUserEmail,groupID);
+			new Meeting().showOptions(api,teamchatUserEmail,groupID,subject);
 
 		} catch (Exception e)
 		{
@@ -98,14 +113,15 @@ public class GoToMeetingMain
 		values = meet.reportSchedule1(api, accTok);
 		for (String out : values)
 			System.out.println(out);
-		api.perform(api.context().currentRoom().post(new PrimaryChatlet().setQuestion("Meeting Scheduled Successfully")));
-		postScheduleURL(api);
+		Room r=api.context().create().add(teamchatUserEmail).setName("p2p");
+		api.perform(r.post(new PrimaryChatlet().setQuestion("Meeting Scheduled Successfully")));
+		postScheduleURL(api,teamchatUserEmail);
 		
 	}
 
-	public void postScheduleURL(TeamchatAPI api) throws ClientProtocolException, IOException, URISyntaxException, JSONException, ParseException
+	public void postScheduleURL(TeamchatAPI api,String temail) throws ClientProtocolException, IOException, URISyntaxException, JSONException, ParseException
 	{
-		meet.postSchedule(api, accTok, values,groupID);
+		meet.postSchedule(api, accTok, values,groupID,temail);
 	}
 	
 	@OnAlias("meetingid")
@@ -151,11 +167,11 @@ public class GoToMeetingMain
 		if(new GetProperties().getDB(teamchatUserEmail)) {
 			String str[]=new GetProperties().pullDB(teamchatUserEmail);
 			accTok=new Token().getAccessToken(str[0], str[1]);
-			api.perform(api.context().currentRoom().post(new PrimaryChatlet().setQuestionHtml("<html><body><b>GoToMeeting BOT</b><br/>"+"Hey! <br/>Now you can conduct online meetings instantly through Teamchat.<br/>Use me to <br/>Conduct Instant Meetings<br/>Schedule Meetings For Future<br/>View Your Prevoius Meetings<br/>Manage all these things at one place.<br/>To get started type <b>meeting</b> in your group and select your prefered task.</body></html>").setReplyScreen(api.objects().form().addField(api.objects().input().label("GoToMeeting Login ID").name("log").value(str[0]))).alias("login")));
+			api.perform(api.context().currentRoom().post(new PrimaryChatlet().setQuestionHtml("<html><body><b>GoToMeeting BOT</b><br/>"+"Hey! <br/>Now you can conduct online meetings instantly through Teamchat.<br/>Use me to <br/>Conduct Instant Meetings<br/>Schedule Meetings For Future<br/>View Your Prevoius Meetings<br/>Manage all these things at one place.<br/>To get started type <b>meeting</b> in your group and select your prefered task.</body></html>").setReplyScreen(api.objects().form().addField(api.objects().input().label("GoToMeeting Login ID").name("log").value(str[0]))).setReplyLabel("LOGIN").alias("login")));
 		}
 		
 		if(!new GetProperties().getDB(teamchatUserEmail))
-			api.perform(api.context().currentRoom().post(new PrimaryChatlet().setQuestionHtml("<html><body><b>GoToMeeting BOT</b><br/>"+"Hey! <br/>Now you can conduct online meetings instantly through Teamchat.<br/>Use me to <br/>Conduct Instant Meetings<br/>Schedule Meetings For Future<br/>View Your Prevoius Meetings<br/>Manage all these things at one place.<br/>To get started type <b>meeting</b> in your group and select your prefered task.</body></html>").setReplyScreen(api.objects().form().addField(api.objects().input().label("Email").name("email")).addField(api.objects().input().label("Password").name("pwd"))).alias("oncreds")));
+			api.perform(api.context().currentRoom().post(new PrimaryChatlet().setQuestionHtml("<html><body><b>GoToMeeting BOT</b><br/>"+"Hey! <br/>Now you can conduct online meetings instantly through Teamchat.<br/>Use me to <br/>Conduct Instant Meetings<br/>Schedule Meetings For Future<br/>View Your Prevoius Meetings<br/>Manage all these things at one place.<br/>To get started type <b>meeting</b> in your group and select your prefered task.</body></html>").setReplyScreen(api.objects().form().addField(api.objects().input().label("Email").name("email")).addField(api.objects().input().label("Password").name("pwd"))).setReplyLabel("LOGIN").alias("oncreds")));
 	}
 	
 	@OnAlias("login")
@@ -165,12 +181,12 @@ public class GoToMeetingMain
 		System.out.println(userEmail);
 		if(new GetProperties().checkLogin(userEmail)){
 			System.out.println("success");
-			new Meeting().showOptions(api, userEmail,groupID);
+			new Meeting().showOptions(api, userEmail,groupID,subject);
 		}
 		
 		if(!new GetProperties().checkLogin(userEmail)){
 			api.perform(api.context().currentRoom().post(new TextChatlet("This is not the GoToMeeting Account ID registered with us. Please try Again.")));
-			api.perform(api.context().currentRoom().post(new PrimaryChatlet().setQuestionHtml("<html><body><b>GoToMeeting BOT</b><br/>"+"Hey! <br/>Now you can conduct online meetings instantly through Teamchat.<br/>Use me to <br/>Conduct Instant Meetings<br/>Schedule Meetings For Future<br/>View Your Prevoius Meetings<br/>Manage all these things at one place.<br/>To get started type <b>meeting</b> in your group and select your prefered task.</body></html>").setReplyScreen(api.objects().form().addField(api.objects().input().label("GoToMeeting Login ID").name("log").value(teamchatUserEmail))).alias("login")));
+			api.perform(api.context().currentRoom().post(new PrimaryChatlet().setQuestionHtml("<html><body><b>GoToMeeting BOT</b><br/>"+"Hey! <br/>Now you can conduct online meetings instantly through Teamchat.<br/>Use me to <br/>Conduct Instant Meetings<br/>Schedule Meetings For Future<br/>View Your Prevoius Meetings<br/>Manage all these things at one place.<br/>To get started type <b>meeting</b> in your group and select your prefered task.</body></html>").setReplyScreen(api.objects().form().addField(api.objects().input().label("GoToMeeting Login ID").name("log").value(teamchatUserEmail))).setReplyLabel("Login").alias("login")));
 		}
 	}
 }
