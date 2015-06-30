@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Connect to OneDrive</title>
+
+<script type="text/javascript" src="https://js.live.net/v5.0/OneDrive.js" id="onedrive-js" client-id="000000004015A50A">
+</script>
+<script type="text/javascript">
+function launchOneDriveDownloader() {
+    var pickerOptions = { 
+    		 success: function(files) {
+    			  // Handle returned file object(s)
+    			//  alert("success");
+ 			    var id=document.createElement("form");
+ 			    var link=files.link;
+ 			    var rid=document.getElementById("roomid").value;
+ 			    var form=document.createElement("form");
+ 			    form.setAttribute("method","POST");
+ 			    form.setAttribute("action","http://interns.teamchat.com:8080/OneDriveIntegration/GetFileList?link="+link+"&rid="+rid);
+ 			    
+ 			    var filenames=[];
+ 			    var filelinks=[];
+ 			    for (i = 0; i < files.values.length; i++) {
+ 			        filelinks[i]=files.values[i].link;
+ 			        filenames[i]=files.values[i].fileName;
+ 			        
+ 			    }
+ 			  //  alert(filenames);
+ 			  //  alert(filelinks);
+ 			   var hiddenField = document.createElement("input");
+ 			    hiddenField.setAttribute("type", "text");
+			        hiddenField.setAttribute("name", "filenames");
+			        hiddenField.setAttribute("value", filenames);
+ 			    form.appendChild(hiddenField);
+ 			    var hiddenField = document.createElement("input");
+ 			    hiddenField.setAttribute("type", "text");
+			        hiddenField.setAttribute("name", "filelinks");
+			        hiddenField.setAttribute("value", filelinks);
+ 			    form.appendChild(hiddenField);
+ 			    form.submit();
+    			    
+    			    
+    			   //location.href="http://localhost:8080/OneDriveIntegration/GetFileList?link="+link+"&filenames="+filenames;
+    			  },
+
+    			  cancel: function() {
+    			      // handle when the user cancels picking a file
+    				  alert("You didn't choose any file");
+    			  },
+
+    			  linkType: "downloadLink", // or "downloadLink"  webViewLink,
+    			  multiSelect: true // or true
+    };
+    OneDrive.open(pickerOptions);
+}
+
+function launchOneDrivePicker() {
+    var pickerOptions = { 
+    		 success: function(files) {
+    			    // Handle returned file object(s)
+    			    var id=document.createElement("form");
+    			    var link=files.link;
+    			    var rid=document.getElementById("roomid").value;
+    			    var form=document.createElement("form");
+    			    form.setAttribute("method","POST");
+    			    form.setAttribute("action","http://interns.teamchat.com:8080/OneDriveIntegration/GetFileList?link="+link+"&rid="+rid);
+    			    
+    			    var filenames=[];
+    			    var filelinks=[];
+    			    for (i = 0; i < files.values.length; i++) {
+    			        filelinks[i]=files.values[i].link;
+    			        filenames[i]=files.values[i].fileName;
+    			        
+    			    }
+    			  //  alert(filenames);
+    			  //  alert(filelinks);
+    			   var hiddenField = document.createElement("input");
+    			    hiddenField.setAttribute("type", "text");
+			        hiddenField.setAttribute("name", "filenames");
+			        hiddenField.setAttribute("value", filenames);
+    			    form.appendChild(hiddenField);
+    			    var hiddenField = document.createElement("input");
+    			    hiddenField.setAttribute("type", "text");
+			        hiddenField.setAttribute("name", "filelinks");
+			        hiddenField.setAttribute("value", filelinks);
+    			    form.appendChild(hiddenField);
+    			    form.submit();
+    			    
+    			    
+    			    
+    			   //location.href="http://localhost:8080/OneDriveIntegration/GetFileList?link="+link+"&filenames="+filenames;
+    			  },
+
+    			  cancel: function() {
+    			      // handle when the user cancels picking a file
+    				  alert("You didn't pick ");
+    			  },
+
+    			  linkType: "webViewLink", // or "downloadLink"  webViewLink,
+    			  multiSelect: true // or true
+    };
+    OneDrive.open(pickerOptions);
+}
+
+
+    function launchOneDriveSaver(){
+    var saverOptions = { 
+
+    		file: "file",
+    		  success: function(){
+    		    // upload is complete
+    		 //   alert("Success");
+    		    
+    			    var rid=document.getElementById("roomid").value;
+    			  location.href="http://interns.teamchat.com:8080/OneDriveIntegration/SaveFile?msg=success&rid="+rid;
+    		  },
+    		  progress: function(p) {
+    		    // upload is progressing
+    		  },
+    		  cancel: function(){
+    		    // upload was cancelled
+    		//    alert("cancel");
+    		    
+    			    var rid=document.getElementById("roomid").value;
+    			  location.href="http://interns.teamchat.com:8080/OneDriveIntegration/SaveFile?msg=cancel&rid="+rid;
+    		  },
+    		  error: function(e) {
+    		    // an error occured
+    		  //  alert("error");
+    		    
+    			    var rid=document.getElementById("roomid").value;
+    			  location.href="http://interns.teamchat.com:8080/OneDriveIntegration/SaveFile?msg=error&rid="+rid;
+    		  }
+    };
+    OneDrive.save(saverOptions);
+}
+    function storeRoomId(){
+    	var rid=window.location.href.split("=");
+    	document.getElementById("roomid").value=rid[1];
+    	//alert(document.getElementById("roomid").value);
+    }
+</script>
+<head>
+<style>
+body {
+   /* background-color: #d0e4fe;*/
+}
+
+button {
+    width: 20em;  height: 3em;
+}
+
+input {
+    width: 15em;  height: 2em;
+}
+
+
+.tablestyle {
+    position:fixed;
+    top: 50%;
+    left: 50%;
+    width:30em;
+    height:20em;
+    margin-top: -9em; /*set to a negative number 1/2 of your height*/
+    margin-left: -10em; /*set to a negative number 1/2 of your width*/
+  /*  border: 1px solid #ccc; */
+   /* background-color: #f3f3f3;*/
+}
+
+h1 {
+    color: orange;
+    text-align: center;
+}
+
+.rightimage {
+    float: right;
+}
+
+p {
+    font-family: "Times New Roman";
+    font-size: 20px;
+}
+td { 
+    padding: 5px;
+}
+table {
+border-spacing:5px;
+}
+</style>
+ <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+</head>
+<body onload="storeRoomId()">
+<img src="images/TeamChatLogo.jpg" alt="logo" style="width:304px;height:228px;">
+<img src="images/onedrive-logo.png" alt="logo" class="rightimage" style="width:304px;height:228px;">
+<input id="roomid" name="roomid" type="hidden" />
+ <table class="tablestyle">
+ <tr>
+<td><div id="picker"><button class="btn btn-primary" onclick="launchOneDrivePicker();">Open from OneDrive</button></div></td>
+</tr>
+<tr>
+<td><div id="downloader"><button class="btn btn-primary" onclick="launchOneDriveDownloader();">Download from OneDrive</button></div></td>
+</tr>
+<tr><td>
+
+<div id="save"><button class="btn btn-primary" onclick="launchOneDriveSaver();">Save to OneDrive</button>&nbsp;<input id="file" name="file" type="file" />
+</div></td>
+</tr>
+</table>
+</body>
+</html>
