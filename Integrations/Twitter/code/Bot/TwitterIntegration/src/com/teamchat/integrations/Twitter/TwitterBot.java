@@ -30,8 +30,8 @@ public class TwitterBot {
 	static ConfigurationBuilder cb2 = new ConfigurationBuilder();
 	static RequestToken requestToken;
 	static AccessToken accessToken;
-	static String consumerkey = "StVbhY7J8qc6dGsERO30cpffM";
-	static String consumersecret = "xAja5GM79qSpPN6yHbyEBYS1yxcqRcLyg7xYuiF5cJia3nalbW";
+	static String consumerkey = "*************************";
+	static String consumersecret = "**************************************************";
 
 	static {
 		cb.setDebugEnabled(true).setOAuthConsumerKey(consumerkey)
