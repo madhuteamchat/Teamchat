@@ -28,16 +28,20 @@ public class Meeting
 	String date=null,time=null,subject=null;
 	String accTok1,groupID1;
 	
-	public void showOptions(TeamchatAPI api,String teamchatUserEmail)
+	public void showOptions(TeamchatAPI api,String teamchatUserEmail,String gID)
 	{
-		
+		groupID1=gID;
 		api.perform(api.context().create().setName("p2p").add(teamchatUserEmail).post(new PrimaryChatlet().setQuestion("Successfully Authenticated with GoToMeeting.")));
-		api.perform(api
+		/*api.perform(api
 				.context()
 				.create().setName("p2p").add(teamchatUserEmail)
 				.post(new PrimaryChatlet().setQuestion("What do you want to do? ")
 						.setReplyScreen(api.objects().form().addField(api.objects().select().label("Functions").name("functions").addOption("Instant Meeting").addOption("View All Previous Meetings").addOption("View Meetings by ID").addOption("Schedule a Meeting"))).alias("functions")));
-
+		 */
+		api.perform(api
+				.context()
+				.byId(gID).post(new PrimaryChatlet().setQuestion("What do you want to do? ")
+						.setReplyScreen(api.objects().form().addField(api.objects().select().label("Functions").name("functions").addOption("Instant Meeting").addOption("View All Previous Meetings").addOption("View Meetings by ID").addOption("Schedule a Meeting"))).alias("functions")));
 	}
 	
 	public void instantMeeting(TeamchatAPI api,String accTok,String groupID) throws ClientProtocolException, IOException, JSONException, URISyntaxException

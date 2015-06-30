@@ -8,8 +8,8 @@ public class GetProperties
 	String url = "jdbc:mysql://localhost:3306/"; 
 	String dbName = "Bot"; 
 	String driver = "com.mysql.jdbc.Driver"; 
-	String userName = "tcinterns"; 
-	String password = "PakyovBosh7";
+	String userName = "prakhar"; 
+	String password = "prakhar";
 	
 	public boolean getDB(String userEmail){
 		boolean flag=false;
