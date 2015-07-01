@@ -1,6 +1,8 @@
 package com.teamchat.integrations.evernote;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -13,6 +15,9 @@ import org.scribe.model.Token;
 import org.scribe.oauth.OAuthService;
 
 import com.evernote.auth.EvernoteService;
+import com.evernote.edam.error.EDAMSystemException;
+import com.evernote.edam.error.EDAMUserException;
+import com.evernote.thrift.TException;
 
 /**
  * Servlet implementation class EverNoteServlet
@@ -20,51 +25,66 @@ import com.evernote.auth.EvernoteService;
 @WebServlet("/EverNoteServlet")
 public class EverNoteServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	static final String consumerKey="botbegins";
-	static final String consumerSecret="1344399f32a08272";
-	static final EvernoteService EVERNOTE_SERVICE = EvernoteService.PRODUCTION;
-	public String authUrl="";
-	public OAuthService service;
-	public Token requestTokenObject;
-  
+	String consumerKey = PropertiesFile.getValue("consumer_key");
+	String consumerSecret = PropertiesFile.getValue("consumer_secret");
+	EvernoteService EVERNOTE_SERVICE = EvernoteService.PRODUCTION;
+	String callbackURL = PropertiesFile.getValue("callback_servlet_url");
+
 	public void init() {
-        // TODO Auto-generated constructor stub
-    }
-
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
-
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		Class<? extends EvernoteApi> providerClass = EvernoteApi.class;
-        if (EVERNOTE_SERVICE == com.evernote.auth.EvernoteService.PRODUCTION) {
-          providerClass = org.scribe.builder.api.EvernoteApi.class;
-        }
-		EverNoteConnect.temp=request.getParameter("name");
-        String callbackURL="http://interns.teamchat.com:8081/EverNote/Sample";
-        service = new ServiceBuilder()
-        										.provider(providerClass)
-        										.apiKey(consumerKey)
-        										.apiSecret(consumerSecret)
-        										.callback(callbackURL)
-        										.build();
-		requestTokenObject = service.getRequestToken();
-		
-		authUrl = EVERNOTE_SERVICE.getAuthorizationUrl(requestTokenObject.getToken());
-		
-		EverNoteVerf.authUrl=authUrl;
-		EverNoteVerf.requestTokenObject=requestTokenObject;
-		EverNoteVerf.service=service;
-	    response.sendRedirect(response.encodeRedirectURL(authUrl));
+		// TODO Auto-generated constructor stub
 	}
+
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+	protected void doGet(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		if (request.getParameter("name") != null) {
+			Class<? extends EvernoteApi> providerClass = EvernoteApi.class;
+			if (EVERNOTE_SERVICE == com.evernote.auth.EvernoteService.PRODUCTION) {
+				providerClass = org.scribe.builder.api.EvernoteApi.class;
+			}
+
+			String mail = request.getParameter("name");
+			String room_id = request.getParameter("room_id");
+			String state = mail + "," + room_id;
+			EverNoteVerf.mail = mail;
+			EverNoteVerf.room_id = room_id;
+			OAuthService service = new ServiceBuilder().provider(providerClass)
+					.apiKey(consumerKey).apiSecret(consumerSecret)
+					.callback(callbackURL).build();
+			Token requestTokenObject = service.getRequestToken();
+
+			String authUrl = EVERNOTE_SERVICE
+					.getAuthorizationUrl(requestTokenObject.getToken());
+			EverNoteVerf.service = service;
+			EverNoteVerf.requestTokenObject = requestTokenObject;
+
+			System.out.println("Details are : "+authUrl+"&state="+state);
+			response.sendRedirect(response.encodeRedirectURL(authUrl+"&state="+state));
+		} else {
+			EverNoteVerf env = new EverNoteVerf();
+			String state=request.getParameter("state");
+			System.out.println("**************");
+			System.out.println("Details are : "+state);
+			env.getverf(request.getParameter("oauth_verifier"));
+			PrintWriter writer = response.getWriter();
+			writer.print("Connected successfully. Now you can access your EverNote from your Teamchat");
+		}
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doPost(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 	}
-	public void destroy(){
-		
+
+	public void destroy() {
+
 	}
 }

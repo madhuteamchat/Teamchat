@@ -8,23 +8,18 @@
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/commons-codec-1.10-javadoc.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/commons-codec-1.10-sources.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/commons-codec-1.10-test-sources.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/commons-codec-1.10-tests.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/commons-codec-1.10.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/jsp-api.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/mysql-connector-java-5.1.27.jar"/>
-	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/teamchat-client-sdk.1.4.jar"/>
 	<classpathentry kind="lib" path="/home/intern9/Downloads/apache-tomcat-7.0.62/lib/servlet-api.jar"/>
 	<classpathentry kind="lib" path="lib/servlet-api.jar"/>
-	<classpathentry kind="lib" path="lib/teamchat-client-sdk.1.4.jar"/>
-	<classpathentry kind="lib" path="lib/mysql-connector-java-5.1.27.jar"/>
 	<classpathentry kind="lib" path="lib/commons-codec-1.10-javadoc.jar"/>
 	<classpathentry kind="lib" path="lib/commons-codec-1.10-sources.jar"/>
 	<classpathentry kind="lib" path="lib/commons-codec-1.10-test-sources.jar"/>
 	<classpathentry kind="lib" path="lib/commons-codec-1.10-tests.jar"/>
 	<classpathentry kind="lib" path="lib/commons-codec-1.10.jar"/>
 	<classpathentry kind="lib" path="lib/jsp-api.jar"/>
+	<classpathentry kind="lib" path="lib/teamchat-client-sdk.1.4.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
