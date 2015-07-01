@@ -6,6 +6,7 @@ import com.evernote.edam.error.EDAMUserException;
 import com.evernote.edam.type.Notebook;
 import com.evernote.thrift.TException;
 import com.teamchat.client.sdk.TeamchatAPI;
+import com.teamchat.client.sdk.chatlets.PrimaryChatlet;
 import com.teamchat.client.sdk.chatlets.TextChatlet;
 
 public class CreateNoteBook {
@@ -18,7 +19,7 @@ public class CreateNoteBook {
 			api.perform(api.context().currentRoom().post(new TextChatlet("NoteBook created")));
 		} catch (EDAMUserException e) {
 			// TODO Auto-generated catch block
-			api.perform(api.context().currentRoom().post(new TextChatlet("NoteBook with name "+nbName+" already exists.\nTry different name.")));
+			api.perform(api.context().currentRoom().post(new PrimaryChatlet().setQuestionHtml("NoteBook with name "+nbName+" already exists.\nTry different name.")));
 			e.printStackTrace();
 		}		
 		}

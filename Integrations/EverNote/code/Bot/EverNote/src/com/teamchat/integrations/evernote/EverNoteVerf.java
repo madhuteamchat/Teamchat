@@ -16,7 +16,7 @@ public class EverNoteVerf {
 	public static String authUrl="";
 	public static OAuthService service;
 	public static Token requestTokenObject;
-	static final EvernoteService EVERNOTE_SERVICE = EvernoteService.SANDBOX;
+	static final EvernoteService EVERNOTE_SERVICE = EvernoteService.PRODUCTION;
 	
 	
 	public void getverf(String ver) throws EDAMUserException, EDAMSystemException, TException, IOException{
@@ -25,5 +25,4 @@ public class EverNoteVerf {
 		Token accessToken = service.getAccessToken(requestTokenObject, verifier);
 	    new EverNoteConnect().getStarted(accessToken);
 	}
-	
 }

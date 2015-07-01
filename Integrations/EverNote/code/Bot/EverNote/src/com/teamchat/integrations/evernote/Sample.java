@@ -1,6 +1,7 @@
 package com.teamchat.integrations.evernote;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -41,6 +42,8 @@ public class Sample extends HttpServlet {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+		PrintWriter writer=response.getWriter();
+		writer.print("Connected successfully. Now you can access your EverNote from your Teamchat");
 	}
 
 	/**

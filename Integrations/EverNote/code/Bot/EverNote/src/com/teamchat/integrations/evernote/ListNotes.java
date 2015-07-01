@@ -21,6 +21,7 @@ import com.evernote.edam.type.NoteSortOrder;
 import com.evernote.edam.type.Notebook;
 import com.evernote.thrift.TException;
 import com.teamchat.client.sdk.TeamchatAPI;
+import com.teamchat.client.sdk.chatlets.PrimaryChatlet;
 import com.teamchat.client.sdk.chatlets.TextChatlet;
 
 public class ListNotes {
@@ -44,7 +45,7 @@ public class ListNotes {
 	      print=print+"----Notes present in "+notebook.getName()+" has been shown successfully.----<br><br>";
 	    }
 	    if(print.length()>0){
-	    	api.perform(api.context().currentRoom().post(new TextChatlet(print)));
+	    	api.perform(api.context().currentRoom().post(new PrimaryChatlet().setQuestionHtml(print)));
 	    }
 	    else{
 	    	api.perform(api.context().currentRoom().post(new TextChatlet("Nothing to show. Your NoteStore is empty!")));

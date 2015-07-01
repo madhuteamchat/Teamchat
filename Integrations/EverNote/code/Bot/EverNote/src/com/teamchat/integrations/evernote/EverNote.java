@@ -24,8 +24,6 @@ import com.evernote.edam.notestore.NoteList;
 import com.evernote.edam.type.Note;
 import com.evernote.edam.type.NoteSortOrder;
 import com.evernote.edam.type.Notebook;
-import com.evernote.edam.type.SharedNotebook;
-import com.evernote.edam.type.SharedNotebookPrivilegeLevel;
 import com.evernote.thrift.TException;
 import com.teamchat.client.annotations.OnAlias;
 import com.teamchat.client.annotations.OnKeyword;
@@ -33,79 +31,95 @@ import com.teamchat.client.sdk.Field;
 import com.teamchat.client.sdk.TeamchatAPI;
 import com.teamchat.client.sdk.chatlets.PrimaryChatlet;
 import com.teamchat.client.sdk.chatlets.TextChatlet;
-import com.teamchat.client.sdk.impl.TeamchatAPIImpl;
 
 public class EverNote {
 		
 	static final String consumerKey="botbegins";
 	static final String consumerSecret="1344399f32a08272";
-	static final EvernoteService EVERNOTE_SERVICE = EvernoteService.SANDBOX;
-	public static NoteStoreClient noteStore;
-	public static UserStoreClient userStore;
+	static final EvernoteService EVERNOTE_SERVICE = EvernoteService.PRODUCTION;
+	public NoteStoreClient noteStore;
+	public UserStoreClient userStore;
+	String token;
 	String nbGuidArray[]=null,nbArray[]=null,nArray[]=null,nGuidArray[]=null,nBook,noteName;
 	private String task;
-	TeamchatAPI api;
-	
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		TeamchatAPI api = TeamchatAPIImpl.fromFile("teamchat.data")
-				.setEmail("botbegins@gmail.com")  //change to your teamchat registered email id
-				.setPassword("botbeginsit"); //change to your teamchat password
-				api.startReceivingEvents(new EverNote()); //Wait for other user to send message
-	}
+	public TeamchatAPI api;
 	
 	@OnKeyword("help")
 	public void help(TeamchatAPI api){
 		String print= "Type \"connect\" to connect your Evernote.<br>Type \"myevernote\" to start your EverNote and select the task you need.<br>Type \"disconnect\" to disconnect your evernote";
-		api.perform(api.context().currentRoom().post(new TextChatlet(print)));
+		api.perform(api.context().currentRoom().post(new PrimaryChatlet().setQuestionHtml(print)));
 	}
 	
-	@OnKeyword("connect")
-	public void connect(TeamchatAPI api) throws EDAMUserException, EDAMSystemException, TException, IOException{
-		String mail=api.context().currentSender().getEmail();
-		String temp=null;
-		temp=PropertyFile.getProperty(mail);
-		if(temp == null){
-			String print= "<a href=\"http://localhost:8080/EverNote/EverNoteServlet?name="+mail+"\" target=\"_blank\">Login to EverNote</a>";
-			api.perform(api.context().currentRoom().post(new TextChatlet(print)));
-			while(temp != null){
-				temp=PropertyFile.getProperty(mail);
-				}
-			
-		}
-		EvernoteAuth evernoteAuth = new EvernoteAuth(EvernoteService.SANDBOX, temp);
-		ClientFactory factory = new ClientFactory(evernoteAuth);
-		userStore = factory.createUserStoreClient();
-		noteStore = factory.createNoteStoreClient();
-		boolean versionOk = userStore.checkVersion("Evernote Evernotebot (Java)",
-			       com.evernote.edam.userstore.Constants.EDAM_VERSION_MAJOR,
-			       com.evernote.edam.userstore.Constants.EDAM_VERSION_MINOR);
-		if (!versionOk) {
+	public NoteStoreClient create(TeamchatAPI api,String mail,String temp) throws TException, EDAMUserException, EDAMSystemException{
+		if(temp!=null){
+				try{
+					EvernoteAuth evernoteAuth = new EvernoteAuth(EvernoteService.PRODUCTION, temp);
+					ClientFactory factory = new ClientFactory(evernoteAuth);
+					userStore = factory.createUserStoreClient();
+					noteStore = factory.createNoteStoreClient();
+					boolean versionOk = userStore.checkVersion("Evernote Evernotebot (Java)",
+					com.evernote.edam.userstore.Constants.EDAM_VERSION_MAJOR,
+					com.evernote.edam.userstore.Constants.EDAM_VERSION_MINOR);
+					if (!versionOk) {
 				      System.err.println("Incompatible Evernote client protocol version");
 				      System.err.println("Incompatible Evernote client protocol version");
-						
 				      System.exit(1);
+				    }
+				}
+				catch(Exception e){
+					String print= "<a href=\"http://interns.teamchat.com:8081/EverNote/EverNoteServlet?name="+mail+"\" target=\"_blank\">Login to EverNote</a>";
+					api.perform(api.context().currentRoom().post(new PrimaryChatlet().setQuestionHtml(print)));
+					
+				}
+				return noteStore;
 		}
-		api.perform(api.context().currentRoom().post(new TextChatlet("Connected...")));
+		else {
+			api.perform(api.context().currentRoom().post(new TextChatlet("Not connected. Try again.")));
+		return null;
+		}
+	}
+	@OnKeyword("connect")
+	public void connect(TeamchatAPI api) throws IOException, TException, EDAMUserException, EDAMSystemException{
+		String mail=api.context().currentSender().getEmail();
+		token=ManageDB.retrieve(mail);
+		if(token == null){
+			String print= "<a href=\"http://interns.teamchat.com:8081/EverNote/EverNoteServlet?name="+mail+"\" target=\"_blank\">Login to EverNote</a>";
+			api.perform(api.context().currentRoom().post(new PrimaryChatlet().setQuestionHtml(print)));
+			while(token == null)
+			{
+				 try
+				 {  
+					token=ManageDB.retrieve(mail);
+					
+				 }catch(Exception e)
+				 {
+					 
+				 }
+			}
+			noteStore = create(api,mail,token);
+			api.perform(api.context().currentRoom().post(new TextChatlet("Connected...")));	
+		}
+		else{
+			api.perform(api.context().currentRoom().post(new TextChatlet("Connected...")));
+		}
 	}
 	
 	@OnKeyword("disconnect")
 	public void disconnect(TeamchatAPI api) throws FileNotFoundException{
 		String mail=api.context().currentSender().getEmail();
-		PropertyFile.remove(mail);
+		ManageDB.remove(mail);
 		api.perform(api.context().currentRoom().post(new TextChatlet("Disconnected...")));
 	}
 		
 	@OnKeyword("myevernote")
 	public void myEverNote(TeamchatAPI api) throws EDAMUserException, EDAMSystemException, TException, EDAMNotFoundException, IOException{
 		String mail=api.context().currentSender().getEmail();
-		String temp=null;
-		temp=PropertyFile.getProperty(mail);
-		if(temp == null){
-			api.perform(api.context().currentRoom().post(new TextChatlet("Connect to access your Evernote")));
+		token=ManageDB.retrieve(mail);
+		if(token == null){
+			api.perform(api.context().currentRoom().post(new TextChatlet("connect to access your Evernote")));
 		}
 		else{
-			new AddReminders(api,noteStore);
+			noteStore=create(api,mail,token);
 			api.perform(api.context().currentRoom().post(
 				new PrimaryChatlet()
 				.setQuestion("Select your task")
@@ -120,8 +134,7 @@ public class EverNote {
 				.addOption("Search Notes")
 				.addOption("List Reminders")
 				.addOption("Edit Note")
-				.addOption("Share NoteBook")
-				)
+				.addOption("Add Reminders to Teamchat"))
 				)
 				.alias("taskToDo")
 				));
@@ -130,39 +143,10 @@ public class EverNote {
 	@OnAlias("taskToDo")
 	public void taskToDo(TeamchatAPI api){
 		task=(api.context().currentReply().getField("task"));
-		try {			
-			if(task.equals("Share NoteBook")){
-				String nb="";
-		    	String nbGuid="";
-		    	List<Notebook> notebooks = noteStore.listNotebooks();
-		    	if(notebooks.size()<1){
-		    		api.perform(api.context().currentRoom().post(new TextChatlet("No Notebooks to edit")));
-		    	}
-		    	else
-		    	{
-		    		for (Notebook notebook : notebooks) {
-		    			nb=nb+":"+notebook.getName();
-		    			nbGuid=nbGuid+":"+notebook.getGuid();
-		    		}
-		    		nb=nb.substring(1);
-		    		nbGuid=nbGuid.substring(1);
-		    		nbArray=nb.split(":");
-		    		nbGuidArray=nbGuid.split(":");
-		    		String label1="Notebook";
-		    		String name1="notebook";
-		    		api.perform(
-		    				api.context().currentRoom().post(
-		    						new PrimaryChatlet()
-		    						.setQuestion("Select the NoteBook to share.")
-		    						.setReplyScreen
-		    						(
-		    								api.objects().form()
-		    								.addField(getOptions(api,label1,name1,nbArray))
-		    								.addField(api.objects().input().label("E-mail").name("mailid"))
-		    						)
-		    						.alias("share")
-					));
-			}
+		try {
+			if(task.equals("Add Reminders to Teamchat")){
+				new AddReminders(api,noteStore);
+				api.perform(api.context().currentRoom().post(new TextChatlet("Raminders added to Teamchat Successfully.")));
 			}
 			else if(task.equals("List NoteBooks")){
 				String nb="";
@@ -174,7 +158,7 @@ public class EverNote {
 		    			//i++;
 		    		}
 		    		nb=nb+"</ol>";
-		    		api.perform(api.context().currentRoom().post(new TextChatlet(nb)));
+		    		api.perform(api.context().currentRoom().post(new PrimaryChatlet().setQuestionHtml(nb)));
 		    	}
 		    	else{
 		    		api.perform(api.context().currentRoom().post(new TextChatlet("No Notebooks to show.")));
@@ -202,7 +186,7 @@ public class EverNote {
 		    		api.perform(
 		    				api.context().currentRoom().post(
 		    						new PrimaryChatlet()
-		    						.setQuestion("Select the NoteBook")
+		    						.setQuestionHtml("Select the NoteBook")
 		    						.setReplyScreen
 		    						(
 		    								api.objects().form()
@@ -218,7 +202,7 @@ public class EverNote {
 			else if(task.equals("Create NoteBook")){
 				api.perform(api.context().currentRoom().post(
 					  new PrimaryChatlet()
-					  .setQuestion("Enter the name of the notebook")
+					  .setQuestionHtml("Enter the name of the notebook")
 					  .setReplyScreen(api.objects().form()
 							  .addField(api.objects().input().label("NoteBook Name").name("nbname")))
 							  .alias("notebook")));
@@ -244,7 +228,7 @@ public class EverNote {
 		    	api.perform(
 						api.context().currentRoom().post(
 						new PrimaryChatlet()
-						.setQuestion("Fill the details to create note")
+						.setQuestionHtml("Fill the details to create note")
 						.setReplyScreen
 						(
 						api.objects().form()
@@ -264,7 +248,7 @@ public class EverNote {
 		    	api.perform(
 						api.context().currentRoom().post(
 						new PrimaryChatlet()
-						.setQuestion("Enter the keyword to search. To search in tags append \"tag:\" before your keyword.")
+						.setQuestionHtml("Enter the keyword to search. <br>To search in tags append \"tag:\" before your keyword.")
 						.setReplyScreen
 						(
 						api.objects().form()
@@ -276,32 +260,13 @@ public class EverNote {
 		    else{
 		    	api.perform(api.context().currentRoom().post(new TextChatlet("Please select a valid option.")));
 		    }
-		 }//try
+		 }
 		 catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 	}
-	@OnAlias("share")
-	public void shareNoteBook(TeamchatAPI api) throws EDAMUserException, EDAMSystemException, TException, EDAMNotFoundException{
-		nBook=api.context().currentReply().getField("notebook");
-		String mailId=api.context().currentReply().getField("mailid");
-		SharedNotebook sharedNotebook = new SharedNotebook();
-		String mail[]=mailId.split(",");
-		List<Notebook> notebooks = noteStore.listNotebooks();
-		for (Notebook notebook : notebooks) {
-			if(notebook.getName().equals(nBook)){
-				sharedNotebook.setNotebookGuid(notebook.getGuid());
-				sharedNotebook.setAllowPreview(true);
-				sharedNotebook.setPrivilege(SharedNotebookPrivilegeLevel.MODIFY_NOTEBOOK_PLUS_ACTIVITY);
-				for(int i=0;i<mail.length;i++){
-					sharedNotebook.setEmail(mail[i]);
-				}
-				sharedNotebook = noteStore.createSharedNotebook(sharedNotebook); 
-				}
-			break;
-		}
-	}
+	
 	@OnAlias("edit")
 	public void selectNoteToEdit(TeamchatAPI api) throws EDAMUserException, EDAMSystemException, EDAMNotFoundException, TException{
 		nBook=api.context().currentReply().getField("notebook");
@@ -328,7 +293,7 @@ public class EverNote {
 	    			api.perform(
 	    				api.context().currentRoom().post(
 	    				new PrimaryChatlet()
-	    				.setQuestion("Select the note to be modified")
+	    				.setQuestionHtml("Select the note to be modified")
 	    				.setReplyScreen
 	    				(
 	    						api.objects().form()
@@ -375,7 +340,7 @@ public class EverNote {
 			  api.perform(
 						api.context().currentRoom().post(
 						new PrimaryChatlet()
-						.setQuestion(print)
+						.setQuestionHtml(print)
 						.setReplyScreen
 						(
 						api.objects().form()
@@ -394,20 +359,14 @@ public class EverNote {
 	}
 	@OnAlias("edit2")
 	public void editNote(TeamchatAPI api) throws EDAMUserException, EDAMSystemException, EDAMNotFoundException, TException{
-		String content=api.context().currentReply().getField("content");
+		String newContent=api.context().currentReply().getField("content");
 		String nbGuid = null;
-		String tag="";
-		String newNoteGuid;
 		for(int i=0;i<nbArray.length;i++){
 			if(nBook.equals(nbArray[i])){
 				nbGuid=nbGuidArray[i];
 			}
 		}
-		Note createdNote=NoteContent.add(api,nbGuid,noteName,content,tag,noteStore);
-		newNoteGuid = createdNote.getGuid();
-	    if(!newNoteGuid.isEmpty()){
-	    	api.perform(api.context().currentRoom().post(new TextChatlet("Your Note has been edited successfully")));
-		}
+		NoteContent.edit(api,nbGuid,noteName,newContent,noteStore);
 	}
 	private void listReminders(TeamchatAPI api) throws EDAMUserException, EDAMSystemException, TException, EDAMNotFoundException{
 		// TODO Auto-generated method stub
@@ -435,7 +394,7 @@ public class EverNote {
 		    }
 		}
 		if(print.length()>0){
-			api.perform(api.context().currentRoom().post(new TextChatlet(print)));
+			api.perform(api.context().currentRoom().post(new PrimaryChatlet().setQuestionHtml(print)));
 		}
 		else{
 			api.perform(api.context().currentRoom().post(new TextChatlet("No reminders to display.")));

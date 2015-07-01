@@ -22,7 +22,7 @@ public class EverNoteServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	static final String consumerKey="botbegins";
 	static final String consumerSecret="1344399f32a08272";
-	static final EvernoteService EVERNOTE_SERVICE = EvernoteService.SANDBOX;
+	static final EvernoteService EVERNOTE_SERVICE = EvernoteService.PRODUCTION;
 	public String authUrl="";
 	public OAuthService service;
 	public Token requestTokenObject;
@@ -37,24 +37,21 @@ public class EverNoteServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		Class<? extends EvernoteApi> providerClass = EvernoteApi.Sandbox.class;
+		Class<? extends EvernoteApi> providerClass = EvernoteApi.class;
         if (EVERNOTE_SERVICE == com.evernote.auth.EvernoteService.PRODUCTION) {
           providerClass = org.scribe.builder.api.EvernoteApi.class;
         }
 		EverNoteConnect.temp=request.getParameter("name");
-        String callbackURL="http://localhost:8080/EverNote/Sample";
+        String callbackURL="http://interns.teamchat.com:8081/EverNote/Sample";
         service = new ServiceBuilder()
         										.provider(providerClass)
         										.apiKey(consumerKey)
         										.apiSecret(consumerSecret)
         										.callback(callbackURL)
         										.build();
-		System.out.println("Fetching the Request Token...");
 		requestTokenObject = service.getRequestToken();
 		
-		System.out.println("Fetching the Authorization URL...");
 		authUrl = EVERNOTE_SERVICE.getAuthorizationUrl(requestTokenObject.getToken());
-		System.out.println("Auth url is : "+authUrl);
 		
 		EverNoteVerf.authUrl=authUrl;
 		EverNoteVerf.requestTokenObject=requestTokenObject;

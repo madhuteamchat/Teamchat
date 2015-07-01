@@ -17,6 +17,7 @@ import com.evernote.edam.type.Note;
 import com.evernote.edam.type.NoteSortOrder;
 import com.evernote.thrift.TException;
 import com.teamchat.client.sdk.TeamchatAPI;
+import com.teamchat.client.sdk.chatlets.PrimaryChatlet;
 import com.teamchat.client.sdk.chatlets.TextChatlet;
 
 public class SearchNotes{
@@ -36,7 +37,7 @@ public class SearchNotes{
 
 		    NoteList notes = noteStore.findNotes(filter, 0, 200);
 		    if(notes.getTotalNotes()==0){
-		    	api.perform(api.context().currentRoom().post(new TextChatlet("No results to show for the query : "+query)));
+		    	api.perform(api.context().currentRoom().post(new PrimaryChatlet().setQuestionHtml("No results to show for the query : "+query)));
 		    }
 		    else{
 		    print=print+"No.of matchings found : " + notes.getTotalNotes()+"<br>";
@@ -46,7 +47,7 @@ public class SearchNotes{
 		      Note fullNote = noteStore.getNote(note.getGuid(), true, true, false,false);
 		      print=print+"Title of the Note : "+fullNote.getTitle()+"<br> Content in the Note is : " +NoteContent.extract(fullNote)+"<br><br>";
 		    }//while
-		    api.perform(api.context().currentRoom().post(new TextChatlet(print)));
+		    api.perform(api.context().currentRoom().post(new PrimaryChatlet().setQuestionHtml(print)));
 		    }
 	    }
 		else{
