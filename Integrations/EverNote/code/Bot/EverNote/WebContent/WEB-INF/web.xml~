@@ -41,7 +41,7 @@
 	</context-param>
 	<context-param>
 		<param-name>db-password</param-name>
-		<param-value>*********</param-value>
+		<param-value>PakyovBosh7</param-value>
 	</context-param>
 <!-- 	<context-param>
 		<param-name>log-location</param-name>
