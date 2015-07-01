@@ -33,8 +33,10 @@ public class YoutubeBotServelet extends HttpServlet {
 	 */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+    	String rid=request.getParameter("rid");
     	client_id=request.getParameter("client_id");
     	client_secret=request.getParameter("client_secret");
+    	YoutubeConnect.rid=rid;
     	YoutubeConnect.client_id=client_id;
     	YoutubeConnect.client_secret=client_secret;
     	YoutubeConnect.uid=request.getParameter("name");

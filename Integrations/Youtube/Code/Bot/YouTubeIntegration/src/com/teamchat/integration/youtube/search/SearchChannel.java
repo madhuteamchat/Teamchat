@@ -65,8 +65,8 @@ public class SearchChannel {
 	        Thumbnail thumbnail = singleChannel.getSnippet().getThumbnails().get("default");
 	        res+="<div align=\"center\" ><br><h4> "+singleChannel.getSnippet().getTitle()+"</h4>";
 	        res+="<br> Channel Id : "+rId.getChannelId();
-	        res+="<br><img src=\""+thumbnail.getUrl()+"\" height=\"198\" width=\"198\" />";
-	        res+="<br><br></div>";
+//	        res+="<br><img src=\""+thumbnail.getUrl()+"\" height=\"198\" width=\"198\" />";
+	        res+="</div>";
 	        cTitle.add(singleChannel.getSnippet().getTitle());
 	        cId.add(rId.getChannelId());
 	      }

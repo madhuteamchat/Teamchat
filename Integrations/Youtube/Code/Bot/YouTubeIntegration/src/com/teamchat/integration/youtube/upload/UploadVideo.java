@@ -21,6 +21,7 @@ import com.google.api.services.youtube.YouTube;
 import com.google.api.services.youtube.model.Video;
 import com.google.api.services.youtube.model.VideoSnippet;
 import com.google.api.services.youtube.model.VideoStatus;
+import com.teamchat.integration.youtube.database.JDBCConnection;
 
 
 public class UploadVideo {
@@ -46,28 +47,30 @@ public class UploadVideo {
 	    // Scope required to upload to YouTube.
 	      // Authorization.
 //	      Credential credential = authorize(scopes);
-	    	 Properties props = new Properties();
-	    	    InputStream is = null;
+//	    	 Properties props = new Properties();
+//	    	    InputStream is = null;
 	    	 
 
-	    	    try {    // First try loading from the current directory
-	    	   
-	    	    File f = new File("uid.properties");
-	    	        is = new FileInputStream( f );  	  }
-	    catch ( Exception e ) { is = null; }
+//	    	    try {    // First try loading from the current directory
+//	    	   
+//	    	    File f = new File("uid.properties");
+//	    	        is = new FileInputStream( f );  	  }
+//	    catch ( Exception e ) { is = null; }
 	    
 	    try { 
-	    	        if(is==null)
-	    	        	return "You have to login";
+//	    	        if(is==null)
+//	    	        	return "You have to login";
 //	    	 is=getClass().getResourceAsStream(uid+".properties");
 	    	  
 	    	        // Try loading properties from the file (if found)
-	    	        props.load( is );
+//	    	        props.load( is );
+	    	JDBCConnection db=new JDBCConnection();
+			String[] gc=db.retreive(uid);
 	    	   
 	    	GoogleCredential credentials = new GoogleCredential.Builder()
 		      .setClientSecrets(client_id, client_secret)
 		      .setJsonFactory(JSON_FACTORY).setTransport(HTTP_TRANSPORT).build()
-		      .setRefreshToken(props.getProperty(uid));
+		      .setRefreshToken(gc[1]).setAccessToken(gc[0]);
 
 	      // YouTube object used to make all API requests.
 	      youtube = new YouTube.Builder(HTTP_TRANSPORT, JSON_FACTORY, credentials).setApplicationName(

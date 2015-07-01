@@ -1,13 +1,9 @@
 package com.teamchat.integration.youtube.upload;
 
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Properties;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
@@ -20,6 +16,7 @@ import com.google.api.services.youtube.model.Channel;
 import com.google.api.services.youtube.model.ChannelListResponse;
 import com.google.api.services.youtube.model.PlaylistItem;
 import com.google.api.services.youtube.model.PlaylistItemListResponse;
+import com.teamchat.integration.youtube.database.JDBCConnection;
 
 public class MyUploads {
 	  private HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
@@ -41,28 +38,29 @@ public class MyUploads {
 
 	      // Authorization.
 //	      Credential credential = authorize(scopes);
-	    	 Properties props = new Properties();
-	    	    InputStream is = null;
+//	    	 Properties props = new Properties();
+//	    	    InputStream is = null;
 	    	 
 
-	    	    try {    // First try loading from the current directory
+	    	    /*try {    // First try loading from the current directory
 	    	   
 	    	    File f = new File("uid.properties");
 	    	        is = new FileInputStream( f );  	  }
-	    catch ( Exception e ) { is = null; }
+	    catch ( Exception e ) { is = null; }*/
 	    
 	    try { 
-	    	        if(is==null)
-	    	        	return "You have to login";
+//	    	        if(is==null)
+//	    	        	return "You have to login";
 //	    	 is=getClass().getResourceAsStream(uid+".properties");
 	    	  
 	    	        // Try loading properties from the file (if found)
-	    	        props.load( is );
-	    	        System.out.println("myuploads....."+props.getProperty(uid));
+//	    	        props.load( is );
+	    	JDBCConnection db=new JDBCConnection();
+			String[] gc=db.retreive(uid);
 	    	GoogleCredential credentials = new GoogleCredential.Builder()
 		      .setClientSecrets(client_id, client_secret)
 		      .setJsonFactory(JSON_FACTORY).setTransport(HTTP_TRANSPORT).build()
-		      .setRefreshToken(props.getProperty(uid));
+		      .setRefreshToken(gc[1]).setAccessToken(gc[0]);
 	      
 	      // YouTube object used to make all API requests.
 	      youtube = new YouTube.Builder(HTTP_TRANSPORT, JSON_FACTORY, credentials).setApplicationName(

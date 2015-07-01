@@ -17,10 +17,12 @@ import com.teamchat.client.sdk.chatlets.PrimaryChatlet;
 import com.teamchat.client.sdk.chatlets.TextChatlet;
 import com.teamchat.integration.youtube.channelbulletin.ChannelBulletin;
 import com.teamchat.integration.youtube.connect.YoutubeConnect;
+import com.teamchat.integration.youtube.database.JDBCConnection;
 import com.teamchat.integration.youtube.playlist.PlaylistUpdates;
 import com.teamchat.integration.youtube.search.SearchByKeyword;
 import com.teamchat.integration.youtube.search.SearchByTopic;
 import com.teamchat.integration.youtube.search.SearchChannel;
+import com.teamchat.integration.youtube.servlet.TeamchatPost;
 import com.teamchat.integration.youtube.subscribe.AddSubscription;
 import com.teamchat.integration.youtube.upload.MyUploads;
 import com.teamchat.integration.youtube.upload.UploadVideo;
@@ -42,20 +44,23 @@ public class YouTubeBot {
 
 	
 // Help
-	@OnKeyword("youtubehelp")
+	@OnKeyword("help")
 	public void youtubeHelp(TeamchatAPI api) {
 		
-		api.perform(api.context().currentRoom().post( 
-				new TextChatlet("<br><div align=\"center\">Youtube Help</div>"
-						+"<br>searchbykeyword &nbsp; - &nbsp; To search videos related to the keyword"
-						+"<br>searchbytopic &nbsp; - &nbsp; To search videos under a category"
-						+"<br>searchchannel &nbsp; - &nbsp; To search channel related to the keyword"
-						+"<br>subscribechannel &nbsp; - &nbsp; To subscribe a channel using channel id"
-						+"<br>channelbulletin &nbsp; - &nbsp; To post a video in your channel by providing video id"
-						+"<br>createplaylist &nbsp; - &nbsp; To ceate a playlist by providing video id"
-						+"<br>uploadvideo &nbsp; - &nbsp; To upload a video into your channel by providing the location"
-						+"<br>myuploads &nbsp; - &nbsp; Reterive the details of the video uploaded by you"
-						)));
+		api.perform(api.context().currentRoom().post(new PrimaryChatlet()
+		.setQuestionHtml("<div align=\"center\">Youtube Help</div>"
+		+"Hey! I am <b>YouTube bot</b>. You can upload video, search videos, subscribe channels, create playlist and post videos in your channel."
+		+"<br>Type <b>connectyoutube</b> "
+		+ "to connect to your Youtube account."
+		+"<br>Type <b>disconnectyoutube</b> to sign out your youtube account"
+		+"<br>Type <b>searchbykeyword</b> to search videos related to the keyword"
+		+"<br>Type <b>searchbytopic</b> to search videos under a category"
+		+"<br>Type <b>searchchannel</b> to search channel related to the keyword"
+		+"<br>Type <b>subscribechannel</b> to subscribe a channel using channel id"
+		+"<br>Type <b>channelbulletin</b> to post a video in your channel by providing video id"
+		+"<br>Type <b>createplaylist</b> to ceate a playlist by providing video id"
+		+"<br>Type <b>uploadvideo</b> to upload a video into your channel by providing the location"
+		+"<br>Type <b>myuploads</b> to reterive the details of the video uploaded by you")));
 		
 	}
 
@@ -66,10 +71,16 @@ public class YouTubeBot {
 			String sname=api.context().currentSender().getEmail();
 			sname=sname.replace('@', '_');
 			sname=sname.replace('.', '_');
-//			YoutubeConnect ytc=new YoutubeConnect();
-//			ytc.youtubeLogin(api.context().currentSender().getEmail());
-//			api.perform(api.context().currentRoom().post( new TextChatlet("Successfully, Connected to your Youtube account.")));
-			api.perform(api.context().currentRoom().post( new TextChatlet("<a href=\"http://interns.teamchat.com:8080/YouTubeIntegration/YoutubeBotServelet?client_id="+client_id+"&client_secret="+client_secret+"&name="+sname+"\" target=\"_blank\"> Login</a>")));
+			JDBCConnection db=new JDBCConnection();
+			String[] gc=db.retreive(sname);
+			TeamchatPost.tpapi=api;
+			String rid=api.context().currentRoom().getId();
+			if(gc[1].equals("refresh_token"))
+				api.perform(api.context().currentRoom().post(new PrimaryChatlet()
+				.setQuestionHtml("<a href=\"http://interns.teamchat.com:8080/YouTubeIntegration/YoutubeBotServelet?rid="+rid+"&client_id="+client_id+"&client_secret="+client_secret+"&name="+sname+"\" target=\"_blank\"> Click here to login youtube</a>")));
+			else
+				api.perform(api.context().currentRoom().post( new PrimaryChatlet()
+				.setQuestionHtml("You are already connected with Youtube.")));
 		}
 		
 // Youtube Disconnect
@@ -81,7 +92,8 @@ public class YouTubeBot {
 				sname=sname.replace('.', '_');
 				YoutubeConnect ytc=new YoutubeConnect();
 				ytc.youtubeLogout(sname);
-				api.perform(api.context().currentRoom().post( new TextChatlet("Successfully, Disconnected from your Youtube account.")));
+				api.perform(api.context().currentRoom().post( new PrimaryChatlet()
+				.setQuestionHtml("Successfully, Disconnected from your Youtube account.")));
 				
 			}
 	
@@ -111,7 +123,8 @@ public class YouTubeBot {
 		String maxresult=rpl.getField("maxresult");
 		SearchByKeyword sbk=new SearchByKeyword();
 		try {
-			api.perform(api.context().currentRoom().post( new TextChatlet(sbk.searchByKeyword(apikey,keyword,Integer.parseInt(maxresult)))));
+			api.perform(api.context().currentRoom().post( new PrimaryChatlet()
+			.setQuestionHtml(sbk.searchByKeyword(apikey,keyword,Integer.parseInt(maxresult)))));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -145,7 +158,8 @@ public class YouTubeBot {
 			String cname=rpl.getField("cname");
 			SearchChannel sc=new SearchChannel();
 			try {
-				api.perform(api.context().currentRoom().post( new TextChatlet(sc.channelSearch(apikey,cname))));
+				api.perform(api.context().currentRoom().post(new PrimaryChatlet()
+				.setQuestionHtml(sc.channelSearch(apikey,cname))));
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -161,7 +175,7 @@ public class YouTubeBot {
 					api.context().currentRoom().post(
 					new PrimaryChatlet()
 				
-					.setQuestion("Enter the Topic")
+					.setQuestionHtml("Enter the Topic")
 					.setReplyScreen(api.objects().form()
 					.addField(api.objects().input().label("Topic").name("topic"))
 					)
@@ -181,13 +195,14 @@ public class YouTubeBot {
 				ArrayNode an=sbt.gettopics();
 				if(!sbt.checkNode.equals("empty"))
 				{
-					api.perform(api.context().currentRoom().post( new TextChatlet(sbt.checkNode)));
+					api.perform(api.context().currentRoom().post( new PrimaryChatlet()
+					.setQuestionHtml(sbt.checkNode)));
 				}
 				else
 				{
 					api.perform(api.context().currentRoom().post(
 						new PrimaryChatlet()
-						.setQuestion("Choose the Topic")
+						.setQuestionHtml("Choose the Topic")
 						.setReplyScreen(api.objects().form().addField(usrField(api, an)))
 						.alias("topicselected"))
 						);
@@ -221,12 +236,21 @@ public class YouTubeBot {
 		{
 			
 			Reply rpl=api.context().currentReply();
-			Integer choice=lan.indexOf(rpl.getField("choice"));
-			try {
-				api.perform(api.context().currentRoom().post( new TextChatlet(sbt.searchByTopic(choice.toString()))));
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			String ch="";
+			ch=rpl.getField("choice");
+			if(ch.length()<1)
+				api.perform(api.context().currentRoom().post( new PrimaryChatlet()
+				.setQuestionHtml("Try Again")));
+			else
+			{
+				Integer choice=lan.indexOf(ch);
+				try {
+					api.perform(api.context().currentRoom().post( new PrimaryChatlet()
+					.setQuestionHtml(sbt.searchByTopic(choice.toString()))));
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
 // Subscribe channel
@@ -235,8 +259,7 @@ public class YouTubeBot {
 		public void subscribeChannel(TeamchatAPI api) {
 			api.perform(
 					api.context().currentRoom().post(
-					new PrimaryChatlet()
-				
+					new PrimaryChatlet()				
 					.setQuestion("Enter the ChannelId or ChannelName")
 					.setReplyScreen(api.objects().form()
 					.addField(api.objects().input().label("ChannelId").name("channelId"))
@@ -251,7 +274,8 @@ public class YouTubeBot {
 		{
 			
 			Reply rpl=api.context().currentReply();
-			String chKeyword=rpl.getField("keyword");
+			String chKeyword="";
+			chKeyword=rpl.getField("keyword");
 			if(chKeyword.isEmpty())
 			{
 				String channelId=rpl.getField("channelId");
@@ -260,7 +284,8 @@ public class YouTubeBot {
 				sname=sname.replace('.', '_');
 				AddSubscription sub=new AddSubscription(client_id,client_secret);
 				try {
-						api.perform(api.context().currentRoom().post( new TextChatlet(sub.subscribe(channelId,sname))));
+						api.perform(api.context().currentRoom().post( new PrimaryChatlet()
+						.setQuestionHtml(sub.subscribe(channelId,sname))));
 				} catch (Exception e) {
 				// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -284,7 +309,8 @@ public class YouTubeBot {
 					}
 					else
 					{
-						api.perform(api.context().currentRoom().post( new TextChatlet(result)));
+						api.perform(api.context().currentRoom().post( new PrimaryChatlet()
+						.setQuestionHtml(result)));
 					}
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
@@ -312,15 +338,24 @@ public class YouTubeBot {
 			String sname=rpl.senderEmail();
 			sname=sname.replace('@', '_');
 			sname=sname.replace('.', '_');
-			String chChoice=URLDecoder.decode(rpl.getField("choice"));
-			String channelId=chId.get(chTitle.indexOf(chChoice));
-			AddSubscription sub=new AddSubscription(client_id,client_secret);
+			String ch="";
+			ch=rpl.getField("choice");
+			if(ch.length()<1)
+				api.perform(api.context().currentRoom().post(new PrimaryChatlet()
+				.setQuestionHtml("Try Again")));
+			else
+			{
+				String chChoice=URLDecoder.decode(rpl.getField("choice"));
+				String channelId=chId.get(chTitle.indexOf(chChoice));
+				AddSubscription sub=new AddSubscription(client_id,client_secret);
 				try {
-						api.perform(api.context().currentRoom().post( new TextChatlet(sub.subscribe(channelId,sname))));
+						api.perform(api.context().currentRoom().post(new PrimaryChatlet()
+						.setQuestionHtml(sub.subscribe(channelId,sname))));
 				} catch (Exception e) {
 				// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+			}
 		}
 		
 // Uploaded video
@@ -332,7 +367,8 @@ public class YouTubeBot {
 					sname=sname.replace('@', '_');
 					sname=sname.replace('.', '_');
 					try {
-						api.perform(api.context().currentRoom().post( new TextChatlet(mu.myUpload(sname))));
+						api.perform(api.context().currentRoom().post(new PrimaryChatlet()
+						.setQuestionHtml(mu.myUpload(sname))));
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -404,7 +440,8 @@ public class YouTubeBot {
 					}
 					PlaylistUpdates plu=new PlaylistUpdates(client_id,client_secret);
 					try {
-						api.perform(api.context().currentRoom().post( new TextChatlet(plu.updatePlaylist(pltitle, pldes,vno, vid,sname))));
+						api.perform(api.context().currentRoom().post( new PrimaryChatlet()
+						.setQuestionHtml(plu.updatePlaylist(pltitle, pldes,vno, vid,sname))));
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -442,7 +479,8 @@ public class YouTubeBot {
 					String description=rpl.getField("description");
 					ChannelBulletin cb=new ChannelBulletin(client_id,client_secret);
 					try {
-						api.perform(api.context().currentRoom().post( new TextChatlet(cb.postvideo(videoid,description,sname))));
+						api.perform(api.context().currentRoom().post(new PrimaryChatlet()
+						.setQuestionHtml(cb.postvideo(videoid,description,sname))));
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -453,19 +491,22 @@ public class YouTubeBot {
 				
 				@OnKeyword("uploadvideo")
 				public void uploadVideo(TeamchatAPI api) {
-					api.perform(
-							api.context().currentRoom().post(
-							new PrimaryChatlet()
-						
-							.setQuestion("Enter the Details")
-							.setReplyScreen(api.objects().form()
-							.addField(api.objects().input().label("Location (example : /home/user/video/samplevideo.mp4) ").name("location"))
-							.addField(api.objects().input().label("Video Title ").name("vtitle"))
-							.addField(api.objects().input().label("Description ").name("vdescription"))
-							.addField(api.objects().input().label("Tags(separated by \"-\")").name("vtags"))
-							)
-							.alias("getlocation")
-							));	
+//					api.perform(
+//							api.context().currentRoom().post(
+//							new PrimaryChatlet()
+//						
+//							.setQuestion("Enter the Details")
+//							.setReplyScreen(api.objects().form()
+//							.addField(api.objects().input().label("Location (example : /home/user/video/samplevideo.mp4) ").name("location"))
+//							.addField(api.objects().input().label("Video Title ").name("vtitle"))
+//							.addField(api.objects().input().label("Description ").name("vdescription"))
+//							.addField(api.objects().input().label("Tags(separated by \"-\")").name("vtags"))
+//							)
+//							.alias("getlocation")
+//							));	
+					api.perform(api.context().currentRoom().post(new PrimaryChatlet()
+								.setQuestionHtml("<a href=\"http://interns.teamchat.com:8080/YouTubeIntegration/index.html\" target=\"_blank\"> Upload</a>")
+								));
 				}
 				
 				@OnAlias("getlocation")
@@ -482,7 +523,8 @@ public class YouTubeBot {
 					String[] vtags=rpl.getField("vtags").split("-");
 					UploadVideo uv=new UploadVideo(client_id,client_secret);
 					try {
-						api.perform(api.context().currentRoom().post( new TextChatlet(uv.uploadVideo(location,vtitle,vdescription,vtags,sname))));
+						api.perform(api.context().currentRoom().post(new PrimaryChatlet()
+						.setQuestionHtml(uv.uploadVideo(location,vtitle,vdescription,vtags,sname))));
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();

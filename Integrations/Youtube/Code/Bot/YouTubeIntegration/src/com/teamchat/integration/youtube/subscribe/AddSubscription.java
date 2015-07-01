@@ -1,11 +1,7 @@
 package com.teamchat.integration.youtube.subscribe;
 
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
@@ -18,6 +14,7 @@ import com.google.api.services.youtube.model.ResourceId;
 import com.google.api.services.youtube.model.Subscription;
 import com.google.api.services.youtube.model.SubscriptionSnippet;
 import com.google.api.services.youtube.model.Thumbnail;
+import com.teamchat.integration.youtube.database.JDBCConnection;
 
 public class AddSubscription {
 	  private  HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
@@ -39,28 +36,31 @@ public class AddSubscription {
 
 	      // Authorization.
 //	      Credential credential = authorize(scopes);
-	    	 Properties props = new Properties();
-	    	    InputStream is = null;
+//	    	 Properties props = new Properties();
+//	    	    InputStream is = null;
 	    	 
 
-	    	    try {    // First try loading from the current directory
+	    	   /* try {    // First try loading from the current directory
 	    	   
 	    	    File f = new File("uid.properties");
 	    	        is = new FileInputStream( f );  	  }
-	    catch ( Exception e ) { is = null; }
+	    catch ( Exception e ) { is = null; }*/
 	    
 	    try { 
-	    	        if(is==null)
-	    	        	return "You have to login";	  
+//	    	        if(is==null)
+//	    	        	return "You have to login";	  
 //	    	 is=getClass().getResourceAsStream(uid+".properties");
 	    	  
 	    	        // Try loading properties from the file (if found)
-	    	        props.load( is );
+//	    	        props.load( is );
+	    	
+	    	JDBCConnection db=new JDBCConnection();
+			String[] gc=db.retreive(uid);
 	    	   
 	    	GoogleCredential credentials = new GoogleCredential.Builder()
 		      .setClientSecrets(client_id, client_secret)
 		      .setJsonFactory(JSON_FACTORY).setTransport(HTTP_TRANSPORT).build()
-		      .setRefreshToken(props.getProperty(uid));
+		      .setRefreshToken(gc[1]).setAccessToken(gc[0]);
 
 	      // YouTube object used to make all API requests.
 	      youtube = new YouTube.Builder(HTTP_TRANSPORT, JSON_FACTORY, credentials).setApplicationName(
@@ -102,7 +102,7 @@ public class AddSubscription {
 	      res+="<br><p align=\"center\" >Channel Subscribed</p>";
 	      res+="<br> -Id : "+returnedSubscription.getId();
 	      res+="<br> - Title : "+returnedSubscription.getSnippet().getTitle();
-	      res+="<br><img src=\""+thumbnail.getUrl()+"\" height=\"198\" width=\"198\" />";
+//	      res+="<br><img src=\""+thumbnail.getUrl()+"\" height=\"198\" width=\"198\" />";
 
 	    } catch (GoogleJsonResponseException e) {
 	      System.err.println("GoogleJsonResponseException code: " + e.getDetails().getCode() + " : "

@@ -1,11 +1,6 @@
 package com.teamchat.integration.youtube.connect;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.Properties;
+import com.teamchat.integration.youtube.database.JDBCConnection;
 
 public class YoutubeConnect {
 	
@@ -58,17 +53,17 @@ public class YoutubeConnect {
 	  
 	  public void youtubeLogout(String sname)
 	  {
-		  Properties props = new Properties();
-  	    InputStream is = null;
-  	  File f=null;
-		   try {    // First try loading from the current directory
-	    	   
-	    	    f = new File("uid.properties");
-	    	        is = new FileInputStream( f );  	  }
-	    catch ( Exception e ) { is = null; }
+//		  Properties props = new Properties();
+//  	    InputStream is = null;
+//  	  File f=null;
+//		   try {    // First try loading from the current directory
+//	    	   
+//	    	    f = new File("uid.properties");
+//	    	        is = new FileInputStream( f );  	  }
+//	    catch ( Exception e ) { is = null; }
 	    
 	    try { 
-	    	        if(is==null)  
+	    	     /*   if(is==null)  
 	    	 is=getClass().getResourceAsStream("uid.properties");
 	    	  
 	    	        // Try loading properties from the file (if found)
@@ -77,7 +72,11 @@ public class YoutubeConnect {
 	    	        props.remove(sname);
 	    	        System.out.println("after"+props.getProperty(sname));
 	    	        OutputStream out = new FileOutputStream( f );
-			        props.store(out, "Refresh Tokens");
+			        props.store(out, "Refresh Tokens");*/
+	    	JDBCConnection db=new JDBCConnection();
+			String[] gc=db.retreive(sname);
+			if(!gc[1].equals("refresh_token"))
+				db.delete(sname);
 	    	        
 	    }
 	    catch(Exception e)

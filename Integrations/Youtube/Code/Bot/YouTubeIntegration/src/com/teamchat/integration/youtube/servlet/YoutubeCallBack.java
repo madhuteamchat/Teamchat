@@ -34,7 +34,7 @@ public class YoutubeCallBack extends HttpServlet {
 		YoutubeConnect ytc=new YoutubeConnect();
 		ytc.getaccesstoken(request.getParameter("code"));
 		PrintWriter writer = response.getWriter();
-		writer.println("Hello Friend!");
+		writer.println("You have Successfully logged in!! Go back to Teamchat to access your Youtube account.");
 	}
 
 	/**
