@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="AppearIn">
+        <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
+        <dependent-module archiveName="commons-codec-1.10-test-sources.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/AppearIn/WebContent/WEB-INF/lib/commons-codec-1.10-test-sources.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="commons-codec-1.10-sources.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/AppearIn/WebContent/WEB-INF/lib/commons-codec-1.10-sources.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="commons-codec-1.10.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/AppearIn/WebContent/WEB-INF/lib/commons-codec-1.10.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="teamchat-client-sdk.1.5.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/AppearIn/WebContent/WEB-INF/lib/teamchat-client-sdk.1.5.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="commons-codec-1.10-tests.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/AppearIn/WebContent/WEB-INF/lib/commons-codec-1.10-tests.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <property name="context-root" value="AppearIn"/>
+        <property name="java-output-path" value="/AppearIn/build/classes"/>
+    </wb-module>
+</project-modules>

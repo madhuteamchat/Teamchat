@@ -1,0 +1,9 @@
+client_id=479767b4a49bd2afa0be
+client_secret=6c395c91dd4f969085be56b5345f0dbd8afac72056bcafe28400335aca25
+wunderlist_servlet=http://interns.teamchat.com:8083/WunderList/WunderlistServlet
+db_user=tcinterns
+db_password=PakyovBosh7
+db_url=jdbc:mysql://localhost/Bot
+class_for_name=com.mysql.jdbc.Driver
+webhook_url=http://interns.teamchat.com:8083/WunderList/WebhookServlet
+callback_url=http://interns.teamchat.com:8083/WunderList/WunderlistServlet

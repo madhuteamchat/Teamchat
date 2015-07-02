@@ -1,0 +1,9 @@
+api_key=572ee2846a0ed649326b88210338f4e7
+api_secret=0534dab829330b043bebe5dd191c411c6c2f10dbe8630bcfff448abadcc8e959
+db_user=tcinterns
+db_password=PakyovBosh7
+db_url=jdbc:mysql://localhost/Bot
+class_for_name=com.mysql.jdbc.Driver
+trello_servlet=http://interns.teamchat.com:8082/Trello/TrelloServlet
+callback_servlet=http://interns.teamchat.com:8082/Trello/TrelloServlet
+webhook_url=http://interns.teamchat.com:8082/Trello/WebhookServlet

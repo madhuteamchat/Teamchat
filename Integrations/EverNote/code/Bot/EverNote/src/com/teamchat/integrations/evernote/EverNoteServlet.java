@@ -1,8 +1,6 @@
 package com.teamchat.integrations.evernote;
 
 import java.io.IOException;
-import java.io.PrintWriter;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -15,9 +13,6 @@ import org.scribe.model.Token;
 import org.scribe.oauth.OAuthService;
 
 import com.evernote.auth.EvernoteService;
-import com.evernote.edam.error.EDAMSystemException;
-import com.evernote.edam.error.EDAMUserException;
-import com.evernote.thrift.TException;
 
 /**
  * Servlet implementation class EverNoteServlet
@@ -29,9 +24,11 @@ public class EverNoteServlet extends HttpServlet {
 	String consumerSecret = PropertiesFile.getValue("consumer_secret");
 	EvernoteService EVERNOTE_SERVICE = EvernoteService.PRODUCTION;
 	String callbackURL = PropertiesFile.getValue("callback_servlet_url");
-
+	public OAuthService service = null;
+	
 	public void init() {
 		// TODO Auto-generated constructor stub
+
 	}
 
 	/**
@@ -41,37 +38,24 @@ public class EverNoteServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		if (request.getParameter("name") != null) {
+		if (request.getParameter("mail") != null) {
+
 			Class<? extends EvernoteApi> providerClass = EvernoteApi.class;
 			if (EVERNOTE_SERVICE == com.evernote.auth.EvernoteService.PRODUCTION) {
 				providerClass = org.scribe.builder.api.EvernoteApi.class;
 			}
-
-			String mail = request.getParameter("name");
-			String room_id = request.getParameter("room_id");
-			String state = mail + "," + room_id;
-			EverNoteVerf.mail = mail;
-			EverNoteVerf.room_id = room_id;
-			OAuthService service = new ServiceBuilder().provider(providerClass)
+			service = new ServiceBuilder().provider(providerClass)
 					.apiKey(consumerKey).apiSecret(consumerSecret)
 					.callback(callbackURL).build();
-			Token requestTokenObject = service.getRequestToken();
-
-			String authUrl = EVERNOTE_SERVICE
-					.getAuthorizationUrl(requestTokenObject.getToken());
-			EverNoteVerf.service = service;
-			EverNoteVerf.requestTokenObject = requestTokenObject;
-
-			System.out.println("Details are : "+authUrl+"&state="+state);
-			response.sendRedirect(response.encodeRedirectURL(authUrl+"&state="+state));
-		} else {
-			EverNoteVerf env = new EverNoteVerf();
-			String state=request.getParameter("state");
-			System.out.println("**************");
-			System.out.println("Details are : "+state);
-			env.getverf(request.getParameter("oauth_verifier"));
-			PrintWriter writer = response.getWriter();
-			writer.print("Connected successfully. Now you can access your EverNote from your Teamchat");
+						
+			String mail = request.getParameter("mail");
+			String room_id = request.getParameter("room_id");
+			Token requestToken = service.getRequestToken();
+			CallbackServlet.service=service;
+			ManageDB.insert(mail, requestToken.getToken(),requestToken.getSecret(), "", room_id);
+			String authUrl = EVERNOTE_SERVICE.getAuthorizationUrl(requestToken
+					.getToken());
+			response.sendRedirect(response.encodeRedirectURL(authUrl));
 		}
 	}
 

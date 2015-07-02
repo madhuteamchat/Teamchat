@@ -48,12 +48,11 @@ public class EverNote {
 			nGuidArray[] = null, nBook, noteName;
 	private String task;
 	public static TeamchatAPI api;
-	
-	
+
 	@OnKeyword("help")
 	public void help(TeamchatAPI api) {
-		
-		EverNote.api=api;
+
+		EverNote.api = api;
 		String print = "";
 		print = print + "<b>Hi, I'm Evernote Bot.</b><br>";
 		print = print + "I will help you stay updated with your Evernote.<br>";
@@ -72,24 +71,18 @@ public class EverNote {
 	public NoteStoreClient create(TeamchatAPI api, String mail,
 			String access_token) throws TException, EDAMUserException,
 			EDAMSystemException {
-		
+
 		if (access_token != null) {
 			try {
 				EvernoteAuth evernoteAuth = new EvernoteAuth(
 						EvernoteService.PRODUCTION, access_token);
 				ClientFactory factory = new ClientFactory(evernoteAuth);
-				
-				System.out.println("userstoreurl in auth : "+evernoteAuth.getUserStoreUrl());
-				System.out.println("User id : "+evernoteAuth.getUserId());
+
+				System.out.println("userstoreurl in auth : "
+						+ evernoteAuth.getUserStoreUrl());
+				System.out.println("User id : " + evernoteAuth.getUserId());
 				userStore = factory.createUserStoreClient();
 				noteStore = factory.createNoteStoreClient();
-				User user=userStore.getUser();
-				
-				System.out.println("##################");
-				System.out.println("user email is : "+user.getEmail());
-				System.out.println("username is : "+user.getUsername());
-				System.out.println("ID is : "+user.getId());
-				System.out.println("name is : "+user.getName());
 				boolean versionOk = userStore
 						.checkVersion(
 								"Evernote Evernotebot (Java)",
@@ -105,7 +98,7 @@ public class EverNote {
 			} catch (Exception e) {
 				String room_id = api.context().currentRoom().getId();
 				String embedded_url = createEmbeddedLink(
-						PropertiesFile.getValue("evernote_servlet")+"?name="
+						PropertiesFile.getValue("evernote_servlet") + "?mail="
 								+ mail + "&room_id=" + room_id,
 						"logging in...", "http");
 				String print = "<a href=" + embedded_url
@@ -125,13 +118,13 @@ public class EverNote {
 	@OnKeyword("connect")
 	public void connect(TeamchatAPI api) throws IOException, TException,
 			EDAMUserException, EDAMSystemException {
-		EverNote.api=api;
+		EverNote.api = api;
 		String mail = api.context().currentSender().getEmail();
 		String room_id = api.context().currentRoom().getId();
-		token = ManageDB.retrieve(mail);
-		if (token == null) {
+		token = ManageDB.retrieveAccessToken(mail);
+		if (token == null || token.length() < 5) {
 			String embedded_url = createEmbeddedLink(
-					PropertiesFile.getValue("evernote_servlet")+"?name="
+					PropertiesFile.getValue("evernote_servlet") + "?mail="
 							+ mail + "&room_id=" + room_id, "logging in...",
 					"http");
 			String print = "<a href=" + embedded_url + ">Login to EverNote</a>";
@@ -146,7 +139,7 @@ public class EverNote {
 
 	@OnKeyword("disconnect")
 	public void disconnect(TeamchatAPI api) throws FileNotFoundException {
-		EverNote.api=api;
+		EverNote.api = api;
 		String mail = api.context().currentSender().getEmail();
 		ManageDB.remove(mail);
 		api.perform(api.context().currentRoom()
@@ -156,9 +149,9 @@ public class EverNote {
 	@OnKeyword("myevernote")
 	public void myEverNote(TeamchatAPI api) throws EDAMUserException,
 			EDAMSystemException, TException, EDAMNotFoundException, IOException {
-		EverNote.api=api;
+		EverNote.api = api;
 		String mail = api.context().currentSender().getEmail();
-		token = ManageDB.retrieve(mail);
+		token = ManageDB.retrieveAccessToken(mail);
 		if (token == null) {
 			api.perform(api.context().currentRoom()
 					.post(new TextChatlet("connect to access your Evernote")));
@@ -206,7 +199,6 @@ public class EverNote {
 				if (notebooks.size() > 0) {
 					for (Notebook notebook : notebooks) {
 						nb = nb + "<li>" + notebook.getName() + "</li>";
-						// i++;
 					}
 					nb = nb + "</ol>";
 					api.perform(api.context().currentRoom()

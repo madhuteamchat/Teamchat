@@ -1,8 +1,8 @@
-consumer_key=botbegins
-consumer_secret=********
+consumer_key=*********
+consumer_secret=*********
 db_user=tcinterns
-db_password=********
+db_password=PakyovBosh7
 db_url=jdbc:mysql://localhost/Bot
-evernote_servlet=http://interns.teamchat.com:8083/EverNote/EverNoteServlet
+evernote_servlet=http://interns.teamchat.com:8082/EverNote/EverNoteServlet
 class_for_name=com.mysql.jdbc.Driver
-callback_servlet_url=http://interns.teamchat.com:8083/EverNote/EverNoteServlet
+callback_servlet_url=http://interns.teamchat.com:8082/EverNote/CallbackServlet

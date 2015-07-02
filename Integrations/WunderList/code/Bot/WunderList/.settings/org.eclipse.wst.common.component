@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="WunderList">
+        <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
+        <dependent-module archiveName="org.apache.commons.httpclient.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//home/intern9/Downloads/org.apache.commons.httpclient.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="commons-codec-1.10.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//home/intern9/Downloads/commons-codec-1.10/commons-codec-1.10.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="servlet-api.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//home/intern9/Downloads/apache-tomcat-8.0.23/lib/servlet-api.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="teamchat-client-sdk.1.4.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib//home/intern9/Downloads/teamchat-client-sdk.1.4.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <property name="context-root" value="WunderList"/>
+        <property name="java-output-path" value="/WunderList/build/classes"/>
+    </wb-module>
+</project-modules>
