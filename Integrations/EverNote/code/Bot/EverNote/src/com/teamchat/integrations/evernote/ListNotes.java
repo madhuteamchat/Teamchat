@@ -40,9 +40,9 @@ public class ListNotes {
 	      List<Note> notes = noteList.getNotes();
 	      for (Note note : notes) {
 	    	  Note fullNote = noteStore.getNote(note.getGuid(), true, true, false,false);
-		      print=print+"<br>**Title of the Note : "+fullNote.getTitle()+"<br>"+NoteContent.extract(fullNote)+"<br><br>";
+		      print=print+"<br>**Title of the Note : "+fullNote.getTitle()+"<br>"+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+NoteContent.extract(fullNote)+"<br><br>";
 		   }
-	      print=print+"----Notes present in "+notebook.getName()+" has been shown successfully.----<br><br>";
+	      print=print+"<hr><br>";
 	    }
 	    if(print.length()>0){
 	    	api.perform(api.context().currentRoom().post(new PrimaryChatlet().setQuestionHtml(print)));

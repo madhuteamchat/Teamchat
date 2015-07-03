@@ -46,7 +46,15 @@ public class EverNote {
 	
 	@OnKeyword("help")
 	public void help(TeamchatAPI api){
-		String print= "Type \"connect\" to connect your Evernote.<br>Type \"myevernote\" to start your EverNote and select the task you need.<br>Type \"disconnect\" to disconnect your evernote";
+		String print="";
+		print=print+"<b>Hi, I'm Evernote Bot.</b><br>";
+		print=print+"I will help you stay updated with your Evernote.<br>";
+		print=print+"Use me to perform these functions:<br>";
+		print=print+"<b>connect</b>:To connect your Evernote<br>";
+		print=print+"<b>myevernote</b>:To perform your desired task from the dropdown<br>";
+		print=print+"<b>disconnect</b>:To disconnect your Evernote.<br>";
+		api.perform(api.context().currentRoom().post(new PrimaryChatlet().setQuestionHtml(print)));
+		print="You can access multiple Evernote accounts by <b>disconnect</b>ing and <b>connect</b>ing.";
 		api.perform(api.context().currentRoom().post(new PrimaryChatlet().setQuestionHtml(print)));
 	}
 	
@@ -142,11 +150,11 @@ public class EverNote {
 	}
 	@OnAlias("taskToDo")
 	public void taskToDo(TeamchatAPI api){
-		task=(api.context().currentReply().getField("task"));
+		task=api.context().currentReply().getField("task");
 		try {
 			if(task.equals("Add Reminders to Teamchat")){
 				new AddReminders(api,noteStore);
-				api.perform(api.context().currentRoom().post(new TextChatlet("Raminders added to Teamchat Successfully.")));
+				api.perform(api.context().currentRoom().post(new TextChatlet("Reminders added to Teamchat Successfully.")));
 			}
 			else if(task.equals("List NoteBooks")){
 				String nb="";
@@ -248,11 +256,14 @@ public class EverNote {
 		    	api.perform(
 						api.context().currentRoom().post(
 						new PrimaryChatlet()
-						.setQuestionHtml("Enter the keyword to search. <br>To search in tags append \"tag:\" before your keyword.")
+						.setQuestionHtml("Enter the keyword to search.")
 						.setReplyScreen
 						(
 						api.objects().form()
 						.addField(api.objects().input().label("Query String").name("query"))
+						.addField(api.objects().select().label("location").name("loc")
+								.addOption("Tags")
+								.addOption("Text"))
 						)
 						.alias("searchit")
 						));  
@@ -452,6 +463,10 @@ public class EverNote {
 	@OnAlias("searchit")
 	public void searchNotes(TeamchatAPI api) throws Exception {
 		String query= (api.context().currentReply().getField("query"));
+		String loc= (api.context().currentReply().getField("loc"));
+		if(loc.equals("Tags")){
+			query="tag:"+query;
+		}
 		new SearchNotes(api,query,noteStore);
 	}
 }
