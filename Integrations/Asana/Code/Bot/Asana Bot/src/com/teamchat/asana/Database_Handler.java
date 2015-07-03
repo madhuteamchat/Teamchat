@@ -22,9 +22,7 @@ public class Database_Handler {
 	private ResultSet resultSet = null;
 
 	private static config_handler config = new config_handler();
-	private static String DB_URL = "jdbc:mysql://localhost/anixxx?user="
-			+ config.getSql_username() + "&password="
-			+ config.getSql_password();
+	private static String DB_URL = "jdbc:mysql://localhost/Bot?user=tcinterns&password=PakyovBosh7";
 
 	Database_Handler() {
 		if (config.isEmpty()) {
@@ -40,7 +38,7 @@ public class Database_Handler {
 			connect = DriverManager.getConnection(DB_URL);
 			statement = connect.createStatement();
 			resultSet = statement
-					.executeQuery("select * from authorized where email = '"
+					.executeQuery("select * from asana_authorized where email = '"
 							+ email + "'");
 			resultSet.next();
 			bb.setAccess_token(resultSet.getString("access_token"));
@@ -57,13 +55,13 @@ public class Database_Handler {
 	}
 
 	// check if data exists in the server against that email
-	public boolean isAuthorized(String email) {
+	public boolean isasana_authorized(String email) {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			connect = DriverManager.getConnection(DB_URL);
 			statement = connect.createStatement();
 			resultSet = statement
-					.executeQuery("select email from authorized where email='"
+					.executeQuery("select email from asana_authorized where email='"
 							+ email + "'");
 			// check if result set is empty or not
 			while (resultSet.next()) {

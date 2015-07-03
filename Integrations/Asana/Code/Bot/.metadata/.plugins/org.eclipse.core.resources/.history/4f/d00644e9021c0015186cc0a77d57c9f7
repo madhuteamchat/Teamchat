@@ -1,0 +1,72 @@
+package com.teamchat.asana;
+
+import java.io.IOException;
+import java.util.Arrays;
+
+import org.apache.http.client.ClientProtocolException;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import com.teamchat.client.annotations.OnAlias;
+import com.teamchat.client.sdk.Field;
+import com.teamchat.client.sdk.TeamchatAPI;
+import com.teamchat.client.sdk.chatlets.PrimaryChatlet;
+import com.teamchat.client.sdk.chatlets.TextChatlet;
+
+public class DeleteTask {
+	public final String USER_AGENT = "Mozilla/5.0";
+	int[] Project_id_array = new int[100];
+	String[] Project_name_array = new String[100];
+	Field f;
+
+	
+	public void deleteProject(TeamchatAPI api) throws ClientProtocolException,
+			IOException {
+		String URL = "https://app.asana.com/api/1.0/users/me/projects";
+		String URL_parameter = "";
+
+		JSONArray jarr = new JSONArray();
+		JSONObject json_data = null;
+		SendPost sp = new SendPost();
+		jarr = sp.sendPost(URL, USER_AGENT, URL_parameter);
+
+		for (int i = 0; i < jarr.length(); i++) {
+			json_data = jarr.getJSONObject(i);
+			for (int j = 0; j <= i; j++) {
+
+				Project_id_array[j] = json_data.getInt("id");
+				Project_name_array[j] = json_data.getString("name");
+			}
+
+		}
+		for (int i = 0; i < Project_id_array.length; i++) {
+			f = api.objects().select().addOption(Project_name_array[i])
+					.name("project_name");
+		}
+		api.perform(api
+				.context()
+				.currentRoom()
+				.post(new PrimaryChatlet()
+						.setQuestion("Select project to be deleted")
+						.setReplyScreen(api.objects().form().addField(f))
+						.alias("delete")));
+
+	}
+
+	@OnAlias("delete")
+	public void delete(TeamchatAPI api) throws IOException  {
+		int project_id;
+		String Workspace_name = api.context().currentReply()
+				.getField("project_name");
+		int id = Arrays.asList(Project_name_array).indexOf(Workspace_name);
+		project_id = Project_id_array[id];
+		String URL = "https://app.asana.com/api/1.0/projects/"+project_id;
+		String URL_parameter;
+		URL_parameter = "";
+		SendDelete sd = new SendDelete();
+		sd.sendDelete(URL, USER_AGENT, URL_parameter);
+		api.perform(api.context().currentRoom()
+				.post(new TextChatlet("Project Deleted!")));
+	
+	}
+}

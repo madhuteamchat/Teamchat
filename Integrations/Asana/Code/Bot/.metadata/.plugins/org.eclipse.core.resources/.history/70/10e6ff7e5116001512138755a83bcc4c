@@ -1,0 +1,133 @@
+package com.teamchat.asana;
+
+//Owner: Aniruddha Varshney
+//Task 2
+//Date of Submission: Friday, June 25, 2015
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import com.teamchat.client.annotations.OnAlias;
+import com.teamchat.client.annotations.OnKeyword;
+import com.teamchat.client.annotations.OnMsg;
+import com.teamchat.client.sdk.Field;
+import com.teamchat.client.sdk.TeamchatAPI;
+import com.teamchat.client.sdk.chatlets.PrimaryChatlet;
+import com.teamchat.client.sdk.chatlets.TextChatlet;
+
+@SuppressWarnings("deprecation")
+public class MainFunc {
+
+	String api_key = "";
+	public final String USER_AGENT = "Mozilla/5.0";
+
+	public static void main(String[] args) {
+		TeamchatAPI api = TeamchatAPI.fromFile("teamchat.data")
+				.setEmail("coolsunny.28@yahoo.com")
+				.setPassword("sunnysurana@123")
+				.startReceivingEvents(new MainFunc());
+	}
+
+	// @OnKeyword("asana")
+	// public void ConnectToAsana(TeamchatAPI api) {
+	// /*api.perform(api
+	// .context()
+	// .currentRoom()
+	// .post(new PrimaryChatlet()
+	// .setQuestionHtml("<html><body><a href=''>Click here to connect your Teamchat Account to Slack</a>")));*/
+	// api.perform(api
+	// .context()
+	// .currentRoom()
+	// .post(new PrimaryChatlet()
+	// .setQuestion("Enter your Asana Credentials:")
+	// .setReplyScreen(
+	// api.objects()
+	// .form()
+	// .addField(
+	// api.objects()
+	// .input()
+	// .label("Email/Username")
+	// .name("username"))
+	// .addField(
+	// api.objects().input()
+	// .label("Password")
+	// .name("password")))
+	// .alias("start")));
+	// }
+	//
+	// @OnAlias("start")
+	// public void start(TeamchatAPI api) {
+	//
+	// api.performPostInCurrentRoom(new TextChatlet("Successfully Connected")
+	// // .alias("getchannels")
+	// );
+	// }
+
+	@OnKeyword("createproject")
+	public void createProject(TeamchatAPI api) throws ClientProtocolException,
+			IOException {
+
+		api.perform(api
+				.context()
+				.currentRoom()
+				.post(new PrimaryChatlet()
+						.setQuestion("Fill in details of the project")
+						.setReplyScreen(
+								api.objects()
+										.form()
+										.addField(
+												api.objects().input()
+														.label("Project Name:")
+														.name("project_name"))
+										.addField(
+												api.objects().input()
+														.label("Notes")
+														.name("notes")))
+						.alias("createproject")));
+
+	}
+
+	@OnAlias("createproject")
+	public void createproject(TeamchatAPI api) throws IOException {
+
+		String ProjectName = api.context().currentReply()
+				.getField("project_name");
+		String Notes = api.context().currentReply().getField("notes");
+		int Workspace_id;
+		String Workspace_name;
+		int[] Workspace_id_array = new int[100];
+		String[] Workspace_name_array = new String[100];
+		String URL = "https://app.asana.com/api/1.0/users/me/workspaces/";
+		String URL_parameter = "";
+
+		JSONArray jarr = new JSONArray();
+		JSONObject json_data = null;
+		for (int i = 0; i < jarr.length(); i++) {
+			json_data = jarr.getJSONObject(i);
+			for (int j = 0; j <= i; j++) {
+				Workspace_id_array[j]=Workspace_id = json_data.getInt("id");
+				Workspace_name_array[j]=Workspace_name = json_data.getString("name");
+			}
+			
+		}
+		
+		SendPost sp = new SendPost();
+		jarr = sp.sendPost(URL, USER_AGENT, URL_parameter);
+		URL = "https://app.asana.com/api/1.0/projects";
+		URL_parameter = "name=" + ProjectName + "&notes=" + Notes
+				+ "&workspace=" + Workspace_id;
+		sp.sendPost(URL, USER_AGENT, URL_parameter);
+		api.perform(api.context().currentRoom()
+				.post(new TextChatlet("Project Created!")));
+	}
+
+}

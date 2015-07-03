@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+<fullyQualifiedTypeName name="javax.net.ssl.HttpsURLConnection"/>
+<fullyQualifiedTypeName name="java.io.DataOutputStream"/>
+<fullyQualifiedTypeName name="com.teamchat.client.annotations.OnAlias"/>
+<fullyQualifiedTypeName name="com.google.gson.JsonObject"/>
+<fullyQualifiedTypeName name="com.google.gson.JsonElement"/>
+<fullyQualifiedTypeName name="com.teamchat.client.sdk.Form"/>
+<fullyQualifiedTypeName name="com.teamchat.client.sdk.chatlets.PrimaryChatlet"/>
+<fullyQualifiedTypeName name="com.teamchat.asana.SendPost"/>
+<fullyQualifiedTypeName name="java.net.HttpURLConnection"/>
+<fullyQualifiedTypeName name="java.net.URL"/>
+<fullyQualifiedTypeName name="java.io.BufferedReader"/>
+<fullyQualifiedTypeName name="java.io.InputStreamReader"/>
+<fullyQualifiedTypeName name="com.teamchat.asana.Asana_basics"/>
+<fullyQualifiedTypeName name="com.teamchat.asana.Database_Handler"/>
+<fullyQualifiedTypeName name="com.google.gson.Gson"/>
+<fullyQualifiedTypeName name="web.asana.servelet.Data"/>
+<fullyQualifiedTypeName name="org.json.JSONObject"/>
+<fullyQualifiedTypeName name="java.lang.Integer"/>
+</qualifiedTypeNameHistroy>

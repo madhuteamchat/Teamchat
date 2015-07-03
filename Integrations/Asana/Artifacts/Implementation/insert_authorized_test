@@ -1,0 +1,2 @@
+use anixxx;
+INSERT INTO authorized values (default, 'email','access_token','refresh_token', 'expires_in', true); 

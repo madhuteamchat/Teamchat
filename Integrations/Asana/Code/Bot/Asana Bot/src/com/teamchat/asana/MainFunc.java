@@ -23,14 +23,19 @@ public class MainFunc {
 	public static Asana_basics ab;
 	final String USER_AGENT = "Mozilla/5.0";
 
-	@OnKeyword("asana")
+	@OnKeyword("help")
 	public void ConnectToAsana(TeamchatAPI api) throws IOException {
 		api.perform(api
 				.context()
 				.currentRoom()
 				.post(new PrimaryChatlet()
+						.setQuestionHtml("<br/>Hi! This is asana Bot. I am going to guide you how to use me to do thinks in asana.<br/>Type the following commands to:<br/>1)create project: To create project<br/>2)delete project: To delete project<br/>3)create task: To add task<br/>4)delete task: to delete task<br/>BUT FIRST YOU HAVE TO LOGIN!")));
+		api.perform(api
+				.context()
+				.currentRoom()
+				.post(new PrimaryChatlet()
 						.setQuestionHtml(
-								"<html><body><a target='_blank' href='https://app.asana.com/-/oauth_authorize?client_id=37903488157876&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2FAsana_Bot%2FRedirect_url&response_type=code'>Click here to connect your Teamchat Account to Asana</a>")
+								"<html><body><a target='_blank' href='https://app.asana.com/-/oauth_authorize?client_id=37903488157876&redirect_uri=http%3A%2F%2Finterns.teamchat.com%2FAsana_Bot%2FRedirect_url&response_type=code'>Click here to connect your Teamchat Account to Asana</a>")
 						.alias("start")));
 		Database_Handler db = new Database_Handler();
 		ab = db.GetBasicStuff(api.context().currentSender().getEmail());
@@ -68,8 +73,8 @@ public class MainFunc {
 	@OnAlias("createproject")
 	public void create_project(TeamchatAPI api) throws IOException {
 
-
-		String ProjectName = api.context().currentReply().getField("project_name");
+		String ProjectName = api.context().currentReply()
+				.getField("project_name");
 		String Notes = api.context().currentReply().getField("notes");
 
 		String[] Workspace = api.context().currentReply()
@@ -147,8 +152,9 @@ public class MainFunc {
 										.addField(f_uid)).alias("createtask")));
 
 	}
+
 	@OnAlias("createtask")
-	public void create_task(TeamchatAPI api){
+	public void create_task(TeamchatAPI api) {
 		String TaskName = api.context().currentReply().getField("task_name");
 		String Notes = api.context().currentReply().getField("notes");
 
@@ -158,88 +164,93 @@ public class MainFunc {
 		String[] Project = api.context().currentReply()
 				.getField("project_name").split("-");
 		long pid = Long.valueOf(Project[Project.length - 1]);
-		String[] Users = api.context().currentReply()
-				.getField("user_name").split("-");
+		String[] Users = api.context().currentReply().getField("user_name")
+				.split("-");
 		long uid = Long.valueOf(Users[Users.length - 1]);
 		System.out.println(wid);
 		String URL = "https://app.asana.com/api/1.0/tasks";
 		String URL_parameter;
-		URL_parameter = "assignee=" + uid + "&followers[0]=" + uid
-				+ "&name=" + TaskName + "&notes=" + Notes + "&projects="
-				+ pid + "&workspace=" + wid;
+		URL_parameter = "assignee=" + uid + "&followers[0]=" + uid + "&name="
+				+ TaskName + "&notes=" + Notes + "&projects=" + pid
+				+ "&workspace=" + wid;
 		SendPost sp = new SendPost();
 		try {
-			sp.sendPost(URL, USER_AGENT, URL_parameter,ab.getAccess_token());
+			sp.sendPost(URL, USER_AGENT, URL_parameter, ab.getAccess_token());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		api.perform(api.context().currentRoom()
-				.post(new TextChatlet("Task Created!")));;
+				.post(new TextChatlet("Task Created!")));
+		;
 	}
-		@OnKeyword("delete task")
-		public void deleteTask(TeamchatAPI api){
-			GetProject gp = new GetProject();
-			Field f = null;
-			f = gp.getProject(ab.getAccess_token(), api);
 
-			api.perform(api
-					.context()
-					.currentRoom()
-					.post(new PrimaryChatlet()
-							.setQuestion("Select project in which the task exists")
-							.setReplyScreen(api.objects().form().addField(f))
-							.alias("selectproject")));
+	@OnKeyword("delete task")
+	public void deleteTask(TeamchatAPI api) {
+		GetProject gp = new GetProject();
+		Field f = null;
+		f = gp.getProject(ab.getAccess_token(), api);
 
-		}
-		@OnAlias("selectproject")
-		public void select_task(TeamchatAPI api){
-			String[] Project = api.context().currentReply()
-					.getField("project_name").split("-");
-			long id = Long.valueOf(Project[Project.length - 1]);
-			String URL = "https://app.asana.com/api/1.0/projects/"+id+"/tasks";
-			String URL_parameter = "";
-			SendGet sg = new SendGet();
-			Field field_task = null;
-			try {
-				String jsonData = sg.sendGet(URL, USER_AGENT, URL_parameter, ab.getAccess_token());
-				JSONObject jsonObj = new JSONObject(jsonData);
-				Gson gson = new Gson();
-				Data[] Tasks = gson.fromJson(jsonObj.get("data").toString(),
-						Data[].class);
-				
-				field_task = api.objects().select().name("task_name")
-						.label("Tasks");
-				for (Data task : Tasks) {
-					field_task.addOption(task.getName() + "-" + task.getId());
-				}
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+		api.perform(api
+				.context()
+				.currentRoom()
+				.post(new PrimaryChatlet()
+						.setQuestion("Select project in which the task exists")
+						.setReplyScreen(api.objects().form().addField(f))
+						.alias("selectproject")));
+
+	}
+
+	@OnAlias("selectproject")
+	public void select_task(TeamchatAPI api) {
+		String[] Project = api.context().currentReply()
+				.getField("project_name").split("-");
+		long id = Long.valueOf(Project[Project.length - 1]);
+		String URL = "https://app.asana.com/api/1.0/projects/" + id + "/tasks";
+		String URL_parameter = "";
+		SendGet sg = new SendGet();
+		Field field_task = null;
+		try {
+			String jsonData = sg.sendGet(URL, USER_AGENT, URL_parameter,
+					ab.getAccess_token());
+			JSONObject jsonObj = new JSONObject(jsonData);
+			Gson gson = new Gson();
+			Data[] Tasks = gson.fromJson(jsonObj.get("data").toString(),
+					Data[].class);
+
+			field_task = api.objects().select().name("task_name")
+					.label("Tasks");
+			for (Data task : Tasks) {
+				field_task.addOption(task.getName() + "-" + task.getId());
 			}
-			api.perform(api
-					.context()
-					.currentRoom()
-					.post(new PrimaryChatlet()
-							.setQuestion("Select task to be deleted")
-							.setReplyScreen(api.objects().form().addField(field_task))
-							.alias("deleteselectedtask")));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		@OnAlias("deleteselectedtask")
-		public void delete_task(TeamchatAPI api){
-			System.out.println("inside delete task");
-			String[] Project = api.context().currentReply()
-					.getField("task_name").split("-");
-			long id = Long.valueOf(Project[Project.length - 1]);
-			String URL = "https://app.asana.com/api/1.0/tasks/"+id;
-			String URL_parameter;
-			URL_parameter = "";
-			SendDelete sd = new SendDelete();
-			sd.sendDelete(URL, USER_AGENT, URL_parameter, ab.getAccess_token());
-			api.perform(api.context().currentRoom()
-					.post(new TextChatlet("Task Deleted!")));
+		api.perform(api
+				.context()
+				.currentRoom()
+				.post(new PrimaryChatlet()
+						.setQuestion("Select task to be deleted")
+						.setReplyScreen(
+								api.objects().form().addField(field_task))
+						.alias("deleteselectedtask")));
+	}
 
-		}
-		
-		
+	@OnAlias("deleteselectedtask")
+	public void delete_task(TeamchatAPI api) {
+		System.out.println("inside delete task");
+		String[] Project = api.context().currentReply().getField("task_name")
+				.split("-");
+		long id = Long.valueOf(Project[Project.length - 1]);
+		String URL = "https://app.asana.com/api/1.0/tasks/" + id;
+		String URL_parameter;
+		URL_parameter = "";
+		SendDelete sd = new SendDelete();
+		sd.sendDelete(URL, USER_AGENT, URL_parameter, ab.getAccess_token());
+		api.perform(api.context().currentRoom()
+				.post(new TextChatlet("Task Deleted!")));
+
+	}
+
 }

@@ -1,0 +1,111 @@
+package com.teamchat.asana;
+
+import java.io.IOException;
+import java.util.Arrays;
+
+import org.apache.http.client.ClientProtocolException;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import com.teamchat.client.annotations.OnAlias;
+import com.teamchat.client.sdk.Field;
+import com.teamchat.client.sdk.TeamchatAPI;
+import com.teamchat.client.sdk.chatlets.PrimaryChatlet;
+import com.teamchat.client.sdk.chatlets.TextChatlet;
+
+public class DeleteTask {
+	public final String USER_AGENT = "Mozilla/5.0";
+	public int[] Project_id_array = new int[100];
+	public String[] Project_name_array = new String[100];
+	public int[] Task_id_array = new int[100];
+	public String[] Task_name_array = new String[100];
+	public Field f_pid,f_tid;
+	public int project_id;
+
+	
+	public void deleteProject(TeamchatAPI api) throws ClientProtocolException,
+			IOException {
+		String URL = "https://app.asana.com/api/1.0/workspace";
+		String URL_parameter = "";
+
+		JSONArray jarr = new JSONArray();
+		JSONObject json_data = null;
+		SendPost sp = new SendPost();
+		jarr = sp.sendPost(URL, USER_AGENT, URL_parameter);
+
+		for (int i = 0; i < jarr.length(); i++) {
+			json_data = jarr.getJSONObject(i);
+			for (int j = 0; j <= i; j++) {
+
+				Project_id_array[j] = json_data.getInt("id");
+				Project_name_array[j] = json_data.getString("name");
+			}
+
+		}
+		for (int i = 0; i < Project_name_array.length; i++) {
+			f_pid = api.objects().select().addOption(Project_name_array[i])
+					.name("project_name");
+		}
+		api.perform(api
+				.context()
+				.currentRoom()
+				.post(new PrimaryChatlet()
+						.setQuestion("Select project in which task has to be deleted")
+						.setReplyScreen(api.objects().form().addField(f_pid))
+						.alias("querytask")));
+
+	}
+
+	@OnAlias("querytask")
+	public void query_task(TeamchatAPI api) throws IOException  {
+		
+		String Project_name = api.context().currentReply()
+				.getField("project_name");
+		int id = Arrays.asList(Project_name_array).indexOf(Project_name);
+		project_id = Project_id_array[id];
+		String URL = "https://app.asana.com/api/1.0/projects/"+project_id+"/tasks";
+		String URL_parameter;
+		URL_parameter = "";
+		SendPost sp = new SendPost();
+		JSONArray jarr = new JSONArray();
+		JSONObject json_data = null;
+		jarr = sp.sendPost(URL, USER_AGENT, URL_parameter);
+
+		for (int i = 0; i < jarr.length(); i++) {
+			json_data = jarr.getJSONObject(i);
+			for (int j = 0; j <= i; j++) {
+
+				Task_id_array[j] = json_data.getInt("id");
+				Task_name_array[j] = json_data.getString("name");
+			}
+
+		}
+		for (int i = 0; i < Task_name_array.length; i++) {
+			f_tid = api.objects().select().addOption(Task_name_array[i])
+					.name("task_name");
+		}
+		api.perform(api
+				.context()
+				.currentRoom()
+				.post(new PrimaryChatlet()
+						.setQuestion("Select task to be deleted")
+						.setReplyScreen(api.objects().form().addField(f_tid))
+						.alias("deletetask")));
+	
+	}
+	@OnAlias("deletetask")
+	public void delete_task(TeamchatAPI api) throws IOException{
+		int task_id;
+		String Task_name = api.context().currentReply()
+				.getField("task_name");
+		int id = Arrays.asList(Task_name_array).indexOf(Task_name);
+		task_id = Task_id_array[id];
+		String URL = "https://app.asana.com/api/1.0/tasks/"+task_id;
+		String URL_parameter;
+		URL_parameter = "";
+		SendPost sp = new SendPost();
+		JSONArray jarr = new JSONArray();
+		JSONObject json_data = null;
+		jarr = sp.sendPost(URL, USER_AGENT, URL_parameter);
+	}
+}

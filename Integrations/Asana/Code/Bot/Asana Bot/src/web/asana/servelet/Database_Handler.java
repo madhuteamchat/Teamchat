@@ -20,7 +20,7 @@ public class Database_Handler {
 	private Statement statement = null;
 	private PreparedStatement preparedStatement = null;
 	private ResultSet resultSet = null;
-	private static final String DB_URL = "jdbc:mysql://localhost/anixxx?user=root&password=";
+	private static final String DB_URL = "jdbc:mysql://localhost/Bot?user=tcinterns&password=PakyovBosh7";
 
 	// storing data handler
 	public boolean StorageHandler(Token token, String email) {
@@ -39,7 +39,7 @@ public class Database_Handler {
 			connect = DriverManager.getConnection(DB_URL);
 			statement = connect.createStatement();
 			resultSet = statement
-					.executeQuery("select email from authorized where email='"
+					.executeQuery("select email from asana_authorized where email='"
 							+ email_id + "'");
 			// check if result set is empty or not
 			while (resultSet.next()) {
@@ -56,12 +56,13 @@ public class Database_Handler {
 
 	// set the authentication data into the table
 	private boolean StoreToken(Token token, String email_id) {
+		
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			connect = DriverManager.getConnection(DB_URL);
 			statement = connect.createStatement();
 			preparedStatement = connect
-					.prepareStatement("insert into authorized values (default, ?, ?, ?, ?, ?)");
+					.prepareStatement("insert into asana_authorized values (default, ?, ?, ?, ?, ?)");
 			preparedStatement.setString(1, email_id);
 			preparedStatement.setString(2, token.getAccess_token());
 			preparedStatement.setString(3, token.getRefresh_token());
@@ -84,7 +85,7 @@ public class Database_Handler {
 			connect = DriverManager.getConnection(DB_URL);
 			statement = connect.createStatement();
 			preparedStatement = connect
-					.prepareStatement("update authorized set access_token = ?, refresh_token = ?, expires_in = ?, authenticated = ? where email = ?");
+					.prepareStatement("update asana_authorized set access_token = ?, refresh_token = ?, expires_in = ?, authenticated = ? where email = ?");
 			preparedStatement.setString(1, token.getAccess_token());
 			preparedStatement.setString(2, token.getRefresh_token());
 			preparedStatement.setInt(3, token.getExpires_in());

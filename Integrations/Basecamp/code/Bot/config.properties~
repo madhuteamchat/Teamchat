@@ -1,0 +1,10 @@
+#app_settings
+#Mon Jun 22 20:51:31 IST 2015
+client_secret=4ab6e59509ac6fe6878c88c5a6face6f9d253afb
+redirect_uri=http\://localhost\:8080/Basecamp_servlet/Redirect_url
+email=waynetech@webaroo.com
+password=rgkb4Wn
+sql_username=root
+sql_password=pappupasshogaya
+base_url=https\://basecamp.com/999999999/api/v1/
+client_id=8f6bc64ea4e27e738ab826f47832df331009feb9

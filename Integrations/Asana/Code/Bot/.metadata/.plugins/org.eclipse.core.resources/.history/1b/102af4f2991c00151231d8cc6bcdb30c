@@ -1,0 +1,121 @@
+//Owner: Aniruddha Varshney
+//Task 2
+//Date of Submission: Friday, June 25, 2015
+package com.teamchat.asana;
+
+import java.io.IOException;
+import java.util.Arrays;
+
+import org.apache.http.client.ClientProtocolException;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import web.asana.servelet.Data;
+
+import com.google.gson.Gson;
+import com.teamchat.client.annotations.OnAlias;
+import com.teamchat.client.annotations.OnKeyword;
+import com.teamchat.client.sdk.Field;
+import com.teamchat.client.sdk.TeamchatAPI;
+import com.teamchat.client.sdk.chatlets.PrimaryChatlet;
+import com.teamchat.client.sdk.chatlets.TextChatlet;
+
+public class MainFunc {
+
+	public final String USER_AGENT = "Mozilla/5.0";
+	public static String ProjectName;
+	public static String Notes;
+	public static Asana_basics ab;
+
+	@OnKeyword("asana")
+	public void ConnectToAsana(TeamchatAPI api) throws IOException {
+		api.perform(api
+				.context()
+				.currentRoom()
+				.post(new PrimaryChatlet()
+						.setQuestionHtml(
+								"<html><body><a target='_blank' href='https://app.asana.com/-/oauth_authorize?client_id=37903488157876&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2FAsana_Bot%2FRedirect_url&response_type=code'>Click here to connect your Teamchat Account to Asana</a>")
+						.alias("start")));
+		Database_Handler db = new Database_Handler();
+		ab = db.GetBasicStuff(api.context().currentSender().getEmail());
+	}
+
+	@OnAlias("start")
+	public void start(TeamchatAPI api) {
+		api.performPostInCurrentRoom(new TextChatlet("Successfully Connected"));
+	}
+
+	@OnKeyword("create project")
+	public void createProject(TeamchatAPI api) throws IOException {
+		// get workspace id and name from json array
+		String URL = "https://app.asana.com/api/1.0/workspaces/";
+		String URL_parameter = "";
+		SendGet sg = new SendGet();
+		Field f = null;
+		try {
+			String jsonData = sg.sendGet(URL, USER_AGENT, URL_parameter,
+					ab.getAccess_token());
+			JSONObject jsonObj = new JSONObject(jsonData);
+			Gson gson = new Gson();
+			Data[] workspaces = gson.fromJson(jsonObj.get("data").toString(),
+					Data[].class);
+			// post chatlet asking for the workspace to user
+			f = api.objects().select().name("workspace_name")
+					.label("Workspace");
+			for (Data workspace : workspaces) {
+				f.addOption(workspace.getName() + " | " + workspace.getId());
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	
+		PrimaryChatlet chtlet = new PrimaryChatlet().setQuestionHtml(
+				"Fill in details of the project").setReplyScreen(
+				api.objects()
+						.form()
+						.addField(
+								api.objects().input().label("Project Name")
+										.name("project_name"))
+						.addField(
+								api.objects().input().label("Notes")
+										.name("notes")).addField(f));
+
+		chtlet.alias("project");
+
+		api.performPostInCurrentRoom(chtlet);
+
+	}
+
+	@OnAlias("project")
+	public void create(TeamchatAPI api) throws IOException {
+
+		// save input from above fields
+
+		ProjectName = api.context().currentReply().getField("project_name");
+		String Notes = api.context().currentReply().getField("notes");
+
+		String[] Workspace = api.context().currentReply()
+				.getField("workspace_name").split("|");
+		long id = Long.valueOf(Workspace[2]);
+		String URL = "https://app.asana.com/api/1.0/projects", URL_parameter = "name="
+				+ ProjectName + "&notes=" + Notes + "&workspace=" + id;
+		new SendPost().sendPost(URL, USER_AGENT, URL_parameter);
+		api.perform(api.context().currentRoom()
+				.post(new TextChatlet("Project Created!")));
+
+	}
+
+	// @OnAlias("getworkspaceid")
+	// public void getworkspaceid(TeamchatAPI api) throws IOException {
+	//
+	// }
+
+	@OnKeyword("delete project")
+	public void deleteProject(TeamchatAPI api) throws ClientProtocolException,
+			IOException {
+		DeleteProject delete = new DeleteProject();
+		delete.deleteProject(api);
+	}
+
+}

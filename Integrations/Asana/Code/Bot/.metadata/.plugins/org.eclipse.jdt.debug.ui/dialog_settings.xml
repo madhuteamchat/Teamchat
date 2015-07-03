@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<section name="org.eclipse.jdt.debug.ui.MAIN_METHOD_SELECTION_DIALOG">
+		<item value="true" key="ShowStatusLine"/>
+		<item value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&#x0A;&lt;History&gt;&#x0A;&lt;historyRootNode&gt;&#x0A;&lt;infoNode&gt;=Asana Bot/\/home\/intern21\/Desktop\/teamchat-client-sdk.1.3.jar&amp;lt;com.teamchat.client.sdk.workflow(CignaBot.class[CignaBot&lt;/infoNode&gt;&#x0A;&lt;infoNode&gt;=Asana Bot/\/home\/intern21\/Downloads\/apache-tomcat-7.0.62\/lib\/catalina.jar&amp;lt;org.apache.catalina.startup(Tomcat$1.class[&lt;/infoNode&gt;&#x0A;&lt;/historyRootNode&gt;&#x0A;&lt;/History&gt;" key="History"/>
+		<section name="DialogBoundsSettings">
+			<item value="600" key="DIALOG_WIDTH"/>
+			<item value="119" key="DIALOG_Y_ORIGIN"/>
+			<item value="387" key="DIALOG_X_ORIGIN"/>
+			<item value="444" key="DIALOG_HEIGHT"/>
+			<item value="1|Ubuntu|11.0|0|GTK|1|" key="DIALOG_FONT_NAME"/>
+		</section>
+	</section>
+</section>

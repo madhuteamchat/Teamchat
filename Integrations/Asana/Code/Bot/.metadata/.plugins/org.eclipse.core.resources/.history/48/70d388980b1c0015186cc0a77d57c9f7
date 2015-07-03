@@ -1,0 +1,113 @@
+//Owner: Aniruddha Varshney
+//Task 2
+//Date of Submission: Friday, June 25, 2015
+package com.teamchat.asana;
+
+import java.io.IOException;
+import java.util.Arrays;
+import org.apache.http.client.ClientProtocolException;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import com.teamchat.client.annotations.OnAlias;
+import com.teamchat.client.sdk.Field;
+import com.teamchat.client.sdk.TeamchatAPI;
+import com.teamchat.client.sdk.chatlets.PrimaryChatlet;
+import com.teamchat.client.sdk.chatlets.TextChatlet;
+
+public class CreateProject {
+
+	public final String USER_AGENT = "Mozilla/5.0";
+	private Field f;
+	public int[] Workspace_id_array = new int[100];
+	public String[] Workspace_name_array = new String[100];
+	public static String ProjectName;
+	public static String Notes;
+
+	public void createProject(TeamchatAPI api) throws IOException {
+
+		PrimaryChatlet chtlet = new PrimaryChatlet()
+				.setQuestionHtml("Fill in details of the project")
+				.setReplyScreen(
+						api.objects()
+								.form()
+								.addField(
+										api.objects().input()
+												.label("Project Name")
+												.name("project_name"))
+								.addField(
+										api.objects().input().label("Notes")
+												.name("notes")))
+				.setReplyLabel("Details");
+
+		chtlet.alias("project");
+
+		api.performPostInCurrentRoom(chtlet);
+
+	}
+
+	@OnAlias("project")
+	public void create(TeamchatAPI api) throws IOException {
+
+		// save input from above fields
+		System.out.println("inside");
+		ProjectName = api.context().currentReply().getField("project_name");
+		String Notes = api.context().currentReply().getField("notes");
+
+		// get workspace id and name from json array
+
+		String URL = "https://app.asana.com/api/1.0/users/me/workspaces/";
+		String URL_parameter = "";
+
+		JSONArray jarr = new JSONArray();
+		JSONObject json_data = null;
+		SendPost sp = new SendPost();
+		try {
+			jarr = sp.sendPost(URL, USER_AGENT, URL_parameter);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		// save workspace id into arrays
+
+		for (int i = 0; i < jarr.length(); i++) {
+			json_data = jarr.getJSONObject(i);
+			for (int j = 0; j <= i; j++) {
+				Workspace_id_array[j] = json_data.getInt("id");
+				Workspace_name_array[j] = json_data.getString("name");
+			}
+
+		}
+		// post chatlet asking for the workspace to user
+
+		for (int i = 0; i < Workspace_name_array.length; i++) {
+			Field f = api.objects().select().addOption(Workspace_name_array[i])
+					.name("workspace_name");
+		}
+		api.perform(api
+				.context()
+				.currentRoom()
+				.post(new PrimaryChatlet().setQuestion("Select workspace")
+						.setReplyScreen(api.objects().form().addField(f))
+						.alias("getworkpaceid")));
+
+	}
+
+	@OnAlias("getworkspaceid")
+	public void getworkspaceid(TeamchatAPI api) throws IOException {
+		int Workspace_id;
+		String Workspace_name = api.context().currentReply()
+				.getField("workspace_name");
+		int id = Arrays.asList(Workspace_name_array).indexOf(Workspace_name);
+		Workspace_id = Workspace_id_array[id];
+		String URL = "https://app.asana.com/api/1.0/projects";
+		String URL_parameter;
+		URL_parameter = "name=" + ProjectName + "&notes=" + Notes
+				+ "&workspace=" + Workspace_id;
+		SendPost sp = new SendPost();
+		sp.sendPost(URL, USER_AGENT, URL_parameter);
+		api.perform(api.context().currentRoom()
+				.post(new TextChatlet("Project Created!")));
+	}
+
+}
