@@ -2,6 +2,9 @@
     <wb-module deploy-name="Slack">
         <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
+        <dependent-module archiveName="simpleslackapi.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/simpleslackapi/simpleslackapi">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
         <property name="context-root" value="Slack"/>
         <property name="java-output-path" value="/Slack/build/classes"/>
     </wb-module>

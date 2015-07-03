@@ -1,3 +1,7 @@
+//INTEGRATION: SLACK
+
+//STATUS:USED
+
 package com.teamchat.integrations.slack;
 
 import java.io.BufferedReader;
@@ -53,7 +57,14 @@ public class slack_auth extends HttpServlet {
 		code = request.getParameter("code");
 		
 		
-		System.err.println("in servlet");
+		System.err.println("In servlet");
+		Slack.code=code;
+		Slack.wait = 1;
+		
+		PrintWriter out = response.getWriter();
+		
+		out.println("<script>window.close();</script>");
+		
 	//	System.out.println(request.getHeaderNames());
 		
 		
@@ -65,9 +76,9 @@ public class slack_auth extends HttpServlet {
 			prop.store(fileOut, null);
 			fileOut.close();
 			*/
-			SlackDB.saveCode(email, code);
+		//	SlackDB.saveCode(email, code);
 			
-			System.err.println("Saved to database");
+		//	System.err.println("Saved to database");
 	}
 	
 	protected void doPost(HttpServletRequest request,

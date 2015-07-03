@@ -1,4 +1,8 @@
-package com.teamchat.integrations.slack;
+//INTEGRATION: SLACK
+
+//STATUS:UNUSED
+
+/*package com.teamchat.integrations.slack;
 
 import java.sql.*;
 
@@ -117,3 +121,4 @@ public class SlackDB {
 	}// end main
 
 }
+*/
