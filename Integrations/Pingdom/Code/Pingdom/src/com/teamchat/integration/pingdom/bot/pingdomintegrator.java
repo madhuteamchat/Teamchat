@@ -1,19 +1,20 @@
 package com.teamchat.integration.pingdom.bot;
 
+/*
+ * *
+ * @author:Anuj Arora
+ */
 import java.io.IOException;
 //import java.io.PrintWriter;
 import java.nio.charset.Charset;
 
-import org.apache.tomcat.util.codec.binary.Base64;
 
-//import com.google.gson.Gson;
-//import com.google.gson.JsonArray;
-//import com.google.gson.JsonElement;
-//import com.google.gson.JsonObject;
-//import com.google.gson.JsonParser;
-//import com.squareup.okhttp.Headers;
+import javax.xml.bind.DatatypeConverter;
+
+import com.squareup.okhttp.FormEncodingBuilder;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
+import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
 //import com.teamchat.integration.pingdom.classes.Check;
 
@@ -22,20 +23,28 @@ import com.squareup.okhttp.Response;
 public class pingdomintegrator {
 	
 	
-	public String addChecks(String username,String password,String App_key,String host, String name,String type) throws IOException{
+	public String addChecks(String username,String password,String App_key,String host, String name,String Protocol) throws IOException{
   	  
   	  String err = "Error";
   	  String success ="Check successfully added!!";
   	OkHttpClient client = new OkHttpClient();
 
 	String auth = username + ":" + password;
-	byte[] encodedAuth = Base64.encodeBase64(auth.getBytes(Charset.forName("US-ASCII")));
+	String encodedAuth = DatatypeConverter.printBase64Binary(auth.getBytes(Charset.forName("US-ASCII")));
+
 	String authHeader = "Basic " + new String(encodedAuth);
 	System.out.println("auth key: " + authHeader);
 	
+	
+	RequestBody formBody = new FormEncodingBuilder()
+    .add("name", name)
+    .add("host", host)
+    .add("type", Protocol)
+    .build();
+	
   	Request request = new Request.Builder()
-  	  .url("https://api.pingdom.com/api/2.0/checks?name="+name+"&host="+host+"&type="+type)
-  	  .post(null)
+  	  .url("https://api.pingdom.com/api/2.0/checks")
+  	  .post(formBody)
   	  .addHeader("authorization", authHeader)
   	  .addHeader("app-key", App_key)
   	  .build();
@@ -58,14 +67,15 @@ public class pingdomintegrator {
 	}
 
 		
-	public String delChecks(String username,String password,String App_key,String[] del) throws IOException{
+	public String delChecks(String username,String password,String App_key,int[] del) throws IOException{
 	  	  
 	  	  String err = "Error";
 	  	  String success ="Deletion successfull!!";
 	  	OkHttpClient client = new OkHttpClient();
 
 		String auth = username + ":" + password;
-		byte[] encodedAuth = Base64.encodeBase64(auth.getBytes(Charset.forName("US-ASCII")));
+		String encodedAuth = DatatypeConverter.printBase64Binary(auth.getBytes(Charset.forName("US-ASCII")));
+		
 		String authHeader = "Basic " + new String(encodedAuth);
 		System.out.println("auth key: " + authHeader);
 		int length,i,len;
@@ -73,7 +83,7 @@ public class pingdomintegrator {
 		String delids="";
 		for(i=0;i<length;i++)
 		{
-			if(!del[i].equals("none"))
+			if(del[i]!=1)
 			{
 				delids=delids+del[i];
 				delids=delids+",";
@@ -81,7 +91,9 @@ public class pingdomintegrator {
 			
 		}
 		len=delids.length();
-		delids=delids.substring(0, (len-2));
+		delids=delids.substring(0, (len-1));
+		System.err.println(delids);
+
 		Request request = new Request.Builder()
 		  .url("https://api.pingdom.com/api/2.0/checks/?delcheckids="+delids)
 		  .delete(null)
@@ -112,7 +124,7 @@ public class pingdomintegrator {
           
 		OkHttpClient client = new OkHttpClient();
 		String auth = username + ":" + password;
-		byte[] encodedAuth = Base64.encodeBase64(auth.getBytes(Charset.forName("US-ASCII")));
+		String encodedAuth = DatatypeConverter.printBase64Binary(auth.getBytes(Charset.forName("US-ASCII")));
 		String authHeader = "Basic " + new String(encodedAuth);
 		System.out.println("auth key: " + authHeader);
 		Request request = new Request.Builder()

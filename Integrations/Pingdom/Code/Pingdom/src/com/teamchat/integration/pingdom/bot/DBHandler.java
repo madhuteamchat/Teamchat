@@ -1,6 +1,10 @@
 package com.teamchat.integration.pingdom.bot;
 
 
+/*
+ * *
+ * @author:Anuj Arora
+ */
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -17,7 +21,7 @@ public class DBHandler {
 	
 	String appkey,username,pass,roomId;
 	
-	String DB_URL = "jdbc:mysql://localhost:3306/Bot?user=root&password=Anuj";
+	String DB_URL = "jdbc:mysql://localhost:3306/Bot?user=tcinterns&password=PakyovBosh7";
 	
 	public DBHandler () {
 				
