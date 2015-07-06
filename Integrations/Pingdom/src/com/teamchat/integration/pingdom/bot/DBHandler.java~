@@ -55,7 +55,7 @@ public class DBHandler {
 	
 	
 	
-	
+	//for getting the roomid from our database corresponding to particular username.
 	public String getRoom (String username) {
 		String room;
 		room="";
@@ -92,7 +92,7 @@ public class DBHandler {
 	
 public boolean roomchk(String roomId) {
 		
-	
+	// check if data exists in the server against that roomid
 		
 	String rmm=roomId.trim();
 			try {
@@ -100,7 +100,7 @@ public boolean roomchk(String roomId) {
 						.executeQuery("select roomId from Bot.pingdom_auth where roomId = '"+ rmm + "'");
 				// check if result set is empty or not
 				while (rs.next()) {
-					System.err.println("aaaaaaa");
+					
 					return true;
 				}
 			} catch (Exception e) {
@@ -111,7 +111,7 @@ public boolean roomchk(String roomId) {
 		}
 	
 
-
+//for getting username password and appkey from our database corresponding to particular roomid.
 
 public String[] getusrpassapp(String roomId) {
 		
@@ -132,9 +132,11 @@ public String[] getusrpassapp(String roomId) {
 			
 		}
 
+//for getting app-key from our database corresponding to particular username.
+
 public String getapp(String username) {
 		
-		// check if data exists in the server against that email
+		
 	String appkey;
 	appkey="";
 		
