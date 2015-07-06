@@ -11,7 +11,7 @@ public class PrintChatlet
 
 	public void set(String output,String email)throws Exception
 	{
-		TeamchatAPI api = TeamchatAPIImpl.fromFile("teamchat.data")
+		TeamchatAPI api = TeamchatAPIImpl.fromFile("teamchat1.data")
 				.setEmail("bot888@outlook.com")
 				.setPassword("bazingacooper04");
 

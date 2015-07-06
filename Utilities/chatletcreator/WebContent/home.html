@@ -43,7 +43,7 @@
 		&nbsp&nbsp&nbsp&nbspHTML<input type="checkbox" id="r4"
 			name="con_type1" checked="checked">
 	</div>
-
+	<div id="success">Chatlet posted successfully!</div>
 	<div id="replies">
 		Show Replies&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input
 			id="r1" type="radio" name="reply" value="showrep"><br>
@@ -80,21 +80,17 @@ $("#r4").click(function(){
 									win.focus();
 								};
 
+	
 	document.getElementById("myTotalButton").onclick=function(){
-						
-					document.getElementById("replies").style.visibility = "visible";
-								};
-
-
-
 		
+		$("#replies").toggle();
+	};
 
-	$("#myTotalButton").click(function(){$("#replies").show()});
-
-document.getElementById("myCommentsButton").onclick=function(){
-									document.getElementById("comments").style.visibility = "visible";
-								};
-
+	document.getElementById("myCommentsButton").onclick=function(){
+		$("#comments").toggle();
+	};
+	
+	
 	document.getElementById("done").onclick=function(){
 						var text=$("#r3").is(":checked");
 						var html=$("#r4").is(":checked");								
@@ -151,7 +147,9 @@ console.log(text+"  "+html);
 							url : "createchatlet",
 							data : data1,
 							success : function() {
-								alert("done");
+								$("#email_text").hide(600);
+								$("#email_btn").hide(600);
+								$("#success").show(600);	
 							}
 						});}
 
