@@ -14,7 +14,7 @@ public class Db_handlerbot
 	private ResultSet resultSet = null;
 
 	private static Config_handler config = new Config_handler();
-	private static String DB_URL = "jdbc:mysql://localhost/Bot?user=tcinterns&password=PakyovBosh7";
+	private static String DB_URL = "jdbc:mysql://localhost/Bot?user=root&password=pappupasshogaya";
 
 	Db_handlerbot()
 	{
@@ -33,7 +33,7 @@ public class Db_handlerbot
 			Class.forName("com.mysql.jdbc.Driver");
 			connect = DriverManager.getConnection(DB_URL);
 			statement = connect.createStatement();
-			resultSet = statement.executeQuery("select * from hipchat where email = '" + email + "'");
+			resultSet = statement.executeQuery("select * from authorized where email = '" + email + "'");
 			resultSet.next();
 			bb.setAccess_token(resultSet.getString("token"));
 			bb.setEmail(resultSet.getObject("email").toString());
@@ -57,7 +57,7 @@ public class Db_handlerbot
 			Class.forName("com.mysql.jdbc.Driver");
 			connect = DriverManager.getConnection(DB_URL);
 			statement = connect.createStatement();
-			resultSet = statement.executeQuery("select email from hipchat where email='" + email + "'");
+			resultSet = statement.executeQuery("select email from authorized where email='" + email + "'");
 			// check if result set is empty or not
 			while (resultSet.next())
 			{
@@ -73,6 +73,7 @@ public class Db_handlerbot
 		// default case
 		return false;
 	}
+
 	public boolean isAuthorizeds(String email)
 	{
 		try
@@ -80,10 +81,11 @@ public class Db_handlerbot
 			Class.forName("com.mysql.jdbc.Driver");
 			connect = DriverManager.getConnection(DB_URL);
 			statement = connect.createStatement();
-			resultSet = statement.executeQuery("select notifytoken from hipchat where email='" + email + "'");
+			resultSet = statement.executeQuery("select notifytoken from authorized where email='" + email + "'");
 			// check if result set is empty or not
 			while (resultSet.next())
 			{
+				System.out.println(resultSet.getString("OUTPUT IS !!!!! : " + "notifytoken"));
 				return true;
 			}
 		} catch (Exception e)
@@ -121,19 +123,30 @@ public class Db_handlerbot
 			e.printStackTrace();
 		}
 	}
-
 	// storing data handler
 	public boolean StorageHandler(String email, String token ,String notifytoken)
 	{
 		// check if token already exists or not
 		if (CheckToken(email))
 		{
-			return StoreToken(email, token , notifytoken);
+			return StoreToken(email, token, notifytoken);
 		} else
 		{
-			return UpdateToken(email, token , notifytoken);
+			return UpdateToken(email, token, notifytoken);
 		}
 	}
+
+//	public boolean StorageHandler1(String email, String notifytoken)
+//	{
+//		// check if token already exists or not
+//		if (CheckToken(email) || CheckToken1(email))
+//		{
+//			return StoreToken1(email, notifytoken);
+//		} else
+//		{
+//			return UpdateToken1(email, notifytoken);
+//		}
+//	}
 
 	// check if data exists in the server against that email
 	// true means that data doesn;t exist
@@ -144,7 +157,7 @@ public class Db_handlerbot
 			Class.forName("com.mysql.jdbc.Driver");
 			connect = DriverManager.getConnection(DB_URL);
 			statement = connect.createStatement();
-			resultSet = statement.executeQuery("select email from hipchat where email='" + email + "'");
+			resultSet = statement.executeQuery("select email from authorized where email='" + email + "'");
 			// check if result set is empty or not
 			while (resultSet.next())
 			{
@@ -161,19 +174,43 @@ public class Db_handlerbot
 		return true;
 	}
 
+//	private boolean CheckToken1(String email)
+//	{
+//		try
+//		{
+//			Class.forName("com.mysql.jdbc.Driver");
+//			connect = DriverManager.getConnection(DB_URL);
+//			statement = connect.createStatement();
+//			resultSet = statement.executeQuery("select notifytoken from authorized where email='" + email + "'");
+//			// check if result set is empty or not
+//			while (resultSet.next())
+//			{
+//				return false;
+//			}
+//		} catch (Exception e)
+//		{
+//			e.printStackTrace();
+//		} finally
+//		{
+//			close();
+//		}
+//		// default case
+//		return true;
+//	}
+
 	// set the authentication data into the table
-	private boolean StoreToken(String email, String token ,String notifytoken)
+	private boolean StoreToken(String email, String token, String notifytoken)
 	{
 		try
 		{
 			Class.forName("com.mysql.jdbc.Driver");
 			connect = DriverManager.getConnection(DB_URL);
 			statement = connect.createStatement();
-			preparedStatement = connect.prepareStatement("insert into hipchat values (default, ?, ?, ?, ?)");
+			preparedStatement = connect.prepareStatement("insert into authorized values (default, ?, ?, ?, ?)");
 			preparedStatement.setString(1, email);
 			preparedStatement.setString(2, token);
-			preparedStatement.setString(3, notifytoken);
-			preparedStatement.setBoolean(4, true);
+			preparedStatement.setBoolean(3, true);
+			preparedStatement.setString(4, notifytoken);
 			preparedStatement.executeUpdate();
 			return true;
 		} catch (Exception e)
@@ -186,6 +223,28 @@ public class Db_handlerbot
 		}
 	}
 
+//	private boolean StoreToken1(String email, String notifytoken)
+//	{
+//		try
+//		{
+//			Class.forName("com.mysql.jdbc.Driver");
+//			connect = DriverManager.getConnection(DB_URL);
+//			statement = connect.createStatement();
+//			preparedStatement = connect.prepareStatement("insert into authorized (notifytoken) values (?) where email = ?'"+email+"'");
+//			preparedStatement.setString(1, notifytoken);
+//			preparedStatement.setString(2, email);
+//			preparedStatement.executeUpdate();
+//			return true;
+//		} catch (Exception e)
+//		{
+//			e.printStackTrace();
+//			return false;
+//		} finally
+//		{
+//			close();
+//		}
+//	}
+
 	// update the authentication data into the table
 	private boolean UpdateToken(String email, String token, String notifytoken)
 	{
@@ -194,11 +253,11 @@ public class Db_handlerbot
 			Class.forName("com.mysql.jdbc.Driver");
 			connect = DriverManager.getConnection(DB_URL);
 			statement = connect.createStatement();
-			preparedStatement = connect.prepareStatement("default, update hipchat set token = ?, state = ?, email = ? where notifytoken = ?");
+			preparedStatement = connect.prepareStatement("default, update authorized set token = ?, state = ?, notifytoken = ? where email = ?");
 			preparedStatement.setString(1, token);
 			preparedStatement.setBoolean(2, true);
-			preparedStatement.setString(3, email);
-			preparedStatement.setString(4, notifytoken);
+			preparedStatement.setString(3, notifytoken);
+			preparedStatement.setString(4, email);
 			preparedStatement.executeUpdate();
 			return true;
 		} catch (Exception e)
@@ -207,5 +266,24 @@ public class Db_handlerbot
 			return false;
 		}
 	}
+
+//	private boolean UpdateToken1(String email, String notifytoken)
+//	{
+//		try
+//		{
+//			Class.forName("com.mysql.jdbc.Driver");
+//			connect = DriverManager.getConnection(DB_URL);
+//			statement = connect.createStatement();
+//			preparedStatement = connect.prepareStatement("default, update authorized set notifytoken = ? where email = ?");
+//			preparedStatement.setString(1, notifytoken);
+//			preparedStatement.setString(2, email);
+//			preparedStatement.executeUpdate();
+//			return true;
+//		} catch (Exception e)
+//		{
+//			e.printStackTrace();
+//			return false;
+//		}
+//	}
 
 }

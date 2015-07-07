@@ -34,12 +34,12 @@ import com.teamchat.client.sdk.chatlets.TextChatlet;
 public class Mainbot
 {
 
-	static Hipchat_basiccheckbot hb = new Hipchat_basiccheckbot();
+	public Hipchat_basiccheckbot hb = new Hipchat_basiccheckbot();
 	private String token;
 	static HipChat hp;
 	static Db_handlerbot db = new Db_handlerbot();// Database handler class
 	static String email;
-	String notify;
+	public String notify;
 	private Room abc;
 
 	@OnKeyword("hipchat")
@@ -54,12 +54,9 @@ public class Mainbot
 			// get the basic info
 			hb = db.GetBasicStuff(email);
 			hp = new HipChat(hb.getAccess_token());
-			token=hb.getAccess_token();
-			api.perform(api
-					.context()
-					.currentRoom()
-					.post(new PrimaryChatlet().setQuestionHtml("HI, YOU HAVE SUCCESSFULLY SIGNED INTO YOUR ACCOUNT. You may proceed to use your <u>hipchat account</u>. "
-							+ "<br />")));
+			token = hb.getAccess_token();
+			api.perform(api.context().currentRoom()
+					.post(new PrimaryChatlet().setQuestionHtml("HI, YOU HAVE SUCCESSFULLY SIGNED INTO YOUR ACCOUNT. You may proceed to use your <u>hipchat account</u>. " + "<br />")));
 			// welcome message and continue
 		} else
 		{
@@ -73,14 +70,18 @@ public class Mainbot
 
 			Form f = api.objects().form();
 			f.addField(api.objects().input().name("token").label("Paste Token here"));
+			f.addField(api.objects().input().name("notifytoken").label("Paste NotifyToken here"));
 			api.perform(api.context().currentRoom().post(new PrimaryChatlet().setQuestionHtml("<b>Paste your token</b>").setReplyScreen(f).setReplyLabel("Enter").alias("gottoken").alias("done")));
-		
+
 		}
 	}
-@OnAlias("done")
-public void ondone(TeamchatAPI api){
-	api.perform(api.context().currentRoom().post(new TextChatlet("You have successfully LOGGED IN.")));
-}
+
+	@OnAlias("done")
+	public void ondone(TeamchatAPI api)
+	{
+		api.perform(api.context().currentRoom().post(new TextChatlet("You have successfully LOGGED IN.")));
+	}
+
 	@OnKeyword("help")
 	// to tell use of all the keywords
 	public void onhelp(TeamchatAPI api)
@@ -106,8 +107,9 @@ public void ondone(TeamchatAPI api){
 	public void ongottoken(TeamchatAPI api)
 	{
 		token = api.context().currentReply().getField("token");
+		notify = api.context().currentReply().getField("notifytoken");
 		hp = new HipChat(token);
-		db.StorageHandler(email, token ,"");
+		db.StorageHandler(email,token,notify);
 
 	}
 
@@ -193,23 +195,24 @@ public void ondone(TeamchatAPI api){
 				hp.deleteRoom(abc.getId());
 			}
 		}
-		api.perform(api.context().currentRoom().post(new PrimaryChatlet().setQuestionHtml("<font color='Red'><b>The room " +abc.getName()+ "has been successfully deleted</b><font>")));
+		api.perform(api.context().currentRoom().post(new PrimaryChatlet().setQuestionHtml("<font color='Red'><b>The room " + abc.getName() + "has been successfully deleted</b><font>")));
 	}
 
 	@OnKeyword("sendmessage")
 	// sends a message which the user specifies to a particular room
 	public void onsendmessage(TeamchatAPI api)
-	{List<Room> rooms = hp.listRooms();
-	String htmlResponse = "<ul>";
-	Form f = api.objects().form();
-	com.teamchat.client.sdk.Field x = api.objects().select().name("name").label("Select name of room you want to send msg");
-
-	for (Room room : rooms)
 	{
-		htmlResponse = room.getName();
-		x.addOption(htmlResponse);
-	}
-	f.addField(x);
+		List<Room> rooms = hp.listRooms();
+		String htmlResponse = "<ul>";
+		Form f = api.objects().form();
+		com.teamchat.client.sdk.Field x = api.objects().select().name("name").label("Select name of room you want to send msg");
+
+		for (Room room : rooms)
+		{
+			htmlResponse = room.getName();
+			x.addOption(htmlResponse);
+		}
+		f.addField(x);
 		f.addField(api.objects().input().name("msg").label("Enter msg"));
 		api.perform(api.context().currentRoom().post(new PrimaryChatlet().setQuestionHtml("<b>Enter name of room you want to sendmsg.</b> ").setReplyScreen(f).setReplyLabel("Enter").alias("send")));
 
@@ -278,84 +281,109 @@ public void ondone(TeamchatAPI api){
 		{
 			if (name.equalsIgnoreCase(room.getName()))
 			{
-				String html = "";https://interns.teamchat.com
+				String html = "";
+				https: // interns.teamchat.com
 				his = room.getHistory(date);
-				
-						for (HistoryMessage historyMessage : his)
-						{
 
-							his = room.getHistory(date);
-							User n1 = hp.getUser(historyMessage.getSender());
-							n = n1.getName();
-							html = historyMessage.getText() + "<br/>";
-							api.perform(api.context().currentRoom().post(new PrimaryChatlet().setQuestionHtml("<u>Message sent by-</u>" +n+ "<br/>" + html)));
-						
-						}
-					
+				for (HistoryMessage historyMessage : his)
+				{
+
+					his = room.getHistory(date);
+					User n1 = hp.getUser(historyMessage.getSender());
+					n = n1.getName();
+					html = historyMessage.getText() + "<br/>";
+					api.perform(api.context().currentRoom().post(new PrimaryChatlet().setQuestionHtml("<u>Message sent by-</u>" + n + "<br/>" + html)));
 
 				}
-				
+
 			}
 
 		}
+
+	}
+
 	@OnKeyword("notify")
 	public void onnotify(TeamchatAPI api)
 	{
-	List<Room> rooms = hp.listRooms();
-	String htmlResponse = "<ul>";
-	Form f = api.objects().form();
-	com.teamchat.client.sdk.Field x = api.objects().select().name("name").label("Select name of room you want to see notifications.");
-
-	for (Room room : rooms)
-	{
-		htmlResponse = room.getName();
-		x.addOption(htmlResponse);
-	}
-	f.addField(x);
-	if (db.isAuthorizeds(email)){
-		api.perform(api.context().currentRoom()
-				.post(new PrimaryChatlet().setQuestionHtml("<b>Select ROOM whose notifications you want</b>").setReplyScreen(f).setReplyLabel("Select").alias("notifyme")));
-
-	}
-	else {
-	f.addField(api.objects().input().name("t").label("Enter notify token"));
-	api.perform(api.context().currentRoom()
-			.post(new PrimaryChatlet().setQuestionHtml("<b>Select ROOM whose notifications you want.Also Enter the notify token one time.Instructions to get notify token are-Go to Edit profile.Click on API.Enter your password.Select all scopes and get the notify token</b>").setReplyScreen(f).setReplyLabel("Select").alias("notifyme")));
-
-	}
-	}
-	@OnAlias("notifyme")
-	public void onnotifyme(TeamchatAPI api) throws Exception{
-		String name = api.context().currentReply().getField("name");
-		notify = api.context().currentReply().getField("t");
-		db.StorageHandler(email, token ,notify);
-		notify=hb.getnotify_token();
-		System.err.println(notify);
 		List<Room> rooms = hp.listRooms();
-		String id="";
+		String htmlResponse = "<ul>";
+		Form f = api.objects().form();
+		com.teamchat.client.sdk.Field x = api.objects().select().name("name").label("Select name of room you want to see notifications.");
+
+		for (Room room : rooms)
+		{
+			htmlResponse = room.getName();
+			x.addOption(htmlResponse);
+		}
+		f.addField(x);
+//		if (db.isAuthorizeds(email))
+//		{
+			api.perform(api.context().currentRoom()
+					.post(new PrimaryChatlet().setQuestionHtml("<b>Select ROOM whose notifications you want</b>").setReplyScreen(f).setReplyLabel("Select").alias("notifyme")));
+
+//		} else
+//		{
+//			f.addField(api.objects().input().name("t").label("Enter notify token"));
+//			api.perform(api
+//					.context()
+//					.currentRoom()
+//					.post(new PrimaryChatlet()
+//							.setQuestionHtml(
+//									"<b>Select ROOM whose notifications you want.Also Enter the notify token one time.Instructions to get notify token are-Go to Edit profile.Click on API.Enter your password.Select all scopes and get the notify token</b>")
+//							.setReplyScreen(f).setReplyLabel("Select").alias("notifyme")));
+//
+//		}
+	}
+
+	@OnAlias("notifyme")
+	public void onnotifyme(TeamchatAPI api) throws Exception
+	{
+		String name = api.context().currentReply().getField("name");
+
+		List<Room> rooms = hp.listRooms();
+		String id = "";
 		for (Room room : rooms)
 		{
 			if (name.equalsIgnoreCase(room.getName()))
 			{
-				id=room.getId();
+				id = room.getId();
 				System.err.println(id);
-				api.perform(api.context().currentRoom()
-						.post(new TextChatlet("You have successfully subscribed to notifications for the room-"+room.getName()+"")));
+				api.perform(api.context().currentRoom().post(new TextChatlet("You have successfully subscribed to notifications for the room-" + room.getName() + "")));
 			}
 		}
-		//Creates webhook
 		
+//		Get all webhooks
 		OkHttpClient client = new OkHttpClient();
-		MediaType mediaType = MediaType.parse("application/json");
-		RequestBody body = RequestBody.create(mediaType, "{\n    \"url\":\"https://interns.teamchat.com/Hipchat/Hipchat_webhooks\",\n    \"event\":\"room_message\",\n    \"name\":\"Room_notification\"\n}");
+
 		Request request = new Request.Builder()
-		  .url("http://api.hipchat.com/v2/room/"+id+"/webhook")
-		  .post(body)
-		  .addHeader("authorization", "Bearer " +notify)
-		  .addHeader("content-type", "application/json")
+		  .url("http://api.hipchat.com/v2/room/1704975/webhook")
+		  .get()
+		  .addHeader("authorization", "Bearer " +notify+ "")
 		  .build();
+
 		Response response = client.newCall(request).execute();
-		//trigger notifier class
+		
+		
+//		Deletes webhook
+		OkHttpClient client1 = new OkHttpClient();
+
+		Request request1 = new Request.Builder()
+		  .url("http://api.hipchat.com/v2/room/ " +id+" /webhook/1952224")
+		  .delete(null)
+		  .addHeader("authorization", "Bearer " +notify+ "")
+		  .build();
+
+		Response response1 = client.newCall(request).execute();
+		// Creates webhook
+
+		OkHttpClient client2 = new OkHttpClient();
+		MediaType mediaType = MediaType.parse("application/json");
+		RequestBody body = RequestBody.create(mediaType,
+				"{\n    \"url\":\"https://16a6033b.ngrok.com/Hipchat/Hipchat_webhooks\",\n    \"event\":\"room_message\",\n    \"name\":\"Room_notification\"\n}");
+		Request request2 = new Request.Builder().url("http://api.hipchat.com/v2/room/" + id + "/webhook").post(body).addHeader("authorization", "Bearer " + notify + "")
+				.addHeader("content-type", "application/json").build();
+		Response response2 = client.newCall(request).execute();
+		// trigger notifier class
 		System.err.println("ERROR2");
 	}
 }
