@@ -101,7 +101,7 @@
 	position:absolute;
 	top:400px;
 	left:400px;
-	visibility:hidden;
+	visibility:visible;
 }
 
 #done {
