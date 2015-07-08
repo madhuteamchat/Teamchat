@@ -25,7 +25,7 @@ public class Db_handlerbot
 	}
 
 	// get HIpchatapi's basic stuff
-	public Hipchat_basiccheckbot GetBasicStuff(String email)
+	public Hipchat_basiccheckbot GetBasicStuff(String hipchatemail)
 	{
 		Hipchat_basiccheckbot bb = new Hipchat_basiccheckbot();
 		try
@@ -33,11 +33,12 @@ public class Db_handlerbot
 			Class.forName("com.mysql.jdbc.Driver");
 			connect = DriverManager.getConnection(DB_URL);
 			statement = connect.createStatement();
-			resultSet = statement.executeQuery("select * from hipchat where email = '" + email + "'");
+			resultSet = statement.executeQuery("select * from hipchat where hipchatemail = '" + hipchatemail + "'");
 			resultSet.next();
 			bb.setAccess_token(resultSet.getString("token"));
 			bb.setEmail(resultSet.getObject("email").toString());
 			bb.setnotify_token(resultSet.getString("notifytoken"));
+			bb.sethipchatEmail(resultSet.getString("hipchatemail"));
 			return bb;
 		} catch (Exception e)
 		{
@@ -50,18 +51,20 @@ public class Db_handlerbot
 	}
 
 	// check if data exists in the server against that email
-	public boolean isAuthorized(String email)
+	public boolean isAuthorized(String email, String hipchatemail)
 	{
 		try
 		{
 			Class.forName("com.mysql.jdbc.Driver");
 			connect = DriverManager.getConnection(DB_URL);
 			statement = connect.createStatement();
-			resultSet = statement.executeQuery("select email from hipchat where email='" + email + "'");
+			resultSet = statement.executeQuery("select email, hipchatemail from hipchat where email ='" + email + "and hipchatemail ='" + hipchatemail + "'");
 			// check if result set is empty or not
 			while (resultSet.next())
 			{
+
 				return true;
+
 			}
 		} catch (Exception e)
 		{
@@ -74,30 +77,31 @@ public class Db_handlerbot
 		return false;
 	}
 
-	public boolean isAuthorizeds(String email)
-	{
-		try
-		{
-			Class.forName("com.mysql.jdbc.Driver");
-			connect = DriverManager.getConnection(DB_URL);
-			statement = connect.createStatement();
-			resultSet = statement.executeQuery("select notifytoken from hipchat where email='" + email + "'");
-			// check if result set is empty or not
-			while (resultSet.next())
-			{
-				System.out.println(resultSet.getString("OUTPUT IS !!!!! : " + "notifytoken"));
-				return true;
-			}
-		} catch (Exception e)
-		{
-			e.printStackTrace();
-		} finally
-		{
-			close();
-		}
-		// default case
-		return false;
-	}
+	// public boolean isAuthorizeds(String email)
+	// {
+	// try
+	// {
+	// Class.forName("com.mysql.jdbc.Driver");
+	// connect = DriverManager.getConnection(DB_URL);
+	// statement = connect.createStatement();
+	// resultSet =
+	// statement.executeQuery("select notifytoken from hipchat where email='" +
+	// email + "'");
+	// // check if result set is empty or not
+	// while (resultSet.next())
+	// {
+	// return true;
+	// }
+	// } catch (Exception e)
+	// {
+	// e.printStackTrace();
+	// } finally
+	// {
+	// close();
+	// }
+	// // default case
+	// return false;
+	// }
 
 	// You need to close the resultSet
 	private void close()
@@ -123,20 +127,19 @@ public class Db_handlerbot
 			e.printStackTrace();
 		}
 	}
+
 	// storing data handler
-	public boolean StorageHandler(String email, String token ,String notifytoken)
+	public boolean StorageHandler(String email, String token, String notifytoken, String hipchatemail)
 	{
 		// check if token already exists or not
 		if (CheckToken(email))
 		{
-			return StoreToken(email, token, notifytoken);
+			return StoreToken(email, token, notifytoken, hipchatemail);
 		} else
 		{
-			return UpdateToken(email, token, notifytoken);
+			return UpdateToken(email, token, notifytoken, hipchatemail);
 		}
 	}
-
-
 
 	// check if data exists in the server against that email
 	// true means that data doesn;t exist
@@ -164,21 +167,20 @@ public class Db_handlerbot
 		return true;
 	}
 
-
-
 	// set the authentication data into the table
-	private boolean StoreToken(String email, String token, String notifytoken)
+	private boolean StoreToken(String email, String token, String notifytoken, String hipchatemail)
 	{
 		try
 		{
 			Class.forName("com.mysql.jdbc.Driver");
 			connect = DriverManager.getConnection(DB_URL);
 			statement = connect.createStatement();
-			preparedStatement = connect.prepareStatement("insert into hipchat values (default, ?, ?, ?, ?)");
+			preparedStatement = connect.prepareStatement("insert into hipchat values (default, ?, ?, ?, ?, ?)");
 			preparedStatement.setString(1, email);
 			preparedStatement.setString(2, token);
 			preparedStatement.setBoolean(3, true);
 			preparedStatement.setString(4, notifytoken);
+			preparedStatement.setString(5, hipchatemail);
 			preparedStatement.executeUpdate();
 			return true;
 		} catch (Exception e)
@@ -191,21 +193,20 @@ public class Db_handlerbot
 		}
 	}
 
-
-
 	// update the authentication data into the table
-	private boolean UpdateToken(String email, String token, String notifytoken)
+	private boolean UpdateToken(String email, String token, String notifytoken, String hipchatemail)
 	{
 		try
 		{
 			Class.forName("com.mysql.jdbc.Driver");
 			connect = DriverManager.getConnection(DB_URL);
 			statement = connect.createStatement();
-			preparedStatement = connect.prepareStatement("default, update hipchat set token = ?, state = ?, notifytoken = ? where email = ?");
+			preparedStatement = connect.prepareStatement("default, update hipchat set token = ?, state = ?, notifytoken = ?, hipchatemail = ? where email=?");
 			preparedStatement.setString(1, token);
 			preparedStatement.setBoolean(2, true);
 			preparedStatement.setString(3, notifytoken);
-			preparedStatement.setString(4, email);
+			preparedStatement.setString(4, hipchatemail);
+			preparedStatement.setString(5, email);
 			preparedStatement.executeUpdate();
 			return true;
 		} catch (Exception e)
@@ -214,7 +215,5 @@ public class Db_handlerbot
 			return false;
 		}
 	}
-
-
 
 }

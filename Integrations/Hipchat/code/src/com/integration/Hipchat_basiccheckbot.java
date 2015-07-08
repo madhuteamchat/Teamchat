@@ -2,38 +2,59 @@ package com.integration;
 
 public class Hipchat_basiccheckbot
 {
-	private String email,access_token,notify_token;
+	private String email,access_token, notify_token, hipchatemail;
 
-	public String getEmail() {
+	public String getEmail()
+	{
 		return email;
 	}
 
-	public void setEmail(String email) {
+	public void setEmail(String email)
+	{
 		this.email = email;
 	}
 
-	public String getAccess_token() {
+	public String gethipchatEmail()
+	{
+		return hipchatemail;
+	}
+
+	public void sethipchatEmail(String hipchatemail)
+	{
+		this.hipchatemail = hipchatemail;
+	}
+
+	public String getAccess_token()
+	{
 		return access_token;
 	}
 
-	public void setAccess_token(String access_token) {
+	public void setAccess_token(String access_token)
+	{
 		this.access_token = access_token;
 	}
-	public String getnotify_token() {
+
+	public String getnotify_token()
+	{
 		return notify_token;
 	}
 
-	public void setnotify_token(String notify_token) {
+	public void setnotify_token(String notify_token)
+	{
 		this.notify_token = notify_token;
 	}
-	public Hipchat_basiccheckbot(){
-		
+
+	public Hipchat_basiccheckbot()
+	{
+
 	}
-	
-	public Hipchat_basiccheckbot(String email,String access_token,String notify_token) {
+
+	public Hipchat_basiccheckbot(String email, String hipchatemail, String access_token, String notify_token)
+	{
 		super();
 		this.email = email;
 		this.access_token = access_token;
-		this.notify_token=notify_token;
+		this.notify_token = notify_token;
+		this.hipchatemail = hipchatemail;
 	}
 }
