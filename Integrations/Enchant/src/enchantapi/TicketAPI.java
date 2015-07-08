@@ -3,6 +3,8 @@ package enchantapi;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+
+import org.json.JSONException;
 import org.json.JSONObject;
 
 
@@ -25,10 +27,16 @@ public class TicketAPI {
 		        String userpass = enchant_username + ":" +enchant_password;
 		        String basicAuth = "Basic " + javax.xml.bind.DatatypeConverter.printBase64Binary(userpass.getBytes());
 		        JSONObject json=new JSONObject();
-		        json.put("type","email");
-		        json.put("subject", subject);
-		        json.put("customer_id", customerid);
-		        json.put("reply_to", reply);
+		        try {
+					json.put("type","email");
+					 json.put("subject", subject);
+				        json.put("customer_id", customerid);
+				        json.put("reply_to", reply);
+				} catch (JSONException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+		       
 		        byte[] postDataBytes = json.toString().getBytes("UTF-8");
 		        HttpURLConnection yc = (HttpURLConnection)urldemo.openConnection();
 		        yc.setRequestProperty ("Authorization", basicAuth);
