@@ -8,7 +8,7 @@ import com.squareup.okhttp.Response;
 public class giphyintegrator {
 
 	
- public String getimages(String keyword) throws IOException{
+ public String getimages(String keyword,int limit,int offset) throws IOException{
    	  
    	  String err = "Error";
          	
@@ -17,7 +17,7 @@ public class giphyintegrator {
 			OkHttpClient client = new OkHttpClient();
 
 			Request request = new Request.Builder()
-			  .url("http://api.giphy.com/v1/gifs/search?api_key=dc6zaTOxFJmzC&q="+keyword)
+			  .url("http://api.giphy.com/v1/gifs/search?api_key=dc6zaTOxFJmzC&q="+keyword+"&offset="+offset+"&limit="+limit)
 			  .get()
 			  .build();
 

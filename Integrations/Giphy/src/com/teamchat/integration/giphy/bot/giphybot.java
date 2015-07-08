@@ -18,10 +18,11 @@ import com.teamchat.integration.giphy.classes.Pagination;
 
 public class giphybot {
 
-	int count, ttl, sc;
+	int count, ttl, sc ,nextc,nexta;
 	String[] urlpge;
 	String[] urlpge_s;
-	String storedstr;
+	String storedstr,temp;
+	int offset,limit;
 
 	@OnKeyword("help")
 	public void help(TeamchatAPI api) {
@@ -71,7 +72,7 @@ public class giphybot {
 
 		String keyword = api.context().currentReply().getField("keyword");
 
-		String temp = "";
+		temp = "";
 		String resp;
 		int l;
 
@@ -84,9 +85,10 @@ public class giphybot {
 				temp = temp + keyword.charAt(i);
 		}
 		// System.out.println(temp);
-
+         limit=5;
+         offset=0;
 		giphyintegrator ob1 = new giphyintegrator();
-		resp = ob1.getimages(temp);
+		resp = ob1.getimages(temp,limit,offset);
 		// System.out.println(resp);
 
 		if (resp.equals("Error")) {
@@ -408,18 +410,265 @@ public class giphybot {
 	@OnAlias("getdata2")
 	public void getdata2(TeamchatAPI api) throws IOException {
 		storedstr="";
-		int sc=1;
+		int sca=1;
 		for(int i=0;i<count;i++)
 		{
-			if(api.context().currentReply().getField("img"+sc).equalsIgnoreCase("yes"))
+			if(api.context().currentReply().getField("img"+sca).equalsIgnoreCase("yes"))
 			{
-			storedstr=storedstr+ String.valueOf(sc);
+			storedstr=storedstr+ String.valueOf(sca);
 			storedstr=storedstr+',';
 			}
-			sc++;
+			sca++;
+		}
+		System.out.println(storedstr);
+		System.out.println(count);
+
+	}
+	
+	@OnKeyword("next")
+	public void next(TeamchatAPI api) throws IOException {
+		
+		if(ttl>5 && (offset+limit)<ttl)
+		{
+			if((ttl-(offset+limit))>=5)
+			{
+		    offset = offset+5;
+						
+			giphyintegrator ob1 = new giphyintegrator();
+			String resp = ob1.getimages(temp,limit,offset);
+			// System.out.println(resp);
+
+			if (resp.equals("Error")) {
+				PrimaryChatlet prime = new PrimaryChatlet();
+				api.perform(api
+						.context()
+						.currentRoom()
+						.post(prime.setQuestionHtml("<br /><b>Error :</b>"
+								+ "<br /><b>Status Code: 403</b>"
+								+ "<br /><b>StatusDesc: Forbidden</b>"
+								+ "<br /><b>Something went wrong!</b>")));
+
+				// System.out.println("loggg");
+			}
+
+			else {
+				Gson gson = new Gson();
+				Giphyd data = gson.fromJson(resp, Giphyd.class);
+				
+				//sc = count+1;
+				int k = count;
+				Form fo = api.objects().form();
+				System.out.println(count);
+
+				for (Datum datas : data.getData()) {
+
+					Images img = datas.getImages();
+					Original or = img.getOriginal();
+					OriginalStill ors = img.getOriginalStill();
+					urlpge[k] = or.getUrl();
+					urlpge_s[k] = ors.getUrl();
+					System.out.println(urlpge[k]);
+					k++;
+				}			
+				nextc=sc;
+					for (int c = 0; c < 5; c++) {
+						fo.addField(api.objects().select()
+								.name("img" + String.valueOf(sc))
+								.label("Image " + String.valueOf(sc) + ":")
+								.addOption("yes").addOption("no"));
+						sc++;
+					}
+					
+					count=count+5;
+					System.out.println(count+k);
+					
+					
+
+
+					PrimaryChatlet prime = new PrimaryChatlet();
+					prime.setQuestionHtml(
+							"<h6><b>Image "+(k-4)+":</b></h6>" + "<img src=\"" + urlpge[k-5]+ "\" height=\"160\" width=\"280\">"
+						  + "<h6><b>Image "+(k-3)+":</b></h6>" + "<img src=\"" + urlpge[k-4]+"\" height=\"160\" width=\"280\">"
+						  + "<h6><b>Image "+(k-2)+":</b></h6>" + "<img src=\"" + urlpge[k-3]+"\" height=\"160\" width=\"280\">"
+						  + "<h6><b>Image "+(k-1)+":</b></h6>" + "<img src=\"" + urlpge[k-2]+"\" height=\"160\" width=\"280\">"
+						  + "<h6><b>Image "+(k)+":</b></h6>" + "<img src=\"" + urlpge[k-1]+"\" height=\"160\" width=\"280\">")
+						  .setReplyScreen(fo).setReplyLabel("Enter")
+							.alias("getdatanext1");
+					api.perform(api.context().currentRoom().post(prime));
+
+								
+			}			
+			}
+			
+			
+			if((ttl-(offset+limit))<5 && (ttl-(offset+limit))!=0)
+			{
+				
+				limit=ttl-(offset+limit);
+				offset=offset+5;
+				
+				giphyintegrator ob1 = new giphyintegrator();
+				String resp = ob1.getimages(temp,limit,offset);
+				// System.out.println(resp);
+
+				if (resp.equals("Error")) {
+					PrimaryChatlet prime = new PrimaryChatlet();
+					api.perform(api
+							.context()
+							.currentRoom()
+							.post(prime.setQuestionHtml("<br /><b>Error :</b>"
+									+ "<br /><b>Status Code: 403</b>"
+									+ "<br /><b>StatusDesc: Forbidden</b>"
+									+ "<br /><b>Something went wrong!</b>")));
+
+					// System.out.println("loggg");
+				}
+
+				else {
+					Gson gson = new Gson();
+					Giphyd data = gson.fromJson(resp, Giphyd.class);
+					
+					//sc = count+1;
+					int k = count;
+					Form fo = api.objects().form();
+
+					for (Datum datas : data.getData()) {
+
+						Images img = datas.getImages();
+						Original or = img.getOriginal();
+						OriginalStill ors = img.getOriginalStill();
+						urlpge[k] = or.getUrl();
+						urlpge_s[k] = ors.getUrl();
+						k++;
+
+					}			
+					nextc=sc;
+					if((ttl-offset)==1)
+					{
+						for (int c = 0; c < (ttl-offset); c++) {
+							fo.addField(api.objects().select()
+									.name("img" + String.valueOf(sc))
+									.label("Image " + String.valueOf(sc) + ":")
+									.addOption("yes").addOption("no"));
+							sc++;
+						}
+						count = count+1;
+						nexta=1;
+						PrimaryChatlet prime = new PrimaryChatlet();
+						prime.setQuestionHtml(
+								"<h6><b>Image "+(k)+":</b></h6>" + "<img src=\"" + urlpge[k-1]+ "\" height=\"160\" width=\"280\">")
+							  .setReplyScreen(fo).setReplyLabel("Enter")
+								.alias("getdatanext2");
+						api.perform(api.context().currentRoom().post(prime));
+					}
+					if((ttl-offset)==2)
+					{
+						for (int c = 0; c < (ttl-offset); c++) {
+							fo.addField(api.objects().select()
+									.name("img" + String.valueOf(sc))
+									.label("Image " + String.valueOf(sc) + ":")
+									.addOption("yes").addOption("no"));
+							sc++;
+						}
+						count = count+2;
+						nexta=2;
+						PrimaryChatlet prime = new PrimaryChatlet();
+						prime.setQuestionHtml(
+								"<h6><b>Image "+(k-1)+":</b></h6>" + "<img src=\"" + urlpge[k-2]+ "\" height=\"160\" width=\"280\">"
+										+"<h6><b>Image "+(k)+":</b></h6>" + "<img src=\"" + urlpge[k-1]+ "\" height=\"160\" width=\"280\">")
+							  .setReplyScreen(fo).setReplyLabel("Enter")
+								.alias("getdatanext2");
+						api.perform(api.context().currentRoom().post(prime));
+					}
+
+					if((ttl-offset)==3)
+					{
+						for (int c = 0; c < (ttl-offset); c++) {
+							fo.addField(api.objects().select()
+									.name("img" + String.valueOf(sc))
+									.label("Image " + String.valueOf(sc) + ":")
+									.addOption("yes").addOption("no"));
+							sc++;
+						}
+						count = count+3;
+						nexta=3;
+						PrimaryChatlet prime = new PrimaryChatlet();
+						prime.setQuestionHtml(
+								"<h6><b>Image "+(k-2)+":</b></h6>" + "<img src=\"" + urlpge[k-3]+ "\" height=\"160\" width=\"280\">"
+										+"<h6><b>Image "+(k-1)+":</b></h6>" + "<img src=\"" + urlpge[k-2]+ "\" height=\"160\" width=\"280\">"
+												+ "<h6><b>Image "+(k)+":</b></h6>" + "<img src=\"" + urlpge[k-1]+ "\" height=\"160\" width=\"280\">")
+							  .setReplyScreen(fo).setReplyLabel("Enter")
+								.alias("getdatanext2");
+						api.perform(api.context().currentRoom().post(prime));
+					}
+					if((ttl-offset)==4)
+					{
+						for (int c = 0; c < (ttl-offset); c++) {
+							fo.addField(api.objects().select()
+									.name("img" + String.valueOf(sc))
+									.label("Image " + String.valueOf(sc) + ":")
+									.addOption("yes").addOption("no"));
+							sc++;
+						}
+						count = count+4;
+						nexta=4;
+						PrimaryChatlet prime = new PrimaryChatlet();
+						prime.setQuestionHtml(
+								"<h6><b>Image "+(k-3)+":</b></h6>" + "<img src=\"" + urlpge[k-4]+ "\" height=\"160\" width=\"280\">"
+										+"<h6><b>Image "+(k-2)+":</b></h6>" + "<img src=\"" + urlpge[k-3]+ "\" height=\"160\" width=\"280\">"
+												+ "<h6><b>Image "+(k-1)+":</b></h6>" + "<img src=\"" + urlpge[k-2]+ "\" height=\"160\" width=\"280\">"
+														+ "<h6><b>Image "+(k)+":</b></h6>" + "<img src=\"" + urlpge[k-1]+ "\" height=\"160\" width=\"280\">")
+							  .setReplyScreen(fo).setReplyLabel("Enter")
+								.alias("getdatanext2");
+						api.perform(api.context().currentRoom().post(prime));
+					}
+			   }
+		}
+		
+	  }
+		else
+		{
+			PrimaryChatlet prime = new PrimaryChatlet();
+			prime.setQuestionHtml(
+					"<h4><b>Sorry, No images to show!!!</b></h6>");
+				 
+			api.perform(api.context().currentRoom().post(prime));
+			
+		}
+		
+	}
+	@OnAlias("getdatanext1")
+	public void getdatanext1(TeamchatAPI api) throws IOException {
+		
+		for(int i=0;i<5;i++)
+		{
+			if(api.context().currentReply().getField("img"+nextc).equalsIgnoreCase("yes"))
+			{
+			storedstr=storedstr+ String.valueOf(nextc);
+			storedstr=storedstr+',';
+			}
+			nextc++;
 		}
 		System.out.println(storedstr);
 
 	}
+	
+	@OnAlias("getdatanext2")
+	public void getdatanext2(TeamchatAPI api) throws IOException {
+		
+		for(int i=0;i<nexta;i++)
+		{
+			if(api.context().currentReply().getField("img"+nextc).equalsIgnoreCase("yes"))
+			{
+			storedstr=storedstr+ String.valueOf(nextc);
+			storedstr=storedstr+',';
+			}
+			nextc++;
+		}
+		System.out.println(storedstr);
 
+	}
+	
+
+	
 }
