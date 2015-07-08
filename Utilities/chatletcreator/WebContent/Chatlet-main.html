@@ -5,8 +5,6 @@
 <meta charset="utf-8">
 <title>Show Hide Dropdown Using CSS</title>
 <link href="style.css" rel="stylesheet" type="text/css">
-
-
 <style type="text/css">
 ul {
 	padding: 0;
@@ -182,7 +180,7 @@ ul li ul.dropdown li {
 
 #demoHeading {
 	background: center;
-	background-color: #CCC;
+	background-color: #ccc;
 	font-size: 36px;
 }
 
@@ -240,53 +238,24 @@ ul li ul.dropdown li {
 	display: none;
 }
 
-#total_replies{
-		visibility:visible;
-}
-
-#comments1{
-		visibility:visible;
+#content_html{
+	display:none;
 }
 
 #th{
-		visibility:hidden;
-}
-
-#content_html {
-	display:inline-block;
-	color:#000000;
-	font-family:Arial;
-	font-size:13px;
-	text-decoration:none;
-	position:absolute;
-	top:200px;
-	left:602px;
 	display:none;
 }
 
-#t {
-	display:inline-block;
-	color:#000000;
-	font-family:Arial;
-	font-size:15px;
-	text-decoration:none;
-	position:absolute;
-	top:480px;
-	left:510px;
+#t{
 	display:block;
-}
+	}
+#rep{
+	visibility:visible;
+	}
 
-#t1 {
-	display:inline-block;
-	color:#000000;
-	font-family:Arial;
-	font-size:15px;
-	text-decoration:none;
-	position:absolute;
-	top:510px;
-	left:510px;
-	display:none;
-}
+#repb{
+	visibility:visible;
+	}
 </style>
 </head>
 
@@ -312,10 +281,10 @@ ul li ul.dropdown li {
 					style="color: #404040; font-size: 12px; padding: 8px 10px 0 10px;">
 				</div>
 				<div>
-				<li>Text <input type="checkbox" id="r3" name="text"
-						checked="true"> HTML <input type="checkbox" id="r4"
-						name="text" >
-					</li> <br>
+				Text <input type="checkbox" id="r3" name="text"
+						checked="true"> &nbsp&nbsp&nbspHTML <input type="checkbox" id="r4"
+						name="text">
+					 <br><br>
 					<p>
 						<input id="content" type="text" value="What are the sales?">
 					</p>
@@ -323,31 +292,43 @@ ul li ul.dropdown li {
 					<script src="jquery-1.11.3.min.js"></script>
 					<p>
 						<br> <input id="content_html" type="text"
-							value="<html><body>What are the sales</body></html>">
+							value="<html><body>What are the sales?</body></html>">
 					</p>
 					<br>
 					<br>
 				</div>
 			</div>
 			<ul>
-				<li><a href="#" id="myReplyButton"> <input type="button"
-						value="Create">
-				</a></li>
+				<li><a href="#" id="myReplyButton"> Create &#9662;
+				</a>
+					<ul class="dropdown" id="idd">
+						<li><a href="#"> <input id="r0" type="radio" name="create"
+								value="Show" checked="checked"> Show Reply Screen
+						</a></li>
+						<li><a href="#"> <input id="r00" type="radio" name="create"
+								value="norep"> Hide Reply Screen
+						</a></li>
+						<li><a href="#"> <input id="r000" type="button" name="create"
+								value="Create Reply Screen">
+						</a></li>
+					</ul>
+				
+				</li>
 				<li><a href="#" id="myTotalButton">Details &#9662;</a>
 					<ul class="dropdown" id="replies">
 						<li><a href="#"> <input id="r1" type="radio" name="reply"
 								value="showrep" checked="checked"> Show
 						</a></li>
-						<li><a href="#"> <input id="r2" type="radio" name="reply"
+						<li><a href="#"> <input id="r11" type="radio" name="reply"
 								value="norep"> Hide
 						</a></li>
 					</ul></li>
 				<li><a href="#" id="myCommentsButton">Comments &#9662;</a>
 					<ul class="dropdown" id="comments">
-						<li><a href="#">Show <input type="radio" id="r5"
+						<li><a href="#">Show <input type="radio" id="r2"
 								name="com" checked="checked">
 						</a></li>
-						<li><a href="#">Hide <input id="r6" type="radio" name="com">
+						<li><a href="#">Hide <input id="r22" type="radio" name="com">
 						</a></li>
 					</ul></li>
 				<li>
@@ -358,9 +339,6 @@ ul li ul.dropdown li {
 			</ul></div>
 			<input id="email_text" type="text" value="Enter Email..."> <input
 				type="button" id="email_btn" value="send Chatlet">
-
-			<div id="t"><r1>What are the sales?</r1></div>
-			<div id="t1"><r2>What are the sales?</r2></div>
 			<script>
 				var text = true;
 
@@ -369,19 +347,56 @@ ul li ul.dropdown li {
 					$("#r3").click(function() {
 
 						$("#content").toggle();
-						$("#t").toggle();
+						$("#t").toggle();	
 					});
 
 					$("#r4").click(function() {
-						console.log("working");						
 						$("#content_html").toggle();
-						$("#t1").toggle();
+						$("#th").toggle();
 					});
+					
+					
 				});
+				
+				document.getElementById("r1").onclick=function(){
+					console.log("checkpoint");
+					document.getElementById("rep").style.visibility="visible";
+				};
+				
+				document.getElementById("r11").onclick=function(){
+					document.getElementById("rep").style.visibility="hidden";
+				};
+				
+				document.getElementById("r2").onclick=function(){
+					document.getElementById("com").style.visibility="visible";
+				};
+				
+				document.getElementById("r22").onclick=function(){
+					document.getElementById("com").style.visibility="hidden";
+				};
+				
+				document.getElementById("r0").onclick=function(){
+					document.getElementById("repb").style.visibility="visible";
+					document.getElementById("rep").style.visibility="visible";
+					document.getElementById("r1").checked=true;
+					document.getElementById("r11").disabled=false;
+					document.getElementById("r1").disabled=false;
+					document.getElementById("r000").disabled=false;
+				};
+				document.getElementById("r00").onclick=function(){
+					document.getElementById("repb").style.visibility="hidden";
+					document.getElementById("rep").style.visibility="hidden";
+					document.getElementById("r11").checked=true;
+					document.getElementById("r11").disabled=true;
+					document.getElementById("r1").disabled=true;
+					document.getElementById("r000").disabled=true;
+					
+				};
+				
 
-				document.getElementById("myReplyButton").onclick = function() {
+				document.getElementById("r000").onclick = function() {
 					var url = "index_replies.html";
-					var win = window.open(url, "_blank");
+					var win = window.open(url, "_blank","toolbar=no, scrollbars=no, resizable=yes, top=250, left=450, width=700, height=550");
 					win.focus();
 				};
 
@@ -390,23 +405,6 @@ ul li ul.dropdown li {
 					document.getElementById("replies").style.visibility = "visible";
 				};
 
-				document.getElementById("r2").onclick=function(){
-					document.getElementById("total_replies").style.visibility = "hidden";					
-				};
-
-				document.getElementById("r1").onclick=function(){
-					document.getElementById("total_replies").style.visibility = "visible";					
-				};
-
-				document.getElementById("r5").onclick=function(){
-					document.getElementById("comments1").style.visibility = "visible";					
-				};
-
-				document.getElementById("r6").onclick=function(){
-					document.getElementById("comments1").style.visibility = "hidden";					
-				};
-
-
 				$("#myTotalButton").click(function() {
 					$("#replies").show()
 				});
@@ -414,20 +412,17 @@ ul li ul.dropdown li {
 				document.getElementById("myCommentsButton").onclick = function() {
 					document.getElementById("comments").style.visibility = "visible";
 				};
-
 				
-				var texthtml="<html><body>What are the sales</body></html>"
-					
 				$("#content").change(function(){
-						var text=document.getElementById("content").value;						
-						$("r1").html(text);
-						});				
-
+					var text=document.getElementById("content").value;
+					$("r1").html(text);
+				});
+				
 				$("#content_html").change(function(){
-						var text=document.getElementById("content_html").value;						
-						$("r2").html(text);
-						});				
-
+					var text=document.getElementById("content_html").value;
+					$("r2").html(text);
+				});
+				
 
 				document.getElementById("done").onclick = function() {
 					var text = $("#r3").is(":checked");
@@ -448,7 +443,7 @@ ul li ul.dropdown li {
 						replies = "all";
 					else
 						replies = "none";
-					if (document.getElementById("r5").checked)
+					if (document.getElementById("r2").checked)
 						comments = true;
 					else
 						comments = false;
@@ -469,7 +464,9 @@ ul li ul.dropdown li {
 					localStorage.setItem("head", str);
 					print_result();
 				};
-				var head = "", foot = "";
+				var head = ""; 
+				var foot = " \"detdesc\": { \"fields\": [] },\"actions\": { \"actitem\": [] }}";
+				localStorage.setItem("foot",foot);
 				$("#email_btn").click(function() {
 					console.log("1");
 					var email = document.getElementById("email_text").value;
@@ -506,35 +503,24 @@ ul li ul.dropdown li {
 				}
 			</script>
 		</div>
+		<br><br>
 		<div>
 			<br> <br> <br><br>
-			<div id="demoHeading" align="center">How will your chatlet appear...</div>
+			<div id="demoHeading" align="center">How your Chatlet Appears</div>
 			<br> <br>
-<div align="center">
-<div class="media-body members-list bubble">      <div class="timestamp u-name">            <span class="chat-seperator">.</span></div> </div>   
-
-<div class="media-heading" id="room_555ad9b814b473c40d6a9d80_msg_55829601f4db477023b1d162">       <div style="border-top:2px solid #0086ca;background-color:#f7f7f7;font-size:14px;font-family:inherit;max-width:400px;margin-top:5px;"><div style="border-left:1px solid #ececec;border-right:1px solid #ececec;border-bottom:1px solid #ececec;">
-
-
+			<div align="center">
+<div class="media-body members-list bubble">      <div class="timestamp u-name">            <span class="chat-seperator">.</span></div> </div>   <div class="media-heading" id="room_555ad9b814b473c40d6a9d80_msg_55829601f4db477023b1d162">       <div style="border-top:2px solid #0086ca;background-color:#f7f7f7;font-size:14px;font-family:inherit;max-width:400px;margin-top:5px;"><div style="border-left:1px solid #ececec;border-right:1px solid #ececec;border-bottom:1px solid #ececec;">
 <div style="color:#404040;font-size:12px;padding:8px 10px 0 10px;" align="left"> Posted on:<span style="color:#999999;margin-left:2px;font-size:11px;font-weight:lighter;">18 Jun 2015 03:27 PM IST</span>
 </div>
-<br><br><br><br>
-
-
-
-
-<div style="font-size:12px;margin:0px 0px 10px;padding:8px 10px 0px 15px;color:#404040;" align="left">
-
-</div>
+<div id="t" style="padding:8px 10px 0 15px;" align="left"><r1>What are the sales ?</r1></div>
+<div id="th" style="padding:8px 10px 0 15px;" align="left"><r2>What are the sales ?</r2></div>
+<br>
 <div style="background-color:#ebebeb;padding:0px;clear:both;overflow:hidden;">
-<div id="reply_button" style="float:left;">
-	<a style="text-decoration:none;color:#0086ca;font-size:13px;font-weight:normal;text-transform:uppercase;padding:12px 15px 8px 10px;display:block;" onClick="msgResp('compose',' eyJpbWdVcmwiOiIiLCJ0eXBlIjoibWV0YSIsImZpZWxkcyI6W3sibmFtZSI6InF1ZXNMIiwidmFsdWUiOiJBYmNkIiwidHlwZSI6ImxhYmVsIn0seyJuYW1lIjoia2V5MUwiLCJ2YWx1ZSI6IkFiY2QiLCJ0eXBlIjoibGFiZWwifSx7Im5hbWUiOiJrZXkxIiwidmFsdWUiOiIiLCJ0eXBlIjoiaW5wdXQifV0sImRpc3BsYXluYW1lIjoiUmVwbHkifQ== ',' {&quot;maction&quot;:&quot;&quot;,&quot;key1&quot;:&quot;&quot;,&quot;action&quot;:&quot;Reply&quot;,&quot;formid&quot;:&quot;55829601e4b09d59c71d538b&quot;} ')" href="javascript:void(0);">Reply</a></div>
+<div id="repb" style="float:left;"><a style="text-decoration:none;color:#0086ca;font-size:13px;font-weight:normal;text-transform:uppercase;padding:12px 15px 8px 10px;display:block;" onClick="msgResp('compose',' eyJpbWdVcmwiOiIiLCJ0eXBlIjoibWV0YSIsImZpZWxkcyI6W3sibmFtZSI6InF1ZXNMIiwidmFsdWUiOiJBYmNkIiwidHlwZSI6ImxhYmVsIn0seyJuYW1lIjoia2V5MUwiLCJ2YWx1ZSI6IkFiY2QiLCJ0eXBlIjoibGFiZWwifSx7Im5hbWUiOiJrZXkxIiwidmFsdWUiOiIiLCJ0eXBlIjoiaW5wdXQifV0sImRpc3BsYXluYW1lIjoiUmVwbHkifQ== ',' {&quot;maction&quot;:&quot;&quot;,&quot;key1&quot;:&quot;&quot;,&quot;action&quot;:&quot;Reply&quot;,&quot;formid&quot;:&quot;55829601e4b09d59c71d538b&quot;} ')" href="javascript:void(0);">Reply</a></div>
 <div style="border-right:1px solid #d0d0d0;height:20px;float:left;margin:9px 5px 9px 0;width:1px;text-indent:-9999px;">                                                Sep                                            </div>
-
-<div id="total_replies"><a style="color:#0086ca;float:left;text-decoration:none;font-size:13px;padding:12px 10px 8px 10px;" href="javascript:void(0);" onClick="msgDet('primary-2.7.2_det','55829601f4db477023b1d162','')"><span style="margin-right:3px;">0</span>Replies</a></div>
-
-<div id="comments1">
-<a style="color:#0086ca;display:block;float:right;text-decoration:none;font-size:13px;padding:5px 10px 3px 0px;" href="javascript:void(0);" onClick="msgDet('primary-2.7.2_comments','55829601f4db477023b1d162','')"><img src="images\comment[1].png" style="margin-left:2px;vertical-align:-10px;"><span style="margin-right:3px;">0</span><i style="font-style:normal;" class="comments-label">Comments</i></a></div>
+<div id="rep">
+<a style="color:#0086ca;float:left;text-decoration:none;font-size:13px;padding:12px 10px 8px 10px;" href="javascript:void(0);" onClick="msgDet('primary-2.7.2_det','55829601f4db477023b1d162','')"><span style="margin-right:3px;">0</span>Replies</a></div><div id="com"><a style="color:#0086ca;display:block;float:right;text-decoration:none;font-size:13px;padding:5px 10px 3px 0px;" href="javascript:void(0);" onClick="msgDet('primary-2.7.2_comments','55829601f4db477023b1d162','')"><img src="images\comment[1].png" style="margin-left:2px;vertical-align:-10px;"><span style="margin-right:3px;">0</span><i style="font-style:normal;" class="comments-label">Comments</i></a>
+</div>
 </div>
 </div></div>      </div>     </div>
 
