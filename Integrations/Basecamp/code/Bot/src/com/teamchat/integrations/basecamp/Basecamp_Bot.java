@@ -62,12 +62,11 @@ public class Basecamp_Bot {
 		// if api is not initialized display keyword
 		// initiate the basecampbot
 		String email = api.context().currentSender().getEmail();
+		Db_handler db = new Db_handler();
 		if (!api_init) {
-			Db_handler db = new Db_handler();
 			// check if the user email exists in the db or not
 			if (db.isAuthorized(email)) {
-				//init new 
-				bb = new Basecamp_basics();
+				// init new
 				// get the basic info
 				bb = db.GetBasicStuff(email);
 				// initiate api handler
@@ -97,6 +96,12 @@ public class Basecamp_Bot {
 										+ "</a>")));
 				return true;
 			}
+		} else {
+			// auth old
+			// get the basic info
+			bb = db.GetBasicStuff(email);
+			// initiate api handler
+			bah = new Basecamp_api_handler(bb);
 		}
 		return false;
 	}
