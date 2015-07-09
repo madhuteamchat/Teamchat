@@ -25,7 +25,7 @@
 	</context-param>
 	<context-param>
 		<param-name>bot-class</param-name>
-		<param-value>com.teamchat.integrations.NewRelic.NewRelicServlet</param-value>
+		<param-value>com.teamchat.integrations.NewRelic.NewRelicBot</param-value>
 	</context-param>
 	<context-param>
 		<param-name>db-host</param-name>
