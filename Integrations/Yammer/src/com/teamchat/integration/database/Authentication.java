@@ -8,7 +8,7 @@ import com.teamchat.integration.factory.PropertyFile;
 public class Authentication {
 	 static java.sql.Statement stmt = null;
 	 static java.sql.Connection connection = null;   
-     static String url="jdbc:mysql://localhost/Bot";
+     static String url="jdbc:mysql://localhost/Yammer";
 	    
     public static void setToken(String id,String accessToken) throws Exception{
     	  String dbUser=PropertyFile.getProperty("dbusername");	

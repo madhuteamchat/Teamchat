@@ -57,6 +57,7 @@ public class YammerBot {
 	public void onloginEntry(TeamchatAPI api) {
 		String hostname=PropertyFile.getProperty("host");
 		String port=PropertyFile.getProperty("port");
+		useremail=api.context().currentSender().getEmail();
 		api.perform(
 				api.context().currentRoom().registerForEvents().post(
 				new PrimaryChatlet()
@@ -77,7 +78,7 @@ public class YammerBot {
 		System.out.println("User is "+useremail);
 		if(yammerconnect.getAuthToken(useremail)== null)
 		{     
-			 
+			onloginEntry(api); 
 		}
 		else {
 		HTMLBuilder ui=new HTMLBuilder();
