@@ -25,8 +25,6 @@ public class pingdombot {
 	String Password;
 	int count = 1;
 
-//keyword for helping the user in understanding the procedure.
-
 	@OnKeyword("help")
 	public void help(TeamchatAPI api) {
 
@@ -58,12 +56,6 @@ public class pingdombot {
 
 	}
 
-//For logging into the pingdom server
-//If the user is logging in for the first time then only teamchat will ask him/her for his/her username,password and appkey else 
-//he/she will automatically get logged into the pingdom server untill n unless he/she logs out(the session will be maintained)
-// If any other user needs to log in, Then he/she should use "login" keyword.Hence,the existing user will be logged out automatically.
-//Sessions are made with the help of roomId..
-
 	@OnKeyword("login")
 	public void login(TeamchatAPI api) {
 
@@ -80,8 +72,6 @@ public class pingdombot {
 
 	}
 
-//for logging out of the server.
-
 	@OnKeyword("logout")
 	public void logout(TeamchatAPI api) throws SQLException {
 
@@ -95,7 +85,6 @@ public class pingdombot {
 			DBHandler datacng = new DBHandler();
 			datacng.stmt.executeUpdate("DELETE FROM Bot.pingdom_auth"
 					+ " WHERE roomId='" + rmid + "'");
-			datacng.conn.close();
 			PrimaryChatlet prime = new PrimaryChatlet();
 			prime.setQuestionHtml("<h5><b>You are successfully logged out!!</b></h5>");
 			api.perform(api.context().currentRoom().post(prime));
@@ -108,7 +97,6 @@ public class pingdombot {
 
 	}
 
-//inserting the data into the database.
 	@OnAlias("setdata")
 	public void setdata(TeamchatAPI api) throws SQLException {
 
@@ -132,7 +120,6 @@ public class pingdombot {
 					+ " SET username ='" + Username + "'" + ", pass ='"
 					+ Password + "'" + ", appkey ='" + App_key + "'"
 					+ " where roomId='" + roomId + "'");
-			datacng.conn.close();
 			
 		}
 		api.perform(api
@@ -143,19 +130,15 @@ public class pingdombot {
 
 	}
 
-
-//for finding the status of the url given by the user that whether it is up or down and its last response time.
-
 	@OnKeyword("ping")
-	public void ping(TeamchatAPI api) throws IOException, SQLException {
+	public void ping(TeamchatAPI api) throws IOException {
 		String rmid;
 		count=1;
-//getting roomid
 		rmid = api.context().currentRoom().getId();
 		DBHandler ob4 = new DBHandler();
 		boolean flag;
 		flag = ob4.roomchk(rmid);
-//checking if roomid is available in the database.If it is available then user will be logged in automatically n flag will become true else false
+
 		if (flag == false) {
 			PrimaryChatlet prime = new PrimaryChatlet();
 			prime.setQuestionHtml("<br /><b>First you have to sign in!!</b>"
@@ -165,16 +148,14 @@ public class pingdombot {
 		}
 
 		else {
-			DBHandler ob5 = new DBHandler();
-			String[] usrpassapp = ob5.getusrpassapp(rmid);
+
+			String[] usrpassapp = ob4.getusrpassapp(rmid);
 			Username = usrpassapp[0];
 			Password = usrpassapp[1];
 			App_key = usrpassapp[2];
 			url = "https://api.pingdom.com/api/2.0/checks";
 			pingdomintegrator ob1 = new pingdomintegrator();
 			String resp = ob1.getChecks(Username, Password, App_key, url);
-
-//error if there is some issue in the authentication.
 
 			if (resp.equals("Error")) {
 				PrimaryChatlet prime = new PrimaryChatlet();
@@ -248,7 +229,6 @@ public class pingdombot {
 				Form fo = api.objects().form();
 			
 				
-
 				for (Check check : checks.getChecks()) {
 					
 			
@@ -282,10 +262,8 @@ public class pingdombot {
 		}
 	}
 
-//inserting checks into your pingdom account.
-
 	@OnKeyword("addcheck")
-	public void addcheck(TeamchatAPI api) throws IOException, SQLException {
+	public void addcheck(TeamchatAPI api) throws IOException {
 		String rmid;
 		rmid = api.context().currentRoom().getId();
 		DBHandler ob4 = new DBHandler();
@@ -301,8 +279,8 @@ public class pingdombot {
 		}
 
 		else {
-			DBHandler ob5 = new DBHandler();
-			String[] usrpassapp = ob5.getusrpassapp(rmid);
+
+			String[] usrpassapp = ob4.getusrpassapp(rmid);
 			Username = usrpassapp[0];
 			Password = usrpassapp[1];
 			App_key = usrpassapp[2];
@@ -327,10 +305,8 @@ public class pingdombot {
 		}
 	}
 
-//deleting checks from your pingdom account.
-
 	@OnKeyword("deletecheck")
-	public void deletecheck(TeamchatAPI api) throws IOException, SQLException {
+	public void deletecheck(TeamchatAPI api) throws IOException {
 		String rmid;
 		count=1;
 		rmid = api.context().currentRoom().getId();
@@ -347,8 +323,8 @@ public class pingdombot {
 		}
 
 		else {
-			DBHandler ob5 = new DBHandler();
-			String[] usrpassapp = ob5.getusrpassapp(rmid);
+
+			String[] usrpassapp = ob4.getusrpassapp(rmid);
 			Username = usrpassapp[0];
 			Password = usrpassapp[1];
 			App_key = usrpassapp[2];
@@ -402,7 +378,6 @@ public class pingdombot {
 		}
 	}
 
-//communicating with pingdomintegrator class
 	@OnAlias("sendreqdel")
 	public void sendreqdel(TeamchatAPI api) throws IOException {
 
@@ -468,8 +443,6 @@ public class pingdombot {
 		}
 	}
 
-//communicating with pingdomintegrator class
-
 	@OnAlias("sendreqadd")
 	public void sendreqadd(TeamchatAPI api) throws IOException {
 		String name = api.context().currentReply().getField("name");
@@ -505,7 +478,6 @@ public class pingdombot {
 		}
 
 	}
-//communicating with pingdomintegrator class
 
 	@OnAlias("sendreqcheck")
 	public void sendreqcheck(TeamchatAPI api) throws IOException {

@@ -24,7 +24,7 @@ public class DBHandler {
 	String DB_URL = "jdbc:mysql://localhost:3306/Bot?user=tcinterns&password=PakyovBosh7";
 	
 	public DBHandler () {
-				//establishing the connection with the database.
+				
 		try {
 			Class.forName("com.mysql.jdbc.Driver").newInstance();
 			conn = DriverManager.getConnection(DB_URL);
@@ -35,8 +35,8 @@ public class DBHandler {
 		}
 	}
 	
-	//insertion of data into your database.
-	public void setData (String username, String pass, String appkey, String roomId) throws SQLException {
+	
+	public void setData (String username, String pass, String appkey, String roomId) {
 		this.username = username;
 		this.pass = pass;
 		this.appkey = appkey;
@@ -50,15 +50,13 @@ public class DBHandler {
 				System.out.println("Updated");
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}finally {
-			conn.close();
 		}
 	}
 	
 	
 	
 	//for getting the roomid from our database corresponding to particular username.
-	public String getRoom (String username) throws SQLException {
+	public String getRoom (String username) {
 		String room;
 		room="";
 		try {
@@ -68,13 +66,11 @@ public class DBHandler {
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}finally {
-			conn.close();
 		}
 		return room;
 	}
 	
-	public boolean dchk(String username) throws SQLException {
+	public boolean dchk(String username) {
 		
 		// check if data exists in the server against that email
 		
@@ -88,16 +84,13 @@ public class DBHandler {
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
-			}finally {
-				conn.close();
 			} 
-			
 			// default case
 			return false;
 		}
 	
 	
-public boolean roomchk(String roomId) throws SQLException {
+public boolean roomchk(String roomId) {
 		
 	// check if data exists in the server against that roomid
 		
@@ -112,9 +105,7 @@ public boolean roomchk(String roomId) throws SQLException {
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
-			} finally {
-				conn.close();
-			}
+			} 
 			// default case
 			return false;
 		}
@@ -122,7 +113,7 @@ public boolean roomchk(String roomId) throws SQLException {
 
 //for getting username password and appkey from our database corresponding to particular roomid.
 
-public String[] getusrpassapp(String roomId) throws SQLException {
+public String[] getusrpassapp(String roomId) {
 		
 		
 	String[] usrpassapp = new String[3];
@@ -135,8 +126,6 @@ public String[] getusrpassapp(String roomId) throws SQLException {
 
 	} catch (SQLException e) {
 		e.printStackTrace();
-	}finally {
-		conn.close();
 	}
 	return usrpassapp;
 			
@@ -145,7 +134,7 @@ public String[] getusrpassapp(String roomId) throws SQLException {
 
 //for getting app-key from our database corresponding to particular username.
 
-public String getapp(String username) throws SQLException {
+public String getapp(String username) {
 		
 		
 	String appkey;
@@ -161,9 +150,7 @@ public String getapp(String username) throws SQLException {
 				
 			} catch (Exception e) {
 				e.printStackTrace();
-			} finally {
-				conn.close();
-			}
+			} 
 			// default case
 			
 			return appkey;
