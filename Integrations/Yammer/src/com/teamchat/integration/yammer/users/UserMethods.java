@@ -64,17 +64,5 @@ public class UserMethods {
         return users;
 	}
 	
-	 public static void main(String argv[]) {
-	    //	try{
-	    //	UserMethods usr=new UserMethods();
-	    	//yc.getUsers();
-	    //	yc.search("yammer");
-	    //	usr.getUsers();
-	    //	}
-	   // 	catch(IOException e) {
-	    //		e.printStackTrace();
-	    //	}
-	    }
-	
 	
 }

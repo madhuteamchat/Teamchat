@@ -2,13 +2,14 @@ package com.teamchat.integration.bot;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import com.teamchat.client.annotations.OnAlias;
 import com.teamchat.client.annotations.OnKeyword;
 import com.teamchat.client.sdk.Field;
 import com.teamchat.client.sdk.TeamchatAPI;
 import com.teamchat.client.sdk.chatlets.PrimaryChatlet;
 import com.teamchat.client.sdk.chatlets.TextChatlet;
-import com.teamchat.integration.factory.HostDomain;
+import com.teamchat.integration.factory.PropertyFile;
 import com.teamchat.integration.yammer.Notifications;
 import com.teamchat.integration.yammer.UploadedFile;
 import com.teamchat.integration.yammer.YammerClient;
@@ -43,12 +44,29 @@ public class YammerBot {
 				.setQuestionHtml("<!DOCTYPE html><html><head></head><body>Hi! I am the <b>Yammer</b> bot of teamchat! You can use me to post and send messgaes "
 						 +       "from your Yammer account. Also, you can get notifications and search from people, messages,groups "         
 						 +       "and files on your Yammer network.<br/>"
+						 +       "Type <b>'login'</b> to log into your Yammer network.<br/>"
 						 +       "Type <b>'post'</b> to post messages on your network.<br/>"
 						 +       "Type <b>'send'</b> to send a private message to a user.<br/>"
 						 +       "Type <b>'search'</b> to search for keywords.<br/>"
 						 +       "Type <b>'notify'</b> to get notifications.<br/></body></html>")));
 			
 	}
+	
+	
+	@OnKeyword("login")
+	public void onloginEntry(TeamchatAPI api) {
+		String hostname=PropertyFile.getProperty("host");
+		String port=PropertyFile.getProperty("port");
+		api.perform(
+				api.context().currentRoom().registerForEvents().post(
+				new PrimaryChatlet()
+				.setQuestionHtml("<!DOCTYPE html><html><head></head><body>You must log into Yammer first.<br/><a href='http://"+hostname+":"+port+"/Yammer/yammerlogin?email="+useremail+"'>Login to Yammer (Please open in a seperate tab)</a>"
+						        +"</html></body>"
+						))
+	  );
+	}
+	
+	
 	
 	
 	@OnKeyword("notify")
@@ -59,14 +77,7 @@ public class YammerBot {
 		System.out.println("User is "+useremail);
 		if(yammerconnect.getAuthToken(useremail)== null)
 		{     
-
-			 api.perform(
-						api.context().currentRoom().registerForEvents().post(
-						new PrimaryChatlet()
-						.setQuestionHtml("<!DOCTYPE html><html><head></head><body>You must log into Yammer first.<br/><a href='http://"+HostDomain.name+":"+HostDomain.port+"/Yammer/yammerlogin?email="+useremail+"'>Login to Yammer (Please open in a seperate tab)</a>"
-								        +"</html></body>"
-								))
-			  );
+			 
 		}
 		else {
 		HTMLBuilder ui=new HTMLBuilder();
@@ -91,12 +102,7 @@ public class YammerBot {
 		System.out.println("User is "+useremail);
 		if(yammerconnect.getAuthToken(useremail)== null)
 		{
-			 api.perform(
-						api.context().currentRoom().registerForEvents().post(
-						new PrimaryChatlet().setQuestionHtml("<!DOCTYPE html><html><head></head><body>You must log into Yammer first.<br/><a href='http://"+HostDomain.name+":"+HostDomain.port+"/Yammer/yammerlogin?email="+useremail+"'>Login to Yammer (Please open in a seperate tab)</a>"
-								        + "</body></html>"
-								))
-			  );
+			onloginEntry(api);
 		}
 		else
 		api.perform(
@@ -120,13 +126,7 @@ public class YammerBot {
 		System.out.println("User is "+useremail);
 		if(yammerconnect.getAuthToken(useremail)== null)
 		{
-			 api.perform(
-						api.context().currentRoom().registerForEvents().post(
-						new PrimaryChatlet()
-						.setQuestionHtml("<!DOCTYPE html><html><head></head><body>You must log into Yammer first.<br/><a href='http://"+HostDomain.name+":"+HostDomain.port+"/Yammer/yammerlogin?email="+useremail+"'>Login to Yammer (Please open in a seperate tab)</a>"
-								         +"</body></html>"
-								))
-			  );
+			onloginEntry(api);
 		}
 		else
 		  api.perform(
@@ -152,12 +152,7 @@ public class YammerBot {
 		System.out.println("User is "+useremail);
 		if(yammerconnect.getAuthToken(useremail)== null)
 		{
-			 api.perform(
-						api.context().currentRoom().registerForEvents().post(
-						new PrimaryChatlet().setQuestionHtml("<!DOCTYPE html><html><head></head><body>You must log into Yammer first.<br/><a href='http://"+HostDomain.name+":"+HostDomain.port+"/Yammer/yammerlogin?email="+useremail+"'>Login to Yammer (Please open in a seperate tab)</a>"
-								        +"</body></html>"
-								))
-			  );
+			onloginEntry(api);
 		}
 		else {
 		useremail=api.context().currentSender().getEmail();
