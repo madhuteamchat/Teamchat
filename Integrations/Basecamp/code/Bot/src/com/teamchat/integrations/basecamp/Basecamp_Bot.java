@@ -26,7 +26,7 @@ import com.teamchat.client.sdk.chatlets.PrimaryChatlet;
  *
  */
 public class Basecamp_Bot {
-	private Basecamp_basics bb = new Basecamp_basics();
+	private Basecamp_basics bb;
 	private Basecamp_api_handler bah;
 	// if api is initialised using keyword 'basecamp' only then shall the
 	// functions work
@@ -66,6 +66,8 @@ public class Basecamp_Bot {
 			Db_handler db = new Db_handler();
 			// check if the user email exists in the db or not
 			if (db.isAuthorized(email)) {
+				//init new 
+				bb = new Basecamp_basics();
 				// get the basic info
 				bb = db.GetBasicStuff(email);
 				// initiate api handler
