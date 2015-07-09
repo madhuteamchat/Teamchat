@@ -1,15 +1,12 @@
 package com.pivotal.bot;
 
 import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.IOException;
+
 import java.io.InputStreamReader;
-import java.net.MalformedURLException;
+
 import java.net.URL;
 
 import javax.net.ssl.HttpsURLConnection;
-
-import org.json.JSONArray;
 
 public class SendDelete {
 	
@@ -26,7 +23,7 @@ public class SendDelete {
 			// add request header
 			con.setRequestMethod("DELETE");
 			con.setRequestProperty("User-Agent", User_agent);
-			con.setRequestProperty("Authorization", "Bearer " + token);
+			con.setRequestProperty("X-TrackerToken", token);
 
 			// Send post request
 			con.setDoOutput(true);

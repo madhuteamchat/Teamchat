@@ -8,13 +8,10 @@ import java.net.URL;
 
 import javax.net.ssl.HttpsURLConnection;
 
-import org.json.JSONArray;
-
 public class SendPost {
-	
 
-	String sendPost(String url, String User_agent, String urlParameters,String token)
-			throws IOException {
+	String sendPost(String url, String User_agent, String urlParameters,
+			String token) throws IOException {
 		StringBuffer response = new StringBuffer();
 		URL obj = new URL(url);
 		HttpsURLConnection con = (HttpsURLConnection) obj.openConnection();
@@ -22,7 +19,9 @@ public class SendPost {
 		// add request header
 		con.setRequestMethod("POST");
 		con.setRequestProperty("User-Agent", User_agent);
-		con.setRequestProperty("Authorization", "Bearer " + token);
+		con.setRequestProperty("Content-Type",
+				"application/x-www-form-urlencoded");
+		con.setRequestProperty("X-TrackerToken", token);
 
 		// Send post request
 		con.setDoOutput(true);
@@ -42,7 +41,6 @@ public class SendPost {
 			BufferedReader in = new BufferedReader(new InputStreamReader(
 					con.getInputStream()));
 			String inputLine;
-			
 
 			while ((inputLine = in.readLine()) != null) {
 				response.append(inputLine);
