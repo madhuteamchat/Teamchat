@@ -73,56 +73,52 @@ public class Redirect_url extends HttpServlet {
 		System.out.println("\nSending 'POST' request to URL : " + url);
 		System.out.println("Post parameters : " + urlParameters);
 		System.out.println("Response Code : " + responseCode);
+		BufferedReader in = new BufferedReader(new InputStreamReader(
+				con.getInputStream()));
+		String inputLine;
+		StringBuffer response = new StringBuffer();
 
-		if (responseCode == 200) {
-			BufferedReader in = new BufferedReader(new InputStreamReader(
-					con.getInputStream()));
-			String inputLine;
-			StringBuffer response = new StringBuffer();
-
-			while ((inputLine = in.readLine()) != null) {
-				response.append(inputLine);
-			}
-			in.close();
-			Gson gson = new Gson();
-			// put response in token class
-			Token token = (Token) gson.fromJson(response.toString(),
-					Token.class);
-//			System.out.println(token.access_token());
-			Db_handler db = new Db_handler();
-			String get_response = sendGet_auth("https://launchpad.37signals.com/authorization.json",
-					"Teamchat (http://www.teamchat.com/en/)", "", token.getAccess_token());
-			//parsing a json like this
-//			{
-//				  "accounts": [
-//				    {
-//				      "product": "bcx",
-//				      "name": "Teamchat",
-//				      "id": 2965117,
-//				      "href": "https://basecamp.com/2965117/api/v1"
-//				    }
-//				  ],
-//				  "identity": {
-//				    "email_address": "puru1joy@gmail.com",
-//				    "last_name": "Jain",
-//				    "first_name": "Puranjay",
-//				    "id": 11321861
-//				  },
-//				  "expires_at": "2015-07-02T14:08:18Z"
-//				}
-			JsonParser jsonParser = new JsonParser();
-			JsonObject accounts = (JsonObject)jsonParser.parse(get_response)
-			    .getAsJsonObject().getAsJsonArray("accounts").get(0).getAsJsonObject();
-			JsonObject identity = (JsonObject)jsonParser.parse(get_response)
-			    .getAsJsonObject().get("identity").getAsJsonObject();
-			String href = accounts.get("href").getAsString();
-			String email = identity.get("email_address").getAsString();
-			//db.StoreToken(email, href, token);
-			System.out.println("Authenticated: " + 
-					db.StorageHandler(email, href, token));
-		} else {
-			// handle bad response here
+		while ((inputLine = in.readLine()) != null) {
+			response.append(inputLine);
 		}
+		in.close();
+		Gson gson = new Gson();
+		// put response in token class
+		Token token = (Token) gson.fromJson(response.toString(), Token.class);
+//		 System.out.println(token.getAccess_token());
+		Db_handler db = new Db_handler();
+		String get_response = sendGet_auth(
+				"https://launchpad.37signals.com/authorization.json",
+				"Teamchat (http://www.teamchat.com/en/)", "",
+				token.getAccess_token());
+		// parsing a json like this
+		// {
+		// "accounts": [
+		// {
+		// "product": "bcx",
+		// "name": "Teamchat",
+		// "id": 2965117,
+		// "href": "https://basecamp.com/2965117/api/v1"
+		// }
+		// ],
+		// "identity": {
+		// "email_address": "puru1joy@gmail.com",
+		// "last_name": "Jain",
+		// "first_name": "Puranjay",
+		// "id": 11321861
+		// },
+		// "expires_at": "2015-07-02T14:08:18Z"
+		// }
+		JsonParser jsonParser = new JsonParser();
+		JsonObject accounts = (JsonObject) jsonParser.parse(get_response)
+				.getAsJsonObject().getAsJsonArray("accounts").get(0)
+				.getAsJsonObject();
+		JsonObject identity = (JsonObject) jsonParser.parse(get_response)
+				.getAsJsonObject().get("identity").getAsJsonObject();
+		String href = accounts.get("href").getAsString();
+		String email = identity.get("email_address").getAsString();
+		System.out.println("Authenticated: "
+				+ db.StorageHandler(email, href, token));
 	}
 
 	/**
@@ -131,21 +127,15 @@ public class Redirect_url extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		// get configuration info from config file
-		Config_handler config = new Config_handler();
-		if (config.isEmpty()) {
-			config.init_auth_Properties();
-			System.out
-					.println("Properties file has been created on the Server!");
-		}
 		PrintWriter out = response.getWriter();
 		try {
-			sendPost("https://launchpad.37signals.com/authorization/token",
+			sendPost(
+					"https://launchpad.37signals.com/authorization/token",
 					request.getHeader("User-Agent"),
 					"type=web_server&client_id=d48fa4605608e6bc3405232a71051aeb171eda35"
-					+ "&redirect_uri=http%3A%2F%2Finterns.teamchat.com%2FBasecamp_bot%2FRedirect_url"
-					+ "&client_secret=cd7f2cc27a364efe2b7299621a265a788d17a24a"
-					+ "&code=" + request.getParameter("code"));
+							+ "&redirect_uri=http%3A%2F%2Finterns.teamchat.com%3A8080%2FBasecamp_bot%2FRedirect_url"
+							+ "&client_secret=cd7f2cc27a364efe2b7299621a265a788d17a24a"
+							+ "&code=" + request.getParameter("code"));
 		} catch (Exception e) {
 			// TODO: handle exception
 			out.println(e);
@@ -155,8 +145,8 @@ public class Redirect_url extends HttpServlet {
 	}
 
 	// HTTP GET request
-	private String sendGet_auth(String url, String User_agent, String urlParameters, String token)
-			throws Exception {
+	private String sendGet_auth(String url, String User_agent,
+			String urlParameters, String token) throws Exception {
 		// url example http://www.google.com/search
 		// urlParameters example q=Search&browser=chrome
 		URL obj = null;

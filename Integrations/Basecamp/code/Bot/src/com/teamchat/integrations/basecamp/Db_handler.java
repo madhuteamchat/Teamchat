@@ -19,16 +19,16 @@ public class Db_handler {
 	private PreparedStatement preparedStatement = null;
 	private ResultSet resultSet = null;
 
-	private static Config_handler config = new Config_handler();
+	// private static Config_handler config = new Config_handler();
 	// replace with server credentials
 	private static String DB_URL = "jdbc:mysql://localhost/Bot?user=tcinterns&password=PakyovBosh7";
 
-	Db_handler() {
-//		if (config.isEmpty()) {
-//			config.init_bot_Properties();
-//			config.init_auth_Properties();
-//		}
-	}
+//	Db_handler() {
+		// if (config.isEmpty()) {
+		// config.init_bot_Properties();
+		// config.init_auth_Properties();
+		// }
+//	}
 
 	// get base camp api's basic stuff
 	public Basecamp_basics GetBasicStuff(String email) {
@@ -81,9 +81,9 @@ public class Db_handler {
 	public boolean StorageHandler(String email, String href, Token token) {
 		// check if token already exists or not
 		if (isAuthorized(email)) {
-			return StoreToken(email, href, token);
-		} else {
 			return UpdateToken(email, href, token);
+		} else {
+			return StoreToken(email, href, token);
 		}
 	}
 
@@ -119,11 +119,11 @@ public class Db_handler {
 			statement = connect.createStatement();
 			preparedStatement = connect
 					.prepareStatement("update basecamp_authorized set access_token = ?, refresh_token = ?, expires_in = ?, authenticated = ? where email = ?");
-			preparedStatement.setString(0, token.getAccess_token());
-			preparedStatement.setString(1, token.getRefresh_token());
-			preparedStatement.setString(2, token.getExpires_in());
-			preparedStatement.setBoolean(3, true);
-			preparedStatement.setString(4, email);
+			preparedStatement.setString(1, token.getAccess_token());
+			preparedStatement.setString(2, token.getRefresh_token());
+			preparedStatement.setString(3, token.getExpires_in());
+			preparedStatement.setBoolean(4, true);
+			preparedStatement.setString(5, email);
 			preparedStatement.executeUpdate();
 			return true;
 		} catch (Exception e) {
