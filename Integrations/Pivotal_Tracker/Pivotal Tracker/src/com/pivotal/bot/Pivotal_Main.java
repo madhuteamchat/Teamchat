@@ -1,20 +1,15 @@
 package com.pivotal.bot;
 
 import java.io.IOException;
-import java.util.ArrayList;
-
 import org.apache.http.client.ClientProtocolException;
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
 import com.teamchat.client.annotations.OnAlias;
 import com.teamchat.client.annotations.OnKeyword;
 import com.teamchat.client.sdk.Field;
 import com.teamchat.client.sdk.Form;
 import com.teamchat.client.sdk.TeamchatAPI;
-import com.teamchat.client.sdk.chatlets.PollChatlet;
 import com.teamchat.client.sdk.chatlets.PrimaryChatlet;
 import com.teamchat.client.sdk.chatlets.TextChatlet;
 
@@ -288,10 +283,12 @@ public class Pivotal_Main {
 		SendGet sg = new SendGet();
 		// list of messages
 		String responseHTML = "";
+		@SuppressWarnings("unused")
 		Field f = null;
 		try {
 			String jsonData = sg.sendGet(URL, USER_AGENT, URL_parameter,
 					pb.getAccess_token());
+			@SuppressWarnings("unused")
 			Gson gson = new Gson();
 			JSONArray jsonArray = new JSONObject(jsonData).getJSONArray("data");
 			for (int i = 0; i < jsonArray.length(); i++) {

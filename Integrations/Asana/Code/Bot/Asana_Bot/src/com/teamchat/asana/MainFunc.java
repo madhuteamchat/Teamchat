@@ -49,6 +49,7 @@ public class MainFunc {
 	public void createProject(TeamchatAPI api) throws IOException {
 		// get workspace id and name from json array
 		Database_Handler db = new Database_Handler();
+		System.out.println(api.context().currentSender().getEmail());
 		ab = db.GetBasicStuff(api.context().currentSender().getEmail());
 		GetWorkspace gwp = new GetWorkspace();
 		Field f = null;
