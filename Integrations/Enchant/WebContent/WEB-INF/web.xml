@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
+    version="2.4">
+
+    <display-name>Groove Teamchat Integration</display-name>
+    <description>
+        This is a simple web application with a source code organization
+        based on the recommendations of the Application Developer's Guide.
+    </description>
+
+ <listener>
+		<listener-class>com.teamchat.client.utils.TeamchatContextListener</listener-class>
+	</listener>
+	<context-param>
+		<param-name>bot-email</param-name>
+		<param-value>dataentrybot@gmail.com</param-value>
+	</context-param>
+	<context-param>
+		<param-name>bot-password</param-name>
+		<param-value>******</param-value>
+	</context-param>
+	<context-param>
+		<param-name>bot-class</param-name>
+		<param-value>com.teamchat.integrations.enchant.bot.EnchantBot</param-value>
+	</context-param>
+	<context-param>
+		<param-name>db-host</param-name>
+		<param-value>localhost</param-value>
+	</context-param>
+	<context-param>
+		<param-name>db-name</param-name>
+		<param-value>Bot</param-value>
+	</context-param>
+	<context-param>
+		<param-name>db-user</param-name>
+		<param-value>tcinterns</param-value>
+	</context-param>
+	<context-param>
+		<param-name>db-password</param-name>
+		<param-value>******</param-value>
+	</context-param>
+	<context-param>
+   		<param-name>threading</param-name>
+   		<param-value>SINGLE</param-value>
+	</context-param>   
+    
+
+</web-app>
