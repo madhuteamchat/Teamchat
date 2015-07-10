@@ -1,0 +1,73 @@
+package com.pivotal.bot;
+
+import java.io.IOException;
+
+import com.teamchat.client.annotations.OnKeyword;
+import com.teamchat.client.sdk.TeamchatAPI;
+import com.teamchat.client.sdk.chatlets.PrimaryChatlet;
+
+public class Pivotal_Main {
+
+	private static String token;
+	
+	static Database_Handler db = new Database_Handler();
+	static String email;
+
+	@OnKeyword("Help")
+	public void onhipchat(TeamchatAPI api) throws Exception {
+		email = api.context().currentSender().getEmail();
+		if (db.isAuthorized(email)) {
+			// get the basic info
+			hb = db.GetBasicStuff(email);
+			hp = new HipChat(hb.getAccess_token());
+			api.perform(api
+					.context()
+					.currentRoom()
+					.post(new PrimaryChatlet()
+							.setQuestionHtml("Hi, you may proceed to use your <u>hipchat account</u>. "
+									+ "<br />Type <b>Help</b> to know more commands")));
+			// welcome message and continue
+		} else {
+			// display the button so the user can begin authentication
+			// and tell the user to retype the keyword 'hipchat'
+			api.perform(api
+					.context()
+					.currentRoom()
+					.post(new PrimaryChatlet()
+							.setQuestion(
+									"Follow the instructions given below.We need you to get your access token one time")
+							.setQuestion(
+									"Open your hipchat account.Click on GROUP ADMIN.Click API.Enter your password.Select 'Type' ADMIN and CREATE TOKEN.")));
+
+			Form f = api.objects().form();
+			f.addField(api.objects().input().name("token")
+					.label("Paste Token here"));
+			api.perform(api
+					.context()
+					.currentRoom()
+					.post(new PrimaryChatlet()
+							.setQuestionHtml("Paste your token")
+							.setReplyScreen(f).setReplyLabel("Enter")
+							.alias("gottoken")));
+		}
+	}
+
+	@OnKeyword("help")
+	public void onhelp(TeamchatAPI api) {
+		api.perform(api
+				.context()
+				.currentRoom()
+				.post(new PrimaryChatlet()
+						.setQuestion("hipchat-to accesss the account,,,,lists-to get list of all the rooms of your account,,,,,createroom--to create new room,,,,deleteroom--to delete a room,,,,sendmessage--to send a message to a particular room")));
+
+	}
+
+	@OnAlias("gottoken")
+	public static void ongottoken(TeamchatAPI api) {
+		token = api.context().currentReply().getField("token");
+		hp = new HipChat(token);
+		db.StorageHandler(email, token);
+
+	}
+
+}

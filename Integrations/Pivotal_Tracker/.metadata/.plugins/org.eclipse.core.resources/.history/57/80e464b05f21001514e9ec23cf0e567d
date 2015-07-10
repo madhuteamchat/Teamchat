@@ -1,0 +1,64 @@
+package com.pivotal.bot;
+
+import java.io.IOException;
+
+import com.teamchat.client.annotations.OnAlias;
+import com.teamchat.client.annotations.OnKeyword;
+import com.teamchat.client.sdk.Form;
+import com.teamchat.client.sdk.TeamchatAPI;
+import com.teamchat.client.sdk.chatlets.PrimaryChatlet;
+
+public class Pivotal_Main {
+
+	private static String token;
+	
+	static Database_Handler db = new Database_Handler();
+	static String email;
+
+	@OnKeyword("Help")
+	public void onhipchat(TeamchatAPI api) throws Exception {
+		email = api.context().currentSender().getEmail();
+		if (db.isAuthorized(email)) {
+			// get the basic info
+	
+			api.perform(api
+					.context()
+					.currentRoom()
+					.post(new PrimaryChatlet()
+							.setQuestionHtml("Hi, you may proceed to use your <u>Pivotal account</u>. "
+									+ "<br />Type <b>Help</b> to know more commands")));
+			// welcome message and continue
+		} else {
+			// display the button so the user can begin authentication
+
+			api.perform(api
+					.context()
+					.currentRoom()
+					.post(new PrimaryChatlet()
+							.setQuestion(
+									"Follow the instructions given below.We need you to get your access token one time")
+							.setQuestion(
+									"Open your Pivotal account.Click on you username in the top right.Click on Profile. Scroll down to API TOKEN. Copy the api token form the api token field and paste below")));
+
+			Form f = api.objects().form();
+			f.addField(api.objects().input().name("token")
+					.label("Paste Token here"));
+			api.perform(api
+					.context()
+					.currentRoom()
+					.post(new PrimaryChatlet()
+							.setQuestionHtml("Paste your token")
+							.setReplyScreen(f).setReplyLabel("Enter")
+							.alias("got_token")));
+		}
+	}
+
+
+	@OnAlias("got_token")
+	public static void got_token(TeamchatAPI api) {
+		token = api.context().currentReply().getField("token");
+		db.StorageHandler(email, token);
+
+	}
+
+}
