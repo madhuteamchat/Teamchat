@@ -1,3 +1,4 @@
+package com.teamchat.integrations.RSS;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -12,9 +13,7 @@ import com.teamchat.client.sdk.chatlets.*;
 
 
 public class RSSReaderBot {
-private static String botID="ultimatekrissh@gmail.com";
-private static String botPsswrd="abhishek";
-private static TeamchatAPI api;
+	
 private static String channelURLs[]=
 {"http://static.cricinfo.com/rss/livescores.xml",
 "http://dynamic.feedsportal.com/pf/555218/http://toi.timesofindia.indiatimes.com/rssfeedstopstories.cms",
@@ -22,6 +21,7 @@ private static String channelURLs[]=
 "http://www.bollywoodhungama.com/rss/release_dates.xml",
 "http://feeds.feedburner.com/digit/latest-news"
 };
+
 
 private static String channelNames[]={"Cricket Live Score",
 	                                  "Times Of India",
@@ -31,42 +31,39 @@ private static String channelNames[]={"Cricket Live Score",
 
 private static Map map=new HashMap();
 
-public static void main(String[] args) {
- api = TeamchatAPI.fromFile("RSSFeed.data")
-                             .setEmail(botID) 
-                             .setPassword(botPsswrd) 
-                             .startReceivingEvents(new RSSReaderBot()); 
-}
 
-
-@OnKeyword("help")
+@OnKeyword("Help")
 public void provideChannels(TeamchatAPI api)
 {   
-	String HtmlInstructions="<b><u><font color='red'>Type:</font><br/><font color='blue'></u></b>"+
-                             "<b>subscribe:</b> To Subscribe or Unsubscribe to Channels<br/>"+
-			                 "<b>custom:</b>To add custom Channel<br/>"+
-                             "<b>blogs:</b> To get new blogs<br/>"+
-                             "<b>timer:</b> To reset Timer<br/>"+
-			                 "<b>unsubscribeAll:</b> To Unsubscribe to RSS";
+	String html="<h4 align='center'><b>Hey, this is RSS Bot<br/></b>"
+			+ "<img src='http://www.pmq.com/rss-feed.png' height='90' width='230'></h4><br/>"
+			+ "You can use me to get any kind of RSS Feeds by using following keywords</font><br/><br/>";
+	String HtmlInstructions= "<ul><li><b>Subscribe:</b><font color='blue'> To Subscribe or Unsubscribe to Channels</font>"+
+			                 "</li><li><b>Custom:</b><font color='blue'>To add custom Channel</font>"+
+                             "</li><li><b>Blogs:</b><font color='blue'> To get new blogs</font>"+
+                             "</li><li><b>Timer:</b><font color='blue'> To reset Timer</font>"+
+			                 "</li><li><b>UnsubscribeAll:</b><font color='blue'> To Unsubscribe to RSS</font>"
+                             +"</li></ul>";
 	
-  	api.perform(api.context().currentRoom().post(new PrimaryChatlet().setQuestionHtml(HtmlInstructions)
+  	api.perform(api.context().currentRoom().post(new PrimaryChatlet().setQuestionHtml(html+HtmlInstructions)
+  			                                                         
   	                                            )
   	           );
 }
-@OnKeyword("subscribe")
+@OnKeyword("Subscribe")
 public void subscribe(TeamchatAPI api)
 {   String email=api.context().currentSender().getEmail();
     RSSBot b=(RSSBot)map.get(email);
     if(b==null)
 	{RSSBot bot=new RSSBot();
-	bot.setup();
+	bot.setup(api);
 	bot.setRoom(api.context().currentRoom().getId());
 	map.put(email,bot);
 	}
-    postChannels(email,api.context().currentRoom());
+    postChannels(email,api);
 }
 
-public void postChannels(String email,Room r)
+public void postChannels(String email, TeamchatAPI api)
 {   RSSBot b=(RSSBot)map.get(email);
     Boolean sub[]=b.getSubscription();
 	Form f=api.objects().form();
@@ -76,8 +73,13 @@ public void postChannels(String email,Room r)
 		Field field=api.objects().select();
 		field.label(channelNames[i]).name(channelNames[i]);
 		if(sub[i])
+		{	field.addOption("Unsubscribe");
+		field.value("Subscribe");
+		field.addOption("Subscribe");}else
+		{
+		field.addOption("Subscribe");
 		field.addOption("Unsubscribe");
-		else field.addOption("Subscribe");
+		field.value("Unsubscribe");}
 	    f.addField(field);
 	}
 	Channel temp=b.CustomChannels;
@@ -92,10 +94,10 @@ public void postChannels(String email,Room r)
 	    temp=temp.next;
 	}
 	
-	  api.perform(r.post(new PrimaryChatlet().setQuestion("View All Channels")
+	  api.perform(api.context().currentRoom().post(new PrimaryChatlet().setQuestion("View All Channels")
 			                                 .setReplyLabel("View")
 			                                 .setReplyScreen(f)
-			                              .alias("changeSubscription")
+			                                 .alias("changeSubscription")
 			             ));
 	
 }
@@ -154,7 +156,7 @@ private String getChannelName(String aliases[])
 	return null;
 	}
 
-@OnKeyword("unsubscribeAll")
+@OnKeyword("UnsubscribeAll")
 public void unsubscribeAll(TeamchatAPI api)
 {
 	RSSBot bot=(RSSBot)map.get(api.context().currentSender().getEmail());
@@ -167,14 +169,14 @@ public void unsubscribeAll(TeamchatAPI api)
 		api.perform(api.context().currentRoom().post(new PrimaryChatlet()
 		                                           .setQuestionHtml("<b><font color='red'>You are Unsubscribed to All RSS Feeds</font></b>")));
 		                                           
-	    map.put(api.context().currentSender().getEmail(), null);
+	    map.remove(api.context().currentSender().getEmail());
 	}else api.perform(api.context().currentRoom().post(new PrimaryChatlet()
 	.setQuestionHtml("<b><font color='green'>You are not Subscribed to any Channels yet."
 	           +"<br/>Type subscribe to get Subscribed.</font></b>")
 	           ));
 	           }
 
-@OnKeyword("custom")
+@OnKeyword("Custom")
 public void CustomChannel(TeamchatAPI api)
 {
 	 Form f=api.objects().form();
@@ -195,7 +197,7 @@ public void addCustomChannel(TeamchatAPI api)
 	if(bot==null)
 	{
 		bot=new RSSBot();
-		bot.setup();
+		bot.setup(api);
 		bot.setRoom(api.context().currentRoom().getId());
 		map.put(email,bot);
 	}
@@ -212,7 +214,7 @@ public void addCustomChannel(TeamchatAPI api)
 	.setQuestionHtml("<b><font color='green'>Channel added Successfully</font></b>")
 			           ));
 	}
-@OnKeyword("timer")
+@OnKeyword("Timer")
 public void timer(TeamchatAPI api)
 {  RSSBot bot=(RSSBot)map.get(api.context().currentSender().getEmail());
 if(bot!=null)
@@ -247,7 +249,7 @@ public void setTimer(TeamchatAPI api)
 				           ));
 		}
     }
-@OnKeyword("blogs")
+@OnKeyword("Blogs")
 public void viewBlog(TeamchatAPI api)
 {RSSBot bot=(RSSBot)map.get(api.context().currentSender().getEmail());
 if(bot!=null)
@@ -261,22 +263,19 @@ else{
 
 
 class RSSBot extends Thread{
-	int delayHrs=1;
-	long delayMillis=delayHrs*60*60*1000;
-	long currentTime=0;
-	int hrs=0;
+	private int delayHrs=1;
+	private int hrs=0;
 	Channel Channels[];
-	Date d=new Date();
-	Boolean subscribed=true;
+	private Boolean subscribed=true;
 	double lastTime;
-	String roomID;
-	Boolean isStarted=false;
+	private String roomID;
+	private Boolean isStarted=false;
 	Channel CustomChannels=null;
+	private TeamchatAPI api;
 
     public void run()
 	{
 	 isStarted=true;
-	 currentTime=d.getTime();	
 	 post(api);
 	try{
 		
@@ -296,6 +295,7 @@ class RSSBot extends Thread{
 			System.out.println("Exception in thread");
 		}
 	}
+    
 	public void post(TeamchatAPI api)
 	{
 		for(int i=0;i<Channels.length;i++)
@@ -309,8 +309,7 @@ class RSSBot extends Thread{
 	    }
 		Channel temp=CustomChannels;
 		while(temp!=null)
-		{System.out.println("Found CHannel: "+temp.getName()
-				+"URL: "+temp.url);
+		{
 			if(temp.getSubscription())
 	    	{
 	    		temp.getFeeds();
@@ -322,8 +321,9 @@ class RSSBot extends Thread{
 	     hrs=0;
 	}
 	
-	public void setup()
+	public void setup(TeamchatAPI api)
 	{
+		this.api=api;
 		Channels=new Channel[channelURLs.length];
 		for(int i=0;i<channelURLs.length;i++)
 		{

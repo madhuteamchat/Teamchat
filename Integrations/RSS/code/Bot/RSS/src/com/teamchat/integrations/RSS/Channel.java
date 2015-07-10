@@ -1,4 +1,5 @@
-import java.io.BufferedReader;
+package com.teamchat.integrations.RSS;import java.io.BufferedReader;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -21,16 +22,16 @@ import com.teamchat.client.sdk.chatlets.*;
 
 
 public class Channel{
-	String title;
-	String link;
-	String description;
-	String guid;
-	String lastUpdated;
-	String lastFeedId;
-	String lastFeedTime;
+	private String title;
+	private String link;
+	private String description;
+	private String guid;
+	private String lastUpdated;
+	private String lastFeedId;
+	private String lastFeedTime;
 	private String channelName;
 	Channel next=null;
-	URL url;
+	private URL url;
 	private TeamchatAPI api;
 	
 	boolean subscribed;
@@ -97,9 +98,7 @@ public class Channel{
 		        COPYRIGHT=null,
 		        PUB_DATE=null;
 		 try{
-			 File file=new File("fb.rss");
-			 System.out.println("File Imported");
-      //FileInputStream in=new FileInputStream(file);
+			//FileInputStream in=new FileInputStream(file);
       InputStream in=url.openStream();
       
       Boolean getChannelDetails=false;
@@ -136,9 +135,10 @@ public class Channel{
      	    	break ;}
      	    	
      	    	lastUpdated=PUB_DATE;
-     	    	 System.out.println("Last Feed Id set to:"+lastFeedId
+     	    	/* System.out.println("Last Feed Id set to:"+lastFeedId
      	     			   +"\n Title set to "+title+TITLE
      	     			   +"\n last Updated set to: "+lastUpdated);
+     	    	 */
      	    	 PUB_DATE=null;
      	    	getChannelDetails=true;
      	    	}
@@ -260,17 +260,22 @@ public class Channel{
 	 {   Feed feed=feeds;
 	 String html="";
 	 html+="<b><u><font color='green'><h4>"+title+"</h4></font></b></u>";
-     Boolean check=false;
+     int NoOfBlogs=0;
 	 while(feed!=null)
-	 	{
+	 	{ NoOfBlogs++;
+		 try{
+			 if(NoOfBlogs%10==0)
+			 {
+			 Thread.sleep(20000);}
+			 else
+       	  Thread.sleep(5000);
+         }catch(Exception e){}
 	 	  String blog=feed.getFeed();
-	      html+=blog;
+	      blog=html+blog;
 	      feed=feed.Next;
-	      check=true;
+	      api.perform(api.context().byId(roomID).post(new PrimaryChatlet().setQuestionHtml(blog)));
+          
 	 	}
-	 if(check)
-	 api.perform(api.context().byId(roomID).post(new PrimaryChatlet().setQuestionHtml(html)));
-
 	 }
 	
 }
