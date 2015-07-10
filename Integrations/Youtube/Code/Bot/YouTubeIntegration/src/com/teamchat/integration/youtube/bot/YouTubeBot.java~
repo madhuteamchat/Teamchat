@@ -28,9 +28,9 @@ import com.teamchat.integration.youtube.upload.UploadVideo;
 
 public class YouTubeBot {
 	
-	String apikey="";
-	String client_id="";
-	String client_secret=""; 
+	String apikey="AIzaSyCuxRZHt5hjH-x-IQQG5MZFldxigM_4_W0";
+	String client_id="494950415885-fqv27scptt61fknafej5is92kd1hrbfe.apps.googleusercontent.com";
+	String client_secret="1HvoCJaWVFMciAfFyrZ9doSg"; 
 	SearchByTopic sbt=null;
 	ArrayList<String> lan,chId,chTitle;
 

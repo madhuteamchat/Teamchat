@@ -15,8 +15,8 @@ public class JDBCConnection {
 	   static final String DB_URL = "jdbc:mysql://localhost/Bot";
 
 	   //  Database credentials
-	   static final String USER = "";
-	   static final String PASS = "";
+	   static final String USER = "tcinterns";
+	   static final String PASS = "PakyovBosh7";
 //	   static final String USER = "root";
 //	   static final String PASS = "gupshup";
 	   Connection conn = null;

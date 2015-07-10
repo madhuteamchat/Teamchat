@@ -35,3 +35,30 @@ input[type="text"], textarea, progress {
 textarea {
   height: 7em;
 }
+
+.tablestyle {
+    position:fixed;
+    top: 50%;
+    left: 50%;
+    height:20em;
+    margin-top: -9em; /*set to a negative number 1/2 of your height*/
+    margin-left: -10em; /*set to a negative number 1/2 of your width*/
+  /*  border: 1px solid #ccc; */
+   /* background-color: #f3f3f3;*/
+}
+
+
+.rightimage {
+    float: right;
+}
+
+p {
+    font-family: "Times New Roman";
+    font-size: 20px;
+}
+td { 
+    padding: 5px;
+}
+table {
+border-spacing:5px;
+}

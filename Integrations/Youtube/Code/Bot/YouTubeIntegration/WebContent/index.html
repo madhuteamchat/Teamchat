@@ -1,21 +1,31 @@
 <!doctype html>
 <html>
   <head>
+ 	<link rel="icon" href="images/favicon.png" type="image/png" sizes="16x16">
+ 	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
     <meta charset="utf-8">
     <title>YouTube API Uploads via Teamchat</title>
     <link rel="stylesheet" href="index.css">
   </head>
   <body>
-    <span id="signinButton" class="pre-sign-in">
-      <span
-          class="g-signin"
-          data-callback="oauth2Callback"
-          data-clientid="494950415885-fqv27scptt61fknafej5is92kd1hrbfe.apps.googleusercontent.com"
-          data-cookiepolicy="single_host_origin"
-          data-scope="https://www.googleapis.com/auth/youtube.readonly https://www.googleapis.com/auth/youtube.upload">
-      </span>
-    </span>
-
+ 	<img src="images/Teamchat_logo_blue.png" alt="logo" style="width:304px;">
+	<img src="images/YouTube-logo-full_color.png" alt="logo" class="rightimage" style="width:304px;">
+	<table class="tablestyle">
+ 		<tr>
+			<td>				
+ 				<span id="signinButton" class="pre-sign-in">
+      				<span
+          				class="g-signin"
+          				data-callback="oauth2Callback"
+          				data-clientid="494950415885-fqv27scptt61fknafej5is92kd1hrbfe.apps.googleusercontent.com"
+          				data-cookiepolicy="single_host_origin"
+          				data-scope="https://www.googleapis.com/auth/youtube.readonly https://www.googleapis.com/auth/youtube.upload">
+      				</span>
+    			</span>
+			</td>
+		</tr>
+	</table>
+   
     <div class="post-sign-in">
       <div>
         <img id="channel-thumbnail">
