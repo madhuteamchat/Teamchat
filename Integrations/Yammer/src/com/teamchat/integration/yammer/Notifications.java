@@ -109,8 +109,4 @@ public class Notifications {
 		return notifications;
 	}
 	
-	public static void main(String argv[]) {
-	//	Notifications nf=new Notifications();
-	//	nf.getLikedBy();
-	}
 }

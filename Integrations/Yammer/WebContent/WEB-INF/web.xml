@@ -45,11 +45,11 @@
 	</context-param>
 	<context-param>
 		<param-name>db-user</param-name>
-		<param-value>webaroo</param-value>
+		<param-value>root</param-value>
 	</context-param>
 	<context-param>
 		<param-name>db-password</param-name>
-		<param-value>webar00</param-value>
+		<param-value>root</param-value>
 	</context-param>
 	<context-param>
    		<param-name>threading</param-name>

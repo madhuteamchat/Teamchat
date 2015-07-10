@@ -61,7 +61,7 @@ public class YammerBot {
 		api.perform(
 				api.context().currentRoom().registerForEvents().post(
 				new PrimaryChatlet()
-				.setQuestionHtml("<!DOCTYPE html><html><head></head><body>You must log into Yammer first.<br/><a href='http://"+hostname+":"+port+"/Yammer/yammerlogin?email="+useremail+"'>Login to Yammer (Please open in a seperate tab)</a>"
+				.setQuestionHtml("<!DOCTYPE html><html><head></head><body>Log into Yammer and then enter the keywords again.<br/><a href='http://"+hostname+":"+port+"/Yammer/yammerlogin?email="+useremail+"'>Login to Yammer (Please open in a seperate tab)</a>"
 						        +"</html></body>"
 						))
 	  );

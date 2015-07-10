@@ -8,26 +8,41 @@ import com.teamchat.integration.factory.PropertyFile;
 public class Authentication {
 	 static java.sql.Statement stmt = null;
 	 static java.sql.Connection connection = null;   
-     static String url="jdbc:mysql://localhost/Yammer";
 	    
     public static void setToken(String id,String accessToken) throws Exception{
+    	  String url=PropertyFile.getProperty("dburl");	
     	  String dbUser=PropertyFile.getProperty("dbusername");	
   	      String dbPassword=PropertyFile.getProperty("dbpassword");	
-          String insertQuery="insert into yammer values (\""+id+"\",\""+accessToken+"\")"; 
+  	    try { 
+          String selQuery="select authtoken from yammer where email=\""+id+"\"";
     	  Class.forName("com.mysql.jdbc.Driver");
     	   connection = DriverManager.getConnection(url, dbUser, dbPassword);
            stmt = connection.createStatement();
-           stmt.execute(insertQuery);
-
-         try { 
-               stmt.close();
-               connection.close();
-           } catch (SQLException e) {
+           /* FIRST CHECK IF THE DATABASE CONTAINS THE USER ID */
+           ResultSet rs=stmt.executeQuery(selQuery); 
+           if(rs.first())
+            {
+               System.out.println("user exists already");
+               String updateQuery="update yammer set authtoken='"+accessToken+"' where email='"+id+"';"; 
+               stmt.execute(updateQuery);
+          }
+           else {
+        	   System.out.println("adding new user");
+               String insertQuery="insert into yammer values (\""+id+"\",\""+accessToken+"\")"; 
+               stmt.execute(insertQuery);
+           } 
+  	    }
+  	    catch (SQLException e) {
                e.printStackTrace();
            }
+  	    finally{
+  	        stmt.close();
+            connection.close();
+  	    }
        }
     
     public static String getToken(String id){
+    	    String url=PropertyFile.getProperty("dburl");	
   	        String dbUser=PropertyFile.getProperty("dbusername");	
 	        String dbPassword=PropertyFile.getProperty("dbpassword");
     	    String token=null;
