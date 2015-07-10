@@ -2,7 +2,6 @@ package com.teamchat.integration.onedrive.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.Enumeration;
 
 import javax.servlet.ServletException;
@@ -89,7 +88,9 @@ public class GetFileList extends HttpServlet {
 	    	msg="Download links:<br>"+msg;
 	    System.out.println("Rid="+rid);
 		new TeamchatPost().postMsg(msg,rid);
-		res.sendRedirect(res.encodeRedirectURL("http://interns.teamchat.com:8080/OneDriveIntegration/filepicker.html?rid="+rid));
+//		res.sendRedirect(res.encodeRedirectURL("http://interns.teamchat.com:8085/OneDriveIntegration/filepicker.html?rid="+rid));
+		PrintWriter out=res.getWriter();
+		out.println("<script>window.close();</script>");
 	}
 
 }
