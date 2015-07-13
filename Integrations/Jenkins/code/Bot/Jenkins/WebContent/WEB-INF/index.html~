@@ -1,0 +1,17 @@
+<html>
+<body>
+<h3>
+<!--1) Download Teamchat Plugin from Jenkins<br/>
+    2) Generate a UID for your Jenkins<br/>
+    3) Enter this UID in Jenkins>Configure>Teamchat Settings> UID<br/>
+    4) Go to any room, Add Jenkins-Bot<br/>
+    5) Type Config and Enter your Jenkins UID -->
+<form action="Register" method="GET">
+Jenkins Installation Name<br/>
+<input type="text" name="first_name" disabled><br/>
+Click Below to Generate a New UID<br/>
+<input type="button" name="generate" value="Generate"  />
+</form>
+</h3>
+</body>
+</html>
