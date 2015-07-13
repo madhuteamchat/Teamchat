@@ -23,15 +23,15 @@ import twitter4j.conf.ConfigurationBuilder;
 import twitter4j.auth.AccessToken;
 
 public class TwitterBot {
-	static Twitter twitter;
-	static TwitterFactory tf, tf1;
-	static ConfigurationBuilder cb = new ConfigurationBuilder();
-	static ConfigurationBuilder cb1 = new ConfigurationBuilder();
-	static ConfigurationBuilder cb2 = new ConfigurationBuilder();
-	static RequestToken requestToken;
-	static AccessToken accessToken;
-	static String consumerkey = "*************************";
-	static String consumersecret = "**************************************************";
+	private static Twitter twitter;
+	private static TwitterFactory tf, tf1;
+	private static ConfigurationBuilder cb = new ConfigurationBuilder();
+	private static ConfigurationBuilder cb1 = new ConfigurationBuilder();
+	private static ConfigurationBuilder cb2 = new ConfigurationBuilder();
+	private static RequestToken requestToken;
+	private static AccessToken accessToken;
+	private static String consumerkey = "*************************";
+	private static String consumersecret = "**************************************************";
 
 	static {
 		cb.setDebugEnabled(true).setOAuthConsumerKey(consumerkey)
@@ -60,7 +60,7 @@ public class TwitterBot {
 					.currentRoom()
 					.post(new PrimaryChatlet().setQuestionHtml(msg1)
 							.setReplyScreen(f).setReplyLabel("Enter")
-							.showDetails(true).alias("chatlet1")));
+							.showDetails(true).alias("authentication")));
 		} catch (TwitterException te) {
 			te.printStackTrace();
 		}
@@ -77,7 +77,7 @@ public class TwitterBot {
 				.post(new TextChatlet("Logout Successful!")));
 	}
 
-	@OnAlias("chatlet1")
+	@OnAlias("authentication")
 	public void Chatlet2(TeamchatAPI api) {
 		String pin = api.context().currentReply().getField("pin");
 
@@ -119,10 +119,10 @@ public class TwitterBot {
 				.currentRoom()
 				.post(new PrimaryChatlet().setQuestion(msg).setReplyScreen(f)
 						.setReplyLabel("Tweet").showDetails(true)
-						.alias("chatlet3")));
+						.alias("posttweet")));
 	}
 
-	@OnAlias("chatlet3")
+	@OnAlias("posttweet")
 	public void Chatlet4(TeamchatAPI api) {
 		String tweet = api.context().currentReply().getField("tweet");
 		System.out.println(tweet);
@@ -188,10 +188,10 @@ public class TwitterBot {
 				.currentRoom()
 				.post(new PrimaryChatlet().setQuestion(msg).setReplyScreen(f)
 						.setReplyLabel("Enter").showDetails(true)
-						.alias("chatlet6")));
+						.alias("sendp2pmsg")));
 	}
 
-	@OnAlias("chatlet6")
+	@OnAlias("sendp2pmsg")
 	public void Chatlet7(TeamchatAPI api) {
 		String rcpt = api.context().currentReply().getField("rcpt");
 		String msg = api.context().currentReply().getField("msg");
@@ -224,10 +224,10 @@ public class TwitterBot {
 				.currentRoom()
 				.post(new PrimaryChatlet().setQuestion(msg).setReplyScreen(f)
 						.setReplyLabel("Enter").showDetails(true)
-						.alias("chatlet8")));
+						.alias("searchtweets")));
 	}
 
-	@OnAlias("chatlet8")
+	@OnAlias("searchtweets")
 	public void Chatlet9(TeamchatAPI api) {
 		String kywd = api.context().currentReply().getField("kywd");
 		twitter = tf.getInstance();
