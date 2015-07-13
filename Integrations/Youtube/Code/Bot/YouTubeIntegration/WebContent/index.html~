@@ -56,7 +56,7 @@
       	<p>It will take a moment.... <br>Go back to Teamchat and type "myuploads" after sometime to check your uploaded list.
         <p>Uploaded video with id <span id="video-id"></span>. Polling for status...</p>
         <ul id="post-upload-status"></ul>
-        <div id="player" style="text-align:center"></div>
+        <div id="player"></div>
       </div>
     </div>
 
