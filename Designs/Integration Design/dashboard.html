@@ -6,13 +6,14 @@
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <!--    Theme colour for android lollipop -->
-  <meta name="theme-color" content="#000000">
+  <meta name="theme-color" content="#159ceb">
   <!-- 1. Load webcomponents-lite.min.js for polyfill support. -->
   <script src="bower_components/webcomponentsjs/webcomponents-lite.min.js">
   </script>
   <!-- 2. Use an HTML Import to bring in some elements. -->
   <link rel="import" href="bower_components/iron-icon/iron-icon.html">
   <link rel="import" href="bower_components/iron-icons/iron-icons.html">
+  <link rel="import" href="bower_components/iron-form/iron-form.html">
   <link rel="import" href="bower_components/font-roboto/roboto.html">
   <link rel="import" href="bower_components/iron-media-query/iron-media-query.html">
   <link rel="import" href="bower_components/iron-collapse/iron-collapse.html">
@@ -21,6 +22,9 @@
   <link rel="import" href="bower_components/paper-dialog/paper-dialog.html">
   <link rel="import" href="bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
   <link rel="import" href="bower_components/paper-fab/paper-fab.html">
+  <link rel="import" href="bower_components/paper-item/paper-icon-item.html">
+  <link rel="import" href="bower_components/paper-item/paper-item.html">
+  <link rel="import" href="bower_components/paper-item/paper-item-body.html">
   <link rel="import" href="bower_components/paper-input/paper-input.html">
   <link rel="import" href="bower_components/paper-input/paper-input-char-counter.html">
   <link rel="import" href="bower_components/paper-input/paper-textarea.html">
@@ -37,7 +41,7 @@
   <link rel="import" href="bower_components/neon-animation/neon-animated-pages.html">
   <link rel="import" href="bower_components/neon-animation/neon-animatable.html">
   <link rel="import" href="bower_components/neon-animation/neon-animations.html">
-  <style media="screen">
+  <style>
     /*custom scrollbar*/
 
     body::-webkit-scrollbar {
@@ -72,7 +76,7 @@
     paper-button {
       color: white;
       margin: 10px;
-      background-color: var(--google-blue-700);
+      background-color: #0087CA;
       white-space: nowrap;
     }
 
@@ -94,7 +98,7 @@
 
     paper-toolbar {
       @apply(--shadow-elevation-2dp);
-      background-color: #3DA0DC;
+      background-color: #159ceb;
       z-index: 1;
     }
 
@@ -102,15 +106,11 @@
       background-color: #0087CA;
     }
 
-    paper-button {
-      background-color: #0087CA;
-    }
-
     paper-spinner {
-      --paper-spinner-layer-1-color: #3DA0DC;
-      --paper-spinner-layer-2-color: #3DA0DC;
-      --paper-spinner-layer-3-color: #3DA0DC;
-      --paper-spinner-layer-4-color: #3DA0DC;
+      --paper-spinner-layer-1-color: #159ceb;
+      --paper-spinner-layer-2-color: #159ceb;
+      --paper-spinner-layer-3-color: #159ceb;
+      --paper-spinner-layer-4-color: #159ceb;
       margin: 0 auto;
       display: block;
     }
@@ -238,8 +238,55 @@
     /*register client dialog*/
     /*buttons*/
 
-    #register_client .discard {
+    .discard {
       background: var(--paper-red-500);
+    }
+    /*drop down ka stuff*/
+
+    .drop-down .flex {
+      font-size: 16px;
+      font-weight: 400;
+      display: inline-block;
+      padding: 16px;
+    }
+
+    .drop-down iron-icon {
+      margin: 13px 16px 0 0;
+      float: right;
+    }
+
+    .drop-down + .drop-down-data {
+      position: absolute;
+      left: 24px;
+      top: 53px;
+      z-index: 1;
+      opacity: 0;
+      transition: 0.3s;
+      pointer-events: none;
+      cursor: pointer;
+    }
+
+    .drop-down-data.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .list {
+      cursor: pointer;
+      background-color: white;
+      display: inline-block;
+      min-width: 240px;
+      margin: 12px;
+      @apply(--shadow-elevation-2dp);
+    }
+
+    .avatar {
+      display: inline-block;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      overflow: hidden;
+      background: #ccc;
     }
   </style>
 </head>
@@ -301,172 +348,22 @@
               12/12/2015
             </td>
           </tr>
-          <tr>
-            <td>1</td>
-            <td>Puranjay Jain</td>
-            <td>
-              kdaodskoadk12332-dkfokd-e21kdo
-            </td>
-            <td>
-              Teamchat
-            </td>
-            <td>
-              puru@gmail.com
-            </td>
-            <td>
-              something imp
-            </td>
-            <td>
-              12/12/2015
-            </td>
-          </tr>
-          <tr>
-            <td>1</td>
-            <td>Puranjay Jain</td>
-            <td>
-              kdaodskoadk12332-dkfokd-e21kdo
-            </td>
-            <td>
-              Teamchat
-            </td>
-            <td>
-              puru@gmail.com
-            </td>
-            <td>
-              something imp
-            </td>
-            <td>
-              12/12/2015
-            </td>
-          </tr>
-          <tr>
-            <td>1</td>
-            <td>Puranjay Jain</td>
-            <td>
-              kdaodskoadk12332-dkfokd-e21kdo
-            </td>
-            <td>
-              Teamchat
-            </td>
-            <td>
-              puru@gmail.com
-            </td>
-            <td>
-              something imp
-            </td>
-            <td>
-              12/12/2015
-            </td>
-          </tr>
-          <tr>
-            <td>1</td>
-            <td>Puranjay Jain</td>
-            <td>
-              kdaodskoadk12332-dkfokd-e21kdo
-            </td>
-            <td>
-              Teamchat
-            </td>
-            <td>
-              puru@gmail.com
-            </td>
-            <td>
-              something imp
-            </td>
-            <td>
-              12/12/2015
-            </td>
-          </tr>
-          <tr>
-            <td>1</td>
-            <td>Puranjay Jain</td>
-            <td>
-              kdaodskoadk12332-dkfokd-e21kdo
-            </td>
-            <td>
-              Teamchat
-            </td>
-            <td>
-              puru@gmail.com
-            </td>
-            <td>
-              something imp
-            </td>
-            <td>
-              12/12/2015
-            </td>
-          </tr>
-          <tr>
-            <td>1</td>
-            <td>Puranjay Jain</td>
-            <td>
-              kdaodskoadk12332-dkfokd-e21kdo
-            </td>
-            <td>
-              Teamchat
-            </td>
-            <td>
-              puru@gmail.com
-            </td>
-            <td>
-              something imp
-            </td>
-            <td>
-              12/12/2015
-            </td>
-          </tr>
-          <tr>
-            <td>1</td>
-            <td>Puranjay Jain</td>
-            <td>
-              kdaodskoadk12332-dkfokd-e21kdo
-            </td>
-            <td>
-              Teamchat
-            </td>
-            <td>
-              puru@gmail.com
-            </td>
-            <td>
-              something imp
-            </td>
-            <td>
-              12/12/2015
-            </td>
-          </tr>
-          <tr>
-            <td>1</td>
-            <td>Puranjay Jain</td>
-            <td>
-              kdaodskoadk12332-dkfokd-e21kdo
-            </td>
-            <td>
-              Teamchat
-            </td>
-            <td>
-              puru@gmail.com
-            </td>
-            <td>
-              something imp
-            </td>
-            <td>
-              12/12/2015
-            </td>
-          </tr>
         </tbody>
       </table>
       <paper-fab icon="add" id="register_client_button" title="Register a new client"></paper-fab>
       <!-- Overlays and dialogs here -->
       <paper-dialog id="register_client" with-backdrop entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
-        <h2>Register a new Client</h2>
-        <paper-dialog-scrollable>
-          <paper-input label="Name" char-counter maxlength="128"></paper-input>
-          <paper-input label="Organization" char-counter maxlength="128"></paper-input>
-          <gold-email-input required auto-validate error-message="Please enter a valid email" label="Email"></gold-email-input>
-          <paper-textarea label="Description" char-counter maxlength="256"></paper-textarea>
-        </paper-dialog-scrollable>
-        <paper-button class="discard" dialog-dismiss>Discard</paper-button>
-        <paper-button dialog-confirm autofocus>Create</paper-button>
+        <form action="http://requestb.in/1le2r5z1" method="post">
+          <h2>Register a new Client</h2>
+          <paper-dialog-scrollable>
+            <paper-input name="reg-client-name" required label="Name" char-counter maxlength="128"></paper-input>
+            <paper-input name="reg-client-org" required label="Organization" char-counter maxlength="128"></paper-input>
+            <gold-email-input name="reg-client-email" required auto-validate error-message="Please enter a valid email" label="Email"></gold-email-input>
+            <paper-textarea name="reg-client-description" required label="Description" char-counter maxlength="256"></paper-textarea>
+          </paper-dialog-scrollable>
+          <paper-button class="discard" dialog-dismiss>Discard</paper-button>
+          <paper-button onclick="this.parentNode.submit()" dialog-confirm autofocus>Create</paper-button>
+        </form>
       </paper-dialog>
     </neon-animatable>
     <neon-animatable>
@@ -487,7 +384,7 @@
           <h3>
             <img src="img/git.png" alt="github" />
             <span>Git</span>
-            <paper-button raised><iron-icon icon="add"></iron-icon>Create New</paper-button>
+            <paper-button id="register_this_button" raised>Create New</paper-button>
           </h3>
           <p>
             This section is used to create a client (customer Id) on Teamchat Integration platfrom. Later you can use this client id to create / consume / register -
@@ -515,15 +412,15 @@
           <tbody>
             <tr>
               <td>1</td>
-              <td>Puranjay Jain</td>
+              <td>Jira</td>
               <td>
-                kdaodskoadk12332-dkfokd-e21kdo
+                Puranjay Jain
               </td>
               <td>
                 Teamchat
               </td>
               <td>
-                puru@gmail.com
+                something imp
               </td>
               <td>
                 something imp
@@ -559,13 +456,41 @@
         </div>
         <paper-fab icon="add" id="register_service_button" title="Register a new service"></paper-fab>
       </div>
+      <!-- Overlays and dialogs here -->
+      <form action="http://requestb.in/1le2r5z1" method="post">
+        <paper-dialog id="register_service" with-backdrop entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
+          <h2>Register a new Service</h2>
+          <paper-dialog-scrollable>
+            <!-- drop down clickable -->
+            <div id="clientDrop" class="list drop-down">
+              <div class="flex">Select Client</div>
+              <iron-icon icon="arrow-drop-down"></iron-icon>
+            </div>
+            <!-- drop down contents -->
+            <div id="clientDropBox" class="horizontal-section drop-down-data">
+              <paper-menu class="list">
+                <paper-item>client 1</paper-item>
+                <paper-item>client 2</paper-item>
+                <paper-item>client 3</paper-item>
+                <paper-item>client 4</paper-item>
+              </paper-menu>
+            </div>
+            <!-- drop down data -->
+            <input type="hidden" name="reg-service-client-id" id="clientId" value="">
+            <paper-input name="reg-service-name" required label="Name" char-counter maxlength="128"></paper-input>
+            <paper-textarea name="reg-service-description" required label="Description" char-counter maxlength="256"></paper-textarea>
+          </paper-dialog-scrollable>
+          <paper-button class="discard" dialog-dismiss>Discard</paper-button>
+          <paper-button onclick="this.parentNode.parentNode.submit()" dialog-confirm autofocus>Create</paper-button>
+        </paper-dialog>
+      </form>
     </neon-animatable>
     <script>
       //helpers
       String.prototype.capitalize = function() {
-          return this.charAt(0).toUpperCase() + this.slice(1);
-        }
-        //click event of tab switching
+        return this.charAt(0).toUpperCase() + this.slice(1);
+      };
+      //click event of tab switching
       document.getElementById('select_tab').onclick = function() {
         document.getElementById('page').selected = this.selected;
       };
@@ -579,6 +504,13 @@
       //open services button
       document.getElementById('register_service_button').onmouseenter = function() {
         document.querySelector('.services').classList.add('open');
+      };
+      //open dialog for registration
+      document.getElementById('register_this_button').onclick = function() {
+        var dialog = document.getElementById('register_service');
+        if (dialog) {
+          dialog.open();
+        }
       };
       //close services button
       document.querySelector('.services').onmouseleave = function() {
@@ -611,6 +543,18 @@
           }, 1500);
         });
       });
+      //open drop down and close it
+      document.getElementById('clientDrop').onclick = function(event) {
+        document.getElementById('clientDropBox').classList.toggle('open');
+      };
+      //select element so update the value of hidden
+      document.getElementById('clientDropBox').onclick = function(event) {
+        document.getElementById('clientDropBox').classList.toggle('open');
+        //update the hidden
+        document.getElementById('clientId').value = this.querySelector('.list').focusedItem.innerHTML;
+        //update the drop down
+        document.querySelector('#clientDrop .flex').innerHTML = this.querySelector('.list').focusedItem.innerHTML;
+      };
     </script>
 </body>
 
