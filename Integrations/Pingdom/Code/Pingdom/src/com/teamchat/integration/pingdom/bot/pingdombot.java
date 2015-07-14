@@ -87,7 +87,7 @@ public class pingdombot {
 
 		String rmid;
 		rmid = api.context().currentRoom().getId();
-		System.err.println(rmid);
+		
 		DBHandler chk = new DBHandler();
 		boolean flag;
 		flag = chk.roomchk(rmid);
@@ -186,7 +186,7 @@ public class pingdombot {
 								+ "<br /><b>StatusDesc: Forbidden</b>"
 								+ "<br /><b>Something went wrong!</b>")));
 
-				// System.out.println("loggg");
+				
 			}
 
 			else {
@@ -260,12 +260,9 @@ public class pingdombot {
 									+ ":").addOption(check.getHostname())
 							.addOption("none"));
 
-					// System.out.println(check.getHostname());
+					
 					count++;
-					
-					
-
-				}
+			}
 
 
 	
@@ -321,8 +318,7 @@ public class pingdombot {
 					.alias("sendreqadd");
 			api.perform(api.context().currentRoom().post(prime));
 			
-//			prime.setQuestion("Enter the Check details below:").setReplyScreen(f).setReplyLabel("Enter").alias("sendreqadd");
-//			api.perform(api.context().currentRoom().post(prime));
+
 
 		}
 	}
@@ -366,7 +362,7 @@ public class pingdombot {
 								+ "<br /><b>StatusDesc: Forbidden</b>"
 								+ "<br /><b>Something went wrong!</b>")));
 
-				// System.out.println("loggg");
+				
 			}
 
 			else {
@@ -384,7 +380,7 @@ public class pingdombot {
 							.label("Select check " + String.valueOf(count)
 									+ ":").addOption(check.getHostname()).addOption("none"));
 
-					// System.out.println(check.getHostname());
+			
 					count++;
 
 				}
@@ -415,24 +411,22 @@ public class pingdombot {
 					.getField("Checks" + String.valueOf(s));
 			s++;
 		}
-//		count = 1;
+
 		s = 1;
 		url = "https://api.pingdom.com/api/2.0/checks";
 		pingdomintegrator ob1 = new pingdomintegrator();
-		System.err.println(Username+"  "+Password+" "+App_key+" "+url);
+		
 		String resp = ob1.getChecks(Username, Password, App_key, url);
-		System.err.println(resp);
-
 		Gson gson = new Gson();
 		Checks checks = gson.fromJson(resp, Checks.class);
 
 		int k = 0;
 
 		int del[] = new int[count-1];
-		System.err.println(chks[0]+" "+chks[1]+" "+chks[2]);
+	
 		for (Check check : checks.getChecks()) {
 			if (check.getHostname().equals(chks[k])) {
-				System.err.println(check.getId());
+			
 				del[k] = check.getId();
 			} else {
 
@@ -442,8 +436,7 @@ public class pingdombot {
 		}
 
 		k = 1;
-		System.err.println(Username+"  "+Password+" "+App_key+" ");
-		System.err.println(del[0]+" "+del[1]+" "+del[2]);
+		
 		String respdel = ob1.delChecks(Username, Password, App_key, del);
 
 		if (respdel.equals("Error")) {
@@ -456,7 +449,7 @@ public class pingdombot {
 							+ "<br /><b>StatusDesc: Forbidden</b>"
 							+ "<br /><b>Something went wrong!</b>")));
 
-			// System.out.println("loggg");
+		
 		}
 
 		else {
@@ -468,7 +461,7 @@ public class pingdombot {
 		}
 	}
 
-//communicating with pingdomintegrator class
+
 
 	@OnAlias("sendreqadd")
 	public void sendreqadd(TeamchatAPI api) throws IOException {
@@ -477,10 +470,9 @@ public class pingdombot {
 		String Protocol = api.context().currentReply().getField("Protocol");
 
 		pingdomintegrator ob1 = new pingdomintegrator();
-		System.err.println(Username+"  "+Password+" "+App_key+" "+host+" "+name+" "+Protocol);
+		
 		String resp = ob1.addChecks(Username, Password, App_key, host, name,Protocol);
-		System.out.println(resp);
-		System.err.println(resp);
+		
 		if (resp.equals("Error")) {
 			PrimaryChatlet prime = new PrimaryChatlet();
 			api.perform(api
@@ -491,7 +483,7 @@ public class pingdombot {
 							+ "<br /><b>StatusDesc: Forbidden</b>"
 							+ "<br /><b>Something went wrong!</b>")));
 
-			// System.out.println("loggg");
+			
 		}
 
 		else {
@@ -565,7 +557,7 @@ public class pingdombot {
 						+ check.getType() + "</a10></li></ul>");
 				api.perform(api.context().currentRoom().post(prime1));
 
-				// System.out.println(check.getHostname());
+				
 
 				s++;
 				

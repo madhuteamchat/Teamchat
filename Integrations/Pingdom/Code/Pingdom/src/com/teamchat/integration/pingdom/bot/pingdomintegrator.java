@@ -37,7 +37,7 @@ public class pingdomintegrator {
 	String encodedAuth = DatatypeConverter.printBase64Binary(auth.getBytes(Charset.forName("US-ASCII")));
 
 	String authHeader = "Basic " + new String(encodedAuth);
-	System.out.println("auth key: " + authHeader);
+	
 	
 	
 	RequestBody formBody = new FormEncodingBuilder()
@@ -81,7 +81,7 @@ public class pingdomintegrator {
 		String encodedAuth = DatatypeConverter.printBase64Binary(auth.getBytes(Charset.forName("US-ASCII")));
 		
 		String authHeader = "Basic " + new String(encodedAuth);
-		System.out.println("auth key: " + authHeader);
+		
 		int length,i,len;
 		length= del.length;
 		String delids="";
@@ -96,7 +96,7 @@ public class pingdomintegrator {
 		}
 		len=delids.length();
 		delids=delids.substring(0, (len-1));
-		System.err.println(delids);
+	
 
 		Request request = new Request.Builder()
 		  .url("https://api.pingdom.com/api/2.0/checks/?delcheckids="+delids)
@@ -130,7 +130,7 @@ public class pingdomintegrator {
 		String auth = username + ":" + password;
 		String encodedAuth = DatatypeConverter.printBase64Binary(auth.getBytes(Charset.forName("US-ASCII")));
 		String authHeader = "Basic " + new String(encodedAuth);
-		System.out.println("auth key: " + authHeader);
+
 		Request request = new Request.Builder()
 		  .url(url)
 		  .get()
