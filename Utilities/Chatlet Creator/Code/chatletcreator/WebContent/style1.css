@@ -67,13 +67,17 @@ body {
 .container {
   z-index: 1;
   position: relative;
-  background-color: #f4d432;
+  background-color: #159ceb;
   padding-top: 120px;
   text-align: center;
   height: 100%;
 }
   .container.blue {
     background-color: #0099cc;
+  }
+  
+  .container.teamblue{
+  	background-color: #159ceb;
   }
   .container.green {
     background-color: #9ed846;
