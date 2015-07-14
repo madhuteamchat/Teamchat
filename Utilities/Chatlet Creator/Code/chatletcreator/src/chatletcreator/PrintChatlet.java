@@ -16,7 +16,18 @@ public class PrintChatlet
 	public void onCreate(TeamchatAPI api){
 		System.out.println("on create");
 		this.api=api;
-		api.performPostInCurrentRoom(new PrimaryChatlet().setQuestionHtml("<html><body><button onclick='myFunction()'>Click here to create your own Chatlet</button><script>function myFunction(){window.open('http://solutions3.teamchat.com/chatletcreator/Chatlet-main.html');} </script></body></html>"));
+		System.out.println("Checkpoint");
+		//api.perform(api.context().currentRoom().post(new PrimaryChatlet().setQuestion("Check")));
+		api.performPostInCurrentRoom(new PrimaryChatlet().setQuestionHtml("<html><body><button onclick='myFunction()'>Click here to create your own Chatlet</button><script>function myFunction(){window.open('http://interns.teamchat.com:8086/chatletcreator/Chatlet-main.html');} </script></body></html>"));
+	}
+	
+	@OnKeyword("hello")
+	public void onHello(TeamchatAPI api){
+		System.out.println("on create");
+		this.api=api;
+		System.out.println("Checkpoint");
+		//api.perform(api.context().currentRoom().post(new PrimaryChatlet().setQuestion("Check")));
+		//api.performPostInCurrentRoom(new PrimaryChatlet().setQuestionHtml("<html><body><button onclick='myFunction()'>Click here to create your own Chatlet</button><script>function myFunction(){window.location.href='/Chatlet-main.html'} </script></body></html>"));
 	}
 	
 	public void set(String output,String email)throws Exception

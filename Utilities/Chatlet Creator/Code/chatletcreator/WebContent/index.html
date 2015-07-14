@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>Chatlet Creator</title>
+  <link href="style1.css" type="text/css" rel="stylesheet" media="screen,projection" />
+  <link href="http://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="menu">
+      <div class="slider">
+        <ul>
+          <li class="category active"><a href="#home">Step 1<br>Type Of Chatlet</a></li>
+          <li class="category"><a href="#search">Step 2<br>Set Chatlet Content</a></li>
+          <li class="category"><a href="#about">Step 3<br>Set Reply Screen</a></li>
+          <li class="category"><a href="#contact">Step 4<br>Set Details Screen</a></li>
+          <li class="category"><a href="#contact">Step 5<br>Comments Visibility</a></li>
+          <li class="category"><a href="#contact">Step 6<br>Post Chatlet</a></li>
+        </ul>
+        
+        <div class="bar">
+          <div class="before"></div>
+          <a class="knob"></a>
+          <div class="after"></div>
+        </div>
+      </div><br>
+    </div>
+    
+    <div id="home" class="container">
+      <div class="header">
+        <h1>What Type of Chatlet do you want to make?</h1>
+        <h1>
+        <input  id="r00" type="radio" name="type" >Text/HTML Chatlet<br><br>
+        <input  id="r01" type="radio" name="type" >Poll Chatlet<br><br>
+        <input  id="r02" type="radio" name="type" >Survey Chatlet
+        </h1>
+        <input type="button" id="button1" class=myButton value="Next Step">
+      </div>
+    </div>
+    <div id="search" class="container blue">
+      <h1>Search</h1>
+    </div>
+    <div id="about" class="container green">
+      <h1>About Us</h1>
+    </div>
+    <div id="contact" class="container red">
+      <h1>Contact Us</h1>
+    </div>
+    
+  
+  <!-- Javascript -->
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script src="js/init.js"></script>
+  <script>
+  $("#button1").click(function(){
+	  $('html, body').animate({scrollTop: $("#search").offset().top}, 1000);
+	});
+  </script>
+</body>
+</html>
