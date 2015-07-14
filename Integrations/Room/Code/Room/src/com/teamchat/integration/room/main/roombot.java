@@ -8,23 +8,29 @@ import com.teamchat.client.sdk.TeamchatAPI;
 import com.teamchat.client.sdk.chatlets.PrimaryChatlet;
 
 /*
- Author : Anuj Arora.Web2
- */
+**
+* @author : Anuj Arora
+*/
 
 public class roombot {
 	@OnKeyword(value = "Room")
 	public void Room(TeamchatAPI api) {
 		Form fo = api.objects().form();
-		fo.addField(api.objects().input().name("Name").label("Name:"));
+		fo.addField(api.objects().input().name("Name").label("Your Name:"));
 		fo.addField(api.objects().input().name("roomlink").label("Room Link:"));
-		fo.addField(api.objects().input().name("EmailId").label("EmailId:"));
+		fo.addField(api.objects().input().name("EmailId").label("Recepient's email-Id:"));
 		api.perform(api
 				.context()
 				.currentRoom()
 				.post(new PrimaryChatlet()
-						.setQuestionHtml(
-								"<center><a href=\"https://room.co/#/\" target=\"_blank\"><img src=\"http://www.yellowpages.rs/komitent_multimedia/93200/93245/logo/room-logo.gif\" border=\"0\" height=\"200\" width=\"200\" ></a></center>")
-						.setReplyScreen(fo).setReplyLabel("Enter")
+						.setQuestionHtml("<center><h4 style=\"color:black\";><b>Click on the button below:-</b></h4></center>"
+								+ "<br />"
+								+ "<center><a href=\"https://room.co/#/\" target=\"_blank\"><img src=\"https://slack.global.ssl.fastly.net/1e47/plugins/room/assets/service_128.png\" border=\"0\" height=\"64\" width=\"64\" ></a></center>"
+								+ "<br />"
+								+ "<ul type=\"square\"; style=\"color:#359FD8\";><li><a1 style=\"color:#484848\";><b>It will redirect you to a page, Where you will find a Start video chat button</b></a1></li></ul>"
+								+ "<ul type=\"square\"; style=\"color:#359FD8\";><li><a1 style=\"color:#484848\";><b>Clicking on it will redirect you to a page Where you will find a link</b></a1></li></ul>"
+								+ "<ul type=\"square\"; style=\"color:#359FD8\";><li><a1 style=\"color:#484848\";><b>Copy that link and paste it in the reply with the Email Id of the person you want to interact with</b></a1></li></ul>")
+						.setReplyScreen(fo).setReplyLabel("Connect")
 						.alias("adduser")));
 	}
 
@@ -50,10 +56,13 @@ public class roombot {
 				.context()
 				.currentRoom()
 				.post(new PrimaryChatlet()
-						.setQuestionHtml("<br /><b>Hi, I'm ROOM Bot.</b>"
-								+ "<br />I'll help you to interact with your friends or relatives with the help of video chat."
-								+ "<br />Write a command <a><b>\"Room\"</b></a> for extracting the link."
-								+ "<br /> After that just click on the image and it will redirect you to a page, Where you will find a Start video chat button."
-								+ "<br />Clicking on it will redirect you to a page Where you will find a link , Copy that link and paste it in the reply with the Email Id of the person you want to interact with.")));
+						.setQuestionHtml("<h4><b>Hi, I'm Room Bot.</b></h4>"
+								+ "<img src=\"https://slack.global.ssl.fastly.net/1e47/plugins/room/assets/service_128.png\" height=\"120\" width=\"120\">"
+								+ "<br />"
+								+ "<br /><b>I'll help you to interact with your friends or relatives with the help of video chat.</b>"
+								+ "<br />"
+								+ "<ul type=\"square\"; style=\"color:#359FD8\";><li><a1 style=\"color:black\";><b>Room - </b></a1><a2 style=\"color:#359FD8\";>"
+								+ "Use This keyword to continue with video chat"
+								+ "</a2></li></ul>")));
 	}
 }
