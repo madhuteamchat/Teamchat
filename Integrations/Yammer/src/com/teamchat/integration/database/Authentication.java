@@ -4,7 +4,15 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class Authentication extends DatabaseConnection {
+import com.teamchat.integration.factory.HostDomain;
+
+public class Authentication {
+	
+	static java.sql.Connection connection = null;
+    static java.sql.Statement stmt = null;
+    static String dbUser=HostDomain.dbusername;
+    static String dbPassword=HostDomain.dbpassword;
+    static String url="jdbc:mysql://localhost/Bot";
 	
     public static void setToken(String id,String accessToken) throws Exception{
     	   
