@@ -23,15 +23,15 @@ import twitter4j.conf.ConfigurationBuilder;
 import twitter4j.auth.AccessToken;
 
 public class TwitterBot {
-	public static Twitter twitter;
-	public static TwitterFactory tf, tf1;
-	public static ConfigurationBuilder cb = new ConfigurationBuilder();
-	public static ConfigurationBuilder cb1 = new ConfigurationBuilder();
-	public static ConfigurationBuilder cb2 = new ConfigurationBuilder();
-	public static RequestToken requestToken;
-	public static AccessToken accessToken;
-	public static String consumerkey = "StVbhY7J8qc6dGsERO30cpffM";
-	public static String consumersecret = "xAja5GM79qSpPN6yHbyEBYS1yxcqRcLyg7xYuiF5cJia3nalbW";
+	static Twitter twitter;
+	static TwitterFactory tf, tf1;
+	static ConfigurationBuilder cb = new ConfigurationBuilder();
+	static ConfigurationBuilder cb1 = new ConfigurationBuilder();
+	static ConfigurationBuilder cb2 = new ConfigurationBuilder();
+	static RequestToken requestToken;
+	static AccessToken accessToken;
+	static String consumerkey = "StVbhY7J8qc6dGsERO30cpffM";
+	static String consumersecret = "xAja5GM79qSpPN6yHbyEBYS1yxcqRcLyg7xYuiF5cJia3nalbW";
 
 	static {
 		cb.setDebugEnabled(true).setOAuthConsumerKey(consumerkey)
@@ -42,6 +42,8 @@ public class TwitterBot {
 
 	@OnKeyword("help")
 	public void Help(TeamchatAPI api) {
+		requestToken=null;
+		accessToken=null;
 		String intro = "<b>Hey, this is Twitter Bot!</b><br><img src=http://www.socialmediatoday.com/sites/default/files/BenKerryPreciseEnglish/files/twitter%202.png alt=twitter.png style=width:230px;height:90px;><br><i>You can use me to tweet, send messages and get tweets on hashtags from twitter.<br>Use following keywords.</i>";
 		String msg = intro
 				+ "<table style=width:100%><tr><th>Keywords</th><th>Function</th></tr><tr><td>tweet</td><td>Post a tweet</td></tr><tr><td>gettweet</td><td>Get tweets from your home timeline</td></tr><tr><td>directmsg</td><td>Send message to a user</td></tr><tr><td>search</td><td>Search a keyword</td></tr><tr><td>logout</td><td>Log out of twitter</td></tr></table>";
@@ -61,7 +63,7 @@ public class TwitterBot {
 					.currentRoom()
 					.post(new PrimaryChatlet().setQuestionHtml(msg1)
 							.setReplyScreen(f).setReplyLabel("Enter")
-							.showDetails(true).alias("logincreds")));
+							.showDetails(true).alias("chatlet1")));
 		} catch (TwitterException te) {
 			te.printStackTrace();
 		}
@@ -78,7 +80,7 @@ public class TwitterBot {
 				.post(new TextChatlet("Logout Successful!")));
 	}
 
-	@OnAlias("logincreds")
+	@OnAlias("chatlet1")
 	public void Chatlet2(TeamchatAPI api) {
 		String pin = api.context().currentReply().getField("pin");
 
@@ -120,10 +122,10 @@ public class TwitterBot {
 				.currentRoom()
 				.post(new PrimaryChatlet().setQuestion(msg).setReplyScreen(f)
 						.setReplyLabel("Tweet").showDetails(true)
-						.alias("posttweet")));
+						.alias("chatlet3")));
 	}
 
-	@OnAlias("posttweet")
+	@OnAlias("chatlet3")
 	public void Chatlet4(TeamchatAPI api) {
 		String tweet = api.context().currentReply().getField("tweet");
 		System.out.println(tweet);
@@ -189,10 +191,10 @@ public class TwitterBot {
 				.currentRoom()
 				.post(new PrimaryChatlet().setQuestion(msg).setReplyScreen(f)
 						.setReplyLabel("Enter").showDetails(true)
-						.alias("sendp2pmsg")));
+						.alias("chatlet6")));
 	}
 
-	@OnAlias("sendp2pmsg")
+	@OnAlias("chatlet6")
 	public void Chatlet7(TeamchatAPI api) {
 		String rcpt = api.context().currentReply().getField("rcpt");
 		String msg = api.context().currentReply().getField("msg");
@@ -225,10 +227,10 @@ public class TwitterBot {
 				.currentRoom()
 				.post(new PrimaryChatlet().setQuestion(msg).setReplyScreen(f)
 						.setReplyLabel("Enter").showDetails(true)
-						.alias("searchtweet")));
+						.alias("chatlet8")));
 	}
 
-	@OnAlias("searchtweet")
+	@OnAlias("chatlet8")
 	public void Chatlet9(TeamchatAPI api) {
 		String kywd = api.context().currentReply().getField("kywd");
 		twitter = tf.getInstance();
