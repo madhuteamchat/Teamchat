@@ -16,11 +16,11 @@
 	</listener>
 	<context-param>
 		<param-name>bot-email</param-name>
-		<param-value>dataentrybot@gmail.com</param-value>
+		<param-value>bot-enchant@teamchatbot.com</param-value>
 	</context-param>
 	<context-param>
 		<param-name>bot-password</param-name>
-		<param-value>hellmasterbot</param-value>
+		<param-value>password@123</param-value>
 	</context-param>
 	<context-param>
 		<param-name>bot-class</param-name>

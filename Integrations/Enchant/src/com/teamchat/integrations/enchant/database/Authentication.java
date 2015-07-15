@@ -14,7 +14,7 @@ public class Authentication {
 	static java.sql.Statement stmt = null;
 	static String dbUser=HostDomain.dbusername;
 	static String dbPassword=HostDomain.dbpassword;
-	static String url="jdbc:mysql://localhost/Bot";
+	static String url="jdbc:mysql://localhost/Enchant";
 	 
 	 public static void setCredentials(String teamchatid,String enchantid,String enchantpassword,String site){	    	
  	    String selQuery="select * from enchant where teamchatid='"+teamchatid+"'";
