@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta content="width=device-width,initial-scale=1.0" name="viewport">
+  <title>Chatlet Creator</title>
+  <link href="style1.css" type="text/css" rel="stylesheet" media="screen,projection" />
+  <link href="http://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+  <link rel="stylesheet" href="style2.css"/>
+</head>
+
+<body>
+<script src="jquery-1.11.3.min.js"></script>
+<script src="print.js"></script>
+    <div class="menu">
+      <div class="slider">
+        <ul>
+          <li class="category active"><a href="#home">Step 1<br>Type Of Chatlet</a></li>
+          <li class="category"><a href="#search">Step 2<br>Set Chatlet Content</a></li>
+          <li class="category"><a href="#about">Step 3<br>Set Reply Screen</a></li>
+          <li class="category"><a href="#contact">Step 4<br>Comments Visibility</a></li>
+          <li class="category"><a href="#details_screen">Step 5<br>Set Details Screen</a></li>
+          <li class="category"><a href="#final">Step 6<br>Post Chatlet</a></li>
+        </ul>
+        
+        <div class="bar">
+          <div class="before"></div>
+          <a class="knob"></a>
+          <div class="after"></div>
+        </div>
+      </div><br>
+    </div>
+    
+    <div id="home" class="container">
+      <div class="header">
+        <h1>What Type of Chatlet do you want to make?</h1>
+        <h1>
+        <input  id="r00" type="radio" name="type" checked="checked">Text/HTML Chatlet<br><br>
+        <input  id="r01" type="radio" name="type" >Poll Chatlet<br><br>
+        <input  id="r02" type="radio" name="type" >Survey Chatlet
+        </h1>
+        <input type="button" id="button1" class=myButton value="Next Step">
+      </div>
+    </div>
+    <div id="search" class="container green">
+		<div id="text" class="header" style="visibility:hidden; position:absolute; margin-left:250px"><h1>You have selected Text/HTML Chatlet!</h1></div> 
+		<div id="poll" class="header" style="visibility:hidden; position:absolute; margin-left:250px"><h1>You have selected Poll Chatlet!</h1></div> 
+		<div id="survey" class="header" style="visibility:hidden; position:absolute; margin-left:250px"><h1>You have selected Survey Chatlet!</h1></div> 
+		
+		<h1
+			style="margin: 0; margin-left:-700px; margin-top: 120px; padding: 0; padding-left: 25px; padding-bottom: 10px; font-family: sans-serif;">
+			Question</h1>
+		<input  id="text_input" type="text" class="css-input" placeholder="What are the sales?" onfocus=="this.value=''" style="margin-left:-425px; position:absolute;">
+	    
+	    <div id="html_q" style="visibility:hidden;">
+	    	<h1
+			style="margin: 0; margin-left:-570px; margin-top: 120px; padding: 0; padding-left: 25px; padding-bottom: 10px; font-family: sans-serif;">
+			HTML(Optional)</h1>
+		<input id="html_input" type="text" class="css-input" placeholder="<html><body>...." onfocus=="this.value=''" style="margin-left:-425px; position:absolute">
+	 
+	    </div>
+	    <h1
+			style="margin: 0; margin-left:950px; margin-top: -150px; padding: 0; padding-left: 25px; padding-bottom: 10px; font-family: sans-serif; position:absolute;">
+			Preview</h1>
+	  
+	    
+	    <!-- POLL Chatlet------****************************************************************---------------------------------------------- -->
+	  
+		<div id="poll_chatlet" style="position:absolute; margin-left:850px; width:400px; margin-top:-100px;">
+			<div
+				style="border-top: 2px solid #0086ca; background-color: #f7f7f7; font-size: 14px; font-family: inherit; max-width: 400px; margin-top: 5px">
+				<div
+					style="border-left: 1px solid #ececec; border-right: 1px solid #ececec; border-bottom: 1px solid #ececec">
+					<div
+						style="color: #404040; font-size: 12px; padding: 8px 10px 0 10px">
+						<span
+							style="color: #999999; margin-left: 2px; font-size: 11px; font-weight: lighter"></span>
+					</div>
+					<div style="color: #404040; padding: 4px 10px 8px 10px">Question..</div>
+					<div
+						style="background-color: #e8f4fa; margin: 0px 10px 10px 10px; clear: both; overflow: hidden; border: 1px solid #e7ebed">
+						<a
+							style="text-decoration: none; float: left; text-align: center; border-right: 1px solid #e7ebed; background-color: #e8f4fa; width: 49%; padding: 6px 0 4px"><span
+							style="color: #404040; vertical-align: middle; font-size: 14px">0</span><img
+							src="images/like.png"
+							style="vertical-align: middle; margin: 0 0 4px 4px; width: 20px; height: 20px; margin-bottom: 6px"></a><a
+							style="text-decoration: none; float: left; text-align: center; background-color: #e8f4fa; padding: 4px 0 6px; width: 49%"><span
+							style="color: #404040; vertical-align: bottom; font-size: 14px">0</span><img
+							src="images/unlike.png"
+							style="margin: 4px 0 0 4px; vertical-align: middle; width: 20px; height: 20px"></a>
+					</div>
+					<div
+						style="background-color: #ebebeb; padding: 0px; clear: both; overflow: hidden">
+						<a
+							style="color: #0086ca; float: left; text-decoration: none; font-size: 13px; padding: 12px 10px 8px 10px"><span
+							style="margin-right: 3px">0</span>Replies</a><a
+							style="color: #0086ca; display: block; float: right; text-decoration: none; font-size: 13px; padding: 5px 10px 3px 0px"><img
+							style="margin-left: 2px; vertical-align: -10px"><span
+							style="margin-right: 3px">0</span><i style="font-style: normal">Comments</i></a>
+					</div>
+				</div>
+			</div>
+		</div>
+<!--   ************************************************************************************8 -->
+		<input type="button" id="button2" class="myButton" value="Next Step" style="margin-top:150px; margin-left:-75px">	
+	</div>
+	
+    <div id="about" class="container blue">
+      <h1><br>Do you want to enable replies for your Chatlet?</h1>
+      <div class="header">
+        <h1></h1>
+        <h1>
+        <input  id="r10" type="radio" name="type" checked="checked">Enable Replies<br><br>
+        <input  id="r11" type="radio" name="type" >Disable Replies<br><br>
+        
+        </h1>
+        <input type="button" id="button4" class=myButton value="Next Step">
+      </div>
+      
+      
+      
+      <div id="repb"><input type="button" id="button3" value="Create Reply Screen" class="myButton" style="margin-top:-300px; margin-left:200px; position:absolute; visibility:hidden;"></div>	
+    		
+    </div>
+    <div id="contact" class="container red">
+      <h1>Do you want to enable Comments on Your Chatlet </h1>
+      <div class="header">
+        <h1></h1>
+        <h1>
+        <input  id="r20" type="radio" name="type" checked="checked">Enable Comments<br><br>
+        <input  id="r21" type="radio" name="type" >Disable Comments<br><br>
+        
+        </h1>
+        <input type="button" id="button5" class=myButton value="Next Step">
+      </div>
+    </div>
+    
+    <div id="details_screen" class="container green">
+    <h1>
+    <div>Good Going...<br>
+    Just preview your Chatlet below and click on the button to finalize your Chatlet!</div>
+    <input type="button" id="button6" class=myButton value="Final Step" style="margin-top:350px; margin-left:20px;">
+    </h1>
+    </div>
+    
+    <div id="final" class="container blue">
+    	<h1>You are Almost Done.<br></h1>
+    	<h1>Enter Email Address of the person to send the chatlet<h1>
+    	<h1
+			style="margin: 0; margin-left:-750px; margin-top: 120px; padding: 0; padding-left: 25px; padding-bottom: 10px; font-family: sans-serif;">
+			Email</h1>
+		<input id="email" type="text" class="css-input" placeholder="Email.." onfocus=="this.value=''" style="margin-left:-425px; position:absolute">
+    	<input type="button" id="button7" class=myButton value="Post Chatlet" style="margin-top:0px; margin-left:200px;">
+    	</div>
+    
+  
+  <!-- Javascript -->
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script src="js/init.js"></script>
+  <script>
+  $("#button1").click(function(){
+	  $('html, body').animate({scrollTop: $("#search").offset().top}, 1000);
+	  	
+	  if($('#r00').is(':checked')) { document.getElementById("text").style.visibility="visible";
+	  								document.getElementById("poll").style.visibility="hidden";
+	  								document.getElementById("survey").style.visibility="hidden";
+	  								document.getElementById("html_q").style.visibility="visible";
+	  }
+	  if($('#r01').is(':checked')) { document.getElementById("poll").style.visibility="visible";
+	  document.getElementById("text").style.visibility="hidden";
+		document.getElementById("survey").style.visibility="hidden";
+		document.getElementById("html_q").style.visibility="hidden";
+		}
+	  if($('#r02').is(':checked')) { document.getElementById("survey").style.visibility="visible";
+	  document.getElementById("poll").style.visibility="hidden";
+		document.getElementById("text").style.visibility="hidden";
+		document.getElementById("html_q").style.visibility="hidden";
+		}
+				
+	});
+  
+  $("#button2").click(function(){
+	  $('html, body').animate({scrollTop: $("#about").offset().top}, 1000);
+	  var text_input=document.getElementById("text_input").value;
+	  var html_input=document.getElementById("html_input").value;
+	  console.log(text_input);
+	  console.log(html_input);
+	  
+	});
+  
+  $("#button3").click(function(){
+	  var url = "index_replies.html";
+	  var win = window.open(url, "_blank","toolbar=no, scrollbars=no, resizable=yes, top=250, left=450, width=700, height=550");
+	  win.focus(); 
+  });
+  
+  $("#button4").click(function(){
+	  $('html, body').animate({scrollTop: $("#contact").offset().top}, 1000);
+	  
+  });  
+  
+  $("#button5").click(function(){
+	  $('html, body').animate({scrollTop: $("#details_screen").offset().top}, 1000);
+	  
+  });  
+  
+  document.getElementById("r10").onclick=function(){
+	  document.getElementById("button3").style.visibility="visible";
+  };
+  
+  document.getElementById("r11").onclick=function(){
+	  document.getElementById("button3").style.visibility="hidden";
+  };
+  
+  $("#button6").click(function(){
+	  $('html, body').animate({scrollTop: $("#final").offset().top}, 1000);
+	  
+  });  
+  
+  document.getElementById("button7").onclick = function() {
+		
+	  	
+		var replies = "all";
+		var comments = true;
+		
+		if (document.getElementById("r10").checked)
+			replies = "all";
+		else
+			replies = "none";
+		
+		if (document.getElementById("r20").checked)
+			comments = true;
+		else
+			comments = false;
+
+		str1 = "{\"imgUrl\":\"\",\"type\":\"primary\",\"content\":{\"text\":\""
+				+ content_t
+				+ "\",\"html\":\""
+				+ content_h
+				+ "\"},\"xslt\":\"primary-2.7.2\",";
+		str2 = "\"detailsLinkVisibility\":\""
+				+ replies
+				+ "\",\"actionreplace\": \"replace\",\"comments\": { \"addcomment\":\""
+				+ comments + "\"},";
+		str3 = "\"displayname\":\"Primary Chatlet\",";
+
+		var str = str1 + str2 + str3;
+		console.log(str);
+		localStorage.setItem("head", str);
+		print_result();
+	
+	var head = ""; 
+	var foot = " \"detdesc\": { \"fields\": [] },\"actions\": { \"actitem\": [] }}";
+	localStorage.setItem("foot",foot);
+	var email = document.getElementById("email").value;
+
+		postChatlet(head, foot, email);
+	};
+
+	function print_result() {
+		head = localStorage.getItem("head");
+		foot = localStorage.getItem("foot");
+		console.log(head + foot);
+
+		
+	}
+
+	function postChatlet(head, foot, email) {
+		var data1 = "{ \"data\":" + head + foot + ",\"email\":"
+				+ "\"" + email + "\"" + "}";
+		console.log(data1);
+		$.ajax({
+			type : "POST",
+			url : "createchatlet",
+			data : data1,
+			success : function() {
+				alert("success");
+			}
+		});
+	}
+
+  </script>
+</body>
+</html>
