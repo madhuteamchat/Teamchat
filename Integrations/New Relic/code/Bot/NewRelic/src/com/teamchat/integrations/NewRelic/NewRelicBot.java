@@ -15,7 +15,7 @@ public class NewRelicBot {
 				.context()
 				.currentRoom()
 				.post(new PrimaryChatlet()
-						.setQuestionHtml("<b>Hey, this is</b><b style=color:blue> New Relic Bot!</b><br><i>You can use me to receive any alert & deployment notifications of your applications monitored by New Relic.<br>Just enter this URL <a>http://interns.teamchat.com:8084/NewRelic/NewRelicServlet?email="
+						.setQuestionHtml("<b>Hey, this is</b><b style=color:blue> New Relic Bot!</b><br><i>You can use me to receive any alert & deployment notifications of your applications monitored by New Relic.<br>Just enter this URL <a>http://integration.teamchat.com:8084/NewRelic/NewRelicServlet?email="
 								+ email
 								+ " </a>as your New Relic Webhook & we are good to go.</i><br><a href=https://login.newrelic.com/login target=_blank>Click here to login to New Relic</a>")));
 	}
