@@ -78,6 +78,8 @@ public class TwitterBot {
 		twitter = tf.getInstance();
 		api.perform(api.context().currentRoom()
 				.post(new TextChatlet("Logout Successful!")));
+		requestToken=null;
+		accessToken=null;
 	}
 
 	@OnAlias("getCreds")
