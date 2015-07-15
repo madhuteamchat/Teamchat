@@ -133,7 +133,7 @@ public class Redirect_url extends HttpServlet {
 					"https://launchpad.37signals.com/authorization/token",
 					request.getHeader("User-Agent"),
 					"type=web_server&client_id=d48fa4605608e6bc3405232a71051aeb171eda35"
-							+ "&redirect_uri=http%3A%2F%2Fintegration.teamchat.com%3A8080%2FBasecamp_bot%2FRedirect_url"
+							+ "&redirect_uri=http%3A%2F%2Fintegration.teamchat.com%3A8082%2FBasecamp_bot%2FRedirect_url"
 							+ "&client_secret=cd7f2cc27a364efe2b7299621a265a788d17a24a"
 							+ "&code=" + request.getParameter("code"));
 		} catch (Exception e) {

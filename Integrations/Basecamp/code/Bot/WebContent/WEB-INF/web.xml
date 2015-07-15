@@ -37,11 +37,11 @@
 	</context-param>
 	<context-param>
 		<param-name>db-user</param-name>
-		<param-value>tcinterns</param-value>
+		<param-value>root</param-value>
 	</context-param>
 	<context-param>
 		<param-name>db-password</param-name>
-		<param-value>PakyovBosh7</param-value>
+		<param-value>integrationsrootdb@123</param-value>
 	</context-param>
 	<context-param>
 		<param-name>threading</param-name>

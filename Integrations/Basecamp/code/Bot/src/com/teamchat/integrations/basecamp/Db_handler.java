@@ -21,7 +21,7 @@ public class Db_handler {
 
 	// private static Config_handler config = new Config_handler();
 	// replace with server credentials
-	private static String DB_URL = "jdbc:mysql://localhost/Basecamp?user=tcinterns&password=PakyovBosh7";
+	private static String DB_URL = "jdbc:mysql://localhost/Basecamp?user=root&password=integrationsrootdb@123";
 
 //	Db_handler() {
 		// if (config.isEmpty()) {
