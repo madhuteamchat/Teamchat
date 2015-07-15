@@ -74,7 +74,7 @@ public class pingdomintegrator {
 	public String delChecks(String username,String password,String App_key,int[] del) throws IOException{
 	  	  
 	  	  String err = "Error";
-	  	  String success ="Deletion successfull!!";
+	  	  String success ="Deletion successful!!";
 	  	OkHttpClient client = new OkHttpClient();
 
 		String auth = username + ":" + password;
