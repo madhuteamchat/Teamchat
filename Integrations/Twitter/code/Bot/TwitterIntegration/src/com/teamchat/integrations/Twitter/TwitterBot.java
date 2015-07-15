@@ -142,6 +142,11 @@ public class TwitterBot {
 										+ status.getText() + "].")));
 			} catch (TwitterException te) {
 				te.printStackTrace();
+				api.perform(api
+						.context()
+						.currentRoom()
+						.post(new TextChatlet("Oops! An error has occurred.")));
+
 			}
 		} else
 			api.perform(api.context().currentRoom()
@@ -176,8 +181,7 @@ public class TwitterBot {
 			api.perform(api
 					.context()
 					.currentRoom()
-					.post(new TextChatlet("Failed to get timeline: "
-							+ te.getMessage())));
+					.post(new TextChatlet("Oops! An error has occurred.")));
 		}
 	}
 
@@ -214,8 +218,7 @@ public class TwitterBot {
 			api.perform(api
 					.context()
 					.currentRoom()
-					.post(new TextChatlet("Failed to send a direct message: "
-							+ te.getMessage())));
+					.post(new TextChatlet("Oops! An error has occurred.")));
 		}
 	}
 
@@ -271,8 +274,7 @@ public class TwitterBot {
 			api.perform(api
 					.context()
 					.currentRoom()
-					.post(new TextChatlet("Failed to search tweets: "
-							+ te.getMessage())));
+					.post(new TextChatlet("Oops! An error has occurred.")));
 		}
 	}
 
