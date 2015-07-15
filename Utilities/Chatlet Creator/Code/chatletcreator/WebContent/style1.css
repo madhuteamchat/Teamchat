@@ -73,7 +73,7 @@ body {
   height: 100%;
 }
   .container.blue {
-    background-color: #0099cc;
+    background-color: #159ceb;
   }
   
   .container.teamblue{
@@ -113,9 +113,8 @@ input[type=radio] {
 	background-color:transparent;
 }
 .myButton:active {
-	position:relative;
-	top:1px;
-}
+	
+	}
 
 #k{
 	position:fixed;
