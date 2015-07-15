@@ -63,10 +63,10 @@ public class TwitterBot {
 		f.addField(api.objects().input().label("Pin").name("pin"));
 		try {
 			requestToken = twitter.getOAuthRequestToken();
-			String msg1 = "<html><b>Log in to twitter and enter the pin.</b> <a href='"
+			String msg1 = "<html><b>Log in to twitter and enter the pin.</b> <a href="
 					+ requestToken.getAuthorizationURL()
-					+ " target='_blank'>"
-					+ requestToken.getAuthorizationURL() + "'></a>";
+					+ " target=_blank>"
+					+ requestToken.getAuthorizationURL() + "></a>";
 			api.perform(api
 					.context()
 					.currentRoom()
