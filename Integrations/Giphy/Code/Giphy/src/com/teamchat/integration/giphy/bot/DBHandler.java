@@ -51,30 +51,28 @@ public class DBHandler {
 		}
 	}
 	
+public boolean emailchk(String emailid) throws SQLException {
+		
+		// check if data exists in the server against that email
+		
+			try {
+				rs = stmt
+						.executeQuery("select emailid from giphy_auth where emailid='"
+								+ emailid + "'");
+				// check if result set is empty or not
+				while (rs.next()) {
+					return true;
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}finally {
+				conn.close();
+			} 
+			
+			// default case
+			return false;
+		}
 	
-	
-//	//for getting the roomid from our database corresponding to particular username.
-//	public String tagchk (String tag) throws SQLException {
-//		String tag;
-//		tag="";
-//
-//		try {
-//			rs = stmt
-//					.executeQuery("select tag from giphy_auth where emailid='"
-//							+ emailid + "' and tag='" + tag + "'");
-//			// check if result set is empty or not
-//			while (rs.next()) {
-//				return true;
-//			}
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}finally {
-//			conn.close();
-//		} 
-//		
-//		// default case
-//		return false;
-//	}
 	
 	public boolean dchk(String emailid, String tag) throws SQLException {
 		
