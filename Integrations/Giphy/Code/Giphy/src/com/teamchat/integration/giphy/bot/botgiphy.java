@@ -50,7 +50,9 @@ public class botgiphy {
 								+ "</a4></li>"
 								+ "</a2></li><li><a3 style=\"color:black\";><b>rename - </b></a3><a4 style=\"color:#359FD8\";>"
 								+ "Type this command to change the name of the tags currently stored"
-								+ "</a4></li></ul>")));
+								+ "</a4></li></ul>"
+								+ "<br />"
+								+ "<br /><b>Note: </b><a1  style=\"color:#359FD8\";>To make your tags work , You have to make a P2P group with the bot present inside it.</a1>")));
 
 		// list of keywords
 		// 1.)search
