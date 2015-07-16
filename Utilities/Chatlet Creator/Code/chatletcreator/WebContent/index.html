@@ -51,21 +51,68 @@
 			Question</h1>
 		<input  id="text_input" type="text" class="css-input" placeholder="What are the sales?" onfocus=="this.value=''" style="margin-left:-425px; position:absolute;">
 	    
+	   <div id="survey_screen" style="visibility:hidden;"> <h1
+			style="margin: 0; margin-left:-700px; margin-top: 80px; padding: 0; padding-left: 25px; padding-bottom: 10px; font-family: sans-serif;">
+			Options</h1>
+	    
+	    <div id="main">
+    
+    <div class="my-form" style="margin-top:5px; margin-left:195px; position:absolute;">
+        <form role="form" method="post">
+            <p class="text-box">
+                <label for="box1">Option<span class="box-number">1</span></label>
+                <input type="text" name="boxes[]" value="" id="box1" class="css-input" /><br>
+                <a class="add-box" href="#">Add More</a>
+            </p>
+            
+        </form>
+    </div>
+</div></div>
+<script type="text/javascript">
+jQuery(document).ready(function($){
+    $('.my-form .add-box').click(function(){
+        var n = $('.text-box').length + 1;
+        if( 10 < n ) {
+            alert('Stop it!');
+            return false;
+        }
+        var box_html = $('<p class="text-box"><label for="box' + n + '">Option <span class="box-number">' + n + '</span></label> <input type="text" class="css-input" name="boxes[]" value="" id="box' + n + '" /> <br><a href="#" class="remove-box">Remove</a></p>');
+        box_html.hide();
+        $('.my-form p.text-box:last').after(box_html);
+        box_html.fadeIn('slow');
+        return false;
+    });
+    $('.my-form').on('click', '.remove-box', function(){
+        $(this).parent().css( 'background-color', '#FF6C6C' );
+        $(this).parent().fadeOut("slow", function() {
+            $(this).remove();
+            $('.box-number').each(function(index){
+                $(this).text( index + 1 );
+            });
+        });
+        return false;
+    });
+});
+</script>
+
+	    
 	    <div id="html_q" style="visibility:hidden;">
 	    	<h1
-			style="margin: 0; margin-left:-570px; margin-top: 120px; padding: 0; padding-left: 25px; padding-bottom: 10px; font-family: sans-serif;">
+			style="margin: 0; margin-left:-570px; margin-top: 100px; padding: 0; padding-left: 25px; padding-bottom: 10px; font-family: sans-serif;">
 			HTML(Optional)</h1>
 		<input id="html_input" type="text" class="css-input" placeholder="<html><body>...." onfocus=="this.value=''" style="margin-left:-425px; position:absolute">
 	 
 	    </div>
 	    <h1
-			style="margin: 0; margin-left:950px; margin-top: -150px; padding: 0; padding-left: 25px; padding-bottom: 10px; font-family: sans-serif; position:absolute;">
+			style="margin: 0; margin-left:950px; margin-top: -350px; padding: 0; padding-left: 25px; padding-bottom: 10px; font-family: sans-serif; position:absolute;">
 			Preview</h1>
-	  
+			
+			
+
 	    
 	    <!-- POLL Chatlet------****************************************************************---------------------------------------------- -->
 	  
-		<div id="poll_chatlet" style="position:absolute; margin-left:850px; width:400px; margin-top:-100px;">
+		<div id="poll_chatlet" style="position:absolute; margin-left:850px; width:400px; margin-top:-300px; visibility:hidden;">
 			<div
 				style="border-top: 2px solid #0086ca; background-color: #f7f7f7; font-size: 14px; font-family: inherit; max-width: 400px; margin-top: 5px">
 				<div
@@ -75,7 +122,7 @@
 						<span
 							style="color: #999999; margin-left: 2px; font-size: 11px; font-weight: lighter"></span>
 					</div>
-					<div style="color: #404040; padding: 4px 10px 8px 10px">Question..</div>
+					<div style="color: #404040; padding: 4px 10px 8px 10px"><r3></r3></div>
 					<div
 						style="background-color: #e8f4fa; margin: 0px 10px 10px 10px; clear: both; overflow: hidden; border: 1px solid #e7ebed">
 						<a
@@ -95,13 +142,39 @@
 							style="margin-right: 3px">0</span>Replies</a><a
 							style="color: #0086ca; display: block; float: right; text-decoration: none; font-size: 13px; padding: 5px 10px 3px 0px"><img
 							style="margin-left: 2px; vertical-align: -10px"><span
-							style="margin-right: 3px">0</span><i style="font-style: normal">Comments</i></a>
+							style="margin-right: 3px;">0</span><i style="font-style: normal">Comments</i></a>
 					</div>
 				</div>
 			</div>
 		</div>
 <!--   ************************************************************************************8 -->
-		<input type="button" id="button2" class="myButton" value="Next Step" style="margin-top:150px; margin-left:-75px">	
+ 
+<!-- ******************************************************************************************** -->
+<div id="survey_chatlet" style="position:absolute; margin-left:850px; width:400px; margin-top:-300px; visibility:hidden;">
+<div style="border-top:2px solid #0086ca;background-color:#f7f7f7;font-size:14px;font-family:inherit;max-width:400px;margin-top:5px"><div style="border-left:1px solid #ececec;border-right:1px solid #ececec;border-bottom:1px solid #ececec"><div style="color:#404040;font-size:12px;padding:8px 10px 0 10px">                          Posted on:                          <span style="color:#999999;margin-left:2px;font-size:11px;font-weight:lighter">14 Jul 2015 12:34 PM IST</span></div><div style="color:#404040;font-size:14px;padding:4px 10px 8px 10px;font-family:inherit;line-height:21px"><r4></r4></div><div style="background-color:#e8f4fa;margin:2px 10px;min-width:175px;border:1px solid #e7e7e7"><a style="color:#404040;font-size:14px;padding:7px 10px;display:block;text-decoration:none;clear:both;overflow:hidden;line-height:18px"><div style="float:left;line-height:20px">a</div><div style="float:right;color:#404040"><img src="images/like.png" style="margin-right:3px;width:20px;height:20px;vertical-align:middle"><span style="vertical-align:bottom">0                                        </span></div></a></div><div style="background-color:#e8f4fa;margin:2px 10px; visibility:hidden; min-width:175px;border:1px solid #e7e7e7"><a style="color:#404040;font-size:14px;padding:7px 10px;display:block;text-decoration:none;clear:both;overflow:hidden;line-height:18px"><div style="float:left;line-height:20px">b</div><div style="float:right;color:#404040"><img src="images/like.png" style="margin-right:3px;width:20px;height:20px;vertical-align:middle"><span style="vertical-align:bottom">0</span></div></a></div><div style="background-color:#ebebeb;clear:both;overflow:hidden;margin-top:10px"><a style="float:left;text-decoration:none;color:#0086ca;font-size:13px;padding:12px 10px 8px 15px">0<span style="margin-left:5px">Replies</span></a><a style="color:#0086ca;display:block;float:right;text-decoration:none;font-size:13px;padding:5px 10px 3px 0px"><img style="margin-left:2px;vertical-align:-10px"><span style="margin-right:3px">0</span><i style="font-style:normal">Comments</i></a></div></div>
+</div>
+</div>
+ <!-- ********************************************************************************************* -->
+ 
+ <div id="text_chatlet" style="position:absolute; margin-left:850px; width:400px; margin-top:-300px; visibility:hidden;">       
+ <div style="border-top:2px solid #0086ca;background-color:#f7f7f7;font-size:14px;font-family:inherit;max-width:400px;margin-top:5px"><div style="border-left:1px solid #ececec;border-right:1px solid #ececec;border-bottom:1px solid #ececec">
+<div style="color:#404040;font-size:12px;padding:8px 10px 0 10px" align="left"> Posted on:<span style="color:#999999;margin-left:2px;font-size:11px;font-weight:lighter">18 Jun 2015 03:27 PM IST</span>
+</div>
+<div style="padding:8px 10px 0 15px; color:#000000;" align="left"><r1></r1></div>
+<div style="padding:8px 10px 0 15px; color:#000000;" align="left"><r2></r2></div>
+<br>
+<div style="background-color:#ebebeb;padding:0px;clear:both;overflow:hidden">
+<div style="float:left"><a style="text-decoration:none;color:#0086ca;font-size:13px;font-weight:normal;text-transform:uppercase;padding:12px 15px 8px 10px;display:block">Reply</a></div>
+<div style="border-right:1px solid #d0d0d0;height:20px;float:left;margin:9px 5px 9px 0;width:1px">                                                                                      </div>
+<div>
+<a style="color:#0086ca;float:left;text-decoration:none;font-size:13px;padding:12px 10px 8px 10px"><span style="margin-right:3px">0</span>Replies</a></div><div><a style="color:#0086ca;display:block;float:right;text-decoration:none;font-size:13px;padding:5px 10px 3px 0px"><img style="margin-left:2px;vertical-align:-10px"><span style="margin-right:3px">0</span><i style="font-style:normal">Comments</i></a>
+</div>
+</div>
+</div></div>      </div>
+<!-- *********************************************************************************************** -->
+
+
+		<input type="button" id="button2" class="myButton" value="Next Step" style="margin-top:30px; margin-left:750px">	
 	</div>
 	
     <div id="about" class="container blue">
@@ -164,16 +237,29 @@
 	  								document.getElementById("poll").style.visibility="hidden";
 	  								document.getElementById("survey").style.visibility="hidden";
 	  								document.getElementById("html_q").style.visibility="visible";
+	  								document.getElementById("text_chatlet").style.visibility="visible";
+	  								document.getElementById("poll_chatlet").style.visibility="hidden";
+	  								document.getElementById("survey_chatlet").style.visibility="hidden";
+	  								document.getElementById("survey_screen").style.visibility="hidden";
 	  }
 	  if($('#r01').is(':checked')) { document.getElementById("poll").style.visibility="visible";
 	  document.getElementById("text").style.visibility="hidden";
 		document.getElementById("survey").style.visibility="hidden";
 		document.getElementById("html_q").style.visibility="hidden";
+		document.getElementById("poll_chatlet").style.visibility="visible";
+		document.getElementById("text_chatlet").style.visibility="hidden";
+			document.getElementById("survey_chatlet").style.visibility="hidden";
+			document.getElementById("survey_screen").style.visibility="hidden";
 		}
 	  if($('#r02').is(':checked')) { document.getElementById("survey").style.visibility="visible";
 	  document.getElementById("poll").style.visibility="hidden";
 		document.getElementById("text").style.visibility="hidden";
 		document.getElementById("html_q").style.visibility="hidden";
+		document.getElementById("survey_chatlet").style.visibility="visible";
+		document.getElementById("poll_chatlet").style.visibility="hidden";
+			document.getElementById("text_chatlet").style.visibility="hidden";
+			document.getElementById("survey_screen").style.visibility="visible";
+			
 		}
 				
 	});
@@ -215,6 +301,21 @@
 	  $('html, body').animate({scrollTop: $("#final").offset().top}, 1000);
 	  
   });  
+  
+  $('#text_input').bind('input',function(){ 
+     var text=document.getElementById("text_input").value;
+	  $("r1").html(text);
+	  $("r3").html(text);
+	  $("r4").html(text);
+	});
+  
+  $('#html_input').bind('input',function(){ 
+	  var text=document.getElementById("html_input").value;   
+	  $("r2").html(text);
+		});
+  
+  
+	  
   
   document.getElementById("button7").onclick = function() {
 		

@@ -126,6 +126,14 @@ h1 {
   font-weight: bold;
   text-shadow: 0px 1px 1px #888;
 }
+
+h2 {
+  margin: 40px 0;
+  font-size: 40px;
+  line-height: 40px;
+  font-weight: bold;
+  text-shadow: 0px 1px 1px #888;
+}
 a {
   text-decoration: none;
   color: #fff;  
