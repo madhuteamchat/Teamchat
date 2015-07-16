@@ -93,8 +93,9 @@ public class pingdombot {
 		flag = chk.roomchk(rmid);
 		if (flag == true) {
 			DBHandler datacng = new DBHandler();
-			datacng.stmt.executeUpdate("DELETE FROM Bot.pingdom_auth"
-					+ " WHERE roomId='" + rmid + "'");
+			
+			datacng.stmt.executeUpdate("DELETE FROM "+datacng.configProps.getProperty("tablename").trim()+
+					" WHERE roomId='" + rmid + "'");
 			datacng.conn.close();
 			PrimaryChatlet prime = new PrimaryChatlet();
 			prime.setQuestionHtml("<h5><b>You are successfully logged out!!</b></h5>");
@@ -128,7 +129,7 @@ public class pingdombot {
 			ob1.setData(Username, Password, this.App_key, roomId);
 		} else {
 			DBHandler datacng = new DBHandler();
-			datacng.stmt.executeUpdate("UPDATE Bot.pingdom_auth"
+			datacng.stmt.executeUpdate("UPDATE "+datacng.configProps.getProperty("tablename").trim()
 					+ " SET username ='" + Username + "'" + ", pass ='"
 					+ Password + "'" + ", appkey ='" + App_key + "'"
 					+ " where roomId='" + roomId + "'");
