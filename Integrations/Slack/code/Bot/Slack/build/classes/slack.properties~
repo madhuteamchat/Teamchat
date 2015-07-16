@@ -1,0 +1,3 @@
+client_id=5090557084.5108581326
+client_secret=6f41ca2089675e9cadddae278f18b3cc
+redirect_uri=http://interns.teamchat.com:8082/Slack/slack_auth

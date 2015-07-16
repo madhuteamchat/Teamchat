@@ -4,10 +4,12 @@ package com.teamchat.integrations.slack;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -17,11 +19,13 @@ import java.util.HashMap;
 import java.util.Properties;
 import java.util.ResourceBundle;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.params.HttpConnectionParams;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -42,49 +46,82 @@ public class Slack {
 	static String code = new String();
 	public static String email = new String();
 	public static int wait;
-
 	
+	public static String client_id = new String(); //  client_id=5090557084.5108581326
+	public static String client_secret = new String(); // client_secret=6f41ca2089675e9cadddae278f18b3cc
+	public static String redirect_uri = new String(); //redirect_uri=http://integrations.teamchat.com:8083/Slack/slack_auth
+	
+	public static Properties loadPropertyFromClasspath(String fileName, Class<?> type) throws IOException
+	{
+		Properties prop = new Properties();
+		prop.load(type.getClassLoader().getResourceAsStream(fileName));
+		return prop;
+
+	}
+
 	@OnKeyword("slack")
 	public void ConnectToSlack(TeamchatAPI api) throws Exception {
+		
+		//Get client id, client secret, and redirect uri from properties file
+		
+		Properties prop1 = loadPropertyFromClasspath("slack.properties", Slack.class);
+		
+		System.out.println("Reading data from properties file.");
+		 
+		// get the property value and print it out
+		System.out.println(prop1.getProperty("client_id"));
+		client_id = prop1.getProperty("client_id").trim();
+		System.out.println(prop1.getProperty("client_secret").trim());
+		client_secret = prop1.getProperty("client_secret");
+		System.out.println(prop1.getProperty("redirect_uri").trim());
+		redirect_uri = prop1.getProperty("redirect_uri");
+ 
+		System.out.println("Read data from properties file.");
+
+		String starturl = "https://slack.com/oauth/authorize?client_id="+client_id+"&redirect_uri="+redirect_uri+"&scope=identify,read,post,client,admin";
+		String urlToPost = createEmbeddedLink(starturl, "Connect", "http");
+		
 		api.perform(api
 				.context()
 				.currentRoom()
 				.post(new PrimaryChatlet()
-						.setQuestionHtml("<a href='https://slack.com/oauth/authorize?client_id=5090557084.5108581326&redirect_uri=http://interns.teamchat.com:8082/Slack/slack_auth&scope=identify,read,post,client,admin' target='_blank'>Click Here to authorize</a>")));
+						.setQuestionHtml("<a href='"+urlToPost+"' target='_blank'>Click Here to authorize</a>")));
 		System.out.println("Haha, wait till I find your authorization info.");
 		
+		
+
 		EventListener.api1 = api;
-		
+
 		email = api.context().currentSender().getEmail();
-		
+
 		slack_auth.email = email;
-		
-		System.err.println("email:"+ slack_auth.email);
-		
+
+		System.err.println("email:" + slack_auth.email);
+
 		wait = 0;
-		while (wait!=1){
-		Thread.sleep(1000);
+		while (wait != 1) {
+			Thread.sleep(1000);
 		}
-		
-		//code = SlackDB.useCode(email);
-		
-		System.err.println("code in Slack.java: "+code);
-		if (wait==1){
-		start(api, code);
+
+		code = SlackDB.useCode(email);
+
+		System.err.println("code in Slack.java: " + code);
+		if (wait == 1) {
+			start(api, code);
 		}
 		// To open new pop-up:
-		// onClick="MyWindow=window.open('https://slack.com/oauth/authorize?client_id=5090557084.5108581326&redirect_uri=http://interns.teamchat.com:8082/slack_auth/slack_auth&scope=identify,read,post,client,admin','MyWindow',width=600,height=300);
+		// onClick="MyWindow=window.open('https://slack.com/oauth/authorize?client_id=5090557084.5108581326&redirect_uri=http://interns.teamchat.com:8083/slack_auth/slack_auth&scope=identify,read,post,client,admin','MyWindow',width=600,height=300);
 		// return false;
 
 	}
 
 	public void start(TeamchatAPI api, String code) throws Exception {
-	
-		String s = "https://slack.com/api/oauth.access?client_id=5090557084.5108581326&client_secret=6f41ca2089675e9cadddae278f18b3cc&code="
-				+ code
-				+ "&redirect_uri=http://interns.teamchat.com:8082/Slack/slack_auth&pretty=1";
 
-		HttpClient client = new DefaultHttpClient(); // this default is
+		String s = "https://slack.com/api/oauth.access?client_id="+client_id+"&client_secret="+client_secret+"&code="
+				+ code
+				+ "&redirect_uri="+redirect_uri+"&pretty=1";
+
+		HttpClient client = HttpClientBuilder.create().build();// this default is
 														// deprecated, I could
 														// instead use
 														// HttpClientBuilder.create().build();
@@ -114,12 +151,16 @@ public class Slack {
 
 			token = acc.get("access_token").toString(); // This token is unique
 			
+			//call to save accesstoken function to DB
+			
+			SlackDB.saveToken(email, token);
+			
 			System.out.println("Recieved access token. Free to access any data now!");
 
 			api.performPostInCurrentRoom(new TextChatlet(
 					"Successfully connected"));
-									
-		//Free to call for notifications (notifyme)
+
+			// Free to call for notifications (notifyme)
 		}
 	}
 
@@ -148,12 +189,33 @@ public class Slack {
 
 		System.out.println("Posting help data.");
 	}
-	
+
 	@OnKeyword("notifyme")
-	public void notifyMe(TeamchatAPI api) throws Exception{
+	public void notifyMe(TeamchatAPI api) throws Exception {
+		token = SlackDB.useToken(email);
 		System.err.println("Assigning token to event listener");
 		EventListener.listenForEvents(token);
 		System.err.println("Assigned token to event listener");
+	}
+
+	public static String createEmbeddedLink(String url, String title, String protocol) throws JSONException
+	{
+		JSONObject object = new JSONObject();
+		JSONObject web = new JSONObject();
+		web.put("title", title);
+		web.put("cancelBtnName", "Back");
+		web.put("minWidth", "200");
+		web.put("draggable", "true");
+		web.put("newWindow", "true");
+		web.put("url", url);
+		object.put("web", web);
+		System.out.println(object.toString());
+		byte[] byteArray = Base64.encodeBase64(object.toString().getBytes());
+		String encodedString = new String(byteArray);
+		String fUrl = protocol + "://teamchat:data=" + encodedString;
+
+		return fUrl;
+
 	}
 	
 	@OnKeyword("channel")
@@ -182,6 +244,8 @@ public class Slack {
 	public void Chname(TeamchatAPI api) throws ClientProtocolException,
 			IOException, JSONException {
 
+		token = SlackDB.useToken(email);
+		
 		String channelname = api.context().currentReply().getField("channel");
 		api.data().addField("channel", "name", channelname);
 
@@ -202,7 +266,8 @@ public class Slack {
 		String output = sb.toString();
 
 		JSONObject j = new JSONObject(output);
-		Boolean value = (Boolean) j.get("ok"); //value true means successful channel creation
+		Boolean value = (Boolean) j.get("ok"); // value true means successful
+												// channel creation
 
 		if (!value) {
 
@@ -235,11 +300,15 @@ public class Slack {
 
 	}
 
-	public Field getOptions(TeamchatAPI api, String[] name) //For using to post message to any channel in Slack
+	public Field getOptions(TeamchatAPI api, String[] name) // For using to post
+															// message to any
+															// channel in Slack
 			throws ClientProtocolException, IOException, JSONException {
 
 		// Get Options from JSON
 
+		token = SlackDB.useToken(email);
+		
 		HttpClient client = new DefaultHttpClient();
 		HttpGet request = new HttpGet(
 				"https://slack.com/api/channels.list?token=" + token
@@ -299,7 +368,7 @@ public class Slack {
 								api.objects()
 										.form()
 										.addField(
-												api.objects().input()
+					 							api.objects().input()
 														.addOption("Message")
 														.label("Message")
 														.name("msg"))
@@ -318,6 +387,8 @@ public class Slack {
 				.replace("?", "%3F"); // For get request to url
 		String channelToSend = api.context().currentReply().getField("ch");
 
+		token = SlackDB.useToken(email);
+		
 		for (int i = 0; i < name.length; i++) {
 			if (channelToSend.equals(name[i])) {
 				channelID = chid[i]; // Received Channel ID and the message to
@@ -329,7 +400,7 @@ public class Slack {
 				HttpGet request = new HttpGet(
 						"https://slack.com/api/chat.postMessage?token=" + token
 								+ "&channel=" + channelID + "&text="
-								+ actualmessage + "&pretty=1"); 
+								+ actualmessage + "&pretty=1");
 
 				System.out.println("Request to send message sent.");
 
@@ -372,12 +443,15 @@ public class Slack {
 	@OnKeyword("delete")
 	public void deleteMsg(TeamchatAPI api) throws ClientProtocolException,
 			IOException, JSONException {
+		
+		token = SlackDB.useToken(email);
+		
 		HttpClient client = new DefaultHttpClient();
 		HttpGet request = new HttpGet(
 				"https://slack.com/api/chat.delete?token=" + token
 						+ "&channel=" + channelID + "&ts=" + timestamp
-						+ "&pretty=1"); 
-		
+						+ "&pretty=1");
+
 		System.out.println("Request to delete previous message sent.");
 
 		HttpResponse response = client.execute(request);
@@ -414,6 +488,8 @@ public class Slack {
 	@OnKeyword("teaminfo")
 	public void teamInfo(TeamchatAPI api) throws ClientProtocolException,
 			IOException, JSONException {
+		
+		token = SlackDB.useToken(email);
 
 		HttpClient client = new DefaultHttpClient();
 		HttpGet request = new HttpGet("https://slack.com/api/team.info?token="
@@ -450,6 +526,8 @@ public class Slack {
 	@OnKeyword("userlist")
 	public void userlist(TeamchatAPI api) throws ClientProtocolException,
 			IOException, JSONException {
+		
+		token = SlackDB.useToken(email);
 
 		HttpClient client = new DefaultHttpClient();
 		HttpGet request = new HttpGet("https://slack.com/api/users.list?token="
@@ -503,42 +581,43 @@ public class Slack {
 		}
 	}
 
-	//For testing:
-	
-/*	@OnKeyword("url")
-	public void getURl(TeamchatAPI api) throws IllegalStateException,
-			IOException {
+	// For testing:
 
-		
-		 * HttpClient client = new DefaultHttpClient(); HttpGet request = new
-		 * HttpGet(
-		 * "https://slack.com/api/rtm.start?token=xoxp-5090557084-5090557086-5142984056-81c64e&pretty=1"
-		 * );
-		 * 
-		 * HttpResponse response = client.execute(request);
-		 * 
-		 * BufferedReader rd = new BufferedReader(new InputStreamReader(response
-		 * .getEntity().getContent())); String line = "";
-		 * 
-		 * StringBuilder sb = new StringBuilder(); while ((line = rd.readLine())
-		 * != null) sb.append(line); String output = sb.toString();
-		 * 
-		 * JSONObject j = new JSONObject(output);
-		 * 
-		 * String url = j.get("url").toString(); System.out.println(url);
-		 * 
-		 * try { Properties properties = new Properties();
-		 * properties.setProperty("url", url);
-		 * 
-		 * File file = new File("test.properties"); FileOutputStream fileOut =
-		 * new FileOutputStream(file); properties.store(fileOut, "URL");
-		 * fileOut.close(); } catch (FileNotFoundException e) {
-		 * e.printStackTrace(); } catch (IOException e) { e.printStackTrace(); }
-		 * // Add call to javascript code for running the websocket url
-		 }*/
+	/*
+	 * @OnKeyword("url") public void getURl(TeamchatAPI api) throws
+	 * IllegalStateException, IOException {
+	 * 
+	 * 
+	 * HttpClient client = new DefaultHttpClient(); HttpGet request = new
+	 * HttpGet(
+	 * "https://slack.com/api/rtm.start?token=xoxp-5090557084-5090557086-5142984056-81c64e&pretty=1"
+	 * );
+	 * 
+	 * HttpResponse response = client.execute(request);
+	 * 
+	 * BufferedReader rd = new BufferedReader(new InputStreamReader(response
+	 * .getEntity().getContent())); String line = "";
+	 * 
+	 * StringBuilder sb = new StringBuilder(); while ((line = rd.readLine()) !=
+	 * null) sb.append(line); String output = sb.toString();
+	 * 
+	 * JSONObject j = new JSONObject(output);
+	 * 
+	 * String url = j.get("url").toString(); System.out.println(url);
+	 * 
+	 * try { Properties properties = new Properties();
+	 * properties.setProperty("url", url);
+	 * 
+	 * File file = new File("test.properties"); FileOutputStream fileOut = new
+	 * FileOutputStream(file); properties.store(fileOut, "URL");
+	 * fileOut.close(); } catch (FileNotFoundException e) { e.printStackTrace();
+	 * } catch (IOException e) { e.printStackTrace(); } // Add call to
+	 * javascript code for running the websocket url }
+	 */
 
 	@OnKeyword("search")
 	public void SearchMessages(TeamchatAPI api) {
+
 		api.perform(api
 				.context()
 				.currentRoom()
@@ -559,7 +638,9 @@ public class Slack {
 	@OnAlias("query")
 	public void Query(TeamchatAPI api) throws ClientProtocolException,
 			IOException, JSONException {
-
+		
+		token = SlackDB.useToken(email);
+		
 		String query = api.context().currentReply().getField("searchquery");
 
 		HttpClient client = new DefaultHttpClient();
