@@ -6,10 +6,10 @@ public class GetProperties
 {
 	
 	String url = "jdbc:mysql://localhost:3306/"; 
-	String dbName = "GoToMeeting"; 
+	String dbName = "Bot"; 
 	String driver = "com.mysql.jdbc.Driver"; 
-	String userName = "root"; 
-	String password = "integrationsrootdb@123";
+	String userName = "tcinterns"; 
+	String password = "PakyovBosh7";
 	
 	public boolean getDB(String userEmail){
 		boolean flag=false;

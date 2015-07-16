@@ -8,8 +8,8 @@
     <listener-class>com.teamchat.client.utils.TeamchatContextListener</listener-class>
   </listener>
   <context-param>
-    <param-name>bot-gotomeeting@teamchatbot.com</param-name>
-    <param-value></param-value>
+    <param-name>bot-email</param-name>
+    <param-value>bot-gotomeeting@teamchatbot.com</param-value>
   </context-param>
   <context-param>
     <param-name>bot-password</param-name>
@@ -25,15 +25,15 @@
   </context-param>
   <context-param>
     <param-name>db-name</param-name>
-    <param-value>GoToMeeting</param-value>
+    <param-value>Bot</param-value>
   </context-param>
   <context-param>
     <param-name>db-user</param-name>
-    <param-value>root</param-value>
+    <param-value>tcinterns</param-value>
   </context-param>
   <context-param>
     <param-name>db-password</param-name>
-    <param-value>integrationsrootdb@123</param-value>
+    <param-value>PakyovBosh7</param-value>
   </context-param>
   <context-param>
     <param-name>threading</param-name>
