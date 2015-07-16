@@ -16,9 +16,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.basecamp.classes.Authorization;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import java.net.URLEncoder;
 
 /**
  * Servlet implementation class Redirect_url
@@ -26,6 +26,7 @@ import com.google.gson.JsonParser;
 @WebServlet(description = "get the verification code from this url", urlPatterns = { "/Redirect_url" })
 public class Redirect_url extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	public static String currentEmail = "";
 
 	/**
 	 * @see HttpServlet#HttpServlet()
@@ -85,7 +86,7 @@ public class Redirect_url extends HttpServlet {
 		Gson gson = new Gson();
 		// put response in token class
 		Token token = (Token) gson.fromJson(response.toString(), Token.class);
-//		 System.out.println(token.getAccess_token());
+		// System.out.println(token.getAccess_token());
 		Db_handler db = new Db_handler();
 		String get_response = sendGet_auth(
 				"https://launchpad.37signals.com/authorization.json",
@@ -109,16 +110,13 @@ public class Redirect_url extends HttpServlet {
 		// },
 		// "expires_at": "2015-07-02T14:08:18Z"
 		// }
-		JsonParser jsonParser = new JsonParser();
-		JsonObject accounts = (JsonObject) jsonParser.parse(get_response)
-				.getAsJsonObject().getAsJsonArray("accounts").get(0)
-				.getAsJsonObject();
-		JsonObject identity = (JsonObject) jsonParser.parse(get_response)
-				.getAsJsonObject().get("identity").getAsJsonObject();
-		String href = accounts.get("href").getAsString();
-		String email = identity.get("email_address").getAsString();
-		System.out.println("Authenticated: "
-				+ db.StorageHandler(email, href, token));
+		Authorization auth = (Authorization) gson.fromJson(get_response,
+				Authorization.class);
+		Basecamp_basics bb = new Basecamp_basics(currentEmail, auth
+				.getIdentity().getEmailAddress(), auth.getAccounts().get(0)
+				.getHref(), token.getExpires_in(), token.getRefresh_token(),
+				token.getAccess_token());
+		System.out.println("Authenticated: " + db.StorageHandler(bb));
 	}
 
 	/**
@@ -133,7 +131,9 @@ public class Redirect_url extends HttpServlet {
 					"https://launchpad.37signals.com/authorization/token",
 					request.getHeader("User-Agent"),
 					"type=web_server&client_id=d48fa4605608e6bc3405232a71051aeb171eda35"
-							+ "&redirect_uri=http%3A%2F%2Fintegration.teamchat.com%3A8082%2FBasecamp_bot%2FRedirect_url"
+							+ "&redirect_uri="
+							+ URLEncoder
+									.encode(Universal.REDIRECT_URL, "UTF-8")
 							+ "&client_secret=cd7f2cc27a364efe2b7299621a265a788d17a24a"
 							+ "&code=" + request.getParameter("code"));
 		} catch (Exception e) {
