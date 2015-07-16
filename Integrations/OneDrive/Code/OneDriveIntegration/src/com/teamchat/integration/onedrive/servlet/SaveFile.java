@@ -1,6 +1,7 @@
 package com.teamchat.integration.onedrive.servlet;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -35,20 +36,24 @@ public class SaveFile extends HttpServlet {
 		{
 			String msg="Uploaded Successfully";
 			new TeamchatPost().postMsg(msg,rid);
-			res.sendRedirect(res.encodeRedirectURL("http://interns.teamchat.com:8080/OneDriveIntegration/filepicker.html?rid="+rid));
+//			res.sendRedirect(res.encodeRedirectURL("http://interns.teamchat.com:8085/OneDriveIntegration/filepicker.html?rid="+rid));
 		}
 		else if(request.getParameter("msg").equals("cancel"))
 		{
 			String msg="Cancelled";
 			new TeamchatPost().postMsg(msg,rid);
-			res.sendRedirect(res.encodeRedirectURL("http://interns.teamchat.com:8080/OneDriveIntegration/filepicker.html?rid="+rid));
+//			res.sendRedirect(res.encodeRedirectURL("http://interns.teamchat.com:8085/OneDriveIntegration/filepicker.html?rid="+rid));
 		}
 		else if(request.getParameter("msg").equals("error"))
 		{
 			String msg=request.getParameter("msg");
 			new TeamchatPost().postMsg(msg,rid);
-			res.sendRedirect(res.encodeRedirectURL("http://interns.teamchat.com:8080/OneDriveIntegration/filepicker.html?rid="+rid));
+//			res.sendRedirect(res.encodeRedirectURL("http://interns.teamchat.com:8085/OneDriveIntegration/filepicker.html?rid="+rid));
 		}
+		PrintWriter out=res.getWriter();
+		out.println("<script>window.close();</script>");
+		out.flush();
+		out.close();
 	}
 
 	/**

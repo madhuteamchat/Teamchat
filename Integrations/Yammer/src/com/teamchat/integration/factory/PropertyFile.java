@@ -1,7 +1,5 @@
 package com.teamchat.integration.factory;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,8 +9,7 @@ import java.util.Properties;
 public class PropertyFile {
 	
 	 static Properties prop = new Properties();
-	
-	 
+				
    public void setProperty(String username,String authtoken) {
 	  OutputStream output = null;
 		try {
@@ -40,40 +37,24 @@ public class PropertyFile {
 		}
 	  }
    
-   public String getProperty(String property) {
-	   InputStream input = null;
+   public static String getProperty(String property) {
+		Properties prop = new Properties();
 	   String value="";
 		try {
 			 System.out.println("reading from property file");
-			input = this.getClass().getClassLoader().getResourceAsStream("config.properties");
-	 		// load a properties file
-			if (input != null) {
-				prop.load(input);
-				} else {
-				throw new FileNotFoundException("property file not found in the classpath");
-				}
-
-	 
-			// get the property value and print it out
+			// load a properties file
+			 prop.load(PropertyFile.class.getClassLoader().getResourceAsStream("config.properties"));
 			value=prop.getProperty(property);
-	 
-		} catch (IOException ex) {
+		} 
+		catch (IOException ex) {
 			ex.printStackTrace();
-		} finally {
-			if (input != null) {
-				try {
-					input.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		}
+		} 
 	   return value;
    }
    
    public static void main(String argv[]) {
 	   PropertyFile pf=new PropertyFile();
-	   pf.setProperty("joseph", "12345");
+	   System.out.println(pf.getProperty("HostName"));
    }
    }
 

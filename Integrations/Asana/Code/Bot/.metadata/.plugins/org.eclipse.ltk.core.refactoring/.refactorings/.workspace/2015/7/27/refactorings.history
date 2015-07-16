@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Delete resource &apos;Pivotal_Tracker_Bot&apos;" deleteContents="false" description="Delete resource &apos;Pivotal_Tracker_Bot&apos;" element1="/Pivotal_Tracker_Bot" flags="7" id="org.eclipse.ltk.core.refactoring.delete.resources" resources="1" stamp="1435821880836"/>
+</session>

@@ -1,6 +1,10 @@
 
 package com.teamchat.integration.pingdom.classes;
 
+/*
+ * *
+ * @author:Anuj Arora
+ */
 import javax.annotation.Generated;
 import com.google.gson.annotations.Expose;
 

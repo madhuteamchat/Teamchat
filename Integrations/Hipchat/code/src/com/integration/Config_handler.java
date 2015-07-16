@@ -9,7 +9,7 @@ import java.io.FileWriter;
 import java.util.Properties;
 
 /**
- * @author Puranjay Jain NOTE: Please create a config.properties file in your
+ * @author Himanshu Rathee NOTE: Please create a config.properties file in your
  *         classpath before using it in a live project ! The classpath is the
  *         folder in which build, src, etc. folders are located
  */

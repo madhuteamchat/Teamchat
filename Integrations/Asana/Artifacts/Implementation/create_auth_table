@@ -1,0 +1,6 @@
+use Pivotal_bot;
+CREATE TABLE authorized (id INT NOT NULL AUTO_INCREMENT, 
+    email VARCHAR(128),
+    access_token VARCHAR(1024) NOT NULL, 
+	authenticated boolean NOT NULL,
+    PRIMARY KEY (ID));

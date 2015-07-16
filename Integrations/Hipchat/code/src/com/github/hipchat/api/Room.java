@@ -52,7 +52,7 @@ public class Room extends RoomId
     private String guestAccessUrl;
     private List<UserId> participants;
 
-    private Room(String id, HipChat origin)
+    public Room(String id, HipChat origin)
     {
         super(id, origin);
     }

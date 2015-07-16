@@ -1,7 +1,0 @@
-botemail = ajteamchat@gmail.com
-botpass = ar2515193
-dbname = zendesk
-dbuser = root
-dbpass = abhi
-tablename = ticketdata
-endpoint = dev-enterprise.teamchat.com

@@ -8,20 +8,35 @@ package com.teamchat.integrations.basecamp;
  *
  */
 public class Basecamp_basics {
-	private String email, href, expires_in, refresh_token, access_token;
+	private String email, basecamp_email, href, expires_in, refresh_token, access_token;
 
-	public Basecamp_basics(){
-		
-	}
-	
-	public Basecamp_basics(String email, String href, String expires_in,
-			String refresh_token, String access_token) {
+	public Basecamp_basics(String email, String basecamp_email, String href,
+			String expires_in, String refresh_token, String access_token) {
 		super();
 		this.email = email;
+		this.basecamp_email = basecamp_email;
 		this.href = href;
 		this.expires_in = expires_in;
 		this.refresh_token = refresh_token;
 		this.access_token = access_token;
+	}
+
+	/**
+	 * @return the basecamp_email
+	 */
+	public String getBasecamp_email() {
+		return basecamp_email;
+	}
+
+	/**
+	 * @param basecamp_email the basecamp_email to set
+	 */
+	public void setBasecamp_email(String basecamp_email) {
+		this.basecamp_email = basecamp_email;
+	}
+
+	public Basecamp_basics(){
+		
 	}
 
 	public String getEmail() {

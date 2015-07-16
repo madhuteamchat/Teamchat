@@ -1,0 +1,561 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <!--    Theme colour for android lollipop -->
+  <meta name="theme-color" content="#159ceb">
+  <!-- 1. Load webcomponents-lite.min.js for polyfill support. -->
+  <script src="bower_components/webcomponentsjs/webcomponents-lite.min.js">
+  </script>
+  <!-- 2. Use an HTML Import to bring in some elements. -->
+  <link rel="import" href="bower_components/iron-icon/iron-icon.html">
+  <link rel="import" href="bower_components/iron-icons/iron-icons.html">
+  <link rel="import" href="bower_components/iron-form/iron-form.html">
+  <link rel="import" href="bower_components/font-roboto/roboto.html">
+  <link rel="import" href="bower_components/iron-media-query/iron-media-query.html">
+  <link rel="import" href="bower_components/iron-collapse/iron-collapse.html">
+  <link rel="import" href="bower_components/paper-styles/paper-styles.html">
+  <link rel="import" href="bower_components/paper-button/paper-button.html">
+  <link rel="import" href="bower_components/paper-dialog/paper-dialog.html">
+  <link rel="import" href="bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
+  <link rel="import" href="bower_components/paper-fab/paper-fab.html">
+  <link rel="import" href="bower_components/paper-item/paper-icon-item.html">
+  <link rel="import" href="bower_components/paper-item/paper-item.html">
+  <link rel="import" href="bower_components/paper-item/paper-item-body.html">
+  <link rel="import" href="bower_components/paper-input/paper-input.html">
+  <link rel="import" href="bower_components/paper-input/paper-input-char-counter.html">
+  <link rel="import" href="bower_components/paper-input/paper-textarea.html">
+  <link rel="import" href="bower_components/paper-menu/paper-menu.html">
+  <link rel="import" href="bower_components/paper-item/paper-item.html">
+  <link rel="import" href="bower_components/paper-item/paper-icon-item.html">
+  <link rel="import" href="bower_components/paper-ripple/paper-ripple.html">
+  <link rel="import" href="bower_components/paper-spinner/paper-spinner.html">
+  <link rel="import" href="bower_components/paper-toolbar/paper-toolbar.html">
+  <link rel="import" href="bower_components/paper-tabs/paper-tabs.html">
+  <link rel="import" href="bower_components/paper-tabs/paper-tab.html">
+  <link rel="import" href="bower_components/paper-icon-button/paper-icon-button.html">
+  <link rel="import" href="bower_components/gold-email-input/gold-email-input.html">
+  <link rel="import" href="bower_components/neon-animation/neon-animated-pages.html">
+  <link rel="import" href="bower_components/neon-animation/neon-animatable.html">
+  <link rel="import" href="bower_components/neon-animation/neon-animations.html">
+  <style>
+    /*custom scrollbar*/
+
+    body::-webkit-scrollbar {
+      background: rgba(0, 0, 0, 0);
+      width: 10px;
+    }
+
+    body::-webkit-scrollbar-thumb {
+      background: #BDBDBD;
+    }
+  </style>
+  <style is="custom-style">
+    body {
+      font-family: 'Roboto', 'Noto', sans-serif;
+      font-size: 14px;
+      margin: 0;
+      /*padding: 24px;*/
+    }
+    /*section {
+      padding: 20px 0;
+    }
+
+    section > div {
+      padding: 14px;
+      font-size: 16px;
+    }*/
+
+    paper-icon-item.iron-selected {
+      background: var(--google-grey-300);
+    }
+
+    paper-button {
+      color: white;
+      margin: 10px;
+      background-color: #0087CA;
+      white-space: nowrap;
+    }
+
+    paper-icon-item {
+      position: relative;
+    }
+
+    #register_client_button {
+      position: fixed;
+      right: 0;
+      bottom: 0;
+      margin: 0 24px 24px 0;
+    }
+    /*outline blueline fix*/
+
+    iron-collapse {
+      outline: none;
+    }
+
+    paper-toolbar {
+      @apply(--shadow-elevation-2dp);
+      background-color: #159ceb;
+      z-index: 1;
+    }
+
+    paper-fab {
+      background-color: #0087CA;
+    }
+
+    paper-spinner {
+      --paper-spinner-layer-1-color: #159ceb;
+      --paper-spinner-layer-2-color: #159ceb;
+      --paper-spinner-layer-3-color: #159ceb;
+      --paper-spinner-layer-4-color: #159ceb;
+      margin: 0 auto;
+      display: block;
+    }
+    /*services buttons*/
+
+    .services {
+      position: fixed;
+      right: 0;
+      bottom: 0;
+      z-index: 2;
+    }
+
+    .services #register_service_button {
+      margin: 0 24px 24px 0;
+    }
+
+    .services .service {
+      height: 36px;
+      width: 36px;
+      border-radius: 50%;
+      box-shadow: 0 2px 6px #0087CA;
+      text-align: center;
+      margin: 16px 5px;
+      padding: 4px;
+      cursor: pointer;
+      background: #fff;
+      /*transitions*/
+      transition: 0.15s;
+      opacity: 0;
+      transform: scale(0.5);
+      pointer-events: none;
+    }
+    /*service hover*/
+
+    .service:hover {
+      box-shadow: 0 4px 8px #0087CA;
+    }
+    /*opened services*/
+
+    .services.open .service {
+      opacity: 1;
+      transform: scale(1);
+      pointer-events: all;
+    }
+    /*a service's style*/
+
+    .services .service img {
+      display: inline-block;
+    }
+    /*jira, etc.*/
+
+    .services .jira-service img {
+      height: 35px;
+    }
+
+    .services .git-service {
+      background-color: #515151;
+      padding: 5px;
+    }
+
+    .services .git-service img {
+      height: 32px;
+    }
+
+    .services .sms-service img {
+      border-radius: 50%;
+      height: 32px;
+    }
+
+    .services .rnas-service img {
+      height: 47px;
+      margin: -5px 0 0 -4px;
+    }
+
+    .services .zendesk-service {
+      background-color: #678F00;
+    }
+
+    .services .zendesk-service img {
+      height: 29px;
+      padding: 4px;
+    }
+    /*content*/
+
+    .content {
+      padding: 16px;
+    }
+
+    .content h3 img {
+      border-radius: 50%;
+      height: 40px;
+      margin-right: 6px;
+      vertical-align: middle;
+    }
+    /*table layout*/
+
+    table {
+      background: #fff;
+      text-align: left;
+      width: 100%;
+    }
+
+    table tr {
+      height: 48px;
+    }
+
+    table tr:last-of-type {
+      height: 56px;
+    }
+
+    table tr th,
+    table tr td {
+      border-bottom: 1px solid;
+      border-color: var(--divider-color);
+      padding-left: 24px;
+    }
+
+    table .book-button {
+      display: block;
+      width: 120px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    /*dialogs*/
+    /*register client dialog*/
+    /*buttons*/
+
+    .discard {
+      background: var(--paper-red-500);
+    }
+    /*drop down ka stuff*/
+
+    .drop-down .flex {
+      font-size: 16px;
+      font-weight: 400;
+      display: inline-block;
+      padding: 16px;
+    }
+
+    .drop-down iron-icon {
+      margin: 13px 16px 0 0;
+      float: right;
+    }
+
+    .drop-down + .drop-down-data {
+      position: absolute;
+      left: 24px;
+      top: 53px;
+      z-index: 1;
+      opacity: 0;
+      transition: 0.3s;
+      pointer-events: none;
+      cursor: pointer;
+    }
+
+    .drop-down-data.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .list {
+      cursor: pointer;
+      background-color: white;
+      display: inline-block;
+      min-width: 240px;
+      margin: 12px;
+      @apply(--shadow-elevation-2dp);
+    }
+
+    .avatar {
+      display: inline-block;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      overflow: hidden;
+      background: #ccc;
+    }
+  </style>
+</head>
+
+<body class="fullbleed layout vertical">
+  <paper-toolbar class="tall">
+    <paper-icon-button icon="extension"></paper-icon-button>
+    <span title>Teamchat Integration Console</span>
+    <h4>Puranjay Jain</h4>
+    <paper-icon-button icon="exit-to-app">Logout</paper-icon-button>
+    <paper-tabs id="select_tab" selected="0" class="bottom self-end" style="width: 300px;">
+      <paper-tab>PLATFORM CLIENT</paper-tab>
+      <paper-tab>SERVICES</paper-tab>
+    </paper-tabs>
+    <div class="bottom flex"></div>
+  </paper-toolbar>
+  <neon-animated-pages id="page" class="flex" selected="0" entry-animation="fade-in-animation" exit-animation="fade-out-animation">
+    <neon-animatable>
+      <div class="content">
+        <h3>
+          Register Client
+        </h3>
+        <p>
+          This section id used to create a client (customer Id) on Teamchat Integration platform , later you can use this client id to create / consume / register application ,services , workflows . This will also help you maintain and manage the application ,services
+          , workflows you create
+        </p>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>
+              #
+            </th>
+            <th>Name</th>
+            <th>Client Key</th>
+            <th>Organization</th>
+            <th>Email</th>
+            <th>Description</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>Puranjay Jain</td>
+            <td>
+              kdaodskoadk12332-dkfokd-e21kdo
+            </td>
+            <td>
+              Teamchat
+            </td>
+            <td>
+              puru@gmail.com
+            </td>
+            <td>
+              something imp
+            </td>
+            <td>
+              12/12/2015
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <paper-fab icon="add" id="register_client_button" title="Register a new client"></paper-fab>
+      <!-- Overlays and dialogs here -->
+      <paper-dialog id="register_client" with-backdrop entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
+        <form action="http://requestb.in/1le2r5z1" method="post">
+          <h2>Register a new Client</h2>
+          <paper-dialog-scrollable>
+            <paper-input name="reg-client-name" required label="Name" char-counter maxlength="128"></paper-input>
+            <paper-input name="reg-client-org" required label="Organization" char-counter maxlength="128"></paper-input>
+            <gold-email-input name="reg-client-email" required auto-validate error-message="Please enter a valid email" label="Email"></gold-email-input>
+            <paper-textarea name="reg-client-description" required label="Description" char-counter maxlength="256"></paper-textarea>
+          </paper-dialog-scrollable>
+          <paper-button class="discard" dialog-dismiss>Discard</paper-button>
+          <paper-button onclick="this.parentNode.submit()" dialog-confirm autofocus>Create</paper-button>
+        </form>
+      </paper-dialog>
+    </neon-animatable>
+    <neon-animatable>
+      <div class="content">
+        <h3>
+          Self Serve Integration Services
+        </h3>
+        <p>
+          This section id used to create a client (customer Id) on Teamchat Integration platfrom , later you can use this client id to create / consume / register application ,services , workflows . This will also help you maintain and manage the application ,services
+          , workflows you create
+        </p>
+      </div>
+      <iron-collapse id="service-loader">
+        <paper-spinner active></paper-spinner>
+      </iron-collapse>
+      <iron-collapse id="service-main">
+        <div class="content">
+          <h3>
+            <img src="img/git.png" alt="github" />
+            <span>Git</span>
+            <paper-button id="register_this_button" raised>Create New</paper-button>
+          </h3>
+          <p>
+            This section is used to create a client (customer Id) on Teamchat Integration platfrom. Later you can use this client id to create / consume / register -
+            <ol>
+              <li>Applications</li>
+              <li>Services</li>
+              <li>Workflows</li>
+            </ol> This will also help you maintain and manage the applications ,services and workflows that you create
+          </p>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Service</th>
+              <th>Name</th>
+              <th>Description</th>
+              <th>Client Key</th>
+              <th>API Key</th>
+              <th>Secret Key</th>
+              <th>Service Key</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>Jira</td>
+              <td>
+                Puranjay Jain
+              </td>
+              <td>
+                Teamchat
+              </td>
+              <td>
+                something imp
+              </td>
+              <td>
+                something imp
+              </td>
+              <td>
+                something imp
+              </td>
+              <td>
+                something imp
+              </td>
+              <td>
+                12/12/2015
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </iron-collapse>
+      <div class="services">
+        <div class="service zendesk-service" title="Zendesk">
+          <img src="img/Zendesk.png" alt="zendesk" />
+        </div>
+        <div class="service rnas-service" title="Rnas">
+          <img src="img/notification.png" alt="rnas" />
+        </div>
+        <div class="service sms-service" title="Sms">
+          <img src="img/sms.png" alt="sms" />
+        </div>
+        <div class="service git-service" title="Github">
+          <img src="img/git.png" alt="github" />
+        </div>
+        <div class="service jira-service" title="Jira">
+          <img src="img/jira_rbg_blue_stacked.png" alt="jira" />
+        </div>
+        <paper-fab icon="add" id="register_service_button" title="Register a new service"></paper-fab>
+      </div>
+      <!-- Overlays and dialogs here -->
+      <form action="http://requestb.in/1le2r5z1" method="post">
+        <paper-dialog id="register_service" with-backdrop entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
+          <h2>Register a new Service</h2>
+          <paper-dialog-scrollable>
+            <!-- drop down clickable -->
+            <div id="clientDrop" class="list drop-down">
+              <div class="flex">Select Client</div>
+              <iron-icon icon="arrow-drop-down"></iron-icon>
+            </div>
+            <!-- drop down contents -->
+            <div id="clientDropBox" class="horizontal-section drop-down-data">
+              <paper-menu class="list">
+                <paper-item>client 1</paper-item>
+                <paper-item>client 2</paper-item>
+                <paper-item>client 3</paper-item>
+                <paper-item>client 4</paper-item>
+              </paper-menu>
+            </div>
+            <!-- drop down data -->
+            <input type="hidden" name="reg-service-client-id" id="clientId" value="">
+            <paper-input name="reg-service-name" required label="Name" char-counter maxlength="128"></paper-input>
+            <paper-textarea name="reg-service-description" required label="Description" char-counter maxlength="256"></paper-textarea>
+          </paper-dialog-scrollable>
+          <paper-button class="discard" dialog-dismiss>Discard</paper-button>
+          <paper-button onclick="this.parentNode.parentNode.submit()" dialog-confirm autofocus>Create</paper-button>
+        </paper-dialog>
+      </form>
+    </neon-animatable>
+    <script>
+      //helpers
+      String.prototype.capitalize = function() {
+        return this.charAt(0).toUpperCase() + this.slice(1);
+      };
+      //click event of tab switching
+      document.getElementById('select_tab').onclick = function() {
+        document.getElementById('page').selected = this.selected;
+      };
+      //click event of register a new client
+      document.getElementById('register_client_button').onclick = function() {
+        var dialog = document.getElementById('register_client');
+        if (dialog) {
+          dialog.open();
+        }
+      };
+      //open services button
+      document.getElementById('register_service_button').onmouseenter = function() {
+        document.querySelector('.services').classList.add('open');
+      };
+      //open dialog for registration
+      document.getElementById('register_this_button').onclick = function() {
+        var dialog = document.getElementById('register_service');
+        if (dialog) {
+          dialog.open();
+        }
+      };
+      //close services button
+      document.querySelector('.services').onmouseleave = function() {
+        this.classList.remove('open');
+      };
+      //open a particular service
+      var elements = document.querySelectorAll('.service');
+      Array.prototype.forEach.call(elements, function(el, i) {
+        el.addEventListener("click", function() {
+          //remove class hover
+          this.parentNode.classList.remove('open');
+          //check if a service is open or not
+          if (document.getElementById('service-main').opened) {
+            //close the existing service
+            document.getElementById('service-main').toggle();
+          }
+          //toggle open the spinner
+          document.getElementById('service-loader').toggle();
+          //set properties inside collapse
+          var strigger = this.classList[1].replace("-service", "");
+          setTimeout(function() {
+            //change text description of service
+            document.querySelector('#service-main .content h3 span').innerHTML = strigger.capitalize();
+            //change service icon
+            document.querySelector('#service-main .content h3 img').setAttribute('src', el.querySelector('img').getAttribute('src'));
+            //toggle open the spinner
+            document.getElementById('service-loader').toggle();
+            //toggle iron collapse
+            document.getElementById('service-main').toggle();
+          }, 1500);
+        });
+      });
+      //open drop down and close it
+      document.getElementById('clientDrop').onclick = function(event) {
+        document.getElementById('clientDropBox').classList.toggle('open');
+      };
+      //select element so update the value of hidden
+      document.getElementById('clientDropBox').onclick = function(event) {
+        document.getElementById('clientDropBox').classList.toggle('open');
+        //update the hidden
+        document.getElementById('clientId').value = this.querySelector('.list').focusedItem.innerHTML;
+        //update the drop down
+        document.querySelector('#clientDrop .flex').innerHTML = this.querySelector('.list').focusedItem.innerHTML;
+      };
+    </script>
+</body>
+
+</html>

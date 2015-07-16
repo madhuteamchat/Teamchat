@@ -15,24 +15,11 @@
  */
 package com.teamchat.integration.yammer;
 
-import java.io.BufferedReader;
 import java.io.Closeable;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
-import com.meterware.httpunit.HttpUnitOptions;
-import com.meterware.httpunit.WebConversation;
-import com.meterware.httpunit.WebForm;
-import com.meterware.httpunit.WebResponse;
-
-import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
@@ -55,12 +42,6 @@ public final class YammerClient implements Closeable {
 	 * Restful Yammer URL for messages api.
 	 */
 	private static final String YAMMER_API_V1_MESSAGES = "https://www.yammer.com/api/v1/messages";
-    private static final String OAUTH_GET_ACCESS_TOKEN_URL = "https://www.yammer.com/dialog/oauth?client_id=%s";
-	/**
-	 * Yammer URL for getting access token.
-	 */
-	private static final String OAUTH_ACCESS_TOKEN_URL = "https://www.yammer.com/oauth2/access_token.xml?client_id=%s&client_secret=%s&code=%s";
-
 	private static final String MESSAGE_GROUP_ID_PARAM_NAME = "group_id";
 	private static final String MESSAGE_BODY_PARAM_NAME = "body";
     private static final String MESSAGE_TOPIC_PARAM_NAME = "topic";
@@ -82,9 +63,7 @@ public final class YammerClient implements Closeable {
     	 httpclient = HttpClientBuilder.create().useSystemProperties().build();
     	 yc=new YammerConnection();
     	 authtoken=yc.getAuthToken(email);
-    	 
-      //  this.accessAuthToken = getAccessTokenParameters(applicationKey, username, password, applicationSecret);
-      //  System.out.println(this.accessAuthToken);
+
     }
 
 	public void sendMessage(final String group, final String message, final String... topics) throws IOException {
@@ -132,16 +111,4 @@ public final class YammerClient implements Closeable {
         httpclient.close();
     }
 
-    public static void main(String argv[]) {
-    /*	try{
-    	YammerClient yc=new YammerClient();
-    	//yc.getUsers();
-    //	yc.search("yammer");
-    	yc.postStatus("hey !!");
-    	yc.close();
-    	}
-    	catch(IOException e) {
-    		e.printStackTrace();
-    	}*/
-    	}
 }

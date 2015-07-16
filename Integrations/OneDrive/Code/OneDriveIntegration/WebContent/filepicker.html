@@ -17,7 +17,7 @@ function launchOneDriveDownloader() {
  			    var rid=document.getElementById("roomid").value;
  			    var form=document.createElement("form");
  			    form.setAttribute("method","POST");
- 			    form.setAttribute("action","http://interns.teamchat.com:8080/OneDriveIntegration/GetFileList?link="+link+"&rid="+rid);
+ 			    form.setAttribute("action","http://integration.teamchat.com:8085/OneDriveIntegration/GetFileList?link="+link+"&rid="+rid);
  			    
  			    var filenames=[];
  			    var filelinks=[];
@@ -41,12 +41,11 @@ function launchOneDriveDownloader() {
  			    form.submit();
     			    
     			    
-    			   //location.href="http://localhost:8080/OneDriveIntegration/GetFileList?link="+link+"&filenames="+filenames;
     			  },
 
     			  cancel: function() {
     			      // handle when the user cancels picking a file
-    				  alert("You didn't choose any file");
+    				 // alert("You didn't choose any file");
     			  },
 
     			  linkType: "downloadLink", // or "downloadLink"  webViewLink,
@@ -64,7 +63,7 @@ function launchOneDrivePicker() {
     			    var rid=document.getElementById("roomid").value;
     			    var form=document.createElement("form");
     			    form.setAttribute("method","POST");
-    			    form.setAttribute("action","http://interns.teamchat.com:8080/OneDriveIntegration/GetFileList?link="+link+"&rid="+rid);
+    			    form.setAttribute("action","http://integration.teamchat.com:8085/OneDriveIntegration/GetFileList?link="+link+"&rid="+rid);
     			    
     			    var filenames=[];
     			    var filelinks=[];
@@ -88,13 +87,11 @@ function launchOneDrivePicker() {
     			    form.submit();
     			    
     			    
-    			    
-    			   //location.href="http://localhost:8080/OneDriveIntegration/GetFileList?link="+link+"&filenames="+filenames;
     			  },
 
     			  cancel: function() {
     			      // handle when the user cancels picking a file
-    				  alert("You didn't pick ");
+    				 // alert("You didn't pick ");
     			  },
 
     			  linkType: "webViewLink", // or "downloadLink"  webViewLink,
@@ -113,7 +110,7 @@ function launchOneDrivePicker() {
     		 //   alert("Success");
     		    
     			    var rid=document.getElementById("roomid").value;
-    			  location.href="http://interns.teamchat.com:8080/OneDriveIntegration/SaveFile?msg=success&rid="+rid;
+    			  location.href="http://integration.teamchat.com:8085/OneDriveIntegration/SaveFile?msg=success&rid="+rid;
     		  },
     		  progress: function(p) {
     		    // upload is progressing
@@ -123,14 +120,14 @@ function launchOneDrivePicker() {
     		//    alert("cancel");
     		    
     			    var rid=document.getElementById("roomid").value;
-    			  location.href="http://interns.teamchat.com:8080/OneDriveIntegration/SaveFile?msg=cancel&rid="+rid;
+    			  location.href="http://integration.teamchat.com:8085/OneDriveIntegration/SaveFile?msg=cancel&rid="+rid;
     		  },
     		  error: function(e) {
     		    // an error occured
     		  //  alert("error");
     		    
     			    var rid=document.getElementById("roomid").value;
-    			  location.href="http://interns.teamchat.com:8080/OneDriveIntegration/SaveFile?msg=error&rid="+rid;
+    			  location.href="http://integration.teamchat.com:8085/OneDriveIntegration/SaveFile?msg=error&rid="+rid;
     		  }
     };
     OneDrive.save(saverOptions);
@@ -148,11 +145,11 @@ body {
 }
 
 button {
-    width: 20em;  height: 3em;
+    width: 100%; padding:10px;font-size:16pt;
 }
 
 input {
-    width: 15em;  height: 2em;
+    width: 15em;
 }
 
 
@@ -160,7 +157,6 @@ input {
     position:fixed;
     top: 50%;
     left: 50%;
-    width:30em;
     height:20em;
     margin-top: -9em; /*set to a negative number 1/2 of your height*/
     margin-left: -10em; /*set to a negative number 1/2 of your width*/
@@ -168,10 +164,6 @@ input {
    /* background-color: #f3f3f3;*/
 }
 
-h1 {
-    color: orange;
-    text-align: center;
-}
 
 .rightimage {
     float: right;
@@ -187,23 +179,103 @@ td {
 table {
 border-spacing:5px;
 }
+
+@import "compass/css3";
+
+@import url("http://fonts.googleapis.com/css?family=Lato");
+
+$background: #e74c3c;
+$file-upload-color: #159ceb;
+$file-upload-size: 300px;
+
+* {
+    margin: 0;
+    padding: 0;
+    @include box-sizing(border-box);
+}
+
+.custom-file-upload-hidden {
+    display: none;
+    visibility: hidden;
+    position: absolute;
+    left: -9999px;
+}
+.custom-file-upload {
+    display: block;
+    width: auto;
+    font-size: 16px;
+    margin-top: 30px;
+    //border: 1px solid #ccc;
+    label {
+        display: block;
+        margin-bottom: 5px;
+    }
+}
+
+.file-upload-wrapper {
+    position: relative; 
+    margin-bottom: 5px;
+    //border: 1px solid #ccc;
+}
+.file-upload-input {
+    width: $file-upload-size;
+    color: #fff;
+    font-size: 16px;
+    padding: 11px 17px; 
+    border: none;
+    background-color: $file-upload-color; 
+    @include transition(all 0.2s ease-in); 
+    float: left; /* IE 9 Fix */
+    &:hover, &:focus { 
+        background-color: darken($file-upload-color, 5);
+        outline: none; 
+    }
+}
+.file-upload-button {
+    cursor: pointer; 
+    display: inline-block; 
+    color: #fff;
+    font-size: 16px;
+    text-transform: uppercase;
+    padding: 11px 20px; 
+    border: none;
+    margin-left: -1px;  
+    background-color: darken($file-upload-color, 10); 
+    float: left; /* IE 9 Fix */
+    @include transition(all 0.2s ease-in);
+    &:hover {
+        background-color: darken($file-upload-color, 20);
+    }
+}
+
+
 </style>
+<link rel="icon" href="images/favicon.png" type="image/png" sizes="16x16">
  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 </head>
 <body onload="storeRoomId()">
-<img src="images/TeamChatLogo.jpg" alt="logo" style="width:304px;height:228px;">
-<img src="images/onedrive-logo.png" alt="logo" class="rightimage" style="width:304px;height:228px;">
+<img src="images/Teamchat_logo_blue.png" alt="logo" style="width:304px;">
+<img src="images/onedrive-logo.png" alt="logo" class="rightimage" style="width:304px;">
 <input id="roomid" name="roomid" type="hidden" />
+
+
+
  <table class="tablestyle">
  <tr>
-<td><div id="picker"><button class="btn btn-primary" onclick="launchOneDrivePicker();">Open from OneDrive</button></div></td>
+<td><div id="picker"><button style="background-color:#159ceb; color:#fff;" class="btn btn-lg btn-block" onclick="launchOneDrivePicker();">Open</button></div></td>
 </tr>
 <tr>
-<td><div id="downloader"><button class="btn btn-primary" onclick="launchOneDriveDownloader();">Download from OneDrive</button></div></td>
+<td><div id="downloader"><button style="background-color:#159ceb; color:#fff;" class="btn btn-lg btn-block"  onclick="launchOneDriveDownloader();">Download</button></div></td>
 </tr>
 <tr><td>
 
-<div id="save"><button class="btn btn-primary" onclick="launchOneDriveSaver();">Save to OneDrive</button>&nbsp;<input id="file" name="file" type="file" />
+<div id="save">
+<div class="custom-file-upload">
+    <!--<label for="file">File: </label>--> 
+    <input type="file" id="file" name="file"  />
+</div>
+&nbsp;
+<button style="background-color:#159ceb; color:#fff;" class="btn btn-lg btn-block" onclick="launchOneDriveSaver();">Upload</button>&nbsp;
 </div></td>
 </tr>
 </table>

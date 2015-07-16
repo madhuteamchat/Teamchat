@@ -13,12 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.teamchat.client.annotations.OnKeyword;
-import com.teamchat.client.sdk.Form;
 import com.teamchat.client.sdk.TeamchatAPI;
-import com.teamchat.client.sdk.chatlets.PollChatlet;
-import com.teamchat.client.sdk.chatlets.PrimaryChatlet;
-import com.teamchat.client.sdk.chatlets.TextChatlet;
 
 @WebServlet("/NewRelicServlet")
 public class NewRelicServlet extends HttpServlet {
@@ -56,6 +51,7 @@ public class NewRelicServlet extends HttpServlet {
 
 		request.getInputStream();
 		String email1 = request.getParameter("email");
+		@SuppressWarnings("resource")
 		Scanner s = new Scanner(request.getInputStream(), "UTF-8")
 				.useDelimiter("\\A");
 		String l = s.hasNext() ? s.next() : "";
@@ -67,7 +63,7 @@ public class NewRelicServlet extends HttpServlet {
 				JSONObject j = new JSONObject(l2);
 				s1 = j.getString("long_description");
 				s2 = j.getString("alert_url");
-				post(s1, s2, email1);
+				NewRelicBot.post(s1, s2, email1);
 			} catch (JSONException je) {
 				je.printStackTrace();
 			}
@@ -77,7 +73,7 @@ public class NewRelicServlet extends HttpServlet {
 				JSONObject j1 = new JSONObject(l3);
 				s1 = j1.getString("description");
 				s2 = j1.getString("deployment_url");
-				post(s1, s2, email1);
+				NewRelicBot.post(s1, s2, email1);
 			} catch (JSONException j) {
 				j.printStackTrace();
 			}
@@ -86,34 +82,10 @@ public class NewRelicServlet extends HttpServlet {
 				JSONObject j = new JSONObject(l1);
 				s1 = j.getString("long_description");
 				s2 = j.getString("alert_url");
-				post(s1, s2, email1);
+				NewRelicBot.post(s1, s2, email1);
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
 		}
 	}
-
-	@OnKeyword("help")
-	public static void begin(TeamchatAPI api1) {
-		api = api1;
-		String email = api.context().currentSender().getEmail();
-		api.perform(api
-				.context()
-				.currentRoom()
-				.post(new TextChatlet(
-						"<b>Hey, this is</b><b style=color:blue> New Relic Bot!</b><br><i>You can use me to receive any alert & deployment notifications of your applications monitored by New Relic.<br>Just enter this URL <a>http://interns.teamchat.com:8080/NewRelic/NewRelicServlet?email="
-								+ email
-								+ " </a>as your New Relic Webhook & we are good to go.</i>")));
-	}
-
-	public static void post(String msg1, String msg2, String mail) {
-		api.perform(api
-				.context()
-				.create()
-				.setName("p2p")
-				.add(mail)
-				.post(new PrimaryChatlet().setQuestionHtml("<b>" + msg1
-						+ "</b><br><a href=" + msg2 + ">" + msg2 + "</a>")));
-	}
-
 }

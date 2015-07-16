@@ -1,0 +1,2 @@
+use anixxx;
+drop table authorized;

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;Asana Bot&apos; to &apos;Asana_Bot&apos;" description="Rename resource &apos;Asana Bot&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="/Asana Bot" name="Asana_Bot" stamp="1436432924371" updateReferences="true"/>
+</session>

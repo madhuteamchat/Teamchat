@@ -19,16 +19,18 @@ public class Db_handler {
 	private PreparedStatement preparedStatement = null;
 	private ResultSet resultSet = null;
 
-	private static Config_handler config = new Config_handler();
+	// private static Config_handler config = new Config_handler();
 	// replace with server credentials
-	private static String DB_URL = "jdbc:mysql://localhost/Bot?user=tcinterns&password=PakyovBosh7";
+	private static String DB_URL = "jdbc:mysql://localhost/"
+			+ Universal.DB_NAME + "?user=" + Universal.DB_USERNAME
+			+ "&password=" + Universal.DB_PASSWORD;
 
-	Db_handler() {
-//		if (config.isEmpty()) {
-//			config.init_bot_Properties();
-//			config.init_auth_Properties();
-//		}
-	}
+	// Db_handler() {
+	// if (config.isEmpty()) {
+	// config.init_bot_Properties();
+	// config.init_auth_Properties();
+	// }
+	// }
 
 	// get base camp api's basic stuff
 	public Basecamp_basics GetBasicStuff(String email) {
@@ -43,6 +45,8 @@ public class Db_handler {
 			resultSet.next();
 			bb.setAccess_token(resultSet.getString("access_token"));
 			bb.setEmail(resultSet.getObject("email").toString());
+			bb.setBasecamp_email(resultSet.getObject("basecamp_email")
+					.toString());
 			bb.setExpires_in(resultSet.getObject("expires_in").toString());
 			bb.setHref(resultSet.getObject("href").toString());
 			bb.setRefresh_token(resultSet.getObject("refresh_token").toString());
@@ -78,29 +82,49 @@ public class Db_handler {
 	}
 
 	// storing data handler
-	public boolean StorageHandler(String email, String href, Token token) {
+	public boolean StorageHandler(Basecamp_basics bb) {
 		// check if token already exists or not
-		if (isAuthorized(email)) {
-			return StoreToken(email, href, token);
+		if (isAuthorized(bb.getEmail())) {
+			return UpdateToken(bb);
 		} else {
-			return UpdateToken(email, href, token);
+			return StoreToken(bb);
 		}
 	}
 
-	// set the authentication data into the table
-	private boolean StoreToken(String email, String href, Token token) {
+	// delete user data
+	public boolean Delete(String email) {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			connect = DriverManager.getConnection(DB_URL);
 			statement = connect.createStatement();
 			preparedStatement = connect
-					.prepareStatement("insert into basecamp_authorized values (default, ?, ?, ?, ?, ?, ?)");
+					.prepareStatement("DELETE FROM basecamp_authorized WHERE email = ?");
 			preparedStatement.setString(1, email);
-			preparedStatement.setString(2, href);
-			preparedStatement.setString(3, token.getAccess_token());
-			preparedStatement.setString(4, token.getRefresh_token());
-			preparedStatement.setString(5, token.getExpires_in());
-			preparedStatement.setBoolean(6, true);
+			preparedStatement.executeUpdate();
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		} finally {
+			close();
+		}
+	}
+
+	// set the authentication data into the table
+	private boolean StoreToken(Basecamp_basics bb) {
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			connect = DriverManager.getConnection(DB_URL);
+			statement = connect.createStatement();
+			preparedStatement = connect
+					.prepareStatement("insert into basecamp_authorized values (default, ?, ?, ?, ?, ?, ?, ?)");
+			preparedStatement.setString(1, bb.getEmail());
+			preparedStatement.setString(2, bb.getBasecamp_email());
+			preparedStatement.setString(3, bb.getHref());
+			preparedStatement.setString(4, bb.getAccess_token());
+			preparedStatement.setString(5, bb.getRefresh_token());
+			preparedStatement.setString(6, bb.getExpires_in());
+			preparedStatement.setBoolean(7, true);
 			preparedStatement.executeUpdate();
 			return true;
 		} catch (Exception e) {
@@ -112,18 +136,18 @@ public class Db_handler {
 	}
 
 	// update the authentication data into the table
-	private boolean UpdateToken(String email, String href, Token token) {
+	private boolean UpdateToken(Basecamp_basics bb) {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			connect = DriverManager.getConnection(DB_URL);
 			statement = connect.createStatement();
 			preparedStatement = connect
 					.prepareStatement("update basecamp_authorized set access_token = ?, refresh_token = ?, expires_in = ?, authenticated = ? where email = ?");
-			preparedStatement.setString(0, token.getAccess_token());
-			preparedStatement.setString(1, token.getRefresh_token());
-			preparedStatement.setString(2, token.getExpires_in());
-			preparedStatement.setBoolean(3, true);
-			preparedStatement.setString(4, email);
+			preparedStatement.setString(1, bb.getAccess_token());
+			preparedStatement.setString(2, bb.getRefresh_token());
+			preparedStatement.setString(3, bb.getExpires_in());
+			preparedStatement.setBoolean(4, true);
+			preparedStatement.setString(5, bb.getEmail());
 			preparedStatement.executeUpdate();
 			return true;
 		} catch (Exception e) {

@@ -1,6 +1,7 @@
 use Bot;
 CREATE TABLE basecamp_authorized (id INT NOT NULL AUTO_INCREMENT, 
-    email VARCHAR(128),
+    email VARCHAR(256),
+	basecamp_email VARCHAR(256),
 	href VARCHAR(256),
     access_token VARCHAR(1024) NOT NULL, 
     refresh_token VARCHAR(1024) NOT NULL,

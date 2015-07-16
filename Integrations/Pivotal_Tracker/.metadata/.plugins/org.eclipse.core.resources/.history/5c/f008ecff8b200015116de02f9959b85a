@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="Pivotal_Tracker">
+        <property name="context-root" value="Pivotal_Tracker"/>
+        <property name="java-output-path" value="/Pivotal_Tracker/build/classes"/>
+    </wb-module>
+</project-modules>
