@@ -1,4 +1,8 @@
 package com.teamchat.integration.giphy.classes;
+/*
+ * *
+ * @author:Anuj Arora
+ */
 import javax.annotation.Generated;
 import com.google.gson.annotations.Expose;
 

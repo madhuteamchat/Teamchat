@@ -1,5 +1,9 @@
 package com.teamchat.integration.giphy.bot;
 
+/*
+ * *
+ * @author:Anuj Arora
+ */
 import java.io.IOException;
 import java.sql.SQLException;
 
@@ -18,13 +22,12 @@ import com.teamchat.integration.giphy.classes.Pagination;
 
 public class botgiphy {
 
-	int sc, nextc, nexta;
+	
 	int ttl = 0;
 	int count = 0;
 	String[] urlpge;
 	String[] chatletid;
-	String[] urlpge_s;
-	String storedstr, temp;
+	String temp;
 	int offset, limit;
 	String chtid, emailid, tag;
 
@@ -51,9 +54,13 @@ public class botgiphy {
 
 		// list of keywords
 		// 1.)search
+		// 2.)rename
+		// 3.)next
 
 	}
-
+	
+// type this command to search gif image.
+	
 	@OnKeyword("search")
 	public void login(TeamchatAPI api) {
 
@@ -66,18 +73,20 @@ public class botgiphy {
 		api.perform(api.context().currentRoom().post(prime));
 	}
 
+	//for renaming any tag.
 	@OnKeyword("rename")
 	public void rename(TeamchatAPI api) throws SQLException {
 		
 		String emailid = api.context().currentSender().getEmail();
 		DBHandler rty = new DBHandler();
-		
+		//checking database if sender's emailid is present or not.
 		if(rty.emailchk(emailid)==true)
 		{
 		this.emailid = emailid;
 		DBHandler gt = new DBHandler();
+		//getting tags from the database for the particular emailid.
 		String[] tags = gt.gettags(emailid);
-		System.err.println(tags[0] + tags[1] + tags[2] + tags[3] + tags[4]);
+		
 		Form fo = api.objects().form();
 		fo.addField(api.objects().select().name("tag").label("Select one tag:")
 				.addOption(tags[0]).addOption(tags[1]).addOption(tags[2])
@@ -105,20 +114,26 @@ public class botgiphy {
 		String rename = api.context().currentReply().getField("rename");
 		String tag = api.context().currentReply().getField("tag");
 		DBHandler gt = new DBHandler();
+		//getting tags from the database for the particular emailid.
 		String[] tags = gt.gettags(emailid);
 		int flag=0;
 		for(int i=0;i<tags.length;i++)
 		{
-			if(tag.equals(tags[i]))
+		
+			if(rename.equals(tags[i]))
 			{
 				flag=1;
+			
+				break;
 			}
 			
 		}
+		//name given in the tag is not clashing.
 		if(flag==0)
 		{
 		DBHandler ui = new DBHandler();
-		ui.stmt.executeUpdate("UPDATE Bot.giphy_auth"
+		// updating the existing information for a particular emailid and tag.
+		ui.stmt.executeUpdate("UPDATE "+ui.configProps.getProperty("tablename").trim()
 				+ " SET tag ='" + rename + "'"
 				+ " where emailid='" + this.emailid + "' and tag='"
 				+ tag + "'");
@@ -127,6 +142,7 @@ public class botgiphy {
 		prime1.setQuestionHtml("<h4><b>TAG successfully renamed!!!</b></h4>");
 		api.perform(api.context().currentRoom().post(prime1));
 		}
+		//name given in the tag is clashing.
 		else
 		{
 			PrimaryChatlet prime = new PrimaryChatlet();
@@ -154,12 +170,13 @@ public class botgiphy {
 			} else
 				temp = temp + keyword.charAt(i);
 		}
-		// System.out.println(temp);
+	
 		limit = 5;
 		offset = 0;
 		giphyintegrator ob1 = new giphyintegrator();
+		//getting images from the giphy server.
 		resp = ob1.getimages(temp, limit, offset);
-		// System.out.println(resp);
+
 
 		if (resp.equals("Error")) {
 			PrimaryChatlet prime = new PrimaryChatlet();
@@ -171,7 +188,7 @@ public class botgiphy {
 							+ "<br /><b>StatusDesc: Forbidden</b>"
 							+ "<br /><b>Something went wrong!</b>")));
 
-			// System.out.println("loggg");
+		
 		}
 
 		else {
@@ -345,8 +362,10 @@ public class botgiphy {
 			// "offset": 0
 			// }
 			// }
-
+			
+		
 			Gson gson = new Gson();
+			//main class for getters and setters : Giphyd
 			Giphyd data = gson.fromJson(resp, Giphyd.class);
 			Pagination cnt = data.getPagination();
 			ttl = cnt.getTotalCount();
@@ -365,12 +384,12 @@ public class botgiphy {
 
 					Images img = datas.getImages();
 					Original or = img.getOriginal();
-					// OriginalStill ors = img.getOriginalStill();
+					
 					PrimaryChatlet prime = new PrimaryChatlet();
 
 					urlpge[i] = or.getUrl();
 
-					System.out.println(urlpge[i]);
+					
 					prime.setQuestionHtml(
 							"<h6><b>Image " + (k) + "</b></h6>"
 									+ "<img src=\"" + or.getUrl()
@@ -378,11 +397,9 @@ public class botgiphy {
 							.setReplyScreen(fo).setReplyLabel("TAG")
 							.alias("gettag");
 					api.perform(api.context().currentRoom().post(prime));
-					// urlpge[k] = or.getUrl();
-					// urlpge_s[k] = ors.getUrl();
-					// k++;
+					
 					chatletid[i] = prime.getFormId();
-					System.err.println(chatletid[i]);
+					
 					i++;
 					k++;
 				}
@@ -399,12 +416,12 @@ public class botgiphy {
 
 					Images img = datas.getImages();
 					Original or = img.getOriginal();
-					// OriginalStill ors = img.getOriginalStill();
+				
 					PrimaryChatlet prime = new PrimaryChatlet();
 
 					urlpge[i] = or.getUrl();
 
-					System.out.println(urlpge[i]);
+				
 					prime.setQuestionHtml(
 							"<h6><b>Image " + (k) + "</b></h6>"
 									+ "<img src=\"" + or.getUrl()
@@ -412,11 +429,9 @@ public class botgiphy {
 							.setReplyScreen(fo).setReplyLabel("TAG")
 							.alias("gettag");
 					api.perform(api.context().currentRoom().post(prime));
-					// urlpge[k] = or.getUrl();
-					// urlpge_s[k] = ors.getUrl();
-					// k++;
+				
 					chatletid[i] = prime.getFormId();
-					System.err.println(chatletid[i]);
+				
 					i++;
 					k++;
 				}
@@ -437,26 +452,22 @@ public class botgiphy {
 
 		String emailid = api.context().currentReply().senderEmail();
 		String tag = api.context().currentReply().getField("tag");
-
+//checking the count for the emailid i.e if count is 5 or not.
 		DBHandler ob3 = new DBHandler();
 		boolean fl = ob3.countchk(emailid);
-		// System.err.println(tag);
-		// System.err.println(tag);
-		// System.err.println(tag);
-		// System.err.println(tag);
+	
 		String chtid = api.context().currentReply().getFormId();
-		// System.err.println(chtid);
-		// System.err.println(chtid);
-		// System.err.println(chtid);
-		// System.err.println(chtid);
+		
 
 		if (fl == false) {
 			for (int i = 0; i < count; i++) {
 				if (chtid.equals(chatletid[i])) {
 					DBHandler ob5 = new DBHandler();
+					//checking data for a particular emailid and tag.
 					if (ob5.dchk(emailid, tag) == true) {
 						DBHandler datacng = new DBHandler();
-						datacng.stmt.executeUpdate("UPDATE Bot.giphy_auth"
+						//updating url..
+						datacng.stmt.executeUpdate("UPDATE "+datacng.configProps.getProperty("tablename").trim()
 								+ " SET url ='" + urlpge[i] + "'"
 								+ " where emailid='" + emailid + "' and tag='"
 								+ tag + "'");
@@ -466,6 +477,7 @@ public class botgiphy {
 						api.perform(api.context().currentRoom().post(prime1));
 					} else {
 						DBHandler ob1 = new DBHandler();
+						//inserting data into the database.
 						ob1.setData(emailid, tag, urlpge[i]);
 						PrimaryChatlet prime1 = new PrimaryChatlet();
 						prime1.setQuestionHtml("<h4><b>TAG successfully added!!!</b></h4>");
@@ -479,8 +491,9 @@ public class botgiphy {
 			this.tag = tag;
 			this.chtid = chtid;
 			DBHandler ob2 = new DBHandler();
+			//getting tags..
 			String[] tags = ob2.gettags(emailid);
-			System.err.println(tags[0] + tags[1] + tags[2] + tags[3] + tags[4]);
+		
 			Form fo = api.objects().form();
 			fo.addField(api.objects().select().name("tag")
 					.label("Select one tag:").addOption(tags[0])
@@ -502,6 +515,7 @@ public class botgiphy {
 
 		String tag = api.context().currentReply().getField("tag");
 		DBHandler datacng = new DBHandler();
+		//deleting existing information.
 		datacng.stmt.executeUpdate("DELETE FROM Bot.giphy_auth"
 				+ " WHERE emailid='" + emailid + "' AND tag='" + tag + "'");
 		datacng.conn.close();
@@ -513,9 +527,11 @@ public class botgiphy {
 		for (int i = 0; i < count; i++) {
 			if (chtid.equals(chatletid[i])) {
 				DBHandler ob5 = new DBHandler();
+				//checking data for the particular emailid and tag.
 				if (ob5.dchk(emailid, this.tag) == true) {
 					DBHandler ui = new DBHandler();
-					ui.stmt.executeUpdate("UPDATE Bot.giphy_auth"
+					//updating information.
+					ui.stmt.executeUpdate("UPDATE "+ui.configProps.getProperty("tablename").trim()
 							+ " SET url ='" + urlpge[i] + "'"
 							+ " where emailid='" + this.emailid + "' and tag='"
 							+ this.tag + "'");
@@ -526,6 +542,7 @@ public class botgiphy {
 
 				} else {
 					DBHandler ob1 = new DBHandler();
+					//inserting records.
 					ob1.setData(this.emailid, this.tag, urlpge[i]);
 					PrimaryChatlet prime1 = new PrimaryChatlet();
 					prime1.setQuestionHtml("<h4><b>TAG successfully added!!!</b></h4>");
@@ -534,7 +551,7 @@ public class botgiphy {
 			}
 		}
 	}
-
+// use this keyword for going to the next page.
 	@OnKeyword("next")
 	public void next(TeamchatAPI api) throws IOException {
 
@@ -543,8 +560,9 @@ public class botgiphy {
 				offset = offset + 5;
 
 				giphyintegrator ob1 = new giphyintegrator();
+				//getting images from the giphy server.
 				String resp = ob1.getimages(temp, limit, offset);
-				// System.out.println(resp);
+				
 
 				if (resp.equals("Error")) {
 					PrimaryChatlet prime = new PrimaryChatlet();
@@ -556,17 +574,16 @@ public class botgiphy {
 									+ "<br /><b>StatusDesc: Forbidden</b>"
 									+ "<br /><b>Something went wrong!</b>")));
 
-					// System.out.println("loggg");
 				}
 
 				else {
 					Gson gson = new Gson();
+					//main class for getters and setters : Giphyd
 					Giphyd data = gson.fromJson(resp, Giphyd.class);
 					urlpge = new String[5];
 					chatletid = new String[5];
 					count = 5;
-					// count = 0;
-					// sc = 1;
+				
 					int k = 1;
 					int i = 0;
 					Form fo = api.objects().form();
@@ -576,12 +593,11 @@ public class botgiphy {
 
 						Images img = datas.getImages();
 						Original or = img.getOriginal();
-						// OriginalStill ors = img.getOriginalStill();
+					
 						PrimaryChatlet prime = new PrimaryChatlet();
 
 						urlpge[i] = or.getUrl();
 
-						System.out.println(urlpge[i]);
 						prime.setQuestionHtml(
 								"<h6><b>Image " + (k) + "</b></h6>"
 										+ "<img src=\"" + or.getUrl()
@@ -589,11 +605,9 @@ public class botgiphy {
 								.setReplyScreen(fo).setReplyLabel("TAG")
 								.alias("gettag");
 						api.perform(api.context().currentRoom().post(prime));
-						// urlpge[k] = or.getUrl();
-						// urlpge_s[k] = ors.getUrl();
-						// k++;
+					
 						chatletid[i] = prime.getFormId();
-						System.err.println(chatletid[i]);
+					
 						i++;
 						k++;
 					}
@@ -609,8 +623,9 @@ public class botgiphy {
 				offset = offset + 5;
 
 				giphyintegrator ob1 = new giphyintegrator();
+				//getting images from  giphy server.
 				String resp = ob1.getimages(temp, limit, offset);
-				// System.out.println(resp);
+			
 
 				if (resp.equals("Error")) {
 					PrimaryChatlet prime = new PrimaryChatlet();
@@ -622,12 +637,12 @@ public class botgiphy {
 									+ "<br /><b>StatusDesc: Forbidden</b>"
 									+ "<br /><b>Something went wrong!</b>")));
 
-					// System.out.println("loggg");
 				}
 
 				else {
 
 					Gson gson = new Gson();
+					//main class for getters and setters : Giphyd
 					Giphyd data = gson.fromJson(resp, Giphyd.class);
 
 					urlpge = new String[limit];
@@ -642,12 +657,11 @@ public class botgiphy {
 
 						Images img = datas.getImages();
 						Original or = img.getOriginal();
-						// OriginalStill ors = img.getOriginalStill();
+					
 						PrimaryChatlet prime = new PrimaryChatlet();
 
 						urlpge[i] = or.getUrl();
 
-						System.out.println(urlpge[i]);
 						prime.setQuestionHtml(
 								"<h6><b>Image " + (k) + "</b></h6>"
 										+ "<img src=\"" + or.getUrl()
@@ -655,11 +669,9 @@ public class botgiphy {
 								.setReplyScreen(fo).setReplyLabel("TAG")
 								.alias("gettag");
 						api.perform(api.context().currentRoom().post(prime));
-						// urlpge[k] = or.getUrl();
-						// urlpge_s[k] = ors.getUrl();
-						// k++;
+					
 						chatletid[i] = prime.getFormId();
-						System.err.println(chatletid[i]);
+			
 						i++;
 						k++;
 					}

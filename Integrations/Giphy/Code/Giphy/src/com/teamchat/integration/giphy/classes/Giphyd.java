@@ -1,10 +1,13 @@
 package com.teamchat.integration.giphy.classes;
-
+/*
+ * *
+ * @author:Anuj Arora
+ */
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Generated;
 import com.google.gson.annotations.Expose;
-
+//main class for getters and setters
 @Generated("org.jsonschema2pojo")
 public class Giphyd {
 
