@@ -56,10 +56,14 @@ public class slack_auth extends HttpServlet {
 		
 		code = request.getParameter("code");
 		
+		SlackDB.saveCode(email, code);
+		System.err.println("Saved code to database");
 		
 		System.err.println("In servlet");
 		Slack.code=code;
 		Slack.wait = 1;
+		
+		
 		
 		PrintWriter out = response.getWriter();
 		
@@ -76,9 +80,7 @@ public class slack_auth extends HttpServlet {
 			prop.store(fileOut, null);
 			fileOut.close();
 			*/
-		//	SlackDB.saveCode(email, code);
-			
-		//	System.err.println("Saved to database");
+		
 	}
 	
 	protected void doPost(HttpServletRequest request,
