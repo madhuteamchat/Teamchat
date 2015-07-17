@@ -1,7 +1,6 @@
 package com.teamchat.integration.linkedin;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -47,7 +46,6 @@ public class AuthHandler extends HttpServlet {
 		OAuthRequest requestLink;
 		org.scribe.model.Response responseLink;
 		DBHandler db = new DBHandler();
-		PrintWriter out = response.getWriter();
 		
 		service = new ServiceBuilder()
         .provider(LinkedInApi.class)
@@ -68,25 +66,33 @@ public class AuthHandler extends HttpServlet {
 		Verifier v = new Verifier(oAuthVerifier);
 		accessToken = service.getAccessToken(requestToken, v);
 		
+		System.out.println("\n\n\n\n\n" + accessToken + "\n\n\n\n\n");
+
 		db.setAccessData(email, accessToken.getToken(), accessToken.getSecret());
 		
 		requestLink = new OAuthRequest(Verb.GET, "https://api.linkedin.com/v1/people/~?format=json");
 		service.signRequest(accessToken, requestLink); // the access token from step 4
 		responseLink = requestLink.send();
 		
-		JSONObject j1 = new JSONObject (responseLink.getBody());
-		
-		TeamchatAPI api = WebAppTeamChatAPI.getTeamchatAPIInstance(getServletConfig());
-		api.perform(api
-				.context()
-				.byId(roomId)
-				.post(new PrimaryChatlet().setQuestionHtml("Hello! " + j1.getString ("firstName") + " " + j1.getString ("lastName") + "<br/>Connected Successfully")));
+		if (responseLink.getCode() != 401) {
+			JSONObject j1 = new JSONObject(responseLink.getBody());
 
-//		out.print("<img src='http://www.teamchat.com/wp-content/uploads/2013/04/logoteamchat.png' width=300 height=100/><br/><div style=\"text-align: center; color: #52b66e; font-size: 30px; vertical-align: 5px; padding-bottom: 10px;\">Hello! Dear "
-//				+ j1.getString ("firstName") + " " + j1.getString ("lastName")
-//				+ ", authenticated successfully<br/>Go back to <a href=\'https://enterprise.teamchat.com/webjim-echat/html/dashboard.html?v=3.0\'>Teamchat</a></div>");
-		RequestDispatcher rd = request.getRequestDispatcher("Authenticated.jsp");
-		rd.include(request, response);
+			TeamchatAPI api = WebAppTeamChatAPI
+					.getTeamchatAPIInstance(getServletConfig());
+			api.perform(api
+					.context()
+					.byId(roomId)
+					.post(new PrimaryChatlet().setQuestionHtml("Hello! "
+							+ j1.getString("firstName") + " "
+							+ j1.getString("lastName")
+							+ "<br/>Connected Successfully")));
+
+			request.setAttribute("name", j1.getString("firstName") + " " + j1.getString("lastName"));
+			RequestDispatcher rd = request.getRequestDispatcher("Auth.jsp");
+		    rd.forward(request, response);
+		}
+		else
+			response.sendRedirect("error.html");
 	}
 
 	/**

@@ -9,11 +9,11 @@
   </listener>
   <context-param>
     <param-name>bot-email</param-name>
-    <param-value>madhusudhan.mahale@webaroo.com</param-value>
+    <param-value>linkedin@teamchatbot.com</param-value>
   </context-param>
   <context-param>
     <param-name>bot-password</param-name>
-    <param-value>Password@1988</param-value>
+    <param-value>keoiv7dkJ</param-value>
   </context-param>
   <context-param>
     <param-name>bot-class</param-name>
@@ -41,7 +41,7 @@
 	</context-param>
 	<context-param>
 		<param-name>log-level</param-name>
-		<param-value>ERROR</param-value>
+		<param-value>ALL</param-value>
 	</context-param>
 	<context-param>
 		<param-name>log-filename</param-name>

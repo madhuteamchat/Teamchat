@@ -39,7 +39,6 @@ public class DBHandler {
 			int c = stmt.executeUpdate("insert into "+ configProps.getProperty("linktable").trim() + " values ('" + reqTok + "', '" + reqSec + "', '" + roomId + "', '" + email + "')");
 			if (c==1)
 				System.out.println("Updated");
-			conn.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -52,7 +51,6 @@ public class DBHandler {
 			rs.next();
 			for (int i=0;i<4;i++)
 				data[i] = rs.getString(i+1);
-			conn.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -65,7 +63,6 @@ public class DBHandler {
 			int c = stmt.executeUpdate("insert into " + configProps.getProperty("accesstable").trim() + " values ('" + email + "', '" + accessToken + "', '" + accessSecret + "')");
 			if (c==1)
 				System.out.println("Updated");
-			conn.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -78,7 +75,6 @@ public class DBHandler {
 			rs.next();
 			for (int i=0;i<3;i++)
 				data[i] = rs.getString(i+1);
-			conn.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
