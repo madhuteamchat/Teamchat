@@ -98,7 +98,7 @@ public class Redirect extends HttpServlet {
 		String user_agent = request.getHeader("User-Agent"), code = request
 				.getParameter("code"), client_id = "37903488157876",
 				client_secret = "a86c434154e32414631fbaf5fdff040d",
-				redirect_uri = "http://interns.teamchat.com:8080/Asana_Bot/Redirect_url";
+				redirect_uri = "http://interns.teamchat.com:8086/Asana_Bot/Redirect_url";
 		PrintWriter out = response.getWriter();
 		try {
 //			out.println(code);

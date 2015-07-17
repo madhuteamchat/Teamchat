@@ -22,7 +22,7 @@ public class Database_Handler
 	private static String DB_URL = "jdbc:mysql://localhost:3306/Bot?user=tcinterns&password=PakyovBosh7";
 
 
-	// get HIpchatapi's basic stuff
+
 	public Pivotal_basics GetBasicStuff(String email)
 	{
 		Pivotal_basics bb = new Pivotal_basics();
@@ -167,10 +167,10 @@ public class Database_Handler
 			Class.forName("com.mysql.jdbc.Driver");
 			connect = DriverManager.getConnection(DB_URL);
 			statement = connect.createStatement();
-			preparedStatement = connect.prepareStatement("default, update authorized_pivotal set token = ?, state = ? where email = ?");
+			preparedStatement = connect.prepareStatement("update authorized_pivotal set token = ?, state = ? where email = ?");
 			preparedStatement.setString(1, token);
-			preparedStatement.setString(2, email);
-			preparedStatement.setBoolean(3, true);
+			preparedStatement.setBoolean(2, true);
+			preparedStatement.setString(3, email);
 			preparedStatement.executeUpdate();
 			return true;
 		} catch (Exception e)
@@ -179,5 +179,25 @@ public class Database_Handler
 			return false;
 		}
 	}
+	public void DeleteData(String email){
+		try
+		{
+			Class.forName("com.mysql.jdbc.Driver");
+			connect = DriverManager.getConnection(DB_URL);
+			statement = connect.createStatement();
+			statement.executeUpdate("DELETE FROM authorized_pivotal WHERE email='" + email + "'");
+		
+			
+		
+		} catch (Exception e)
+		{
+			e.printStackTrace();
+		} finally
+		{
+			close();
+		}
+		// default case
+	}
+	
 
 }

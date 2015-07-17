@@ -29,7 +29,7 @@ public class Pivotal_Main {
 				.context()
 				.currentRoom()
 				.post(new PrimaryChatlet()
-						.setQuestionHtml("<br/>Hi! This is Pivotal Tracker Bot. I am going to guide you how to use me to do thinks in Tracker.<br/>Type the following commands to:<br/>1)Createproject: To create project<br/>2)Deleteproject: To delete project<br/>3)Createstory: To add story<br/>4)Deletestory: To delete story<br/>5)Notification: To get notifications<br/>BUT FIRST YOU HAVE TO LOGIN!")));
+						.setQuestionHtml("<br/>Hi! This is Pivotal Tracker Bot. I am going to guide you how to use me to do thinks in Tracker.<br/>Type the following commands to:<br/>1)Createproject: To create project<br/>2)Deleteproject: To delete project<br/>3)Createstory: To add story<br/>4)Deletestory: To delete story<br/>5)Notification: To get notifications<br/>6)Logout: To log out<br/>BUT FIRST YOU HAVE TO LOGIN!")));
 		email = api.context().currentSender().getEmail();
 		if (db.isAuthorized(email)) {
 			// get the basic info
@@ -50,7 +50,7 @@ public class Pivotal_Main {
 							.setQuestion(
 									"Follow the instructions given below.We need you to get your access token one time")
 							.setQuestion(
-									"Open your Pivotal account.Click on you username in the top right.Click on Profile. Scroll down to API TOKEN. Copy the api token form the api token field and paste below")));
+									"Open your Pivotal account.Click on your username in the top right.Click on Profile. Scroll down to API TOKEN. Copy the api token from the api token field and paste below")));
 
 			Form f = api.objects().form();
 			f.addField(api.objects().input().name("token")
@@ -74,7 +74,7 @@ public class Pivotal_Main {
 
 	@OnKeyword("Createproject")
 	public void createProject(TeamchatAPI api) throws IOException {
-		// get workspace id and name from json array
+	
 		Database_Handler db = new Database_Handler();
 		pb = db.GetBasicStuff(api.context().currentSender().getEmail());
 		GetAccount ga = new GetAccount();
@@ -303,5 +303,12 @@ public class Pivotal_Main {
 		}
 		api.perform(api.context().currentRoom()
 				.post(new PrimaryChatlet().setQuestionHtml(responseHTML)));
+	}
+	@OnKeyword("Logout")
+	public void Logout(TeamchatAPI api){
+		Database_Handler db = new Database_Handler();
+		db.DeleteData(api.context().currentSender().getEmail());
+		api.perform(api.context().currentRoom()
+				.post(new TextChatlet("You have been logged out.")));
 	}
 }
