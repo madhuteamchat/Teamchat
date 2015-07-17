@@ -4818,3 +4818,82 @@ java.io.FileNotFoundException: /home/intern21/Teamchat/Integrations/Pivotal_Trac
 	at org.eclipse.core.internal.resources.SaveManager.save(SaveManager.java:1144)
 	at org.eclipse.core.internal.resources.DelayedSnapshotJob.run(DelayedSnapshotJob.java:51)
 	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:54)
+
+!ENTRY org.eclipse.jdt.core 4 1006 2015-07-17 12:57:51.757
+!MESSAGE /home/intern21/Downloads/teamchat-client-sdk.1.5.jar is not on its project's build path
+
+!ENTRY org.eclipse.jdt.core 4 1006 2015-07-17 12:57:51.762
+!MESSAGE /home/intern21/Downloads/teamchat-client-sdk.1.5.jar is not on its project's build path
+
+!ENTRY org.eclipse.jdt.core 4 1006 2015-07-17 12:57:51.765
+!MESSAGE /home/intern21/Downloads/teamchat-client-sdk.1.5.jar is not on its project's build path
+
+!ENTRY org.eclipse.jdt.core 4 1006 2015-07-17 12:57:51.766
+!MESSAGE /home/intern21/Downloads/teamchat-client-sdk.1.5.jar is not on its project's build path
+
+!ENTRY org.eclipse.jdt.core 4 1006 2015-07-17 12:57:51.767
+!MESSAGE /home/intern21/Downloads/teamchat-client-sdk.1.5.jar is not on its project's build path
+
+!ENTRY org.eclipse.jdt.core 4 1006 2015-07-17 12:57:51.767
+!MESSAGE /home/intern21/Downloads/teamchat-client-sdk.1.5.jar is not on its project's build path
+
+!ENTRY org.eclipse.jdt.core 4 1006 2015-07-17 12:57:51.771
+!MESSAGE /home/intern21/Downloads/teamchat-client-sdk.1.5.jar is not on its project's build path
+
+!ENTRY org.eclipse.core.resources 4 568 2015-07-17 13:00:57.315
+!MESSAGE Could not write metadata for '/RemoteSystemsTempFiles'.
+!STACK 0
+java.io.FileNotFoundException: /home/intern21/Teamchat/Integrations/Pivotal_Tracker/.metadata/.plugins/org.eclipse.core.resources/.projects/RemoteSystemsTempFiles/.markers.snap (No such file or directory)
+	at java.io.FileOutputStream.open(Native Method)
+	at java.io.FileOutputStream.<init>(FileOutputStream.java:221)
+	at java.io.FileOutputStream.<init>(FileOutputStream.java:142)
+	at org.eclipse.core.internal.localstore.SafeChunkyOutputStream.<init>(SafeChunkyOutputStream.java:45)
+	at org.eclipse.core.internal.localstore.SafeChunkyOutputStream.<init>(SafeChunkyOutputStream.java:41)
+	at org.eclipse.core.internal.resources.SaveManager.visitAndSnap(SaveManager.java:1745)
+	at org.eclipse.core.internal.resources.SaveManager.visitAndSnap(SaveManager.java:1828)
+	at org.eclipse.core.internal.resources.SaveManager.save(SaveManager.java:1202)
+	at org.eclipse.core.internal.resources.SaveManager.save(SaveManager.java:1144)
+	at org.eclipse.core.internal.resources.DelayedSnapshotJob.run(DelayedSnapshotJob.java:51)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:54)
+
+!ENTRY org.eclipse.jdt.core 4 1006 2015-07-17 13:01:11.401
+!MESSAGE /home/intern21/Desktop/gson-2.3.1.jar is not on its project's build path
+
+!ENTRY org.eclipse.jdt.core 4 1006 2015-07-17 13:01:11.415
+!MESSAGE /home/intern21/Desktop/gson-2.3.1.jar is not on its project's build path
+
+!ENTRY org.eclipse.jdt.core 4 1006 2015-07-17 13:01:11.418
+!MESSAGE /home/intern21/Desktop/gson-2.3.1.jar is not on its project's build path
+
+!ENTRY org.eclipse.jdt.core 4 1006 2015-07-17 13:01:11.420
+!MESSAGE /home/intern21/Desktop/gson-2.3.1.jar is not on its project's build path
+
+!ENTRY org.eclipse.jdt.core 4 1006 2015-07-17 13:01:11.420
+!MESSAGE /home/intern21/Desktop/gson-2.3.1.jar is not on its project's build path
+
+!ENTRY org.eclipse.jdt.core 4 1006 2015-07-17 13:01:11.424
+!MESSAGE /home/intern21/Desktop/gson-2.3.1.jar is not on its project's build path
+
+!ENTRY org.eclipse.jdt.core 4 1006 2015-07-17 13:01:11.425
+!MESSAGE /home/intern21/Desktop/gson-2.3.1.jar is not on its project's build path
+
+!ENTRY org.eclipse.jdt.core 4 1006 2015-07-17 13:02:40.290
+!MESSAGE /home/intern21/Teamchat/Integrations/Pivotal_Tracker/Pivotal Tracker/WebContent/WEB-INF/lib/teamchat-sdk-java-1.5.zip is not on its project's build path
+
+!ENTRY org.eclipse.jdt.core 4 1006 2015-07-17 13:02:40.295
+!MESSAGE /home/intern21/Teamchat/Integrations/Pivotal_Tracker/Pivotal Tracker/WebContent/WEB-INF/lib/teamchat-sdk-java-1.5.zip is not on its project's build path
+
+!ENTRY org.eclipse.jdt.core 4 1006 2015-07-17 13:02:40.296
+!MESSAGE /home/intern21/Teamchat/Integrations/Pivotal_Tracker/Pivotal Tracker/WebContent/WEB-INF/lib/teamchat-sdk-java-1.5.zip is not on its project's build path
+
+!ENTRY org.eclipse.jdt.core 4 1006 2015-07-17 13:02:40.296
+!MESSAGE /home/intern21/Teamchat/Integrations/Pivotal_Tracker/Pivotal Tracker/WebContent/WEB-INF/lib/teamchat-sdk-java-1.5.zip is not on its project's build path
+
+!ENTRY org.eclipse.jdt.core 4 1006 2015-07-17 13:02:40.297
+!MESSAGE /home/intern21/Teamchat/Integrations/Pivotal_Tracker/Pivotal Tracker/WebContent/WEB-INF/lib/teamchat-sdk-java-1.5.zip is not on its project's build path
+
+!ENTRY org.eclipse.jdt.core 4 1006 2015-07-17 13:02:40.297
+!MESSAGE /home/intern21/Teamchat/Integrations/Pivotal_Tracker/Pivotal Tracker/WebContent/WEB-INF/lib/teamchat-sdk-java-1.5.zip is not on its project's build path
+
+!ENTRY org.eclipse.jdt.core 4 1006 2015-07-17 13:02:40.298
+!MESSAGE /home/intern21/Teamchat/Integrations/Pivotal_Tracker/Pivotal Tracker/WebContent/WEB-INF/lib/teamchat-sdk-java-1.5.zip is not on its project's build path
