@@ -1,0 +1,10 @@
+botemail = 
+botpass = 
+dbname = linkedin
+dbuser = tcinterns
+dbpass = 
+linktable = linkdata
+accesstable = accessdata
+apikey = 
+apisecret = 
+server = 
