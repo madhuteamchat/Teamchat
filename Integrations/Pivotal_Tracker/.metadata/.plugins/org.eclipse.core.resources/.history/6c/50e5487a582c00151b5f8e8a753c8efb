@@ -48,7 +48,7 @@ public class Pivotal_Main {
 					.currentRoom()
 					.post(new PrimaryChatlet()
 							.setQuestionHtml(
-									"Follow the instructions given below.We need you to get your access token one time.<br/>Open your Pivotal account.<br/>Click on your username in the top right.<br/>Click on Profile.<br/> Scroll down to API TOKEN. <br/>Copy the api token from the api token field and paste below.<html><body><a target='_blank' href='https://www.pivotaltracker.com/profile'>To Get to your profile click here</a><br/>")));
+									"Follow the instructions given below.We need you to get your access token one time.</br>Open your Pivotal account.</br>Click on your username in the top right.</br>Click on Profile.</br> Scroll down to API TOKEN. </br>Copy the api token from the api token field and paste below.<html><body><a target='_blank' href='https://www.pivotaltracker.com/profile'>To Get to your profile click here</a></br></br> ")));
 
 			Form f = api.objects().form();
 			f.addField(api.objects().input().name("token")
