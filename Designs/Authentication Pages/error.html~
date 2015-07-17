@@ -33,7 +33,7 @@
           <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" onclick="window.close()">Continue</a>
         </div>
       </div>
-      <img class="logo-img" src="img/App_Logo.png" alt="logo" />
+      <img class="logo-img" src="img/Pocket_App_Logo.png" alt="logo" />
     </div>
   </div>
 </body>
