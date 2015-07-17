@@ -25,39 +25,56 @@ public class WikiSearch {
 		api.perform(api
 				.context()
 				.currentRoom()
-				.post(new PrimaryChatlet().setQuestion("Enter search keyword")
+				.post(new PrimaryChatlet()
+						.setQuestion("Enter search keyword")
 						.setReplyScreen(
 								api.objects()
 										.form()
 										.addField(
 												api.objects().input()
 														.label("Search")
-														.name("search"))).alias("searchWikipedia")));
+														.name("search")))
+						.alias("searchWikipedia")));
 
 	}
-	
+
 	@OnMsg
-	public void onMsg(TeamchatAPI api) throws IllegalStateException, IOException {
+	public void onMsg(TeamchatAPI api) throws IllegalStateException,
+			IOException {
 		String message = api.context().currentChatlet().raw();
-		search(api, message);
+
+		if (message.equals("help") || message.equals("Help")
+				|| message.equals("hElp") || message.equals("heLp")) {
+			help(api);
+		} else {
+			search(api, message);
+		}
 	}
-	
+
+	public void help(TeamchatAPI api) {
+		api.performPostInCurrentRoom(new PrimaryChatlet()
+				.setQuestionHtml("Hi, I'm Wikipedia Bot! <br>I can retrieve summaries of anything you want to know about from Wikipedia! <br>Just type what you want to search for!"));
+	}
+
 	@OnAlias("searchWikipedia")
-	public void SearchWikipedia(TeamchatAPI api) throws IllegalStateException, IOException {
+	public void SearchWikipedia(TeamchatAPI api) throws IllegalStateException,
+			IOException {
 		searchKeyword = api.context().currentReply().getField("search");
 		search(api, searchKeyword);
 	}
-	
-	public void search(TeamchatAPI api, String searchKeyword) throws IllegalStateException, IOException {
-		
+
+	public void search(TeamchatAPI api, String searchKeyword)
+			throws IllegalStateException, IOException {
+
 		String searchEncoded = URLEncoder.encode(searchKeyword, "UTF-8");
-		
-		String url = "https://en.wikipedia.org/w/api.php?action=opensearch&search="+searchEncoded+"&format=json";
-		
+
+		String url = "https://en.wikipedia.org/w/api.php?action=opensearch&search="
+				+ searchEncoded + "&format=json";
+
 		System.out.println(url);
-		
-		HttpClient client = HttpClientBuilder.create().build(); 
-		
+
+		HttpClient client = HttpClientBuilder.create().build();
+
 		HttpGet request = new HttpGet(url);
 
 		HttpResponse response = client.execute(request);
@@ -72,21 +89,24 @@ public class WikiSearch {
 		System.out.println("Query executed.");
 
 		JSONArray result = new JSONArray(output);
-		
-		JSONArray firstResultArray = (JSONArray) result.get(1); 
+
+		JSONArray firstResultArray = (JSONArray) result.get(1);
 		String firstResultTitle = (String) firstResultArray.get(0);
 		System.out.println(firstResultTitle.toString());
-		
+
 		JSONArray details = (JSONArray) result.get(2);
 		String detailsOfSearch = (String) details.get(0);
 		System.out.println(detailsOfSearch.toString());
-		
+
 		JSONArray linkList = (JSONArray) result.get(3);
 		String link = (String) linkList.get(0);
 
-		//	String toDisplay = "Read more at:" + link;
-		api.performPostInCurrentRoom(new PrimaryChatlet().setQuestionHtml("<h3>"+firstResultTitle+"</h3><br><h5>"+detailsOfSearch+"</h5><br><a href='"+link+"' target='_blank'>Read more</a>"));
-	
+		// String toDisplay = "Read more at:" + link;
+		api.performPostInCurrentRoom(new PrimaryChatlet()
+				.setQuestionHtml("<h3>" + firstResultTitle + "</h3><br><h5>"
+						+ detailsOfSearch + "</h5><br><a href='" + link
+						+ "' target='_blank'>Read more</a>"));
+
 	}
-	
+
 }
