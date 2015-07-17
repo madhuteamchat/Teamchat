@@ -3,8 +3,11 @@
  1. Copy the contents of this folder into the Webcontent folder of your Bot template
  2. Replace the image in img/App_logo.png with your the logo of your app and name it as App_logo.png.
  3. Use the code snippet below in your servlet.
+ 
  Put this code inside the doGet method of the servlet (at the end)
-` 		// Set response content type
+ 
+```		
+// Set response content type
 		response.setContentType("text/html");
 		// New location to be redirected
 		String site = "";
@@ -14,12 +17,15 @@
 			site = "error.html";
 		}
 		// redirect to location
-		response.sendRedirect(site);`
+		response.sendRedirect(site);
+```
+		
 **Note: the resp_code variable will be using the response code from the post request you are sending.**
 
 The Final code will be:
 e.g. 
-`protected void doGet(HttpServletRequest request,
+```
+protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		try {
 			resp_code = sendPost(
@@ -67,6 +73,7 @@ e.g.
 			wr.close();
 			int responseCode = con.getResponseCode();
 			return responseCode;
-}`
+}
+```
 
 **Note you maybe using another method for posting data to your server to get the auth token please look into that method and return the response code you might be getting and plugin that value into resp_code variable**
