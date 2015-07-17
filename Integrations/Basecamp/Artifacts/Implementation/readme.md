@@ -5,7 +5,13 @@ This is a [Basecamp](https://basecamp.com/) client integration with teamchat.
 
 ### Table of contents
 
-[TOC]
+  * [Implementation Manual](#implementation-manual)
+      * [Table of contents](#table-of-contents)
+    * [Dependencies](#dependencies)
+    * [Registering your app on Basecamp](#registering-your-app-on-basecamp)
+    * [Configure the code](#configure-the-code)
+    * [Authorisation flow](#authorisation-flow)
+    * [Rest API](#rest-api)
 
 Dependencies
 ----------
@@ -53,6 +59,7 @@ Basecamp-->Redirect_url.java: Returns the authorization details
 ```
 
 The authorization details are retured in the following format if successfully done:
+```json
 {
 		 "accounts": [
 		 {
@@ -70,6 +77,7 @@ The authorization details are retured in the following format if successfully do
 		 },
 		 "expires_at": "2015-07-02T14:08:18Z"
 }
+```
 
 we use gson to parse them into pojo [classes](https://github.com/madhuteamchat/Teamchat/tree/master/Integrations/Basecamp/code/Bot/src/com/basecamp/classes). You can also do the same from [here](jsonschema2pojo.org)
 
@@ -77,7 +85,7 @@ Rest API
 ----------
 
 All the api calls are authenticated with token in the request headers as 
-> **Authorization: Bearer token **
+> Authorization: Bearer token 
 
 There are two functions which already do so (in Request_handler.java ) :
 

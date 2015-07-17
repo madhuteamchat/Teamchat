@@ -6,7 +6,7 @@
  
  Put this code inside the doGet method of the servlet (at the end)
  
-```		
+```Java		
 // Set response content type
 		response.setContentType("text/html");
 		// New location to be redirected
@@ -24,7 +24,7 @@
 
 The Final code will be:
 e.g. 
-```
+```Java
 protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		try {
