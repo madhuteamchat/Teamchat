@@ -49,7 +49,7 @@
 		<h1
 			style="margin: 0; margin-left:-700px; margin-top: 120px; padding: 0; padding-left: 25px; padding-bottom: 10px; font-family: sans-serif;">
 			Question</h1>
-		<input  id="text_input" type="text" class="css-input" placeholder="What are the sales?" onfocus=="this.value=''" style="margin-left:-425px; position:absolute;">
+		<input  id="text_input" type="text" class="css-input" placeholder="What are the sales?" onfocus=="this.value=''"  style="margin-left:-425px; position:absolute;">
 	    
 	   <div id="survey_screen" style="visibility:hidden;"> <h1
 			style="margin: 0; margin-left:-700px; margin-top: 80px; padding: 0; padding-left: 25px; padding-bottom: 10px; font-family: sans-serif;">
@@ -62,13 +62,26 @@
             <p class="text-box">
                 <label for="box1">Option<span class="box-number">1</span></label>
                 <input type="text" name="boxes[]" value="" id="box1" class="css-input" /><br>
-                <a class="add-box" href="#">Add More</a>
+                
+            </p><br>
+            <p class="text-box">
+                <label for="box2">Option<span class="box-number">2</span></label>
+                <input type="text" name="boxes[]" value="" id="box2" class="css-input" /><br>
+                
+            </p><br>
+		<p class="text-box">
+                <label for="box3">Option<span class="box-number">3</span></label>
+                <input type="text" name="boxes[]" value="" id="box3" class="css-input" /><br>
+                
             </p>
-            
+<br>
+		<p class="text-box">
+                <label for="box4">Option<span class="box-number">4</span></label>
+                <input type="text" name="boxes[]" value="" id="box4" class="css-input" /><br>
         </form>
     </div>
 </div></div>
-<script type="text/javascript">
+<!--<script type="text/javascript">
 jQuery(document).ready(function($){
     $('.my-form .add-box').click(function(){
         var n = $('.text-box').length + 1;
@@ -93,7 +106,7 @@ jQuery(document).ready(function($){
         return false;
     });
 });
-</script>
+</script> -->
 
 	    
 	    <div id="html_q" style="visibility:hidden;">
@@ -143,6 +156,9 @@ jQuery(document).ready(function($){
 							style="color: #0086ca; display: block; float: right; text-decoration: none; font-size: 13px; padding: 5px 10px 3px 0px"><img
 							style="margin-left: 2px; vertical-align: -10px"><span
 							style="margin-right: 3px;">0</span><i style="font-style: normal">Comments</i></a>
+
+
+
 					</div>
 				</div>
 			</div>
@@ -151,7 +167,11 @@ jQuery(document).ready(function($){
  
 <!-- ******************************************************************************************** -->
 <div id="survey_chatlet" style="position:absolute; margin-left:850px; width:400px; margin-top:-300px; visibility:hidden;">
-<div style="border-top:2px solid #0086ca;background-color:#f7f7f7;font-size:14px;font-family:inherit;max-width:400px;margin-top:5px"><div style="border-left:1px solid #ececec;border-right:1px solid #ececec;border-bottom:1px solid #ececec"><div style="color:#404040;font-size:12px;padding:8px 10px 0 10px">                          Posted on:                          <span style="color:#999999;margin-left:2px;font-size:11px;font-weight:lighter">14 Jul 2015 12:34 PM IST</span></div><div style="color:#404040;font-size:14px;padding:4px 10px 8px 10px;font-family:inherit;line-height:21px"><r4></r4></div><div style="background-color:#e8f4fa;margin:2px 10px;min-width:175px;border:1px solid #e7e7e7"><a style="color:#404040;font-size:14px;padding:7px 10px;display:block;text-decoration:none;clear:both;overflow:hidden;line-height:18px"><div style="float:left;line-height:20px">a</div><div style="float:right;color:#404040"><img src="images/like.png" style="margin-right:3px;width:20px;height:20px;vertical-align:middle"><span style="vertical-align:bottom">0                                        </span></div></a></div><div style="background-color:#e8f4fa;margin:2px 10px; visibility:hidden; min-width:175px;border:1px solid #e7e7e7"><a style="color:#404040;font-size:14px;padding:7px 10px;display:block;text-decoration:none;clear:both;overflow:hidden;line-height:18px"><div style="float:left;line-height:20px">b</div><div style="float:right;color:#404040"><img src="images/like.png" style="margin-right:3px;width:20px;height:20px;vertical-align:middle"><span style="vertical-align:bottom">0</span></div></a></div><div style="background-color:#ebebeb;clear:both;overflow:hidden;margin-top:10px"><a style="float:left;text-decoration:none;color:#0086ca;font-size:13px;padding:12px 10px 8px 15px">0<span style="margin-left:5px">Replies</span></a><a style="color:#0086ca;display:block;float:right;text-decoration:none;font-size:13px;padding:5px 10px 3px 0px"><img style="margin-left:2px;vertical-align:-10px"><span style="margin-right:3px">0</span><i style="font-style:normal">Comments</i></a></div></div>
+<div style="border-top:2px solid #0086ca;background-color:#f7f7f7;font-size:14px;font-family:inherit;max-width:400px;margin-top:5px"><div style="border-left:1px solid #ececec;border-right:1px solid #ececec;border-bottom:1px solid #ececec"><div style="color:#404040;font-size:12px;padding:8px 10px 0 10px">                          Posted on:                          <span style="color:#999999;margin-left:2px;font-size:11px;font-weight:lighter">14 Jul 2015 12:34 PM IST</span></div><div style="color:#404040;font-size:14px;padding:4px 10px 8px 10px;font-family:inherit;line-height:21px"><r4></r4></div><div style="background-color:#e8f4fa;margin:2px 10px;min-width:175px;border:1px solid #e7e7e7"><a style="color:#404040;font-size:14px;padding:7px 10px;display:block;text-decoration:none;clear:both;overflow:hidden;line-height:18px"><div style="float:left;line-height:20px"></div><a1></a1><div style="float:right;color:#404040"><img src="images/like.png" style="margin-right:3px;width:20px;height:20px;vertical-align:middle"><span style="vertical-align:bottom">0                                        </span></div></a></div>
+<div   style="background-color:#e8f4fa;margin:2px 10px;min-width:175px;border:1px solid #e7e7e7"><a style="color:#404040;font-size:14px;padding:7px 10px;display:block;text-decoration:none;clear:both;overflow:hidden;line-height:18px"><b1></b1><div style="float:left;line-height:20px"></div><div style="float:right;color:#404040"><img src="images/like.png" style="margin-right:3px;width:20px;height:20px;vertical-align:middle"><span style="vertical-align:bottom">0                                        </span></div></a></div>
+<div id="c" style="background-color:#e8f4fa;margin:2px 10px; min-width:175px;border:1px solid #e7e7e7"><a style="color:#404040;font-size:14px;padding:7px 10px;display:block;text-decoration:none;clear:both;overflow:hidden;line-height:18px"><c1></c1><div style="float:left;line-height:20px"></div><div style="float:right;color:#404040"><img src="images/like.png" style="margin-right:3px;width:20px;height:20px;vertical-align:middle"><span style="vertical-align:bottom">0</span></div></a></div>
+<div id="d" style="background-color:#e8f4fa;margin:2px 10px;min-width:175px;border:1px solid #e7e7e7"><a style="color:#404040;font-size:14px;padding:7px 10px;display:block;text-decoration:none;clear:both;overflow:hidden;line-height:18px"><d1></d1><div style="float:left;line-height:20px"></div><div style="float:right;color:#404040"><img src="images/like.png" style="margin-right:3px;width:20px;height:20px;vertical-align:middle"><span style="vertical-align:bottom">0                                        </span></div></a></div>
+<div style="background-color:#ebebeb;clear:both;overflow:hidden;margin-top:10px"><a style="float:left;text-decoration:none;color:#0086ca;font-size:13px;padding:12px 10px 8px 15px">0<span style="margin-left:5px">Replies</span></a><a style="color:#0086ca;display:block;float:right;text-decoration:none;font-size:13px;padding:5px 10px 3px 0px"><img style="margin-left:2px;vertical-align:-10px"><span style="margin-right:3px">0</span><i style="font-style:normal">Comments</i></a></div></div>
 </div>
 </div>
  <!-- ********************************************************************************************* -->
@@ -182,8 +202,8 @@ jQuery(document).ready(function($){
       <div class="header">
         <h1></h1>
         <h1>
-        <input  id="r10" type="radio" name="type" checked="checked">Enable Replies<br><br>
-        <input  id="r11" type="radio" name="type" >Disable Replies<br><br>
+        <input  id="r10" type="radio" name="rep" checked="checked">Enable Replies<br><br>
+        <input  id="r11" type="radio" name="rep" >Disable Replies<br><br>
         
         </h1>
         <input type="button" id="button4" class=myButton value="Next Step">
@@ -191,7 +211,7 @@ jQuery(document).ready(function($){
       
       
       
-      <div id="repb"><input type="button" id="button3" value="Create Reply Screen" class="myButton" style="margin-top:-300px; margin-left:200px; position:absolute; visibility:hidden;"></div>	
+      <div id="repb"><input type="button" id="button3" value="Create Reply Screen" class="myButton" style="margin-top:-300px; margin-left:200px; position:absolute; visibility:visible;"></div>	
     		
     </div>
     <div id="contact" class="container red">
@@ -199,8 +219,8 @@ jQuery(document).ready(function($){
       <div class="header">
         <h1></h1>
         <h1>
-        <input  id="r20" type="radio" name="type" checked="checked">Enable Comments<br><br>
-        <input  id="r21" type="radio" name="type" >Disable Comments<br><br>
+        <input  id="r20" type="radio" name="com" checked="checked">Enable Comments<br><br>
+        <input  id="r21" type="radio" name="com" >Disable Comments<br><br>
         
         </h1>
         <input type="button" id="button5" class=myButton value="Next Step">
@@ -233,7 +253,14 @@ jQuery(document).ready(function($){
   $("#button1").click(function(){
 	  $('html, body').animate({scrollTop: $("#search").offset().top}, 1000);
 	  	
-	  if($('#r00').is(':checked')) { document.getElementById("text").style.visibility="visible";
+	  var type="";
+	  var replies="";
+	  var comments=false;
+	  var text_input="";
+	  var html_input="";
+	  if($('#r00').is(':checked')) { 
+		  							type="text";
+		  							document.getElementById("text").style.visibility="visible";
 	  								document.getElementById("poll").style.visibility="hidden";
 	  								document.getElementById("survey").style.visibility="hidden";
 	  								document.getElementById("html_q").style.visibility="visible";
@@ -242,7 +269,9 @@ jQuery(document).ready(function($){
 	  								document.getElementById("survey_chatlet").style.visibility="hidden";
 	  								document.getElementById("survey_screen").style.visibility="hidden";
 	  }
-	  if($('#r01').is(':checked')) { document.getElementById("poll").style.visibility="visible";
+	  if($('#r01').is(':checked')) { 
+		  type="poll";			  
+		  document.getElementById("poll").style.visibility="visible";
 	  document.getElementById("text").style.visibility="hidden";
 		document.getElementById("survey").style.visibility="hidden";
 		document.getElementById("html_q").style.visibility="hidden";
@@ -251,7 +280,9 @@ jQuery(document).ready(function($){
 			document.getElementById("survey_chatlet").style.visibility="hidden";
 			document.getElementById("survey_screen").style.visibility="hidden";
 		}
-	  if($('#r02').is(':checked')) { document.getElementById("survey").style.visibility="visible";
+	  if($('#r02').is(':checked')) { 
+		  type="survey";
+		  document.getElementById("survey").style.visibility="visible";
 	  document.getElementById("poll").style.visibility="hidden";
 		document.getElementById("text").style.visibility="hidden";
 		document.getElementById("html_q").style.visibility="hidden";
@@ -266,20 +297,26 @@ jQuery(document).ready(function($){
   
   $("#button2").click(function(){
 	  $('html, body').animate({scrollTop: $("#about").offset().top}, 1000);
-	  var text_input=document.getElementById("text_input").value;
-	  var html_input=document.getElementById("html_input").value;
+	  text_input=document.getElementById("text_input").value;
+	  html_input=document.getElementById("html_input").value;
 	  console.log(text_input);
 	  console.log(html_input);
 	  
 	});
+ 
   
   $("#button3").click(function(){
+	  replies=false;
+	  if($('#r10').is(':checked')) replies=true;
+	  
 	  var url = "index_replies.html";
 	  var win = window.open(url, "_blank","toolbar=no, scrollbars=no, resizable=yes, top=250, left=450, width=700, height=550");
+	  //var win=window.open(url);
 	  win.focus(); 
   });
   
   $("#button4").click(function(){
+	  if($('#r20').is(':checked')) comments=true;
 	  $('html, body').animate({scrollTop: $("#contact").offset().top}, 1000);
 	  
   });  
@@ -308,20 +345,38 @@ jQuery(document).ready(function($){
 	  $("r3").html(text);
 	  $("r4").html(text);
 	});
+$('#box1').bind('input',function(){ 
+     var text=document.getElementById("box1").value;
+	  $("a1").html(text);
+	  
+	});
+$('#box2').bind('input',function(){ 
+     var text=document.getElementById("box2").value;
+	  $("b1").html(text);
+	  
+	});
+$('#box3').bind('input',function(){ 
+     var text=document.getElementById("box3").value;
+	  $("c1").html(text);
+	  
+	});
+$('#box4').bind('input',function(){ 
+     var text=document.getElementById("box4").value;
+	  $("d1").html(text);
+	  
+	});
+
   
   $('#html_input').bind('input',function(){ 
 	  var text=document.getElementById("html_input").value;   
 	  $("r2").html(text);
 		});
   
-  
-	  
+    
   
   document.getElementById("button7").onclick = function() {
 		
 	  	
-		var replies = "all";
-		var comments = true;
 		
 		if (document.getElementById("r10").checked)
 			replies = "all";
@@ -333,39 +388,111 @@ jQuery(document).ready(function($){
 		else
 			comments = false;
 
+		
 		str1 = "{\"imgUrl\":\"\",\"type\":\"primary\",\"content\":{\"text\":\""
-				+ content_t
+				+ text_input
 				+ "\",\"html\":\""
-				+ content_h
+				+ html_input
 				+ "\"},\"xslt\":\"primary-2.7.2\",";
-		str2 = "\"detailsLinkVisibility\":\""
+		str1_survey = "{\"imgUrl\":\"\",\"type\":\"primary\",\"content\":{\"text\":\""
+					+ text_input
+					+ "\",\"html\":\""
+					+ html_input
+					+ "\"},\"xslt\":\"survey-2.7.2\",";
+			
+				
+			str2 = "\"detailsLinkVisibility\":\""
 				+ replies
 				+ "\",\"actionreplace\": \"replace\",\"comments\": { \"addcomment\":\""
 				+ comments + "\"},";
 		str3 = "\"displayname\":\"Primary Chatlet\",";
-
-		var str = str1 + str2 + str3;
-		console.log(str);
-		localStorage.setItem("head", str);
-		print_result();
+		
+		str2_poll = "\"detailsLinkVisibility\":\""
+			+ "all"
+			+ "\",\"summdesc\":{\"fields\":[{\"operation\":\"Count\",\"drilldown\":\"resp\",\"hidden\":\"true\",\"name\":\"yesno\",\"display\":\"Count\",\"fieldname\":\"resp\"}]},\"actionreplace\": \"replace\",\"comments\": { \"addcomment\":\""
+			+ comments + "\"},";
 	
-	var head = ""; 
-	var foot = " \"detdesc\": { \"fields\": [] },\"actions\": { \"actitem\": [] }}";
-	localStorage.setItem("foot",foot);
-	var email = document.getElementById("email").value;
+		str2_survey = "\"detailsLinkVisibility\":\""
+				+ "all"
+				+ "\",\"summdesc\":{\"fields\":[{\"operation\":\"Count\",\"drilldown\":\"resp\",\"hidden\":\"true\",\"name\":\"yesno\",\"display\":\"Count\",\"fieldname\":\"resp\"}]},\"actionreplace\": \"replace\",\"comments\": { \"addcomment\":\""
+				+ comments + "\"},";
+		
+		str4_survey="\"minCrv\":\"3\",\"rim\":{},\"queslabel\":\"Question\",\"opt1label\":\"Option1\",\"opt2label\":\"Option2\",\"opt3label\":\"Option3\",\"opt4label\":\"Option4\",";
+			
+			var str="";
+			if($('#r01').is(':checked')){
+				str=str1+str2_poll+str3;
+			}
 
-		postChatlet(head, foot, email);
+			if($('#r00').is(':checked')) str = str1 + str2 + str3;
+		
+			if($('#r02').is(':checked')) str = str1_survey + str2_survey + str3+str4_survey;
+			
+			
+			console.log(str);
+		var head=str;
+		localStorage.setItem("head", str);
+	
+		
+		
+		if($('#r00').is(':checked')){
+	var foot="";
+	
+	var n = replies.localeCompare("none");
+	if(n==0) { foot = " \"detdesc\": { \"fields\": [] },\"actions\": { \"actitem\": [] }}"; localStorage.setItem("foot",foot);}
+	else foot=localStorage.getItem("foot");
+	
+	var email = document.getElementById("email").value;
+	console.log("calling text chatlet maker");
+	postChatlet(head, foot, email);
+		}
+	
+		if($('#r01').is(':checked')){
+		var foot_poll="\"detdesc\":{\"label\":\"Replies\",\"showcount\":\"true\",\"fields\":[{\"display\":\"Response\",\"key\":\"resp\"}]},\"actions\":{\"actitem\":[{\"yesno\":{}}]}}";
+		var email = document.getElementById("email").value;
+		console.log("calling poll chatlet maker");
+		postChatlet(head, foot_poll, email);
+  }
+  	
+		if($('#r02').is(':checked')){
+			var foot1_survey="\"detdesc\":{\"label\":\"Replies\",\"showcount\":\"true\",\"fields\":[{\"display\":\"Response\",\"key\":\"resp\"}]},";
+			//{"actitem":[{"button":{"deffields":{"resp":"aaa"},"resptype":"sendmsg","label":"Reply"}}]}
+			var foot2_survey="\"actions\":{\"actitem\":[";
+			var arr="";
+			
+			var len=0;
+			for(var i=1;i<=4;i++){
+				var op=document.getElementById("box"+i).value;
+				var n=op.localeCompare("");
+				if(n!=0) len++;
+			}
+			
+			var ind=1;
+			for(ind=1;ind<len;ind++){
+				var op=document.getElementById("box"+ind).value;
+				arr=arr+"{\"button\":{\"deffields\":{\"resp\":\""+op+"\"},\"resptype\":\"sendmsg\",\"label\":\"Reply\"}},";
+				}
+			
+			var op=document.getElementById("box"+ind).value;
+			arr=arr+"{\"button\":{\"deffields\":{\"resp\":\""+op+"\"},\"resptype\":\"sendmsg\",\"label\":\"Reply\"}}]}}";
+		
+		
+			var foot_survey=foot1_survey+foot2_survey+arr;
+			console.log("calling survey chatlet maker");
+			var email = document.getElementById("email").value;
+			postChatlet(head, foot_survey, email);
+			}
 	};
 
-	function print_result() {
-		head = localStorage.getItem("head");
-		foot = localStorage.getItem("foot");
-		console.log(head + foot);
-
-		
-	}
+	
 
 	function postChatlet(head, foot, email) {
+		
+		
+		console.log("head is --------"+head);
+		console.log("foot is --------"+foot);
+		
+		
 		var data1 = "{ \"data\":" + head + foot + ",\"email\":"
 				+ "\"" + email + "\"" + "}";
 		console.log(data1);

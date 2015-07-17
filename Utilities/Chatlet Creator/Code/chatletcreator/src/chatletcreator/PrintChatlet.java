@@ -12,13 +12,13 @@ public class PrintChatlet
 {
 	public static TeamchatAPI api;
 	
-	@OnKeyword("create")
+	@OnKeyword("help")
 	public void onCreate(TeamchatAPI api){
 		System.out.println("on create");
 		this.api=api;
 		System.out.println("Checkpoint");
 		//api.perform(api.context().currentRoom().post(new PrimaryChatlet().setQuestion("Check")));
-		api.performPostInCurrentRoom(new PrimaryChatlet().setQuestionHtml("<html><body><button onclick='myFunction()'>Click here to create your own Chatlet</button><script>function myFunction(){window.open('http://interns.teamchat.com:8086/chatletcreator/Chatlet-main.html');} </script></body></html>"));
+		api.performPostInCurrentRoom(new PrimaryChatlet().setQuestionHtml("<html><body><button onclick='myFunction()'>Click here to create your own Chatlet</button><script>function myFunction(){window.open('http://localhost:8080/chatletcreator/index.html');} </script></body></html>"));
 	}
 	
 	@OnKeyword("hello")
