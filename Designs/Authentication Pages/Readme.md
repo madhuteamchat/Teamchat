@@ -1,5 +1,7 @@
 ## Live Demo ##
+
 [Success Page](http://madhuteamchat.github.io/Teamchat/Designs/Authentication%20Pages/success.html)
+
 [Error Page](http://madhuteamchat.github.io/Teamchat/Designs/Authentication%20Pages/error.html)
 
 ## Setup ##
