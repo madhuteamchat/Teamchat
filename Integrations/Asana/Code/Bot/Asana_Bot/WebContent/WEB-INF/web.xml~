@@ -21,11 +21,7 @@
 	</context-param>
 	<context-param>
 		<param-name>bot-password</param-name>
-<<<<<<< Updated upstream
-		<param-value>*******</param-value>
-=======
-		<param-value></param-value>
->>>>>>> Stashed changes
+		<param-value>password@123</param-value>
 	</context-param>
 	<context-param>
 		<param-name>bot-class</param-name>
@@ -41,15 +37,11 @@
 	</context-param>
 	<context-param>
 		<param-name>db-user</param-name>
-		<param-value>******</param-value>
+		<param-value>webaroo</param-value>
 	</context-param>
 	<context-param>
 		<param-name>db-password</param-name>
-<<<<<<< Updated upstream
-		<param-value>*******</param-value>
-=======
-		<param-value></param-value>
->>>>>>> Stashed changes
+		<param-value>webar00</param-value>
 	</context-param>
 	<context-param>
 		<param-name>threading</param-name>
