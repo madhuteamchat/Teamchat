@@ -1,10 +1,10 @@
-botemail = linkedin@teamchatbot.com
-botpass = keoiv7dkJ
+botemail = email
+botpass = pass
 dbname = linkedin
-dbuser = tcinterns
-dbpass = PakyovBosh7
+dbuser = user
+dbpass = pass
 linktable = linkdata
 accesstable = accessdata
-apikey = 754z46slfke0xm
-apisecret = Jm46YNdPTb2toxoY
+apikey = key
+apisecret = secret
 server = http://integration.teamchat.com:8083/LinkedIn/AuthHandler
