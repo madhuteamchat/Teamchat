@@ -33,11 +33,4 @@
 		<nature>org.eclipse.wst.common.project.facet.core.nature</nature>
 		<nature>org.eclipse.wst.jsdt.core.jsNature</nature>
 	</natures>
-	<linkedResources>
-		<link>
-			<name>WebContent/WEB-INF/lib/teamchat-client-sdk.1.5.jar</name>
-			<type>1</type>
-			<locationURI>PARENT-6-PROJECT_LOC/Downloads/teamchat-client-sdk.1.5.jar%20(2)</locationURI>
-		</link>
-	</linkedResources>
 </projectDescription>
