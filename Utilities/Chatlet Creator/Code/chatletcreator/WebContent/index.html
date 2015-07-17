@@ -6,6 +6,7 @@
   <link href="style1.css" type="text/css" rel="stylesheet" media="screen,projection" />
   <link href="http://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
   <link rel="stylesheet" href="style2.css"/>
+  <link rel="stylesheet" href="style4.css"/>
 </head>
 
 <body>
@@ -62,26 +63,14 @@
             <p class="text-box">
                 <label for="box1">Option<span class="box-number">1</span></label>
                 <input type="text" name="boxes[]" value="" id="box1" class="css-input" /><br>
+                <a class="add-box" href="#">Add More</a>
                 
             </p><br>
-            <p class="text-box">
-                <label for="box2">Option<span class="box-number">2</span></label>
-                <input type="text" name="boxes[]" value="" id="box2" class="css-input" /><br>
-                
-            </p><br>
-		<p class="text-box">
-                <label for="box3">Option<span class="box-number">3</span></label>
-                <input type="text" name="boxes[]" value="" id="box3" class="css-input" /><br>
-                
-            </p>
-<br>
-		<p class="text-box">
-                <label for="box4">Option<span class="box-number">4</span></label>
-                <input type="text" name="boxes[]" value="" id="box4" class="css-input" /><br>
-        </form>
+               </form>
     </div>
 </div></div>
-<!--<script type="text/javascript">
+
+<script type="text/javascript">
 jQuery(document).ready(function($){
     $('.my-form .add-box').click(function(){
         var n = $('.text-box').length + 1;
@@ -106,7 +95,7 @@ jQuery(document).ready(function($){
         return false;
     });
 });
-</script> -->
+</script> 
 
 	    
 	    <div id="html_q" style="visibility:hidden;">
@@ -206,12 +195,12 @@ jQuery(document).ready(function($){
         <input  id="r11" type="radio" name="rep" >Disable Replies<br><br>
         
         </h1>
-        <input type="button" id="button4" class=myButton value="Next Step">
+        <div style="margin-top:100px;"><input type="button" id="button4" class=myButton value="Next Step">
       </div>
       
       
       
-      <div id="repb"><input type="button" id="button3" value="Create Reply Screen" class="myButton" style="margin-top:-300px; margin-left:200px; position:absolute; visibility:visible;"></div>	
+      <div id="repb"><input type="button" id="button3" value="Create Reply Screen" class="myButton" style="margin-top:-150px; margin-left:-150px; position:absolute; visibility:visible;"></div>	
     		
     </div>
     <div id="contact" class="container red">
@@ -222,6 +211,7 @@ jQuery(document).ready(function($){
         <input  id="r20" type="radio" name="com" checked="checked">Enable Comments<br><br>
         <input  id="r21" type="radio" name="com" >Disable Comments<br><br>
         
+           
         </h1>
         <input type="button" id="button5" class=myButton value="Next Step">
       </div>
@@ -242,9 +232,13 @@ jQuery(document).ready(function($){
 			style="margin: 0; margin-left:-750px; margin-top: 120px; padding: 0; padding-left: 25px; padding-bottom: 10px; font-family: sans-serif;">
 			Email</h1>
 		<input id="email" type="text" class="css-input" placeholder="Email.." onfocus=="this.value=''" style="margin-left:-425px; position:absolute">
-    	<input type="button" id="button7" class=myButton value="Post Chatlet" style="margin-top:0px; margin-left:200px;">
-    	</div>
+    	<input type="button" id="button7" class=myButton value="Post Chatlet" style="margin-top:0px; margin-left:50px; position:absolute;">
+    	<div id="sc" class=myButton style="margin-top:150px; margin-left:100px; position:relative; display:none;">Chatlet posted Successfully</div>
+    	<div id="again" type="button" class=myButton style="margin-top:200px; margin-left:100px; position:relative; display:none">Creat a new Chatlet</div>
     
+    	</div>
+    	
+    	
   
   <!-- Javascript -->
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
@@ -302,6 +296,9 @@ jQuery(document).ready(function($){
 	  console.log(text_input);
 	  console.log(html_input);
 	  
+	  	var xx = document.querySelectorAll('.text-box input');
+		for(var i=0;i<xx.length;i++) console.log(document.getElementById(xx[i].id).value);
+	  
 	});
  
   
@@ -327,6 +324,7 @@ jQuery(document).ready(function($){
   });  
   
   document.getElementById("r10").onclick=function(){
+	  
 	  document.getElementById("button3").style.visibility="visible";
   };
   
@@ -371,6 +369,12 @@ $('#box4').bind('input',function(){
 	  var text=document.getElementById("html_input").value;   
 	  $("r2").html(text);
 		});
+  
+  $("#again").click(function(){
+	  
+	  window.close();
+	  window.open("index.html");
+  });
   
     
   
@@ -460,20 +464,29 @@ $('#box4').bind('input',function(){
 			var foot2_survey="\"actions\":{\"actitem\":[";
 			var arr="";
 			
-			var len=0;
+			/*var len=0;
 			for(var i=1;i<=4;i++){
 				var op=document.getElementById("box"+i).value;
 				var n=op.localeCompare("");
 				if(n!=0) len++;
-			}
+			}*/
 			
-			var ind=1;
+			/*var ind=1;
 			for(ind=1;ind<len;ind++){
 				var op=document.getElementById("box"+ind).value;
 				arr=arr+"{\"button\":{\"deffields\":{\"resp\":\""+op+"\"},\"resptype\":\"sendmsg\",\"label\":\"Reply\"}},";
-				}
+				}*/
 			
-			var op=document.getElementById("box"+ind).value;
+			var x = document.querySelectorAll('.text-box input');
+				var i=0;
+			for(i=0;i<x.length-1;i++){
+				var op=document.getElementById(x[i].id).value;
+				console.log(op);
+				arr=arr+"{\"button\":{\"deffields\":{\"resp\":\""+op+"\"},\"resptype\":\"sendmsg\",\"label\":\"Reply\"}},";
+			}
+			i=i+1;
+			var op=document.getElementById("box"+i).value;
+			console.log(op);
 			arr=arr+"{\"button\":{\"deffields\":{\"resp\":\""+op+"\"},\"resptype\":\"sendmsg\",\"label\":\"Reply\"}}]}}";
 		
 		
@@ -501,7 +514,9 @@ $('#box4').bind('input',function(){
 			url : "createchatlet",
 			data : data1,
 			success : function() {
-				alert("success");
+				
+				$("#sc").show("slow");
+				$("#again").show("slow");
 			}
 		});
 	}
