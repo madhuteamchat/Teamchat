@@ -19,7 +19,7 @@ public class Database_Handler
 	private ResultSet resultSet = null;
 
 	
-	private static String DB_URL = "jdbc:mysql://localhost:3306/Bot?user=tcinterns&password=PakyovBosh7";
+	private static String DB_URL = "jdbc:mysql://localhost:3306/Pivotal?user=webaroo&password=webar00";
 
 
 
