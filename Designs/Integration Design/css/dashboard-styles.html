@@ -1,0 +1,232 @@
+<style is="custom-style">
+  body {
+    font-family: 'Roboto', 'Noto', sans-serif;
+    font-size: 16px;
+    margin: 0;
+  }
+
+  paper-icon-item.iron-selected {
+    background: var(--google-grey-300);
+  }
+
+  paper-button {
+    color: white;
+    margin: 10px;
+    background-color: #0087CA;
+    white-space: nowrap;
+  }
+
+  paper-icon-item {
+    position: relative;
+  }
+
+  #register_client_button {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    margin: 0 24px 24px 0;
+  }
+  /*outline blueline fix*/
+
+  iron-collapse {
+    outline: none;
+  }
+
+  paper-toolbar {
+    @apply(--shadow-elevation-2dp);
+    background-color: #159ceb;
+    z-index: 1;
+  }
+
+  paper-fab {
+    background-color: #0087CA;
+  }
+
+  paper-spinner {
+    --paper-spinner-layer-1-color: #159ceb;
+    --paper-spinner-layer-2-color: #159ceb;
+    --paper-spinner-layer-3-color: #159ceb;
+    --paper-spinner-layer-4-color: #159ceb;
+    margin: 0 auto;
+    display: block;
+  }
+  /*paper dialog*/
+
+  paper-dialog .buttons {
+    width: 90%;
+  }
+  /*services buttons*/
+
+  .services #register_service_button {
+    margin: 0 24px 24px 0;
+  }
+
+  .services .service {
+    height: 56px;
+    width: 56px;
+    border-radius: 50%;
+    box-shadow: 0 2px 6px #0087CA;
+    text-align: center;
+    margin: 36px;
+    padding: 4px;
+    cursor: pointer;
+    background: #fff;
+    /*transitions*/
+    transition: 0.15s;
+    display: inline-block;
+    vertical-align: middle;
+    position: relative;
+  }
+  /*badge*/
+
+  .services .service .badge {
+    height: 16px;
+    background-color: var(--paper-red-500);
+    padding: 6px;
+    min-width: 16px;
+    display: block;
+    color: #FFF;
+    border-radius: 16px;
+    position: absolute;
+    top: -15px;
+    right: -10px;
+  }
+  /*service hover*/
+
+  .service:hover {
+    box-shadow: 0 4px 8px #0087CA;
+  }
+  /*a service's style*/
+
+  .services .service img {
+    display: inline-block;
+  }
+  /*jira, etc.*/
+
+  .services .jira-service img {
+    height: 89%;
+  }
+
+  .services .git-service {
+    background-color: #515151;
+    padding: 7px;
+  }
+
+  .services .git-service img {
+    height: 75%;
+  }
+
+  .services .sms-service img {
+    border-radius: 50%;
+    height: 100%;
+  }
+
+  .services .rnas-service img {
+    height: 116%;
+    margin: -7% 0 0 -7%;
+  }
+
+  .services .zendesk-service {
+    background-color: #678F00;
+  }
+
+  .services .zendesk-service img {
+    height: 83%;
+    padding: 9%;
+  }
+  /*content*/
+
+  .content {
+    padding: 16px;
+  }
+
+  .content h3 img {
+    border-radius: 50%;
+    height: 40px;
+    margin-right: 6px;
+    vertical-align: middle;
+  }
+  /*table layout*/
+
+  table {
+    background: #fff;
+    text-align: left;
+    width: 100%;
+  }
+
+  table tr {
+    height: 48px;
+  }
+
+  table tr:last-of-type {
+    height: 56px;
+  }
+
+  table tr th,
+  table tr td {
+    border-bottom: 1px solid;
+    border-color: var(--divider-color);
+    padding-left: 24px;
+  }
+
+  table .book-button {
+    display: block;
+    width: 120px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  /*dialogs*/
+  /*register client dialog*/
+  /*buttons*/
+
+  .discard {
+    background: var(--paper-red-500);
+  }
+  /*drop down ka stuff*/
+
+  .drop-down .flex {
+    font-size: 16px;
+    font-weight: 400;
+    display: inline-block;
+    padding: 16px;
+  }
+
+  .drop-down iron-icon {
+    margin: 13px 16px 0 0;
+    float: right;
+  }
+
+  .drop-down + .drop-down-data {
+    position: absolute;
+    left: 24px;
+    top: 53px;
+    z-index: 1;
+    opacity: 0;
+    transition: 0.3s;
+    pointer-events: none;
+    cursor: pointer;
+  }
+
+  .drop-down-data.open {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  .list {
+    cursor: pointer;
+    background-color: white;
+    display: inline-block;
+    min-width: 240px;
+    margin: 12px;
+    @apply(--shadow-elevation-2dp);
+  }
+
+  .avatar {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: #ccc;
+  }
+</style>

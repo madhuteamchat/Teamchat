@@ -1,119 +1,67 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
-
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <!--    Theme colour for android lollipop -->
-  <meta name="theme-color" content="#3DA0DC">
-  <!-- 1. Load webcomponents-lite.min.js for polyfill support. -->
-  <script src="bower_components/webcomponentsjs/webcomponents-lite.min.js">
-  </script>
-  <!-- 2. Use an HTML Import to bring in some elements. -->
-  <link rel="import" href="bower_components/font-roboto/roboto.html">
-  <link rel="import" href="bower_components/iron-media-query/iron-media-query.html">
-  <!-- <link rel="import" href="bower_components/iron-form/iron-form.html"> -->
-  <link rel="import" href="bower_components/paper-styles/paper-styles.html">
-  <link rel="import" href="bower_components/paper-button/paper-button.html">
-  <link rel="import" href="bower_components/paper-input/paper-input.html">
-  <link rel="import" href="bower_components/gold-email-input/gold-email-input.html">
-  <style>
-    /*custom scrollbar*/
-
-    body::-webkit-scrollbar {
-      background: rgba(0, 0, 0, 0);
-      width: 10px;
-    }
-
-    body::-webkit-scrollbar-thumb {
-      background: #BDBDBD;
-    }
-  </style>
-  <style is="custom-style">
-    body {
-      font-family: 'Roboto', 'Noto', sans-serif;
-      font-size: 14px;
-      margin: 0;
-      background-color: #F7F7F7;
-      text-align: center;
-    }
-
-    paper-button {
-      color: white;
-      margin: 10px;
-      background-color: #0087CA;
-      white-space: nowrap;
-    }
-    /*login box container*/
-
-    .logo {
-      margin: 30px auto;
-      display: block;
-    }
-
-    h1 {
-      color: #25A549;
-      text-align: center;
-    }
-
-    .login-container {
-      display: block;
-      padding: 30px 25px;
-      margin: 0 auto;
-      width: 400px;
-      background-color: #fff;
-      text-align: left;
-      @apply(--shadow-elevation-2dp);
-    }
-
-    .login-container gold-email-input,
-    .login-container paper-input {
-      margin-bottom: 30px;
-    }
-
-    .login-container paper-button {
-      display: block;
-    }
-
-    h3 {
-      text-align: center;
-    }
-
-    a {
-      font-size: 18px;
-      color: #428BCA;
-      text-decoration: none;
-    }
-
-    a:hover,
-    a:focus {
-      color: #2A6496;
-      text-decoration: underline;
-    }
-
-    a:active,
-    a:hover {
-      outline: 0;
-    }
-  </style>
-</head>
-
+<meta charset="UTF-8">
+<title>Teamchat Integration Server | Login</title>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
+<link rel="stylesheet" href="https://enterprise.teamchat.com/webjim-echat/static/third-party/bootstrap/css/bootstrap.min.css" type="text/css">
+<link rel="stylesheet" href="https://enterprise.teamchat.com/webjim-echat/static/css/style.css" type="text/css"/>
+<script type="text/javascript" src="https://enterprise.teamchat.com/webjim-echat/static/third-party/jQuery/jquery-1.7.1/jquery-1.7.1.min.js"></script>
+<script type="text/javascript" src="https://enterprise.teamchat.com/webjim-echat/static/third-party/jQuery/jquery-tmpl/jquery.tmpl.min.js"></script>
+<script type="text/javascript" src="https://enterprise.teamchat.com/webjim-echat/static/third-party/crypt/md5.js"></script>
+<script type="text/javascript" src="https://enterprise.teamchat.com/webjim-echat/static/third-party/jQuery/jquery-1.7.1/jquery.cookie.js"></script>
+<script>
+$(document).ready(function(){
+	var url = location.search;
+	if(url.indexOf('errMsg=') > 0)
+	{
+		var errMsg = url.substring(url.indexOf('errMsg='), url.length).split('=')[1];
+		console.log(errMsg);
+		errMsg = unescape(errMsg);
+		$('#errMsg').text(errMsg).show();
+	}
+});
+</script>
+<link rel="shortcut icon" href="https://enterprise.teamchat.com/webjim-echat/static/img/favicon.png" type="image/x-icon">
 <body>
-  <img class="logo" src="img/logo.png" alt="teamchat logo" />
-  <h1>Sign In</h1>
-  <div class="login-container">
-    <form action="http://requestb.in/twbmbntw" method="post">
-      <gold-email-input name="username" required auto-validate error-message="Please enter a valid email" label="Email"></gold-email-input>
-      <paper-input name="password" type="password" required label="Password"></paper-input>
-      <paper-button onclick="this.parentNode.submit()" raised>Sign In</paper-button>
-      <button type="submit">Native Submit</button>
-    </form>
-  </div>
-  <h3>
-    Don't have an account?
-  </h3>
-  <a href="http://teamchat.com/dl">Sign up</a>
-</body>
+	<div class="gs-content">
+		<div class="logo">
+			<a href="https://www.teamchat.com"><img src="https://enterprise.teamchat.com/webjim-echat/static/img/logo.png" alt="Teamchat" title="Teamchat - Powered by Webaroo" /></a>
+		</div>
+		<header>
+			<h1>Sign In</h1>
+		</header>
+		<div class="gs-main-content">
+			<form id="login-form" method="POST" action="http://10.10.11.242:8080/TeamchatIntegrationServer/login" autocomplete="off">
+				<div class="alerts"></div>
+				<div class="input-row">
+					<input type="email" name="email" id="email" class="input password required" placeholder="Email" data-email="true"/>
+				</div>
+				<div class="input-row">
+					<input type="password" name="password" id="password" class="input password required" placeholder="Password">
+				</div>
+				<div class="clearfix" style="display:none">
+					<input type="checkbox" name="rememberme" id="rememberme" class="required pull-left me"/><label for="rememberme" class="pull-left remember"> Remember Me</label>
+				</div>
+				<div class="button-row">
+					<input type="submit" class="button disable-on-click" value="Sign In">
+				</div>
+				<div class="clearfix" style="display:none; color: red;font-style: italic;" id="errMsg" name="errMsg">
+				</div>
+				<div class="links clearfix" style="display:none"><!--  style="display:none"-->
+					<a href="getotp.html?page=forgot-password&v=2.8.4">Forgot Password?</a><br/>
+					<div class="pull-left">I am a <a href="getotp.html?page=mobile-user&v=2.8.4">mobile user</a></div>
+					<div class="pull-right">Go to <a href="https://www.teamchat.com" target="_blank" title="Go to main website" title="Teamchat.com">Main Website</a></div>
+				</div>
+			</form>
+		</div>
+		<div class="register">Don't have an account?<br /><a href="http://teamchat.com/dl">Sign up</a>
+        </div>
+        </div>
 
+	<script type="text/javascript" src="https://enterprise.teamchat.com/webjim-echat/static/third-party/bootstrap/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="https://enterprise.teamchat.com/webjim-echat/static/js/echat.js?v=2.9"></script>
+	<script type="text/javascript" src="https://enterprise.teamchat.com/webjim-echat/static/js/login-signup-verify.js?v=2.9"></script>
+</body>
 </html>

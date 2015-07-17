@@ -1,0 +1,4 @@
+1. uncomment these and remove the jugaad! // client.adminEmail = '${sessionScope.email}';
+2. put jsp tags according to register.jsp
+3. map relevent events i.e logout , login , redirects .etc
+4. replace util.js with the original util.js

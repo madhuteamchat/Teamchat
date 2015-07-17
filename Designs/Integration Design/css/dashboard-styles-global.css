@@ -1,0 +1,19 @@
+/*custom scrollbar*/
+
+body::-webkit-scrollbar {
+  background: rgba(0, 0, 0, 0);
+  width: 10px;
+}
+body::-webkit-scrollbar-thumb {
+  background: #BDBDBD;
+}
+
+/*description text*/
+
+.service::after {
+  content: attr(title);
+  position: absolute;
+  bottom: -28px;
+  left: 0;
+  right: 0;
+}
