@@ -42,7 +42,7 @@
 		<link>
 			<name>WebContent/WEB-INF/lib/teamchat-client-sdk.1.5.jar</name>
 			<type>1</type>
-			<locationURI>PARENT-4-PROJECT_LOC/Downloads/teamchat-client-sdk.1.5.jar%20(2)</locationURI>
+			<locationURI>PARENT-4-PROJECT_LOC/Downloads/teamchat-client-sdk.1.5.jar</locationURI>
 		</link>
 	</linkedResources>
 </projectDescription>
