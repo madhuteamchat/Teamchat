@@ -52,7 +52,7 @@ public class Redirect_url extends HttpServlet {
 	}
 
 	// HTTP POST request
-	private void sendPost(String url, String User_agent, String urlParameters)
+	private int sendPost(String url, String User_agent, String urlParameters)
 			throws Exception {
 		URL obj = new URL(url);
 		HttpsURLConnection con = (HttpsURLConnection) obj.openConnection();
@@ -89,8 +89,8 @@ public class Redirect_url extends HttpServlet {
 		// System.out.println(token.getAccess_token());
 		Db_handler db = new Db_handler();
 		String get_response = sendGet_auth(
-				"https://launchpad.37signals.com/authorization.json",
-				"Teamchat (http://www.teamchat.com/en/)", "",
+				Universal.AUTHORIZATION_URL,
+				Universal.APP_NAME, "",
 				token.getAccess_token());
 		// parsing a json like this
 		// {
@@ -117,6 +117,7 @@ public class Redirect_url extends HttpServlet {
 				.getHref(), token.getExpires_in(), token.getRefresh_token(),
 				token.getAccess_token());
 		System.out.println("Authenticated: " + db.StorageHandler(bb));
+		return responseCode;
 	}
 
 	/**
@@ -126,22 +127,35 @@ public class Redirect_url extends HttpServlet {
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		PrintWriter out = response.getWriter();
+		int resp_code = 400;
 		try {
-			sendPost(
-					"https://launchpad.37signals.com/authorization/token",
+			resp_code = sendPost(
+					Universal.TOKEN_URL,
 					request.getHeader("User-Agent"),
-					"type=web_server&client_id=d48fa4605608e6bc3405232a71051aeb171eda35"
+					"type=web_server&client_id=" + Universal.CLIENT_ID
 							+ "&redirect_uri="
 							+ URLEncoder
 									.encode(Universal.REDIRECT_URL, "UTF-8")
-							+ "&client_secret=cd7f2cc27a364efe2b7299621a265a788d17a24a"
+							+ "&client_secret=" + Universal.CLIENT_SECRET
 							+ "&code=" + request.getParameter("code"));
 		} catch (Exception e) {
 			// TODO: handle exception
 			out.println(e);
 		}
 		// TODO retrieve CLIENT_ID ,etc from db
-		out.println("<script>window.close();</script>");
+		// redirect according to request
+		// Set response content type
+		response.setContentType("text/html");
+		// New location to be redirected
+		String site = "";
+		if (resp_code <= 200) {
+			site = "success.html";
+		} else {
+			site = "error.html";
+		}
+		// redirect to location
+		response.sendRedirect(site);
+		// out.println("<script>window.close();</script>");
 	}
 
 	// HTTP GET request

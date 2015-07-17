@@ -40,7 +40,7 @@ public class Db_handler {
 			connect = DriverManager.getConnection(DB_URL);
 			statement = connect.createStatement();
 			resultSet = statement
-					.executeQuery("select * from basecamp_authorized where email = '"
+					.executeQuery("select * from " + Universal.TABLE_NAME + " where email = '"
 							+ email + "'");
 			resultSet.next();
 			bb.setAccess_token(resultSet.getString("access_token"));
@@ -66,7 +66,7 @@ public class Db_handler {
 			connect = DriverManager.getConnection(DB_URL);
 			statement = connect.createStatement();
 			resultSet = statement
-					.executeQuery("select email from basecamp_authorized where email='"
+					.executeQuery("select email from " + Universal.TABLE_NAME + " where email='"
 							+ email + "'");
 			// check if result set is empty or not
 			while (resultSet.next()) {
@@ -98,7 +98,7 @@ public class Db_handler {
 			connect = DriverManager.getConnection(DB_URL);
 			statement = connect.createStatement();
 			preparedStatement = connect
-					.prepareStatement("DELETE FROM basecamp_authorized WHERE email = ?");
+					.prepareStatement("DELETE FROM " + Universal.TABLE_NAME + " WHERE email = ?");
 			preparedStatement.setString(1, email);
 			preparedStatement.executeUpdate();
 			return true;
@@ -117,7 +117,7 @@ public class Db_handler {
 			connect = DriverManager.getConnection(DB_URL);
 			statement = connect.createStatement();
 			preparedStatement = connect
-					.prepareStatement("insert into basecamp_authorized values (default, ?, ?, ?, ?, ?, ?, ?)");
+					.prepareStatement("insert into " + Universal.TABLE_NAME + " values (default, ?, ?, ?, ?, ?, ?, ?)");
 			preparedStatement.setString(1, bb.getEmail());
 			preparedStatement.setString(2, bb.getBasecamp_email());
 			preparedStatement.setString(3, bb.getHref());
@@ -142,7 +142,7 @@ public class Db_handler {
 			connect = DriverManager.getConnection(DB_URL);
 			statement = connect.createStatement();
 			preparedStatement = connect
-					.prepareStatement("update basecamp_authorized set access_token = ?, refresh_token = ?, expires_in = ?, authenticated = ? where email = ?");
+					.prepareStatement("update " + Universal.TABLE_NAME + " set access_token = ?, refresh_token = ?, expires_in = ?, authenticated = ? where email = ?");
 			preparedStatement.setString(1, bb.getAccess_token());
 			preparedStatement.setString(2, bb.getRefresh_token());
 			preparedStatement.setString(3, bb.getExpires_in());
