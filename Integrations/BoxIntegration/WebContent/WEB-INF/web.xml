@@ -5,7 +5,7 @@
     <welcome-file>welcome.html</welcome-file>
   </welcome-file-list>
   <listener>
-    <listener-class></listener-class>
+    <listener-class>com.teamchat.client.utils.TeamchatContextListener</listener-class>
   </listener>
   <context-param>
     <param-name>bot-email</param-name>
@@ -25,24 +25,28 @@
   </context-param>
   <context-param>
     <param-name>db-name</param-name>
-    <param-value></param-value>
+    <param-value>Bot</param-value>
   </context-param>
   <context-param>
     <param-name>db-user</param-name>
-    <param-value></param-value>
+    <param-value>tcinterns</param-value>
   </context-param>
   <context-param>
     <param-name>db-password</param-name>
     <param-value></param-value>
   </context-param>
-   <context-param>
-    <param-name>client-id</param-name>
-    <param-value></param-value>
-  </context-param>
-  <context-param>
-    <param-name>secret</param-name>
-    <param-value></param-value>
-  </context-param>
+  	<context-param>
+		<param-name>log-location</param-name>
+		<param-value>./logs</param-value>
+	</context-param>
+	<context-param>
+		<param-name>log-level</param-name>
+		<param-value>ERROR</param-value>
+	</context-param>
+	<context-param>
+		<param-name>log-filename</param-name>
+		<param-value>box</param-value>
+	</context-param>
   <context-param>
     <param-name>threading</param-name>
     <param-value>SINGLE</param-value>

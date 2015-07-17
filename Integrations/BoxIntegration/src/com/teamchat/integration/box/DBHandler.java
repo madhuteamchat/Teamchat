@@ -1,6 +1,6 @@
 package com.teamchat.integration.box;
 
-import java.io.FileInputStream;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -16,11 +16,10 @@ public class DBHandler {
 	String path;
 	
 	DBHandler () {
-		path = "/home/intern3/Documents/data/solutions-config/workflow-data/box/box-config.properties";
 		configProps = new Properties();
 		
 		try {
-			configProps = loadPropertyFileFromDisk(path);
+			configProps = loadPropertyFromClasspath("box-config", DBHandler.class);
 			Class.forName("com.mysql.jdbc.Driver").newInstance();
 			conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/" + configProps.getProperty("dbname").trim(), configProps.getProperty("dbuser").trim(), configProps.getProperty("dbpass").trim());
 			stmt = conn.createStatement();
@@ -38,6 +37,12 @@ public class DBHandler {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		try {
+			conn.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public String[] getData (String state) {
@@ -48,6 +53,12 @@ public class DBHandler {
 			for (int i=0;i<2;i++)
 				data[i] = rs.getString(i+1);
 		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		try {
+			conn.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return data;
@@ -61,6 +72,12 @@ public class DBHandler {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		try {
+			conn.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public String getAccessData (String email) {
@@ -70,6 +87,12 @@ public class DBHandler {
 			rs.next();
 			data = rs.getString("accesstoken");
 		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		try {
+			conn.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return data;
@@ -87,17 +110,9 @@ public class DBHandler {
 		return data;
 	}
 	
-	public static Properties loadPropertyFileFromDisk(String filePath) throws Exception
-	{
-		String os = System.getProperty("os.name");
-		if (os.toLowerCase().contains("windows")) {
-			filePath = "d:" + filePath;
-		}
-		
-		Properties configProp = new Properties();
-		FileInputStream fIS = new FileInputStream(filePath);
-		configProp.load(fIS);
-		fIS.close();
-		return configProp;
+	public static Properties loadPropertyFromClasspath(String fileName, Class<?> type) throws IOException {
+		Properties prop = new Properties();
+		prop.load(type.getClassLoader().getResourceAsStream(fileName));
+		return prop;
 	}
 }

@@ -35,14 +35,18 @@
     <param-name>db-password</param-name>
     <param-value>PakyovBosh7</param-value>
   </context-param>
-   <context-param>
-    <param-name>client-id</param-name>
-    <param-value>iyjj6g8fglaxqn17u48uvmzv6i8je1uo</param-value>
-  </context-param>
-  <context-param>
-    <param-name>secret</param-name>
-    <param-value>R5yYhiCTd0L2L4r8ZigCosUK5tYOFxgY</param-value>
-  </context-param>
+  	<context-param>
+		<param-name>log-location</param-name>
+		<param-value>./logs</param-value>
+	</context-param>
+	<context-param>
+		<param-name>log-level</param-name>
+		<param-value>ERROR</param-value>
+	</context-param>
+	<context-param>
+		<param-name>log-filename</param-name>
+		<param-value>box</param-value>
+	</context-param>
   <context-param>
     <param-name>threading</param-name>
     <param-value>SINGLE</param-value>

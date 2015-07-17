@@ -13,7 +13,7 @@
   </context-param>
   <context-param>
     <param-name>bot-password</param-name>
-    <param-value>password@123</param-value>
+    <param-value></param-value>
   </context-param>
   <context-param>
     <param-name>bot-class</param-name>
@@ -33,7 +33,7 @@
   </context-param>
   <context-param>
     <param-name>db-password</param-name>
-    <param-value>PakyovBosh7</param-value>
+    <param-value></param-value>
   </context-param>
   <context-param>
     <param-name>threading</param-name>
