@@ -22,7 +22,7 @@ public class glassdoorintegrator {
 				//pn =page number
 				
 				Request request = new Request.Builder()
-				  .url("http://api.glassdoor.com/api/api.htm?t.p=39226&t.k=hl6voUXhoGA&format=json&v=1&action=employers&q="+Keyword+"&ps=2&pn="+pn+"&l="+Location)
+				  .url("http://api.glassdoor.com/api/api.htm?t.p=39226&t.k=hl6voUXhoGA&format=json&v=1&action=employers&q="+Keyword+"&ps=1&pn="+pn+"&l="+Location)
 				  .get()
 				  .build();
 

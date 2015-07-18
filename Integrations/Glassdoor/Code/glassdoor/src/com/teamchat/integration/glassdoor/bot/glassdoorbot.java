@@ -18,7 +18,9 @@ import com.teamchat.integration.glassdoor.classes.Response;
 
 public class glassdoorbot {
 
-	int pn,ttp,ttc;
+	int pn,ttp,ttc,flag;
+String key;
+String loc;
 	
 	@OnKeyword("help")
 	public void help(TeamchatAPI api) {
@@ -30,29 +32,23 @@ public class glassdoorbot {
 						.setQuestionHtml("<h4><b>Hi, I'm Glassdoor Bot.</b></h4>"
 								+ "<img src=\"http://recruitingwebinars.com/wp-content/uploads/sites/3/2014/06/GD_forEmployers_Logo_600x200Pixels11.png\" height=\"90\" width=\"230\" />"
 								+ "<br />"
-								+ "<br /><b>You can use me to search any gif image, using following keywords:</b>"
+								+ "<br /><b>You can use me to search any company and find its rating and reviews, using following keywords:</b>"
 								+ "<br />"
 								+ "<ul type=\"square\"; style=\"color:#359FD8\";><li><a1 style=\"color:black\";><b>search - </b></a1><a2 style=\"color:#359FD8\";>"
-								+ "Type this command to search any gif image"
+								+ "Type this command to search any company"
 								+ "</a2></li><li><a3 style=\"color:black\";><b>next - </b></a3><a4 style=\"color:#359FD8\";>"
 								+ "Type this command to check the next result page for your searched keyword"
-								+ "</a4></li>"
-								+ "</a2></li><li><a3 style=\"color:black\";><b>rename - </b></a3><a4 style=\"color:#359FD8\";>"
-								+ "Type this command to change the name of the tags currently stored"
-								+ "</a4></li></ul>"
-								+ "<br />"
-								+ "<br /><b>Note: </b><a1  style=\"color:#359FD8\";>To make your tags work , You have to make a P2P group with the bot present inside it.</a1>")));
+								+ "</a4></li></ul>")));
 
 		// list of keywords
 		// 1.)search
-		// 2.)rename
-		// 3.)next
+		// 2.)next
 
 	}
 	
 	@OnKeyword("search")
 	public void login(TeamchatAPI api) {
-
+flag=0;
 		Form f = api.objects().form();
 		f.addField(api.objects().input().label("Query phrase to search for:").name("keyword"));
 		f.addField(api.objects().input().label("Location:").name("Location"));
@@ -63,7 +59,7 @@ public class glassdoorbot {
 				+ "<a1 style=\"color:#359FD8\";><b>powered by </b></a1><img src='http://www.glassdoor.com/static/img/api/glassdoor_logo_80.png' style=\"padding-bottom: 0.35cm\";/></a>"
 				+ "<br />"
 				+ "<h5><b>Enter any occupation or job title with the location you want to search for in the reply option.</b><h5>"
-				+ "<br /><b>Note: </b><a1  style=\"color:#359FD8\";>Location and job title are not mandatory.</a1>")
+				+ "<br /><b>Note: </b><a1  style=\"color:#359FD8\";>One field is required.</a1>")
 				.setReplyScreen(f).setReplyLabel("Reply").alias("getdata");
 		api.perform(api.context().currentRoom().post(prime));
 	}
@@ -73,12 +69,13 @@ public class glassdoorbot {
 		
 		String keyword = api.context().currentReply().getField("keyword");
 		String Location = api.context().currentReply().getField("Location");
-		String temp = "";
-		String temp1 = "";
+		
 		pn =1;
 		String resp;
 		int l,l1;
 
+		String temp="";
+		String temp1="";
 		keyword = keyword.trim();
 		Location = Location.trim();
 		l1 = Location.length();
@@ -95,7 +92,8 @@ public class glassdoorbot {
 			} else
 				temp1 = temp1 + Location.charAt(i);
 		}
-		
+		key=temp;
+		loc=temp1;
 		glassdoorintegrator ob1 = new glassdoorintegrator();
 		//getting images from the giphy server.
 		resp = ob1.getcompanies(temp, temp1,pn);
@@ -197,76 +195,280 @@ public class glassdoorbot {
 			if(ttc>0)
 			{
 				for (Employer emdata : r.getEmployers()) {
-					FeaturedReview fr = emdata.getFeaturedReview();
-					Ceo c = emdata.getCeo();
-					Image i = c.getImage();
 					
-					PrimaryChatlet prime1 = new PrimaryChatlet();
-					prime1.setQuestionHtml("<h2><b>"+emdata.getName()
-							+ "</b></h2>"
-							+ "<img src=\""+emdata.getSquareLogo()+"\" height=\"120\" width=\"120\" style=\"padding-left: 1cm\";/>"
-							+ "<br />"
-							+ "<h3><b>Company Details:</b></h3>"
-							+ "<ul type=\"square\"; style=\"color:#359FD8\";><li><a1 style=\"color:black\";><b>Industry - </b></a1><a2 style=\"color:#359FD8\";>"
-							+ emdata.getIndustry()
-							+ "</a2></li><li><a3 style=\"color:black\";><b>Website - </b></a3><a4 style=\"color:#359FD8\";>"
-							+ emdata.getWebsite()
-							+ "</a4></li><li><a7 style=\"color:black\";><b>Number of Ratings - </b></a7><a8 style=\"color:#359FD8\";>"
-							+ emdata.getNumberOfRatings()
-							+ "</a8></li><li><a9 style=\"color:black\";><b>Overall Rating - </b></a9><a10 style=\"color:#359FD8\";>"
-							+ emdata.getOverallRating() + "</a10></li>"
-							+"<li><a9 style=\"color:black\";><b>Rating Description - </b></a9><a10 style=\"color:#359FD8\";>"
-							+ emdata.getRatingDescription() + "</a10></li>"
-							+"<li><a9 style=\"color:black\";><b>Culture and Values Rating - </b></a9><a10 style=\"color:#359FD8\";>"
-							+ emdata.getCultureAndValuesRating() + "</a10></li>"
-							+"<li><a9 style=\"color:black\";><b>Senior Leadership Rating - </b></a9><a10 style=\"color:#359FD8\";>"
-							+ emdata.getSeniorLeadershipRating() + "</a10></li>"
-							+"<li><a9 style=\"color:black\";><b>Compensation and Benefits Rating - </b></a9><a10 style=\"color:#359FD8\";>"
-							+ emdata.getCompensationAndBenefitsRating() + "</a10></li>"
-							+"<li><a9 style=\"color:black\";><b>Career Opportunities Rating - </b></a9><a10 style=\"color:#359FD8\";>"
-							+ emdata.getCareerOpportunitiesRating() + "</a10></li>"
-							+"<li><a9 style=\"color:black\";><b>Worklife Balance Rating - </b></a9><a10 style=\"color:#359FD8\";>"
-							+ emdata.getWorkLifeBalanceRating() + "</a10></li>"
-							+"<li><a9 style=\"color:black\";><b>Recommend To Friend Rating - </b></a9><a10 style=\"color:#359FD8\";>"
-							+ emdata.getRecommendToFriendRating() + "</a10></li>"
-							+ "</ul>"
-							+ "<br />"
-							+ "<h3><b>Review Details:</b></h3>"
-							+ "<ul type=\"square\"; style=\"color:#359FD8\";><li><a1 style=\"color:black\";><b>Job Title - </b></a1><a2 style=\"color:#359FD8\";>"
-							+ fr.getJobTitle()
-							+ "</a2></li>"
-							+"<li><a9 style=\"color:black\";><b>Location - </b></a9><a10 style=\"color:#359FD8\";>"
-							+ fr.getLocation() + "</a10></li>"
-							+"<li><a9 style=\"color:black\";><b>Review DateTime - </b></a9><a10 style=\"color:#359FD8\";>"
-							+ fr.getReviewDateTime() + "</a10></li></ul>"
-							+ "<center><h4><b>Review</b></h4></center>"
-							+ "<center><h4><a1 style=\"color:#484848\";>\""+fr.getHeadline()+"\"</a1></h4></center>"
-							+"<ul type=\"square\"; style=\"color:#359FD8\";><li><a9 style=\"color:black\";><b>Pros - </b></a9><a10 style=\"color:#359FD8\";>"
-							+ fr.getPros() + "</a10></li>"
-							+"<li><a9 style=\"color:black\";><b>Cons - </b></a9><a10 style=\"color:#359FD8\";>"
-							+ fr.getCons() + "</a10></li>"
-							+ "</ul>"
-							+ "<h3><b>CEO Details:</b></h3>"
-							+ "<img src=\""+i.getSrc()+"\" height=\"120\" width=\"120\" style=\"padding-left: 1cm\";/>"
-							+ "<br />"
-							+ "<br />"
-							+"<ul type=\"square\"; style=\"color:#359FD8\";><li><a9 style=\"color:black\";><b>Name - </b></a9><a10 style=\"color:#359FD8\";>"
-							+ c.getName() + "</a10></li>"
-							+"<li><a9 style=\"color:black\";><b>Title - </b></a9><a10 style=\"color:#359FD8\";>"
-							+ c.getTitle() + "</a10></li></ul>"
-							);
+					FeaturedReview fr;
+					Ceo c;
+					Image i;
+					try {
+						fr = emdata.getFeaturedReview();
+						c = emdata.getCeo();
+						i = c.getImage();
+						PrimaryChatlet prime1 = new PrimaryChatlet();
+						prime1.setQuestionHtml("<h2><b>"+emdata.getName()
+								+ "</b></h2>"
+								+ "<img src=\""+emdata.getSquareLogo()+"\" height=\"120\" width=\"120\" />"
+								+ "<br />"
+								+ "<h3><b>Company Details:</b></h3>"
+								+ "<ul type=\"square\"; style=\"color:#359FD8\";><li><a1 style=\"color:black\";><b>Industry - </b></a1><a2 style=\"color:#359FD8\";>"
+								+ emdata.getIndustry()
+								+ "</a2></li><li><a3 style=\"color:black\";><b>Website - </b></a3><a4 style=\"color:#359FD8\"; href=\""
+								+ emdata.getWebsite()
+								+ "\">"
+								+ emdata.getWebsite()
+								+ "</a4></li><li><a7 style=\"color:black\";><b>Number of Ratings - </b></a7><a8 style=\"color:#359FD8\";>"
+								+ emdata.getNumberOfRatings()
+								+ "</a8></li><li><a9 style=\"color:black\";><b>Overall Rating - </b></a9><a10 style=\"color:#359FD8\";>"
+								+ emdata.getOverallRating() + "</a10></li>"
+								+"<li><a9 style=\"color:black\";><b>Rating Description - </b></a9><a10 style=\"color:#359FD8\";>"
+								+ emdata.getRatingDescription() + "</a10></li>"
+								+"<li><a9 style=\"color:black\";><b>Culture and Values Rating - </b></a9><a10 style=\"color:#359FD8\";>"
+								+ emdata.getCultureAndValuesRating() + "</a10></li>"
+								+"<li><a9 style=\"color:black\";><b>Senior Leadership Rating - </b></a9><a10 style=\"color:#359FD8\";>"
+								+ emdata.getSeniorLeadershipRating() + "</a10></li>"
+								+"<li><a9 style=\"color:black\";><b>Compensation and Benefits Rating - </b></a9><a10 style=\"color:#359FD8\";>"
+								+ emdata.getCompensationAndBenefitsRating() + "</a10></li>"
+								+"<li><a9 style=\"color:black\";><b>Career Opportunities Rating - </b></a9><a10 style=\"color:#359FD8\";>"
+								+ emdata.getCareerOpportunitiesRating() + "</a10></li>"
+								+"<li><a9 style=\"color:black\";><b>Worklife Balance Rating - </b></a9><a10 style=\"color:#359FD8\";>"
+								+ emdata.getWorkLifeBalanceRating() + "</a10></li>"
+								+"<li><a9 style=\"color:black\";><b>Recommend To Friend Rating - </b></a9><a10 style=\"color:#359FD8\";>"
+								+ emdata.getRecommendToFriendRating() + "</a10></li>"
+								+ "</ul>"
+								+ "<br />"
+								+ "<h3><b>Review Details:</b></h3>"
+								+ "<ul type=\"square\"; style=\"color:#359FD8\";><li><a1 style=\"color:black\";><b>Job Title - </b></a1><a2 style=\"color:#359FD8\";>"
+								+ fr.getJobTitle()
+								+ "</a2></li>"
+								+"<li><a9 style=\"color:black\";><b>Location - </b></a9><a10 style=\"color:#359FD8\";>"
+								+ fr.getLocation() + "</a10></li>"
+								+"<li><a9 style=\"color:black\";><b>Review DateTime - </b></a9><a10 style=\"color:#359FD8\";>"
+								+ fr.getReviewDateTime() + "</a10></li></ul>"
+								+ "<center><h4><b>Review</b></h4></center>"
+								+ "<center><h4><a1 style=\"color:#484848\";>\""+fr.getHeadline()+"\"</a1></h4></center>"
+								+"<ul type=\"square\"; style=\"color:#359FD8\";><li><a9 style=\"color:black\";><b>Pros - </b></a9><a10 style=\"color:#359FD8\";>"
+								+ fr.getPros() + "</a10></li>"
+								+"<li><a9 style=\"color:black\";><b>Cons - </b></a9><a10 style=\"color:#359FD8\";>"
+								+ fr.getCons() + "</a10></li>"
+								+ "</ul>"
+								+ "<h3><b>CEO Details:</b></h3>"
+								+ "<img src=\""+i.getSrc()+"\" height=\"120\" width=\"120\" />"
+								+ "<br />"
+								+ "<br />"
+								+"<ul type=\"square\"; style=\"color:#359FD8\";><li><a9 style=\"color:black\";><b>Name - </b></a9><a10 style=\"color:#359FD8\";>"
+								+ c.getName() + "</a10></li>"
+								+"<li><a9 style=\"color:black\";><b>Title - </b></a9><a10 style=\"color:#359FD8\";>"
+								+ c.getTitle() + "</a10></li></ul>"
+								);
+						
+						api.perform(api.context().currentRoom().post(prime1));
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+						
+						PrimaryChatlet prime1 = new PrimaryChatlet();
+						prime1.setQuestionHtml("<h2><b>"+emdata.getName()
+								+ "</b></h2>"
+								+ "<img src=\""+emdata.getSquareLogo()+"\" height=\"120\" width=\"120\" />"
+								+ "<br />"
+								+ "<h3><b>Company Details:</b></h3>"
+								+ "<ul type=\"square\"; style=\"color:#359FD8\";><li><a1 style=\"color:black\";><b>Industry - </b></a1><a2 style=\"color:#359FD8\";>"
+								+ emdata.getIndustry()
+								+ "</a2></li><li><a3 style=\"color:black\";><b>Website - </b></a3><a4 style=\"color:#359FD8\"; href=\""
+								+ emdata.getWebsite()
+								+ "\">"
+								+ emdata.getWebsite()
+								+ "</a4></li><li><a7 style=\"color:black\";><b>Number of Ratings - </b></a7><a8 style=\"color:#359FD8\";>"
+								+ emdata.getNumberOfRatings()
+								+ "</a8></li><li><a9 style=\"color:black\";><b>Overall Rating - </b></a9><a10 style=\"color:#359FD8\";>"
+								+ emdata.getOverallRating() + "</a10></li>"
+								+"<li><a9 style=\"color:black\";><b>Rating Description - </b></a9><a10 style=\"color:#359FD8\";>"
+								+ emdata.getRatingDescription() + "</a10></li>"
+								+"<li><a9 style=\"color:black\";><b>Culture and Values Rating - </b></a9><a10 style=\"color:#359FD8\";>"
+								+ emdata.getCultureAndValuesRating() + "</a10></li>"
+								+"<li><a9 style=\"color:black\";><b>Senior Leadership Rating - </b></a9><a10 style=\"color:#359FD8\";>"
+								+ emdata.getSeniorLeadershipRating() + "</a10></li>"
+								+"<li><a9 style=\"color:black\";><b>Compensation and Benefits Rating - </b></a9><a10 style=\"color:#359FD8\";>"
+								+ emdata.getCompensationAndBenefitsRating() + "</a10></li>"
+								+"<li><a9 style=\"color:black\";><b>Career Opportunities Rating - </b></a9><a10 style=\"color:#359FD8\";>"
+								+ emdata.getCareerOpportunitiesRating() + "</a10></li>"
+								+"<li><a9 style=\"color:black\";><b>Worklife Balance Rating - </b></a9><a10 style=\"color:#359FD8\";>"
+								+ emdata.getWorkLifeBalanceRating() + "</a10></li>"
+								+"<li><a9 style=\"color:black\";><b>Recommend To Friend Rating - </b></a9><a10 style=\"color:#359FD8\";>"
+								+ emdata.getRecommendToFriendRating() + "</a10></li>"
+								+ "</ul>");
+						api.perform(api.context().currentRoom().post(prime1));
+					}
+			
+				}
+			flag=1;	
+			}
+			else
+			{
+				PrimaryChatlet prime2 = new PrimaryChatlet();
+				prime2.setQuestionHtml("<h4><b>Sorry, No records to display!!!</b></h4>");
+				api.perform(api.context().currentRoom().post(prime2));
+			}
+	
+		}
+	}
+	
+	@OnKeyword("next")
+	public void next(TeamchatAPI api) throws IOException {
+		
+		
+		if(pn<=ttp && flag==1)
+		{
+			pn++;
+		glassdoorintegrator ob1 = new glassdoorintegrator();
+		//getting images from the giphy server.
+		String resp = ob1.getcompanies(key, loc,pn);
+		
+		//System.out.println(resp);
+		
+		
+
+		if (resp.equals("Error")) {
+			PrimaryChatlet prime = new PrimaryChatlet();
+			api.perform(api
+					.context()
+					.currentRoom()
+					.post(prime.setQuestionHtml("<br /><b>Error :</b>"
+							+ "<br /><b>Status Code: 403</b>"
+							+ "<br /><b>StatusDesc: Forbidden</b>"
+							+ "<br /><b>Something went wrong!</b>")));
+
+		
+		}
+		else
+		{
+
+			Gson gson = new Gson();
+			//main class for getters and setters : Glassdoormain
+			Glassdoormain data = gson.fromJson(resp, Glassdoormain.class);
+			Response r = data.getResponse();
+				
+					for (Employer emdata : r.getEmployers()) {
+					FeaturedReview fr;
+					Ceo c;
+					Image i;
+					try {
+						fr = emdata.getFeaturedReview();
+						c = emdata.getCeo();
+						i = c.getImage();
+						
+						PrimaryChatlet prime1 = new PrimaryChatlet();
+						prime1.setQuestionHtml("<h2><b>"+emdata.getName()
+								+ "</b></h2>"
+								+ "<img src=\""+emdata.getSquareLogo()+"\" height=\"120\" width=\"120\" />"
+								+ "<br />"
+								+ "<h3><b>Company Details:</b></h3>"
+								+ "<ul type=\"square\"; style=\"color:#359FD8\";><li><a1 style=\"color:black\";><b>Industry - </b></a1><a2 style=\"color:#359FD8\";>"
+								+ emdata.getIndustry()
+								+ "</a2></li><li><a3 style=\"color:black\";><b>Website - </b></a3><a4 style=\"color:#359FD8\"; href=\""
+								+ emdata.getWebsite()
+								+ "\">"
+								+ emdata.getWebsite()
+								+ "</a4></li><li><a7 style=\"color:black\";><b>Number of Ratings - </b></a7><a8 style=\"color:#359FD8\";>"
+								+ emdata.getNumberOfRatings()
+								+ "</a8></li><li><a9 style=\"color:black\";><b>Overall Rating - </b></a9><a10 style=\"color:#359FD8\";>"
+								+ emdata.getOverallRating() + "</a10></li>"
+								+"<li><a9 style=\"color:black\";><b>Rating Description - </b></a9><a10 style=\"color:#359FD8\";>"
+								+ emdata.getRatingDescription() + "</a10></li>"
+								+"<li><a9 style=\"color:black\";><b>Culture and Values Rating - </b></a9><a10 style=\"color:#359FD8\";>"
+								+ emdata.getCultureAndValuesRating() + "</a10></li>"
+								+"<li><a9 style=\"color:black\";><b>Senior Leadership Rating - </b></a9><a10 style=\"color:#359FD8\";>"
+								+ emdata.getSeniorLeadershipRating() + "</a10></li>"
+								+"<li><a9 style=\"color:black\";><b>Compensation and Benefits Rating - </b></a9><a10 style=\"color:#359FD8\";>"
+								+ emdata.getCompensationAndBenefitsRating() + "</a10></li>"
+								+"<li><a9 style=\"color:black\";><b>Career Opportunities Rating - </b></a9><a10 style=\"color:#359FD8\";>"
+								+ emdata.getCareerOpportunitiesRating() + "</a10></li>"
+								+"<li><a9 style=\"color:black\";><b>Worklife Balance Rating - </b></a9><a10 style=\"color:#359FD8\";>"
+								+ emdata.getWorkLifeBalanceRating() + "</a10></li>"
+								+"<li><a9 style=\"color:black\";><b>Recommend To Friend Rating - </b></a9><a10 style=\"color:#359FD8\";>"
+								+ emdata.getRecommendToFriendRating() + "</a10></li>"
+								+ "</ul>"
+								+ "<br />"
+								+ "<h3><b>Review Details:</b></h3>"
+								+ "<ul type=\"square\"; style=\"color:#359FD8\";><li><a1 style=\"color:black\";><b>Job Title - </b></a1><a2 style=\"color:#359FD8\";>"
+								+ fr.getJobTitle()
+								+ "</a2></li>"
+								+"<li><a9 style=\"color:black\";><b>Location - </b></a9><a10 style=\"color:#359FD8\";>"
+								+ fr.getLocation() + "</a10></li>"
+								+"<li><a9 style=\"color:black\";><b>Review DateTime - </b></a9><a10 style=\"color:#359FD8\";>"
+								+ fr.getReviewDateTime() + "</a10></li></ul>"
+								+ "<center><h4><b>Review</b></h4></center>"
+								+ "<center><h4><a1 style=\"color:#484848\";>\""+fr.getHeadline()+"\"</a1></h4></center>"
+								+"<ul type=\"square\"; style=\"color:#359FD8\";><li><a9 style=\"color:black\";><b>Pros - </b></a9><a10 style=\"color:#359FD8\";>"
+								+ fr.getPros() + "</a10></li>"
+								+"<li><a9 style=\"color:black\";><b>Cons - </b></a9><a10 style=\"color:#359FD8\";>"
+								+ fr.getCons() + "</a10></li>"
+								+ "</ul>"
+								+ "<h3><b>CEO Details:</b></h3>"
+								+ "<img src=\""+i.getSrc()+"\" height=\"120\" width=\"120\" />"
+								+ "<br />"
+								+ "<br />"
+								+"<ul type=\"square\"; style=\"color:#359FD8\";><li><a9 style=\"color:black\";><b>Name - </b></a9><a10 style=\"color:#359FD8\";>"
+								+ c.getName() + "</a10></li>"
+								+"<li><a9 style=\"color:black\";><b>Title - </b></a9><a10 style=\"color:#359FD8\";>"
+								+ c.getTitle() + "</a10></li></ul>"
+								);
+						
+						api.perform(api.context().currentRoom().post(prime1));
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+						PrimaryChatlet prime1 = new PrimaryChatlet();
+						prime1.setQuestionHtml("<h2><b>"+emdata.getName()
+								+ "</b></h2>"
+								+ "<img src=\""+emdata.getSquareLogo()+"\" height=\"120\" width=\"120\" />"
+								+ "<br />"
+								+ "<h3><b>Company Details:</b></h3>"
+								+ "<ul type=\"square\"; style=\"color:#359FD8\";><li><a1 style=\"color:black\";><b>Industry - </b></a1><a2 style=\"color:#359FD8\";>"
+								+ emdata.getIndustry()
+								+ "</a2></li><li><a3 style=\"color:black\";><b>Website - </b></a3><a4 style=\"color:#359FD8\"; href=\""
+								+ emdata.getWebsite()
+								+ "\">"
+								+ emdata.getWebsite()
+								+ "</a4></li><li><a7 style=\"color:black\";><b>Number of Ratings - </b></a7><a8 style=\"color:#359FD8\";>"
+								+ emdata.getNumberOfRatings()
+								+ "</a8></li><li><a9 style=\"color:black\";><b>Overall Rating - </b></a9><a10 style=\"color:#359FD8\";>"
+								+ emdata.getOverallRating() + "</a10></li>"
+								+"<li><a9 style=\"color:black\";><b>Rating Description - </b></a9><a10 style=\"color:#359FD8\";>"
+								+ emdata.getRatingDescription() + "</a10></li>"
+								+"<li><a9 style=\"color:black\";><b>Culture and Values Rating - </b></a9><a10 style=\"color:#359FD8\";>"
+								+ emdata.getCultureAndValuesRating() + "</a10></li>"
+								+"<li><a9 style=\"color:black\";><b>Senior Leadership Rating - </b></a9><a10 style=\"color:#359FD8\";>"
+								+ emdata.getSeniorLeadershipRating() + "</a10></li>"
+								+"<li><a9 style=\"color:black\";><b>Compensation and Benefits Rating - </b></a9><a10 style=\"color:#359FD8\";>"
+								+ emdata.getCompensationAndBenefitsRating() + "</a10></li>"
+								+"<li><a9 style=\"color:black\";><b>Career Opportunities Rating - </b></a9><a10 style=\"color:#359FD8\";>"
+								+ emdata.getCareerOpportunitiesRating() + "</a10></li>"
+								+"<li><a9 style=\"color:black\";><b>Worklife Balance Rating - </b></a9><a10 style=\"color:#359FD8\";>"
+								+ emdata.getWorkLifeBalanceRating() + "</a10></li>"
+								+"<li><a9 style=\"color:black\";><b>Recommend To Friend Rating - </b></a9><a10 style=\"color:#359FD8\";>"
+								+ emdata.getRecommendToFriendRating() + "</a10></li>"
+								+ "</ul>");
+						
+						api.perform(api.context().currentRoom().post(prime1));
+						
+					}
 					
-					api.perform(api.context().currentRoom().post(prime1));
 				}
 				
 			}
 			
-			
-			
-			
-		}
-	}
 
+    }
 		
+	
+		else{
+			
+			//no records to display
+			PrimaryChatlet prime2 = new PrimaryChatlet();
+			prime2.setQuestionHtml("</h4><b>Sorry, No records to display!!!</b></h4>");
+			api.perform(api.context().currentRoom().post(prime2));
+		}
+
+}
 	
 }
