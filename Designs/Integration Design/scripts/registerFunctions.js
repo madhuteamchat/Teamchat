@@ -12,7 +12,6 @@ function handleEvents(e) {
     alert("Error");
   } else {
     loadDetails(target);
-
   }
 }
 
@@ -151,15 +150,15 @@ var getAllServiceDataSuccess = function(data) {
 		var count = 0;
 		//if there is some count add it
 		if (count > 0) {
-			countHtml = String.format('<span class = "badge">{0}</span>',count);
+			countHtml = String.format('<span class="badge">{0}</span>',count);
 		}
     //populate services list
     serviceHtml += String.format('<div class="service {0}-service" title="{1}"><img src="{2}" alt="{3}" />{4}</div>',
 		service.typeId.toLowerCase(),
       service.typeId.toLowerCase().capitalize(),
       service.imgUrl,
-      service.typeId),
-			countHtml;
+      service.typeId,
+			countHtml);
   }
   document.querySelector('.services').innerHTML = serviceHtml;
   // for (var i = 0; i < data.length; i++) {
