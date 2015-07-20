@@ -18,7 +18,7 @@
           <li class="category active"><a href="#home">Step 1<br>Type Of Chatlet</a></li>
           <li class="category"><a href="#search">Step 2<br>Set Chatlet Content</a></li>
           <li class="category"><a href="#about">Step 3<br>Set Reply Screen</a></li>
-          <li class="category"><a href="#contact">Step 4<br>Comments Visibility</a></li>
+          
           <li class="category"><a href="#details_screen">Step 5<br>Set Details Screen</a></li>
           <li class="category"><a href="#final">Step 6<br>Post Chatlet</a></li>
         </ul>
@@ -39,7 +39,7 @@
         <input  id="r01" type="radio" name="type" >Poll Chatlet<br><br>
         <input  id="r02" type="radio" name="type" >Survey Chatlet
         </h1>
-        <input type="button" id="button1" class=myButton value="Next Step">
+        <input type="button" id="button1" class=myButton value="Next">
       </div>
     </div>
     <div id="search" class="container green">
@@ -183,39 +183,39 @@ jQuery(document).ready(function($){
 <!-- *********************************************************************************************** -->
 
 
-		<input type="button" id="button2" class="myButton" value="Next Step" style="margin-top:30px; margin-left:750px">	
+		<input type="button" id="button2" class="myButton" value="Next" style="margin-top:30px; margin-left:750px">	
 	</div>
 	
     <div id="about" class="container blue">
-      <h1><br>Do you want to enable replies for your Chatlet?</h1>
-      <div class="header">
-        <h1></h1>
-        <h1>
+      <div style="margin-top:100px; margin-left:100px; font-size:22px; position:absolute; font-weight:bold;">Do you want to enable replies for your Chatlet?
+      
+        <br><br>
+        
         <input  id="r10" type="radio" name="rep" checked="checked">Enable Replies<br><br>
         <input  id="r11" type="radio" name="rep" >Disable Replies<br><br>
         
-        </h1>
-        <div style="margin-top:100px;"><input type="button" id="button4" class=myButton value="Next Step">
-      </div>
+        </div>
+        
+        <div style="margin-top:100px; margin-left:800px; font-size:22px; position:absolute; font-weight:bold;">Do you want to enable Comments for your Chatlet?
       
-      
-      
-      <div id="repb"><input type="button" id="button3" value="Create Reply Screen" class="myButton" style="margin-top:-150px; margin-left:-150px; position:absolute; visibility:visible;"></div>	
-    		
-    </div>
-    <div id="contact" class="container red">
-      <h1>Do you want to enable Comments on Your Chatlet </h1>
-      <div class="header">
-        <h1></h1>
-        <h1>
+        <br><br>
+        
         <input  id="r20" type="radio" name="com" checked="checked">Enable Comments<br><br>
         <input  id="r21" type="radio" name="com" >Disable Comments<br><br>
         
-           
-        </h1>
-        <input type="button" id="button5" class=myButton value="Next Step">
+        </div>
+      
+        
+        
+        <div style="margin-top:500px;"><input type="button" id="button4" class=myButton value="Next">
       </div>
+      
+      
+      
+      <div id="repb"><input type="button" id="button3" value="Create Reply Screen" class="myButton" style="margin-top:-250px; margin-left:-475px; position:absolute; visibility:visible; font-size:23px;"></div>	
+    		
     </div>
+    
     
     <div id="details_screen" class="container green">
     <h1>
@@ -305,6 +305,7 @@ jQuery(document).ready(function($){
 			  
 	  }
 	if($("#r00").is(":checked")){  
+		document.getElementById("r10").disabled=false;
 	$('html, body').animate({scrollTop: $("#about").offset().top}, 1000);
 	  text_input=document.getElementById("text_input").value;
 	  html_input=document.getElementById("html_input").value;
@@ -413,6 +414,12 @@ $('#box4').bind('input',function(){
 				+ "\",\"html\":\""
 				+ html_input
 				+ "\"},\"xslt\":\"primary-2.7.2\",";
+		str1_poll = "{\"imgUrl\":\"\",\"type\":\"primary\",\"content\":{\"text\":\""
+					+ text_input
+					+ "\""
+					
+					+ "},\"xslt\":\"primary-2.7.2\",";
+			
 		str1_survey = "{\"imgUrl\":\"\",\"type\":\"primary\",\"content\":{\"text\":\""
 					+ text_input
 					+ "\",\"html\":\""
@@ -440,7 +447,7 @@ $('#box4').bind('input',function(){
 			
 			var str="";
 			if($('#r01').is(':checked')){
-				str=str1+str2_poll+str3;
+				str=str1_poll+str2_poll+str3;
 			}
 
 			if($('#r00').is(':checked')) str = str1 + str2 + str3;
