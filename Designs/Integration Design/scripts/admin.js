@@ -28,7 +28,7 @@ var client =
 
 		if (clientName == "" || clientOrg == "" || clientOrgEmail == "")
 		{
-			alert("Please fill the required fields!");
+			showToast('toast_client', 'Please fill the required fields !');
 			return false;
 		} else
 		{

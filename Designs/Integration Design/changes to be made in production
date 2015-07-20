@@ -2,3 +2,4 @@
 2. put jsp tags according to register.jsp
 3. map relevent events i.e logout , login , redirects .etc
 4. replace util.js with the original util.js
+5. add services count registerFunctions.js line 143 - 163

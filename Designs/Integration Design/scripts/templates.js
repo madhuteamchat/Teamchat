@@ -6,12 +6,12 @@ var serviceListTemplate = "<div id='{{typeId}}' style='float:left;'>" + '<center
 
 
 
-var serviceHeder = "<div id='{{typeId}}' style=''>" + '<center><div style="padding:10px;">' + '<div>' + '<div style="height:80px;width:70px;">'
+var serviceHeader = "<div id='{{typeId}}' style=''>" + '<center><div style="padding:10px;">' + '<div>' + '<div style="height:80px;width:70px;">'
 		+ '<img style="height:80px;width:70px;" src="{{imgUrl}}" />' + '</div>' + '<div style="padding-top:10px;text-align:center;color:#159ceb">' + '<div>{{typeDisp}}</div>' + '</div>' + '</div>'
 		+ '</center>' + '</div>';
 
 
-var serviceHead = serviceHeder + '<div>{{{desc}}}</div>';
+var serviceHead = serviceHeader + '<div>{{{desc}}}</div>';
 
 
 

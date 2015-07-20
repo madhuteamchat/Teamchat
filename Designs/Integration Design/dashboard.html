@@ -37,6 +37,7 @@
   <link rel="import" href="bower_components/paper-item/paper-icon-item.html">
   <link rel="import" href="bower_components/paper-ripple/paper-ripple.html">
   <link rel="import" href="bower_components/paper-spinner/paper-spinner.html">
+  <link rel="import" href="bower_components/paper-toast/paper-toast.html">
   <link rel="import" href="bower_components/paper-toolbar/paper-toolbar.html">
   <link rel="import" href="bower_components/paper-tabs/paper-tabs.html">
   <link rel="import" href="bower_components/paper-tabs/paper-tab.html">
@@ -57,6 +58,8 @@
     <![endif]-->
   <script src="scripts/Constants.js"></script>
   <script src="scripts/mustache.js"></script>
+  <script src="scripts/helpers.js"></script>
+  <script src="scripts/toastshandler.js"></script>
   <script src="scripts/admin.js"></script>
   <script src="scripts/util.js"></script>
   <script src="scripts/templates.js"></script>
@@ -150,9 +153,11 @@
     <span title>Teamchat Integration Console</span>
     <h4>Puranjay Jain</h4>
     <paper-icon-button icon="exit-to-app">Logout</paper-icon-button>
-    <paper-tabs id="select_tab" selected="0" class="bottom self-end" style="width: 300px;">
+    <paper-tabs id="select_tab" selected="0" class="bottom self-end" style="width: 600px;">
       <paper-tab>PLATFORM CLIENT</paper-tab>
       <paper-tab>SERVICES</paper-tab>
+      <paper-tab>APPLICATIONS</paper-tab>
+      <paper-tab>WORKFLOWS</paper-tab>
     </paper-tabs>
     <div class="bottom flex"></div>
   </paper-toolbar>
@@ -163,7 +168,7 @@
           Register Client
         </h3>
         <p>
-          This section id used to create a client (customer Id) on Teamchat Integration platform , later you can use this client id to create / consume / register application ,services , workflows . This will also help you maintain and manage the application ,services
+          This section is used to create a client (customer Id) on Teamchat Integration platform , later you can use this client id to create / consume / register application / services / workflows . This will also help you maintain and manage the application ,services
           , workflows you create
         </p>
       </div>
@@ -176,18 +181,19 @@
           <h2>Register a new Client</h2>
           <!-- <paper-dialog-scrollable> -->
           <div>
-            <paper-input name="reg-client-name" id="reg-client-name" required label="Name" char-counter maxlength="128"></paper-input>
-            <paper-input name="reg-client-org" id="reg-client-org" required label="Organization" char-counter maxlength="128"></paper-input>
+            <paper-input name="reg-client-name" id="reg-client-name" required auto-validate label="Name" autofocus char-counter maxlength="128"></paper-input>
+            <paper-input name="reg-client-org" id="reg-client-org" required auto-validate label="Organization" char-counter maxlength="128"></paper-input>
             <gold-email-input name="reg-client-email" id="reg-client-email" required auto-validate error-message="Please enter a valid email" label="Email"></gold-email-input>
-            <paper-textarea name="reg-client-description" id="reg-client-description" required label="Description" char-counter maxlength="256"></paper-textarea>
+            <paper-textarea name="reg-client-description" id="reg-client-description" label="Description" char-counter maxlength="256"></paper-textarea>
           </div>
           <!-- </paper-dialog-scrollable> -->
           <div class="buttons">
             <paper-button class="discard" dialog-dismiss raised>Discard</paper-button>
-            <paper-button id="reg-client-save" onclick="registerClient()" class="submit-button" dialog-confirm autofocus raised>Create</paper-button>
+            <paper-button id="reg-client-save" onclick="registerClient()" class="submit-button" dialog-confirm raised>Create</paper-button>
           </div>
         </paper-dialog>
       </form>
+      <paper-toast id="toast_client" text="An Error Occured">
     </neon-animatable>
     <neon-animatable>
       <div class="content">
@@ -312,89 +318,86 @@
           </div>
         </paper-dialog>
       </form>
+      <paper-toast id="toast_service" text="An Error Occured">
     </neon-animatable>
-    <script>
-      //helpers
-      String.prototype.capitalize = function() {
-        return this.charAt(0).toUpperCase() + this.slice(1);
-      };
-      //click event of tab switching
-      document.getElementById('select_tab').onclick = function() {
-        document.getElementById('page').selected = this.selected;
-      };
-      //click event of register a new client
-      document.getElementById('register_client_button').onclick = function() {
-        var dialog = document.getElementById('register_client');
-        if (dialog) {
-          dialog.open();
+    <neon-animatable>
+      applications
+    </neon-animatable>
+    <neon-animatable>
+      workflows
+    </neon-animatable>
+  </neon-animated-pages>
+  <script>
+    //click event of tab switching
+    document.getElementById('select_tab').onclick = function() {
+      document.getElementById('page').selected = this.selected;
+    };
+    //click event of register a new client
+    document.getElementById('register_client_button').onclick = function() {
+      var dialog = document.getElementById('register_client');
+      if (dialog) {
+        dialog.open();
+      }
+    };
+    //open dialog for registration
+    document.getElementById('register_this_button').onclick = function() {
+      var dialog = document.getElementById('register_service');
+      if (dialog) {
+        dialog.open();
+      }
+    };
+    //close dialog for registration
+    document.getElementById('register_close_button').onclick = function() {
+      findParentById(this, "IRON-COLLAPSE").toggle();
+    };
+    //open a particular service
+    var elements = document.querySelectorAll('.service');
+    Array.prototype.forEach.call(elements, function(el, i) {
+      el.addEventListener("click", function() {
+        //remove class hover
+        this.parentNode.classList.remove('open');
+        //check if a service is open or not
+        if (document.getElementById('service-main').opened) {
+          //close the existing service
+          document.getElementById('service-main').toggle();
         }
-      };
-      //open dialog for registration
-      document.getElementById('register_this_button').onclick = function() {
-        var dialog = document.getElementById('register_service');
-        if (dialog) {
-          dialog.open();
-        }
-      };
-      //close dialog for registration
-      document.getElementById('register_close_button').onclick = function() {
-        findParentById(this, "IRON-COLLAPSE").toggle();
-      };
-      //open a particular service
-      var elements = document.querySelectorAll('.service');
-      Array.prototype.forEach.call(elements, function(el, i) {
-        el.addEventListener("click", function() {
-          //remove class hover
-          this.parentNode.classList.remove('open');
-          //check if a service is open or not
-          if (document.getElementById('service-main').opened) {
-            //close the existing service
-            document.getElementById('service-main').toggle();
-          }
+        //toggle open the spinner
+        document.getElementById('service-loader').toggle();
+        //set properties inside collapse
+        var strigger = this.classList[1].replace("-service", "");
+        setTimeout(function() {
+          //change text description of service
+          document.querySelector('#service-main .content h3 span').innerHTML = strigger.capitalize();
+          //change service icon
+          document.querySelector('#service-main .content h3 img').setAttribute('src', el.querySelector('img').getAttribute('src'));
           //toggle open the spinner
           document.getElementById('service-loader').toggle();
-          //set properties inside collapse
-          var strigger = this.classList[1].replace("-service", "");
-          setTimeout(function() {
-            //change text description of service
-            document.querySelector('#service-main .content h3 span').innerHTML = strigger.capitalize();
-            //change service icon
-            document.querySelector('#service-main .content h3 img').setAttribute('src', el.querySelector('img').getAttribute('src'));
-            //toggle open the spinner
-            document.getElementById('service-loader').toggle();
-            //toggle iron collapse
-            document.getElementById('service-main').toggle();
-          }, 1500);
-        });
+          //toggle iron collapse
+          document.getElementById('service-main').toggle();
+        }, 1500);
       });
-      //open drop down and close it
-      document.getElementById('clientDrop').onclick = function(event) {
-        document.getElementById('clientDropBox').classList.toggle('open');
-      };
-      //select element so update the value of hidden
-      document.getElementById('clientDropBox').onclick = function(event) {
-        document.getElementById('clientDropBox').classList.toggle('open');
-        //update the hidden
-        document.getElementById('clientId').value = this.querySelector('.list').focusedItem.innerHTML;
-        //update the drop down
-        document.querySelector('#clientDrop .flex').innerHTML = this.querySelector('.list').focusedItem.innerHTML;
-      };
-      //submit button event
-      // var submitbuttons = document.querySelectorAll('.submit-button');
-      // Array.prototype.forEach.call(submitbuttons, function(el, i) {
-      //   el.addEventListener("click", function() {
-      //     //find parent form and submit it's data
-      //     findParentById(el, "FORM").submit();
-      //   });
-      // });
-      //find parent by type FORM,DIV,etc.
-      function findParentById(el, type) {
-        while (el = el.parentNode)
-          if (el.nodeName == type)
-            return el;
-        return null;
-      }
-    </script>
+    });
+    //open drop down and close it
+    document.getElementById('clientDrop').onclick = function(event) {
+      document.getElementById('clientDropBox').classList.toggle('open');
+    };
+    //select element so update the value of hidden
+    document.getElementById('clientDropBox').onclick = function(event) {
+      document.getElementById('clientDropBox').classList.toggle('open');
+      //update the hidden
+      document.getElementById('reg-service-cKey').value = this.querySelector('.list').focusedItem.innerHTML;
+      //update the drop down
+      document.querySelector('#clientDrop .flex').innerHTML = this.querySelector('.list').focusedItem.innerHTML;
+    };
+    //submit button event
+    // var submitbuttons = document.querySelectorAll('.submit-button');
+    // Array.prototype.forEach.call(submitbuttons, function(el, i) {
+    //   el.addEventListener("click", function() {
+    //     //find parent form and submit it's data
+    //     findParentById(el, "FORM").submit();
+    //   });
+    // });
+  </script>
 </body>
 
 </html>

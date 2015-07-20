@@ -1,206 +1,233 @@
-﻿(function ($) {
+﻿
+(function($) {
 
-    $.fn.mrjsontablecolumn = function (options) {
-        var thisSelector = this.selector;
-        var opt = $.extend({}, $.fn.mrjsontablecolumn.defaults, options);
-        return opt;
-    };
+  $.fn.mrjsontablecolumn = function(options) {
+    var thisSelector = this.selector;
+    var opt = $.extend({}, $.fn.mrjsontablecolumn.defaults, options);
+    return opt;
+  };
 
-    $.fn.mrjsontablecolumn.defaults = {
-        heading: "Heading",
-        data: "json_field",
-        type: "string",
-        sortable: true,
-        starthidden: false
+  $.fn.mrjsontablecolumn.defaults = {
+    heading: "Heading",
+    data: "json_field",
+    type: "string",
+    sortable: true,
+    starthidden: false
+  }
+
+  $.fn.mrjsontable = function(options) {
+
+    var thisSelector = this.selector;
+
+    var opts = $.extend({}, $.fn.mrjsontable.defaults, options);
+
+    var $mrjsontableContainer = $("<div>", {
+      "data-so": "A",
+      "data-ps": opts.pageSize
+    }).addClass("mrjt");
+
+    var $visibleColumnsCBList = $("<div>").addClass("legend");
+
+    var $table = $("<table>").addClass(opts.tableClass);
+
+    var $thead = $("<thead>");
+    var $theadRow = $("<tr>");
+
+    $.each(opts.columns, function(index, item) {
+      var $th = $("<th>").attr("data-i", index);
+
+      var $cb = $("<input>", {
+        "type": "checkbox",
+        "id": "cb" + thisSelector + index,
+        value: index,
+        checked: !item.starthidden,
+        "data-i": index
+      }).bind("change", opts.onHiddenCBChange).appendTo($visibleColumnsCBList);
+      var $cblabel = $('<label />', {
+        'for': 'cb' + thisSelector + index,
+        text: item.heading
+      }).appendTo($visibleColumnsCBList);
+
+      if (item.starthidden) {
+        $th.hide();
+      }
+
+      if (item.sortable) {
+        $("<a>", {
+          "class": "s-init",
+          "href": "#",
+          "data-i": index,
+          "data-t": item.type
+        }).text(item.heading).bind("click", opts.onSortClick).appendTo($th);
+      } else {
+        $("<span>").text(item.heading).appendTo($th);
+      }
+
+      $th.appendTo($theadRow);
+    });
+
+    $theadRow.appendTo($thead);
+    $thead.appendTo($table);
+
+    var pagingNeeded = false;
+    $.each(opts.data, function(index, item) {
+      var $tr = $("<tr>").attr("data-i", index);
+
+      if (opts.pageSize <= index) {
+        $tr.hide();
+        pagingNeeded = true;
+      }
+
+      $.each(opts.columns, function(c_index, c_item) {
+
+        var $td = $("<td>").text(item[c_item.data]).attr("data-i", c_index);
+
+        if (c_item.starthidden) {
+          $td.hide();
+        }
+
+        $td.appendTo($tr)
+      });
+      $tr.appendTo($table);
+    });
+
+    $mrjsontableContainer.append($visibleColumnsCBList);
+    $mrjsontableContainer.append($table);
+
+
+    if (pagingNeeded) {
+      var $pager = $("<div>").addClass("paging");
+      for (var i = 0; i < Math.ceil(opts.data.length / opts.pageSize); i++) {
+        //$("<a>", { "text": "Page " + (i + 1), "href": "#", "data-i": (i + 1), "class": "p-link" }).bind("click", opts.onPageClick).appendTo($pager);
+        $("<paper-button data-i=\"" + (i + 1) +"\">Page " + (i + 1) + "</paper-button>").bind("click", opts.onPageClick).appendTo($pager);
+      }
+      $mrjsontableContainer.append($pager).addClass("paged");
     }
+    return this.append($mrjsontableContainer);
+  };
 
-    $.fn.mrjsontable = function (options) {
+  $.fn.mrjsontable.defaults = {
+    cssClass: "table",
+    columns: [],
+    data: [],
+    pageSize: 10,
 
-        var thisSelector = this.selector;
+    onHiddenCBChange: function() {
+      var $thisGrid = $(this).parents(".mrjt");
+      var columIndex = $(this).attr("data-i");
 
-        var opts = $.extend({}, $.fn.mrjsontable.defaults, options);
+      if ($(this).is(":checked")) {
+        $("td[data-i='" + columIndex + "']", $thisGrid).show();
+        $("th[data-i='" + columIndex + "']", $thisGrid).show();
+      } else {
+        $("td[data-i='" + columIndex + "']", $thisGrid).hide();
+        $("th[data-i='" + columIndex + "']", $thisGrid).hide();
+      }
+    },
+    onPageClick: function() {
+      var $thisGrid = $(this).parents(".mrjt");
 
-        var $mrjsontableContainer = $("<div>", { "data-so": "A", "data-ps": opts.pageSize }).addClass("mrjt");
+      var pageSize = $thisGrid.attr("data-ps");
+      var page = $(this).attr("data-i");
 
-        var $visibleColumnsCBList = $("<div>").addClass("legend");
+      $("tbody tr", $thisGrid).each(function(tr_index, tr_item) {
+        $(this).hide();
 
-        var $table = $("<table>").addClass(opts.tableClass);
+        var pageStart = ((page - 1) * pageSize) + 1;
+        var pageEnd = page * pageSize;
 
-        var $thead = $("<thead>");
-        var $theadRow = $("<tr>");
+        if ((tr_index + 1) >= pageStart && (tr_index + 1) <= pageEnd) {
+          $(this).show();
+        }
+      });
 
-        $.each(opts.columns, function (index, item) {
-            var $th = $("<th>").attr("data-i", index);
+      return false;
+    },
+    onSortClick: function() {
+      var $thisGrid = $(this).parents(".mrjt");
+      var direction = $thisGrid.attr("data-so");
 
-            var $cb = $("<input>", { "type": "checkbox", "id": "cb" + thisSelector + index, value: index, checked: !item.starthidden, "data-i": index }).bind("change", opts.onHiddenCBChange).appendTo($visibleColumnsCBList);
-            var $cblabel = $('<label />', { 'for': 'cb' + thisSelector + index, text: item.heading }).appendTo($visibleColumnsCBList);
+      $('.s-init', $thisGrid).removeClass("s-A s-D");
+      $(this).addClass("s-" + direction);
 
-            if (item.starthidden)
-            {
-                $th.hide();
-            }
+      var type = $(this).attr("data-t");
+      var index = $(this).attr("data-i");
 
-            if (item.sortable) {
-                $("<a>", { "class": "s-init", "href": "#", "data-i": index, "data-t": item.type }).text(item.heading).bind("click", opts.onSortClick).appendTo($th);
-            } else {
-                $("<span>").text(item.heading).appendTo($th);
-            }
+      var array = [];
 
-            $th.appendTo($theadRow);
-        });
+      $("tbody tr", $thisGrid).each(function(tr_index, tr_item) {
+        var item = $("td", tr_item).eq(index)
 
-        $theadRow.appendTo($thead);
-        $thead.appendTo($table);
-        
-        var pagingNeeded = false;
-        $.each(opts.data, function (index, item) {
-            var $tr = $("<tr>").attr("data-i", index);
+        var tr_id = item.parent().attr("data-i");
 
-            if (opts.pageSize <= index) {
-                $tr.hide();
-                pagingNeeded = true;
-            }
+        var value = null;
+        switch (type) {
+          case "string":
+            value = item.text();
+            break;
+          case "int":
+            value = parseInt(item.text());
+            break;
 
-            $.each(opts.columns, function (c_index, c_item) {
+          case "float":
+            value = parseFloat(item.text());
+            break;
 
-                var $td = $("<td>").text(item[c_item.data]).attr("data-i", c_index);
+          case "datetime":
+            value = new Date(item.text());
+            break;
 
-                if (c_item.starthidden) {
-                    $td.hide();
-                }
-
-                $td.appendTo($tr)
-            });
-            $tr.appendTo($table);
-        });
-                
-        $mrjsontableContainer.append($visibleColumnsCBList);
-        $mrjsontableContainer.append($table);
-
-
-        if (pagingNeeded) {
-            var $pager = $("<div>").addClass("paging");
-            for (var i = 0; i < Math.ceil(opts.data.length / opts.pageSize) ; i++) {
-                $("<a>", { "text": "Page " + (i + 1), "href": "#", "data-i": (i + 1), "class": "p-link" }).bind("click", opts.onPageClick).appendTo($pager);
-            }
-            $mrjsontableContainer.append($pager).addClass("paged");
+          default:
+            value = item.text();
+            break;
         }
 
+        array.push({
+          tr_id: tr_id,
+          val: value
+        });
+      });
 
-        return this.append($mrjsontableContainer);
-    };
-    
-    $.fn.mrjsontable.defaults = {
-        cssClass: "table",
-        columns: [],
-        data: [],
-        pageSize: 10,
+      if (direction == "A") {
+        array.sort(function(a, b) {
+          if (a.val > b.val) {
+            return 1
+          }
+          if (a.val < b.val) {
+            return -1
+          }
+          return 0;
+        });
+        $thisGrid.attr("data-so", "D");
+      } else {
 
-        onHiddenCBChange: function () {
-            var $thisGrid = $(this).parents(".mrjt");
-            var columIndex = $(this).attr("data-i");
-            
-            if ($(this).is(":checked")) {
-                $("td[data-i='" + columIndex + "']", $thisGrid).show();
-                $("th[data-i='" + columIndex + "']", $thisGrid).show();
-            } else {
-                $("td[data-i='" + columIndex + "']", $thisGrid).hide();
-                $("th[data-i='" + columIndex + "']", $thisGrid).hide();
-            }
-        },
-        onPageClick: function () {
-            var $thisGrid = $(this).parents(".mrjt");
+        array.sort(function(a, b) {
+          if (a.val < b.val) {
+            return 1
+          }
+          if (a.val > b.val) {
+            return -1
+          }
+          return 0;
+        });
 
-            var pageSize = $thisGrid.attr("data-ps");
-            var page = $(this).attr("data-i");
+        $thisGrid.attr("data-so", "A");
+      }
 
-            $("tbody tr", $thisGrid).each(function (tr_index, tr_item) {
-                $(this).hide();
+      for (var i = 0; i < array.length; i++) {
+        var td = $("tr[data-i='" + array[i].tr_id + "']", $thisGrid)
 
-                var pageStart = ((page - 1) * pageSize) + 1;
-                var pageEnd = page * pageSize;
+        td.detach();
 
-                if ((tr_index + 1) >= pageStart && (tr_index + 1) <= pageEnd) {
-                    $(this).show();
-                }
-            });
+        $("tbody", $thisGrid).append(td);
+      }
 
-            return false;
-        },
-        onSortClick: function () {
-            var $thisGrid = $(this).parents(".mrjt");
-            var direction = $thisGrid.attr("data-so");
+      if ($thisGrid.hasClass("paged")) {
+        $('.p-link', $thisGrid).eq(0).click();
+      }
 
-            $('.s-init', $thisGrid).removeClass("s-A s-D");
-            $(this).addClass("s-" + direction);
+      return false;
+    }
+  };
 
-            var type = $(this).attr("data-t");
-            var index = $(this).attr("data-i");
-
-            var array = [];
-
-            $("tbody tr", $thisGrid).each(function (tr_index, tr_item) {
-                var item = $("td", tr_item).eq(index)
-
-                var tr_id = item.parent().attr("data-i");
-
-                var value = null;
-                switch (type) {
-                    case "string":
-                        value = item.text();
-                        break;
-                    case "int":
-                        value = parseInt(item.text());
-                        break;
-
-                    case "float":
-                        value = parseFloat(item.text());
-                        break;
-
-                    case "datetime":
-                        value = new Date(item.text());
-                        break;
-
-                    default:
-                        value = item.text();
-                        break;
-                }
-
-                array.push({ tr_id: tr_id, val: value });
-            });
-
-            if (direction == "A") {
-                array.sort(function (a, b) {
-                    if (a.val > b.val) { return 1 }
-                    if (a.val < b.val) { return -1 }
-                    return 0;
-                });
-                $thisGrid.attr("data-so", "D");
-            } else {
-
-                array.sort(function (a, b) {
-                    if (a.val < b.val) { return 1 }
-                    if (a.val > b.val) { return -1 }
-                    return 0;
-                });
-
-                $thisGrid.attr("data-so", "A");
-            }
-
-            for (var i = 0; i < array.length; i++) {
-                var td = $("tr[data-i='" + array[i].tr_id + "']", $thisGrid)
-
-                td.detach();
-                
-                $("tbody", $thisGrid).append(td);
-            }
-
-            if ($thisGrid.hasClass("paged")) {
-                $('.p-link', $thisGrid).eq(0).click();
-            }
-
-            return false;
-        }
-    };
-    
 }(jQuery));
