@@ -290,7 +290,22 @@ jQuery(document).ready(function($){
 	});
   
   $("#button2").click(function(){
-	  $('html, body').animate({scrollTop: $("#about").offset().top}, 1000);
+	  if($("#r01").is(":checked")){
+		  document.getElementById("r10").disabled=true;
+		  document.getElementById("button3").style.visibility="hidden";
+		  $('html, body').animate({scrollTop: $("#contact").offset().top}, 1000);
+		  text_input=document.getElementById("text_input").value;
+	  }
+	  
+	if($("#r02").is(":checked")){
+		document.getElementById("r10").disabled=true;
+		  document.getElementById("button3").style.visibility="hidden";
+		$('html, body').animate({scrollTop: $("#contact").offset().top}, 1000);
+		  text_input=document.getElementById("text_input").value;
+			  
+	  }
+	if($("#r00").is(":checked")){  
+	$('html, body').animate({scrollTop: $("#about").offset().top}, 1000);
 	  text_input=document.getElementById("text_input").value;
 	  html_input=document.getElementById("html_input").value;
 	  console.log(text_input);
@@ -298,7 +313,7 @@ jQuery(document).ready(function($){
 	  
 	  	var xx = document.querySelectorAll('.text-box input');
 		for(var i=0;i<xx.length;i++) console.log(document.getElementById(xx[i].id).value);
-	  
+	}
 	});
  
   
