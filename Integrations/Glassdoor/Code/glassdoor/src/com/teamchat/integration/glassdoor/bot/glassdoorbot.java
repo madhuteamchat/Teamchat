@@ -1,5 +1,8 @@
 package com.teamchat.integration.glassdoor.bot;
-
+/*
+ * *@author : Anuj Arora
+ * 
+ */
 import java.io.IOException;
 
 import com.google.gson.Gson;
@@ -19,8 +22,8 @@ import com.teamchat.integration.glassdoor.classes.Response;
 public class glassdoorbot {
 
 	int pn,ttp,ttc,flag;
-String key;
-String loc;
+    String key;
+    String loc;
 	
 	@OnKeyword("help")
 	public void help(TeamchatAPI api) {
@@ -34,9 +37,9 @@ String loc;
 								+ "<br />"
 								+ "<br /><b>You can use me to search any company and find its rating and reviews, using following keywords:</b>"
 								+ "<br />"
-								+ "<ul type=\"square\"; style=\"color:#359FD8\";><li><a1 style=\"color:black\";><b>search - </b></a1><a2 style=\"color:#359FD8\";>"
+								+ "<ul type=\"square\"; style=\"color:#359FD8\"; ><li><a1 style=\"color:black\";><b>search - </b></a1><a2 style=\"color:#359FD8\"; align=\"justify\";>"
 								+ "Type this command to search any company"
-								+ "</a2></li><li><a3 style=\"color:black\";><b>next - </b></a3><a4 style=\"color:#359FD8\";>"
+								+ "</a2></li><li><a3 style=\"color:black\";><b>next - </b></a3><a4 style=\"color:#359FD8\"; align=\"justify\";>"
 								+ "Type this command to check the next result page for your searched keyword"
 								+ "</a4></li></ul>")));
 
@@ -45,7 +48,7 @@ String loc;
 		// 2.)next
 
 	}
-	
+	//Use this keyword to search any company
 	@OnKeyword("search")
 	public void login(TeamchatAPI api) {
 flag=0;
@@ -63,17 +66,18 @@ flag=0;
 				.setReplyScreen(f).setReplyLabel("Reply").alias("getdata");
 		api.perform(api.context().currentRoom().post(prime));
 	}
-	
+	//getting the data from glassdoor server
 	@OnAlias("getdata")
 	public void getdata(TeamchatAPI api) throws IOException {
 		
 		String keyword = api.context().currentReply().getField("keyword");
 		String Location = api.context().currentReply().getField("Location");
-		
+		//pn : pagenumber (global variable)
 		pn =1;
 		String resp;
 		int l,l1;
-
+		
+        //concatenating strings with a "+" sign
 		String temp="";
 		String temp1="";
 		keyword = keyword.trim();
@@ -95,13 +99,9 @@ flag=0;
 		key=temp;
 		loc=temp1;
 		glassdoorintegrator ob1 = new glassdoorintegrator();
-		//getting images from the giphy server.
+		//getting companies from the glassdoor server.
 		resp = ob1.getcompanies(temp, temp1,pn);
 		
-		//System.out.println(resp);
-		
-		
-
 		if (resp.equals("Error")) {
 			PrimaryChatlet prime = new PrimaryChatlet();
 			api.perform(api
@@ -112,7 +112,6 @@ flag=0;
 							+ "<br /><b>StatusDesc: Forbidden</b>"
 							+ "<br /><b>Something went wrong!</b>")));
 
-		
 		}
 		else
 		{
@@ -191,14 +190,16 @@ flag=0;
 			Response r = data.getResponse();
 			ttp=r.getTotalNumberOfPages();
 			ttc=r.getTotalRecordCount();
-			
+			//If there are some results to show.
 			if(ttc>0)
 			{
+				//traversing through json object.
 				for (Employer emdata : r.getEmployers()) {
 					
 					FeaturedReview fr;
 					Ceo c;
 					Image i;
+					//If review details is there in the json.
 					try {
 						fr = emdata.getFeaturedReview();
 						c = emdata.getCeo();
@@ -211,11 +212,11 @@ flag=0;
 								+ "<h3><b>Company Details:</b></h3>"
 								+ "<ul type=\"square\"; style=\"color:#359FD8\";><li><a1 style=\"color:black\";><b>Industry - </b></a1><a2 style=\"color:#359FD8\";>"
 								+ emdata.getIndustry()
-								+ "</a2></li><li><a3 style=\"color:black\";><b>Website - </b></a3><a4 style=\"color:#359FD8\"; href=\""
+								+ "</a2></li><li><a3 style=\"color:black\";><b>Website - </b></a3><a href=\"https://"
 								+ emdata.getWebsite()
-								+ "\">"
+								+ "\" title=\"Go to this link\"; target=\"_blank\"; >"
 								+ emdata.getWebsite()
-								+ "</a4></li><li><a7 style=\"color:black\";><b>Number of Ratings - </b></a7><a8 style=\"color:#359FD8\";>"
+								+ "</a></li><li><a7 style=\"color:black\";><b>Number of Ratings - </b></a7><a8 style=\"color:#359FD8\";>"
 								+ emdata.getNumberOfRatings()
 								+ "</a8></li><li><a9 style=\"color:black\";><b>Overall Rating - </b></a9><a10 style=\"color:#359FD8\";>"
 								+ emdata.getOverallRating() + "</a10></li>"
@@ -245,9 +246,9 @@ flag=0;
 								+ fr.getReviewDateTime() + "</a10></li></ul>"
 								+ "<center><h4><b>Review</b></h4></center>"
 								+ "<center><h4><a1 style=\"color:#484848\";>\""+fr.getHeadline()+"\"</a1></h4></center>"
-								+"<ul type=\"square\"; style=\"color:#359FD8\";><li><a9 style=\"color:black\";><b>Pros - </b></a9><a10 style=\"color:#359FD8\";>"
+								+"<ul type=\"square\"; style=\"color:#359FD8\";><li><a9 style=\"color:black\";><b>Pros - </b></a9><a10 style=\"color:#359FD8\"; align=\"justify\";>"
 								+ fr.getPros() + "</a10></li>"
-								+"<li><a9 style=\"color:black\";><b>Cons - </b></a9><a10 style=\"color:#359FD8\";>"
+								+"<li><a9 style=\"color:black\";><b>Cons - </b></a9><a10 style=\"color:#359FD8\"; align=\"justify\";>"
 								+ fr.getCons() + "</a10></li>"
 								+ "</ul>"
 								+ "<h3><b>CEO Details:</b></h3>"
@@ -264,7 +265,7 @@ flag=0;
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
-						
+						//If review details and ceo details are not in the json.
 						PrimaryChatlet prime1 = new PrimaryChatlet();
 						prime1.setQuestionHtml("<h2><b>"+emdata.getName()
 								+ "</b></h2>"
@@ -273,11 +274,11 @@ flag=0;
 								+ "<h3><b>Company Details:</b></h3>"
 								+ "<ul type=\"square\"; style=\"color:#359FD8\";><li><a1 style=\"color:black\";><b>Industry - </b></a1><a2 style=\"color:#359FD8\";>"
 								+ emdata.getIndustry()
-								+ "</a2></li><li><a3 style=\"color:black\";><b>Website - </b></a3><a4 style=\"color:#359FD8\"; href=\""
+								+ "</a2></li><li><a3 style=\"color:black\";><b>Website - </b></a3><a href=\"https://"
 								+ emdata.getWebsite()
-								+ "\">"
+								+ "\" title=\"Go to this link\"; target=\"_blank\"; >"
 								+ emdata.getWebsite()
-								+ "</a4></li><li><a7 style=\"color:black\";><b>Number of Ratings - </b></a7><a8 style=\"color:#359FD8\";>"
+								+ "</a></li><li><a7 style=\"color:black\";><b>Number of Ratings - </b></a7><a8 style=\"color:#359FD8\";>"
 								+ emdata.getNumberOfRatings()
 								+ "</a8></li><li><a9 style=\"color:black\";><b>Overall Rating - </b></a9><a10 style=\"color:#359FD8\";>"
 								+ emdata.getOverallRating() + "</a10></li>"
@@ -300,8 +301,9 @@ flag=0;
 					}
 			
 				}
-			flag=1;	
+			flag=1;	//To indicate that user has searched for a query.
 			}
+			//If no records found.
 			else
 			{
 				PrimaryChatlet prime2 = new PrimaryChatlet();
@@ -311,22 +313,19 @@ flag=0;
 	
 		}
 	}
-	
+	//Use this keyword for going to the next result.
 	@OnKeyword("next")
 	public void next(TeamchatAPI api) throws IOException {
 		
-		
+		//user had searched for a query and current page number should be less than or equal to the total page count.
 		if(pn<=ttp && flag==1)
 		{
+			//increasing the page number by 1. 
 			pn++;
 		glassdoorintegrator ob1 = new glassdoorintegrator();
-		//getting images from the giphy server.
+		//getting companies from the glassdoor server.
 		String resp = ob1.getcompanies(key, loc,pn);
-		
-		//System.out.println(resp);
-		
-		
-
+	// Error if no json returned.
 		if (resp.equals("Error")) {
 			PrimaryChatlet prime = new PrimaryChatlet();
 			api.perform(api
@@ -336,9 +335,8 @@ flag=0;
 							+ "<br /><b>Status Code: 403</b>"
 							+ "<br /><b>StatusDesc: Forbidden</b>"
 							+ "<br /><b>Something went wrong!</b>")));
-
-		
-		}
+	}
+		//If returned
 		else
 		{
 
@@ -346,12 +344,13 @@ flag=0;
 			//main class for getters and setters : Glassdoormain
 			Glassdoormain data = gson.fromJson(resp, Glassdoormain.class);
 			Response r = data.getResponse();
-				
+				//For traversing through the json object.
 					for (Employer emdata : r.getEmployers()) {
 					FeaturedReview fr;
 					Ceo c;
 					Image i;
 					try {
+						//If review details and ceo details are in the json.
 						fr = emdata.getFeaturedReview();
 						c = emdata.getCeo();
 						i = c.getImage();
@@ -364,11 +363,11 @@ flag=0;
 								+ "<h3><b>Company Details:</b></h3>"
 								+ "<ul type=\"square\"; style=\"color:#359FD8\";><li><a1 style=\"color:black\";><b>Industry - </b></a1><a2 style=\"color:#359FD8\";>"
 								+ emdata.getIndustry()
-								+ "</a2></li><li><a3 style=\"color:black\";><b>Website - </b></a3><a4 style=\"color:#359FD8\"; href=\""
+								+ "</a2></li><li><a3 style=\"color:black\";><b>Website - </b></a3><a href=\"https://"
 								+ emdata.getWebsite()
-								+ "\">"
+								+ "\" title=\"Go to this link\"; target=\"_blank\"; >"
 								+ emdata.getWebsite()
-								+ "</a4></li><li><a7 style=\"color:black\";><b>Number of Ratings - </b></a7><a8 style=\"color:#359FD8\";>"
+								+ "</a></li><li><a7 style=\"color:black\";><b>Number of Ratings - </b></a7><a8 style=\"color:#359FD8\";>"
 								+ emdata.getNumberOfRatings()
 								+ "</a8></li><li><a9 style=\"color:black\";><b>Overall Rating - </b></a9><a10 style=\"color:#359FD8\";>"
 								+ emdata.getOverallRating() + "</a10></li>"
@@ -398,9 +397,9 @@ flag=0;
 								+ fr.getReviewDateTime() + "</a10></li></ul>"
 								+ "<center><h4><b>Review</b></h4></center>"
 								+ "<center><h4><a1 style=\"color:#484848\";>\""+fr.getHeadline()+"\"</a1></h4></center>"
-								+"<ul type=\"square\"; style=\"color:#359FD8\";><li><a9 style=\"color:black\";><b>Pros - </b></a9><a10 style=\"color:#359FD8\";>"
+								+"<ul type=\"square\"; style=\"color:#359FD8\";><li><a9 style=\"color:black\";><b>Pros - </b></a9><a10 style=\"color:#359FD8\"; align=\"justify\";>"
 								+ fr.getPros() + "</a10></li>"
-								+"<li><a9 style=\"color:black\";><b>Cons - </b></a9><a10 style=\"color:#359FD8\";>"
+								+"<li><a9 style=\"color:black\";><b>Cons - </b></a9><a10 style=\"color:#359FD8\"; align=\"justify\";>"
 								+ fr.getCons() + "</a10></li>"
 								+ "</ul>"
 								+ "<h3><b>CEO Details:</b></h3>"
@@ -417,6 +416,7 @@ flag=0;
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
+						//If review details and ceo details are not in the json.
 						PrimaryChatlet prime1 = new PrimaryChatlet();
 						prime1.setQuestionHtml("<h2><b>"+emdata.getName()
 								+ "</b></h2>"
@@ -425,11 +425,11 @@ flag=0;
 								+ "<h3><b>Company Details:</b></h3>"
 								+ "<ul type=\"square\"; style=\"color:#359FD8\";><li><a1 style=\"color:black\";><b>Industry - </b></a1><a2 style=\"color:#359FD8\";>"
 								+ emdata.getIndustry()
-								+ "</a2></li><li><a3 style=\"color:black\";><b>Website - </b></a3><a4 style=\"color:#359FD8\"; href=\""
+								+ "</a2></li><li><a3 style=\"color:black\";><b>Website - </b></a3><a href=\"https://"
 								+ emdata.getWebsite()
-								+ "\">"
+								+ "\" title=\"Go to this link\"; target=\"_blank\"; >"
 								+ emdata.getWebsite()
-								+ "</a4></li><li><a7 style=\"color:black\";><b>Number of Ratings - </b></a7><a8 style=\"color:#359FD8\";>"
+								+ "</a></li><li><a7 style=\"color:black\";><b>Number of Ratings - </b></a7><a8 style=\"color:#359FD8\";>"
 								+ emdata.getNumberOfRatings()
 								+ "</a8></li><li><a9 style=\"color:black\";><b>Overall Rating - </b></a9><a10 style=\"color:#359FD8\";>"
 								+ emdata.getOverallRating() + "</a10></li>"
@@ -452,18 +452,11 @@ flag=0;
 						api.perform(api.context().currentRoom().post(prime1));
 						
 					}
-					
-				}
-				
 			}
-			
-
-    }
-		
-	
-		else{
-			
-			//no records to display
+			}
+  }
+	else{
+		  //no records to display
 			PrimaryChatlet prime2 = new PrimaryChatlet();
 			prime2.setQuestionHtml("</h4><b>Sorry, No records to display!!!</b></h4>");
 			api.perform(api.context().currentRoom().post(prime2));

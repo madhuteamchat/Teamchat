@@ -1,5 +1,8 @@
 package com.teamchat.integration.glassdoor.classes;
-
+/*
+ * *@author : Anuj Arora
+ * 
+ */
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Generated;

@@ -1,5 +1,8 @@
 package com.teamchat.integration.glassdoor.classes;
-
+/*
+ * *@author : Anuj Arora
+ * 
+ */
 import javax.annotation.Generated;
 import com.google.gson.annotations.Expose;
 

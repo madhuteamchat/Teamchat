@@ -1,5 +1,8 @@
 package com.teamchat.integration.glassdoor.bot;
-
+/*
+ * *@author : Anuj Arora
+ * 
+ */
 import java.io.IOException;
 
 import com.squareup.okhttp.OkHttpClient;
@@ -7,7 +10,7 @@ import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
 public class glassdoorintegrator {
-
+// getting company details from glassdoor server.
 	public String getcompanies(String Keyword,String Location,int pn) throws IOException{
 	   	  
 	   	  String err = "Error";
