@@ -6,12 +6,31 @@ var toggleForm = function(showForm, showImage, hideForm, hideImage) {
 }
 
 function handleEvents(e) {
-  var target = e.currentTarget.id;
+  var el = e.currentTarget;
   integration.currentService = integration.services[e.currentTarget.id];
-  if (target == undefined || target == null) {
-    alert("Error");
+  if (el.id == undefined || el.id == null) {
+    // alert("Error");
+		showToast('toast_service','An Error Occurred');
   } else {
-    loadDetails(target);
+		if (document.getElementById('service-main').opened) {
+			//close the existing service
+			document.getElementById('service-main').toggle();
+		}
+		//toggle open the spinner
+		document.getElementById('service-loader').toggle();
+		//set properties inside collapse
+		var strigger = el.classList[1].replace("-service", "");
+		setTimeout(function() {
+			//change text description of service
+			document.querySelector('#service-main .content h3 span').innerHTML = strigger.capitalize();
+			//change service icon
+			document.querySelector('#service-main .content h3 img').setAttribute('src', el.querySelector('img').getAttribute('src'));
+			//toggle open the spinner
+			document.getElementById('service-loader').toggle();
+			//toggle iron collapse
+			document.getElementById('service-main').toggle();
+		}, 1500);
+    loadDetails(el.id);
   }
 }
 
@@ -109,7 +128,8 @@ var getClientDataFailure = function(data) {
 }
 
 var registerClientSuccess = function(data) {
-  alert("Success. Client Key: " + data.clientKey);
+  // alert("Success. Client Key: " + data.clientKey);
+  showToast('toast_client', 'Client has been registered successfully');
   var client = new Object();
   client.adminEmail = integration.user.email;
   admin.client.getAllClientsOfUser(client, getClientDataSuccess,
@@ -118,6 +138,7 @@ var registerClientSuccess = function(data) {
 
 var registerClientFailure = function(data) {
   //alert("registerFailure: " + JSON.stringify(data));
+  showToast('toast_client', 'Couldn\'t register client');
 }
 
 var getApplicationDataSuccess = function(data) {
@@ -131,7 +152,6 @@ var getApplicationDataFailure = function(data) {
 }
 
 var getServiceDataSuccess = function(data) {
-	console.log(data);
   loadServiceDataTable(data, "#registeredServicesTable");
 }
 
@@ -140,27 +160,31 @@ var getServiceDataFailure = function(data) {
 }
 
 var getAllServiceDataSuccess = function(data) {
-  //store services in var for reference
-  SERVICES = data;
-  var serviceHtml = ""
-			countHtml = "";
-  for (service of SERVICES) {
-		//TODO if services are present
-		//store them in count
-		var count = 0;
-		//if there is some count add it
-		if (count > 0) {
-			countHtml = String.format('<span class="badge">{0}</span>',count);
-		}
+  for (service of data) {
+    //TODO if services are present
+    //store them in count
+    var count = 0,
+		countHtml = "";
+    //if there is some count add it
+    if (count > 0) {
+      countHtml = String.format('<span class="badge">{0}</span>', count);
+    }
+    //store services in var for reference
+    integration.services[service.typeId] = service;
     //populate services list
-    serviceHtml += String.format('<div class="service {0}-service" title="{1}"><img src="{2}" alt="{3}" />{4}</div>',
-		service.typeId.toLowerCase(),
+    var serviceHtml = String.format('<div id="{0}" class="service {1}-service" title="{2}"><img src="{3}" alt="{4}" />{5}</div>',
+      service.typeId,
+      service.typeId.toLowerCase(),
       service.typeId.toLowerCase().capitalize(),
       service.imgUrl,
       service.typeId,
-			countHtml);
+      countHtml);
+			$('#availableServices').append(serviceHtml);
+    //add click event to that service
+    $('#' + service.typeId).bind('click', function(e) {
+      handleEvents(e);
+    });
   }
-  document.querySelector('.services').innerHTML = serviceHtml;
   // for (var i = 0; i < data.length; i++) {
   // 	var service = data[i];
   // 	integration.services[service.typeId] = service;

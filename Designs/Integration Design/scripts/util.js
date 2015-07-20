@@ -85,6 +85,3 @@ KEYSTORE.FAIL_MESSAGE = "failMessage";
 KEYSTORE.WF_KEY = "workflowKey";
 
 KEYSTORE.STRING = "string";
-
-//services are stored in this variable after being retrieved
-var SERVICES;

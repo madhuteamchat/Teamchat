@@ -204,8 +204,8 @@
           This section id used to create a client (customer Id) on Teamchat Integration platfrom , later you can use this client id to create / consume / register application ,services , workflows . This will also help you maintain and manage the application ,services
           , workflows you create
         </p>
-        <div class="services">
-          <div class="service zendesk-service" title="Zendesk">
+        <div id="availableServices" class="services">
+          <!-- <div class="service zendesk-service" title="Zendesk">
             <img src="img/Zendesk.png" alt="zendesk" />
             <span class="badge">1</span>
           </div>
@@ -221,7 +221,7 @@
           </div>
           <div class="service jira-service" title="Jira">
             <img src="img/jira_rbg_blue_stacked.png" alt="jira" />
-          </div>
+          </div> -->
         </div>
       </div>
       <iron-collapse id="service-loader">
@@ -245,47 +245,7 @@
             </ol> This will also help you maintain and manage the applications ,services and workflows that you create
           </p>
         </div>
-        <table>
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Service</th>
-              <th>Name</th>
-              <th>Description</th>
-              <th>Client Key</th>
-              <th>API Key</th>
-              <th>Secret Key</th>
-              <th>Service Key</th>
-              <th>Date</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>1</td>
-              <td>Jira</td>
-              <td>
-                Puranjay Jain
-              </td>
-              <td>
-                Teamchat
-              </td>
-              <td>
-                something imp
-              </td>
-              <td>
-                something imp
-              </td>
-              <td>
-                something imp
-              </td>
-              <td>
-                something imp
-              </td>
-              <td>
-                12/12/2015
-              </td>
-            </tr>
-          </tbody>
+        <table id="registeredServicesTable">
         </table>
       </iron-collapse>
       <!-- Overlays and dialogs here -->
@@ -349,7 +309,33 @@
     //close dialog for registration
     document.getElementById('register_close_button').onclick = function() {
       findParentById(this, "IRON-COLLAPSE").toggle();
-    };    
+    }; //open a particular service
+    // var elements = document.querySelectorAll('.service');
+    // Array.prototype.forEach.call(elements, function(el, i) {
+    //   el.addEventListener("click", function() {
+    //     //remove class hover
+    //     this.parentNode.classList.remove('open');
+    //     //check if a service is open or not
+    //     if (document.getElementById('service-main').opened) {
+    //       //close the existing service
+    //       document.getElementById('service-main').toggle();
+    //     }
+    //     //toggle open the spinner
+    //     document.getElementById('service-loader').toggle();
+    //     //set properties inside collapse
+    //     var strigger = this.classList[1].replace("-service", "");
+    //     setTimeout(function() {
+    //       //change text description of service
+    //       document.querySelector('#service-main .content h3 span').innerHTML = strigger.capitalize();
+    //       //change service icon
+    //       document.querySelector('#service-main .content h3 img').setAttribute('src', el.querySelector('img').getAttribute('src'));
+    //       //toggle open the spinner
+    //       document.getElementById('service-loader').toggle();
+    //       //toggle iron collapse
+    //       document.getElementById('service-main').toggle();
+    //     }, 1500);
+    //   });
+    // });
     //open drop down and close it
     document.getElementById('clientDrop').onclick = function(event) {
       document.getElementById('clientDropBox').classList.toggle('open');
