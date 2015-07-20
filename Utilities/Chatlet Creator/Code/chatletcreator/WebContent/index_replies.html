@@ -33,20 +33,23 @@
   </style>
 </head>
 <body>
-  <div class='fb-main'></div>
+
+  <div class='fb-main'>
+ 
+  </div>
+  <div id="back1">
+  <input id="back" value="Go Back" type="Button">
+  </div>
 
   <script src="vendor/js/vendor.js"></script>
   <script src="dist/formbuilder.js"></script>
   <script src="print.js"></script>
-	<div id="back">
-	<input type="button" value="DONE" id="back_button">
-	</div>
-<script>
-document.getElementbyId("back_button").onclick=function(){
-	window.close();
-};
+	<script>
+	document.getElementById("back").onclick=function(){
+		window.close();
+	};
+	</script>
 
-</script>
   <script>
 	var label;
     $(function(){
