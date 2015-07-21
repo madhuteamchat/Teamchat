@@ -33,11 +33,11 @@ OPERATION.GET_ALL_SERVICES_OF_USER = "getAllServiceOfUser";
 OPERATION.GET_ALL_WORKFLOWS_OF_USER = "getAllWorkflowsOfUser";
 
 KEYSTORE = {};
-KEYSTORE.CLIENT = "client";
-KEYSTORE.APPLICATION = "application";
-KEYSTORE.SERVICE = "service";
-KEYSTORE.WORKFLOW = "workflow";
-KEYSTORE.JSON = "json";
+KEYSTORE.CLIENT = "http://stag-solutions.teamchat.com/TeamchatIntegrationServer/client";
+KEYSTORE.APPLICATION = "http://stag-solutions.teamchat.com/TeamchatIntegrationServer/application";
+KEYSTORE.SERVICE = "http://stag-solutions.teamchat.com/TeamchatIntegrationServer/service";
+KEYSTORE.WORKFLOW = "http://stag-solutions.teamchat.com/TeamchatIntegrationServer/workflow";
+KEYSTORE.JSON = "http://stag-solutions.teamchat.com/TeamchatIntegrationServer/json";
 
 KEYSTORE.DISP_NAME = "Name";
 KEYSTORE.DISP_CLIENT_KEY = "Client Key";
