@@ -1,11 +1,3 @@
-
-//
-//
-//
-//@author Priyanka Shiyal
-//
-//
-//
 package com.teamchat.integration;
 
 import java.awt.image.ConvolveOp;
@@ -56,12 +48,21 @@ import org.apache.http.params.BasicHttpParams;
 
 @SuppressWarnings("deprecation")
 public class TodoistIntegration {
+
+	public static Authentication 	objAuthentication = null;
 	
+
 	public final String USER_AGENT = "Google Chrome/43.0.2357.81";
 	
 	public static String token ="";
 
     private	static TeamchatAPI api;
+   
+
+	public static Map<String, Integer> ProjectNameToProjectIdMap = new HashMap<String, Integer>();
+	public static Map<String, TaskDetails> TaskNameToTaskDetailsMap = new HashMap<String, TaskDetails>();
+
+	public static int projectId;
 	
 	public static DatabaseHandler db = null;
 	
@@ -87,6 +88,8 @@ public class TodoistIntegration {
 		));
 	}
 	
+	
+	
 	@OnKeyword("todoist")
 	public void onTODOIST(TeamchatAPI api) {		
 		
@@ -96,7 +99,7 @@ public class TodoistIntegration {
 				.currentRoom()
 				.post(new PrimaryChatlet()
 						.setQuestionHtml(
-	                        "<a target='_blank' href='https://todoist.com/oauth/authorize?client_id=71be67ab414940e9866a8e09afa03a16&redirect_uri=http://Todoist/Authentication&response_type=code&scope=data:read,data:delete,data:read_write,task:add,project:delete&state="+api.context().currentSender().getEmail()+"'>Click here to connect your Teamchat Account To ToDoIst</a>")));
+	                        "<a target='_blank' href='https://todoist.com/oauth/authorize?client_id=71be67ab414940e9866a8e09afa03a16&redirect_uri=http://interns.teamchat.com:8084/Todoist/Authentication&response_type=code&scope=data:read,data:delete,data:read_write,task:add,project:delete&state="+api.context().currentSender().getEmail()+"'>Click here to connect your Teamchat Account To ToDoIst</a>")));
 		
 		
 	}
@@ -137,8 +140,14 @@ public class TodoistIntegration {
 		api.perform(api.context().currentRoom().post(new PrimaryChatlet().setQuestion("Successfully Login...")));
 		
 	}
-	
   	public static int SyncProjectsFromTODOISTServer(TeamchatAPI api) {
+
+		objAuthentication = new Authentication();
+
+		// token = objAuthentication.getAccessToken();
+
+		System.out.print("Token in Todoist: " + token);
+
 
 		String syncProjectUrl = "https://todoist.com/API/v6/sync?token="
 				+ token
@@ -189,6 +198,8 @@ public class TodoistIntegration {
 						Integer projectId = new Integer(
 								(int) jsonObject.get("id"));
 						String emailid = api.context().currentSender().getEmail();
+			
+						//ProjectNameToProjectIdMap.put(projectName, projectId);
 						
 						db.insertProjectsIntoDB(emailid, projectId, projectName);
 
@@ -272,6 +283,12 @@ public class TodoistIntegration {
 						Integer projectId = new Integer(
 								(int) jsonObject.get("project_id"));
 
+//						TaskDetails objTaskDetails = new TaskDetails();
+//						objTaskDetails.setTaskId(taskId);
+//						objTaskDetails.setProjectId(projectId);
+//						objTaskDetails.setTaskName(taskName);
+
+						//TaskNameToTaskDetailsMap.put(taskName, objTaskDetails);
 						String emailid = api.context().currentSender().getEmail();
 						db.insertTasksIntoDB(emailid, projectId, taskId, taskName);
 					}
@@ -330,7 +347,9 @@ public class TodoistIntegration {
 	public void AddNewProjectToTODOISTServerAlias(TeamchatAPI api)
 			throws IOException, JSONException {
 
-			
+		
+		
+		
     	String projectNameFromUI = api.context().currentReply().getField("projectname");     
         UUID uuid = UUID.randomUUID();
         	
@@ -387,7 +406,8 @@ public class TodoistIntegration {
 		
 		if(0 == OkStatus.compareTo("ok"))
 		{
-		
+			
+			//ProjectNameToProjectIdMap.put(projectNameFromUI, projectId);
 			String emailid = api.context().currentSender().getEmail();
 			db.insertProjectsIntoDB(emailid, projectId, projectNameFromUI);
 			
@@ -473,100 +493,102 @@ public class TodoistIntegration {
 		String updateProjectNameFromUI = api.context().currentReply()
 				.getField("updateprojectname");
 		
-		
+		int projectId = 0;
 		
 		
 		try {
 			String emailid = api.context().currentSender().getEmail();
 			
-			int	projectId = db.getProjectIdByProjectName(projectNameFromUI,emailid);
+			projectId = db.getProjectIdByProjectName(projectNameFromUI,emailid);
 			System.out.println("projectId Is:"+projectId);
-			
-			
-			UUID uuid = UUID.randomUUID();
-			System.out.println("UUID Is:" + uuid);
-
-			String url = "https://todoist.com/API/v6/sync?token="
-					+ token
-					+ "&commands=[{%22type%22:%20%22project_update%22,%20%22uuid%22:%20%22"
-					+ uuid + "%22,%20%22args%22:%20{%22id%22:%20" + projectId
-					+ ",%20%22name%22:%22" + updateProjectNameFromUI
-					+ "%22,%22indent%22:%202}}]";
-
-			URL obj = new URL(url);
-			HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-
-			// optional default is GET
-			con.setRequestMethod("GET");
-
-			// add request header
-			con.setRequestProperty("User-Agent", USER_AGENT);
-
-			int responseCode = con.getResponseCode();
-			System.out.println("\nSending 'GET' request to URL : " + url);
-			System.out.println("Response Code : " + responseCode);
-
-			BufferedReader in = new BufferedReader(new InputStreamReader(
-					con.getInputStream()));
-			String inputLine;
-			StringBuffer response = new StringBuffer();
-
-			while ((inputLine = in.readLine()) != null) {
-				response.append(inputLine);
-			}
-
-			in.close();
-
-//			JSONObject thedata = new JSONObject(response.toString());
-	//
-//			JSONObject jsonObjectForSyncStatus = (JSONObject) thedata
-//					.get("SyncStatus");
-	//
-//			String OkStatus = (String) jsonObjectForSyncStatus.get(uuid.toString());
-	//
-//			System.out.println("Project update status is:" + OkStatus);
-
-			if (200== responseCode) {
-				
-				try {
-					
-					db.UpdateProjectByEmailId(emailid, updateProjectNameFromUI, projectNameFromUI);
-					
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				
-
-				api.perform(api
-						.context()
-						.currentRoom()
-						.post(new PrimaryChatlet()
-								.setQuestionHtml("<html><body><b><font color = #159CEB>Project Updated SuccessFully.</font></b><br></br>"
-										+ "<b>Project Id:&nbsp</b>"
-										+ "<font color = #159CEB>"
-										+ projectId
-										+"</font><br></br>"
-										+ "<b>Project Name:&nbsp</b>"
-										+ "<font color = #159CEB>"
-										+ updateProjectNameFromUI
-										+"</font></body></html>")));
-
-			} else {
-				api.perform(api
-						.context()
-						.currentRoom()
-						.post(new PrimaryChatlet().setQuestionHtml("<html><body><b><font color = #159CEB>Update Project Failed.</font></b><br></br>"
-								+ "<b> Project Name:&nbsp</b>" 
-								+ "<font color = #159CEB>"
-								+ projectNameFromUI
-								+"</font></body></html>")));
-			
-			}
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+
+		UUID uuid = UUID.randomUUID();
+		System.out.println("UUID Is:" + uuid);
+
+		String url = "https://todoist.com/API/v6/sync?token="
+				+ token
+				+ "&commands=[{%22type%22:%20%22project_update%22,%20%22uuid%22:%20%22"
+				+ uuid + "%22,%20%22args%22:%20{%22id%22:%20" + projectId
+				+ ",%20%22name%22:%22" + updateProjectNameFromUI
+				+ "%22,%22indent%22:%202}}]";
+
+		URL obj = new URL(url);
+		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+
+		// optional default is GET
+		con.setRequestMethod("GET");
+
+		// add request header
+		con.setRequestProperty("User-Agent", USER_AGENT);
+
+		int responseCode = con.getResponseCode();
+		System.out.println("\nSending 'GET' request to URL : " + url);
+		System.out.println("Response Code : " + responseCode);
+
+		BufferedReader in = new BufferedReader(new InputStreamReader(
+				con.getInputStream()));
+		String inputLine;
+		StringBuffer response = new StringBuffer();
+
+		while ((inputLine = in.readLine()) != null) {
+			response.append(inputLine);
+		}
+
+		in.close();
+
+//		JSONObject thedata = new JSONObject(response.toString());
+//
+//		JSONObject jsonObjectForSyncStatus = (JSONObject) thedata
+//				.get("SyncStatus");
+//
+//		String OkStatus = (String) jsonObjectForSyncStatus.get(uuid.toString());
+//
+//		System.out.println("Project update status is:" + OkStatus);
+
+		if (200== responseCode) {
+
+			//ProjectNameToProjectIdMap.remove(projectNameFromUI);
+			//ProjectNameToProjectIdMap.put(updateProjectNameFromUI, projectId);
+			String emailid = api.context().currentSender().getEmail();
+			try {
+				
+				db.UpdateProjectByEmailId(emailid, updateProjectNameFromUI, projectNameFromUI);
+				
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+
+			api.perform(api
+					.context()
+					.currentRoom()
+					.post(new PrimaryChatlet()
+							.setQuestionHtml("<html><body><b><font color = #159CEB>Project Updated SuccessFully.</font></b><br></br>"
+									+ "<b>Project Id:&nbsp</b>"
+									+ "<font color = #159CEB>"
+									+ projectId
+									+"</font><br></br>"
+									+ "<b>Project Name:&nbsp</b>"
+									+ "<font color = #159CEB>"
+									+ updateProjectNameFromUI
+									+"</font></body></html>")));
+
+		} else {
+			api.perform(api
+					.context()
+					.currentRoom()
+					.post(new PrimaryChatlet().setQuestionHtml("<html><body><b><font color = #159CEB>Update Project Failed.</font></b><br></br>"
+							+ "<b> Project Name:&nbsp</b>" 
+							+ "<font color = #159CEB>"
+							+ projectNameFromUI
+							+"</font></body></html>")));
+		
 		}
 
 	}
@@ -575,7 +597,7 @@ public class TodoistIntegration {
 	public int DeleteProjectToTODOISTServer(TeamchatAPI api) {
 		Form form = api.objects().form();
 		Field field = api.objects().select().label("Project Name").name("projectname");
-		List<ProjectDetails> list = new ArrayList<ProjectDetails>();
+	List<ProjectDetails> list = new ArrayList<ProjectDetails>();
 		
 		try {
 			
@@ -612,7 +634,7 @@ public class TodoistIntegration {
 		String projectNameFromUI = api.context().currentReply()
 				.getField("projectname");
 		
-		
+		//Integer projectId = ProjectNameToProjectIdMap.get(projectNameFromUI);
 		int projectId =0;
 		try {
 			String emailid = api.context().currentSender().getEmail();
@@ -623,6 +645,7 @@ public class TodoistIntegration {
 		}
 		System.out.println("Project Id Is:"+projectId);
 
+		//System.out.println("TaskId Is:" + ProjectId);
 
 		UUID uuid = UUID.randomUUID();
 		System.out.println("uuid is:"+uuid);
@@ -675,6 +698,10 @@ public class TodoistIntegration {
 //		System.out.println("Project delete status is:" + OkStatus);
 
 		if (200 == responseCode) {
+			
+//			System.out.println("Before removing from map 1");
+//			ProjectNameToProjectIdMap.remove(projectNameFromUI);
+//			System.out.println("Before removing from map 2");
 			
 			String emailid= api.context().currentSender().getEmail();
 			try {
@@ -739,6 +766,15 @@ public class TodoistIntegration {
 		
 		form.addField(field);
 		
+//		Form form = api.objects().form();
+//		Field field = api.objects().select().label("Project Name")
+//				.name("projectname");
+//		for (Map.Entry<String, Integer> entry : ProjectNameToProjectIdMap
+//				.entrySet()) {
+//			String key = entry.getKey();
+//			field.addOption(key);
+//		}
+//		form.addField(field);
 		api.perform(
 
 		api.context()
@@ -837,6 +873,8 @@ public class TodoistIntegration {
 			objTaskDetails.setTaskId(TaskId);
 			objTaskDetails.setProjectId(projectId);
 			objTaskDetails.setTaskName(taskNameFromUI);
+
+		//	TaskNameToTaskDetailsMap.put(taskNameFromUI, objTaskDetails);
 			
 			//String emailid = api.context().currentSender().getEmail();
 			db.insertTasksIntoDB(emailid, projectId, TaskId, taskNameFromUI);
@@ -881,7 +919,7 @@ public class TodoistIntegration {
 	public int DeleteTaskInProjectToTODOISTServer(TeamchatAPI api) {
 		Form form = api.objects().form();
 		Field field = api.objects().select().label("Task Name").name("taskname");
-		List<TaskDetails> list = new ArrayList<TaskDetails>();
+	List<TaskDetails> list = new ArrayList<TaskDetails>();
 		
 		try {
 			
@@ -1019,12 +1057,14 @@ public class TodoistIntegration {
 
 	}
 
+
+
 	@OnKeyword("updatetask")
 	public int UpdateTaskInProjectToTODOISTServer(TeamchatAPI api) {
 		
 		Form form = api.objects().form();
 		Field field = api.objects().select().label("Task Name").name("taskname");
-		List<TaskDetails> list = new ArrayList<TaskDetails>();
+	List<TaskDetails> list = new ArrayList<TaskDetails>();
 		
 		try {
 			
