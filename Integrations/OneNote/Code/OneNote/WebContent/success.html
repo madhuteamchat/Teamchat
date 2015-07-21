@@ -1,0 +1,58 @@
+<!doctype html>
+<html>
+
+<head>
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Successfully Logged In</title>
+<!-- favicon -->
+<link rel="shortcut icon"
+	href="https://enterprise.teamchat.com/webjim-echat/static/img/favicon.png"
+	type="image/x-icon">
+<!-- Theme colour for android lollipop -->
+<meta name="theme-color" content="#159ceb">
+<!-- styles -->
+<link rel="stylesheet"
+	href="http://fonts.googleapis.com/css?family=Roboto:300,400,500,700"
+	rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="css/fonts.css">
+<link rel="stylesheet" href="css/material.min.css">
+<link rel="stylesheet" href="css/success.css">
+</head>
+
+<body>
+	<div class="main-container ">
+		<div class="inner-container">
+			<img class="logo-img" src="img/icons-04.png" alt="teamchat-logo" />
+			<div class="mdl-card mdl-shadow--2dp demo-card-wide green">
+				<div class="mdl-card__title font-white">
+					<h2 class="mdl-card__title-text">Logged in</h2>
+					<i class="icon icon-check auth_state"></i>
+				</div>
+				<div class="mdl-card__supporting-text font-white">You have
+					successfully authorized Teamchat to use your account.</div>
+				<div class="mdl-card__actions mdl-card--border">
+					<a
+						class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect"
+						onclick="window.close()">Continue</a>
+				</div>
+			</div>
+			<img class="logo-img" src="img/App_Logo.png" alt="logo" />
+		</div>
+	</div>
+	<script>
+		window.onload = function()
+		{
+			var x = "Oneserve?" + window.location.hash.slice(1);
+			var data = null;
+			var xhr = new XMLHttpRequest();
+			xhr.withCredentials = true;
+			xhr.open("POST", x);
+			xhr.send(data);
+		};
+	</script>
+</body>
+
+</html>
