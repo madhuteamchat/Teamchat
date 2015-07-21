@@ -5,12 +5,13 @@ This is a [Basecamp](https://basecamp.com/) client integration with teamchat.
 
 ### Table of contents
 
-* [Dependencies](#dependencies)
-* [Registering your app on Basecamp](#registering-your-app-on-basecamp)
-* [Configure the code](#configure-the-code)
-* [Setup Database](#setup-database)
-* [Authorisation flow](#authorisation-flow)
-* [Rest API](#rest-api)
+  * [Implementation Manual](#implementation-manual)
+      * [Table of contents](#table-of-contents)
+    * [Dependencies](#dependencies)
+    * [Registering your app on Basecamp](#registering-your-app-on-basecamp)
+    * [Configure the code](#configure-the-code)
+    * [Authorisation flow](#authorisation-flow)
+    * [Rest API](#rest-api)
 
 Dependencies
 ----------
