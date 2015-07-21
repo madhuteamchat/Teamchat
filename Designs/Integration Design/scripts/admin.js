@@ -128,13 +128,13 @@ var service = {
       adminName: adminName
     }
 
-    if (clientKey == null) {
+    if (clientKey == null || clientKey == "" || clientKey == undefined) {
       // alert("You need to register a client before you can register a service");
       showToast('toaster', 'Please register a client first');
       return false;
     }
     // if there is no name given to the service
-    else if (serName == "" || clientKey == "") {
+    else if (serName == "") {
       showToast('toaster', 'Please fill the required fields');
     } else {
       ajaxCall(KEYSTORE.SERVICE, success, error, KEYSTORE.JSON, HTTP.POST, JSON.stringify(data));
