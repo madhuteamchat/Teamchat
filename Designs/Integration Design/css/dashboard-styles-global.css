@@ -1,10 +1,10 @@
 /*custom scrollbar*/
 
-body::-webkit-scrollbar {
+*::-webkit-scrollbar {
   background: rgba(0, 0, 0, 0);
   width: 10px;
 }
-body::-webkit-scrollbar-thumb {
+*::-webkit-scrollbar-thumb {
   background: #BDBDBD;
 }
 

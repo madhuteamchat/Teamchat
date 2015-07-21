@@ -184,11 +184,20 @@
   }
   /*drop down ka stuff*/
 
+  .drop-down {
+    width: 400px;
+  }
+
   .drop-down .flex {
     font-size: 16px;
     font-weight: 400;
+    width: 320px;
     display: inline-block;
     padding: 16px;
+    text-overflow: ellipsis;
+    /* Required for text-overflow to do anything */
+    white-space: nowrap;
+    overflow: hidden;
   }
 
   .drop-down iron-icon {
@@ -216,9 +225,35 @@
     cursor: pointer;
     background-color: white;
     display: inline-block;
-    min-width: 240px;
+    /*min-width: 240px;*/
     margin: 12px;
     @apply(--shadow-elevation-2dp);
+  }
+  /*this style only applies to list of items*/
+
+  .innerlist {
+    height: 143px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    width: 400px;
+  }
+  /*list fix*/
+
+  .innerlist paper-item {
+    text-overflow: ellipsis;
+    /* Required for text-overflow to do anything */
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  /*hoverable paper item inside a list*/
+
+  .innerlist paper-item:hover {
+    background-color: #F0F0F0;
+  }
+  /*selected item*/
+
+  .innerlist .selected-item {
+    background-color: #D8D3D3;
   }
 
   .avatar {
