@@ -45,18 +45,22 @@ Configure the code
 	 - APP_NAME : Registered app's name and Registered app's url (inside the brackets)
 	 - The rest of the fields are mysql database's details. You may use [this](https://github.com/madhuteamchat/Teamchat/blob/master/Integrations/Basecamp/Artifacts/Sql%20Queries/create_auth_table) my sql query to create a table in the database.
 	
+Setup Database
+----------
+Use the sql queries found [here](https://github.com/madhuteamchat/Teamchat/tree/master/Integrations/Basecamp/Artifacts/Sql%20Queries) to setup your database on any server running MySql.
+
+The database must have the following configuration (as done in [Universal.java](https://github.com/madhuteamchat/Teamchat/blob/master/Integrations/Basecamp/code/Bot/src/com/teamchat/integrations/basecamp/Universal.java))
+
+ 1. DB_NAME as the database's name
+ 2. DB_USERNAME as the database's username
+ 3. DB_PASSWORD as the database's password
+ 4. TABLE_NAME as the table used for storing authorization credentials
+
 Authorisation flow
 ----------
  Note right of Basecamp: Basecamp API
  
-```sequence
-Basecamp_bot.java->Basecamp: GET Request for authentication code
-Basecamp-->Redirect_url.java: Returns the code
-Redirect_url.java->Basecamp: POST Request for authentication token
-Basecamp-->Redirect_url.java: Returns the token
-Redirect_url.java->Basecamp: POST Request for authorization details
-Basecamp-->Redirect_url.java: Returns the authorization details
-```
+![auth flow](https://raw.githubusercontent.com/madhuteamchat/Teamchat/master/Integrations/Basecamp/Artifacts/Implementation/authflow.png)
 
 The authorization details are retured in the following format if successfully done:
 ```json
