@@ -56,6 +56,7 @@ function addDropdownHandler(container, hidden, inner) {
       document.getElementById(hidden).value = el.innerHTML.trim();
       //update the drop down
       document.querySelector('#' + inner + ' .flex').innerHTML = el.innerHTML.trim();
+      document.querySelector('#' + inner + ' .flex').setAttribute('title', el.innerHTML.trim());
       //remove selected highlight from wrong item
       var elementsx = document.querySelectorAll('innerlist paper-item');
       Array.prototype.forEach.call(elements, function(el, i) {
@@ -75,6 +76,7 @@ function updateDropdown(container, hidden, inner, item) {
   document.getElementById(hidden).value = value.trim();
   //update the drop down
   document.querySelector('#' + inner + ' .flex').innerHTML = value.trim();
+  document.querySelector('#' + inner + ' .flex').setAttribute('title', value.trim());
   //add selected to correct item
   //sorry jquery really helps here
   document.querySelector('#' + container + ' .innerlist ' + item).classList.add('selected-item');

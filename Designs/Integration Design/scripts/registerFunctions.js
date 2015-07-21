@@ -101,7 +101,7 @@ var getClientDataSuccess = function(data) {
   $("#reg-service-cKey").empty();
   var selectService = document.getElementById("reg-service-cKey");
   for (client of data) {
-    $("<paper-item>" + client.cName + ' ::::: ' + client.clientKey + "</paper-item>").appendTo('#clientDropBox .list');
+    $("<paper-item title=\"" + client.cName + ' ::::: ' + client.clientKey + "\">" + client.cName + ' ::::: ' + client.clientKey + "</paper-item>").appendTo('#clientDropBox .list');
   }
   //add event handler for this drop down
   addDropdownHandler('clientDropBox', 'reg-service-cKey', 'clientDrop');
