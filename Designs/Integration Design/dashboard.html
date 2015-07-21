@@ -59,7 +59,6 @@
   <script src="scripts/Constants.js"></script>
   <script src="scripts/mustache.js"></script>
   <script src="scripts/helpers.js"></script>
-  <script src="scripts/toastshandler.js"></script>
   <script src="scripts/admin.js"></script>
   <script src="scripts/util.js"></script>
   <script src="scripts/templates.js"></script>
@@ -152,7 +151,7 @@
     <paper-icon-button icon="extension"></paper-icon-button>
     <span title>Teamchat Integration Console</span>
     <h4>Puranjay Jain</h4>
-    <paper-icon-button icon="exit-to-app">Logout</paper-icon-button>
+    <paper-icon-button id="logout_button" icon="exit-to-app">Logout</paper-icon-button>
     <paper-tabs id="select_tab" selected="0" class="bottom self-end" style="width: 600px;">
       <paper-tab>PLATFORM CLIENT</paper-tab>
       <paper-tab>SERVICES</paper-tab>
@@ -193,7 +192,6 @@
           </div>
         </paper-dialog>
       </form>
-      <paper-toast id="toast_client" text="An Error Occured">
     </neon-animatable>
     <neon-animatable>
       <div class="content">
@@ -260,25 +258,20 @@
             </div>
             <!-- drop down contents -->
             <div id="clientDropBox" class="horizontal-section drop-down-data">
-              <paper-menu class="list">
-                <paper-item>client 1</paper-item>
-                <paper-item>client 2</paper-item>
-                <paper-item>client 3</paper-item>
-                <paper-item>client 4</paper-item>
+              <paper-menu class="list innerlist">
               </paper-menu>
             </div>
             <!-- drop down data -->
             <input type="hidden" name="reg-service-cKey" id="reg-service-cKey" value="">
-            <paper-input name="reg-service-name" id="reg-service-name" required label="Name" char-counter maxlength="128"></paper-input>
-            <paper-textarea name="reg-service-desc" id="reg-service-desc" required label="Description" char-counter maxlength="256"></paper-textarea>
+            <paper-input name="reg-service-name" id="reg-service-name" required auto-validate label="Name" char-counter maxlength="128"></paper-input>
+            <paper-textarea name="reg-service-desc" id="reg-service-desc" label="Description" char-counter maxlength="256"></paper-textarea>
           </paper-dialog-scrollable>
           <div class="buttons">
             <paper-button class="discard" dialog-dismiss raised>Discard</paper-button>
-            <paper-button class="submit-button" dialog-confirm autofocus raised>Create</paper-button>
+            <paper-button class="submit-button" onclick="registerService()" dialog-confirm autofocus raised>Create</paper-button>
           </div>
         </paper-dialog>
       </form>
-      <paper-toast id="toast_service" text="An Error Occured">
     </neon-animatable>
     <neon-animatable>
       applications
@@ -287,7 +280,13 @@
       workflows
     </neon-animatable>
   </neon-animated-pages>
+  <!-- to display errors and status -->
+  <paper-toast id="toaster" text="An Error Occured">
   <script>
+    //logout button event
+    document.getElementById('logout_button').onclick = function(){
+      window.location = "login?operation=logout";
+    }
     //click event of tab switching
     document.getElementById('select_tab').onclick = function() {
       document.getElementById('page').selected = this.selected;
@@ -339,14 +338,6 @@
     //open drop down and close it
     document.getElementById('clientDrop').onclick = function(event) {
       document.getElementById('clientDropBox').classList.toggle('open');
-    };
-    //select element so update the value of hidden
-    document.getElementById('clientDropBox').onclick = function(event) {
-      document.getElementById('clientDropBox').classList.toggle('open');
-      //update the hidden
-      document.getElementById('reg-service-cKey').value = this.querySelector('.list').focusedItem.innerHTML;
-      //update the drop down
-      document.querySelector('#clientDrop .flex').innerHTML = this.querySelector('.list').focusedItem.innerHTML;
     };
     //submit button event
     // var submitbuttons = document.querySelectorAll('.submit-button');

@@ -220,6 +220,23 @@
     margin: 12px;
     @apply(--shadow-elevation-2dp);
   }
+  /*this style only applies to list of items*/
+
+  .innerlist {
+    height: 143px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+  }
+  /*hoverable paper item inside a list*/
+
+  .innerlist paper-item:hover {
+    background-color: #F0F0F0;
+  }
+
+  /*selected item*/
+  .innerlist .selected-item {
+    background-color: #D8D3D3;
+  }
 
   .avatar {
     display: inline-block;
