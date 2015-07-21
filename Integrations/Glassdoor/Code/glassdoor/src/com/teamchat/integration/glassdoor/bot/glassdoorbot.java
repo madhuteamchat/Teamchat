@@ -250,16 +250,7 @@ flag=0;
 								+ fr.getPros() + "</a10></li>"
 								+"<li><a9 style=\"color:black\";><b>Cons - </b></a9><a10 style=\"color:#359FD8\"; align=\"justify\";>"
 								+ fr.getCons() + "</a10></li>"
-								+ "</ul>"
-								+ "<h3><b>CEO Details:</b></h3>"
-								+ "<img src=\""+i.getSrc()+"\" height=\"120\" width=\"120\" />"
-								+ "<br />"
-								+ "<br />"
-								+"<ul type=\"square\"; style=\"color:#359FD8\";><li><a9 style=\"color:black\";><b>Name - </b></a9><a10 style=\"color:#359FD8\";>"
-								+ c.getName() + "</a10></li>"
-								+"<li><a9 style=\"color:black\";><b>Title - </b></a9><a10 style=\"color:#359FD8\";>"
-								+ c.getTitle() + "</a10></li></ul>"
-								);
+								+ "</ul>");
 						
 						api.perform(api.context().currentRoom().post(prime1));
 					} catch (Exception e) {
@@ -401,16 +392,7 @@ flag=0;
 								+ fr.getPros() + "</a10></li>"
 								+"<li><a9 style=\"color:black\";><b>Cons - </b></a9><a10 style=\"color:#359FD8\"; align=\"justify\";>"
 								+ fr.getCons() + "</a10></li>"
-								+ "</ul>"
-								+ "<h3><b>CEO Details:</b></h3>"
-								+ "<img src=\""+i.getSrc()+"\" height=\"120\" width=\"120\" />"
-								+ "<br />"
-								+ "<br />"
-								+"<ul type=\"square\"; style=\"color:#359FD8\";><li><a9 style=\"color:black\";><b>Name - </b></a9><a10 style=\"color:#359FD8\";>"
-								+ c.getName() + "</a10></li>"
-								+"<li><a9 style=\"color:black\";><b>Title - </b></a9><a10 style=\"color:#359FD8\";>"
-								+ c.getTitle() + "</a10></li></ul>"
-								);
+								+ "</ul>");
 						
 						api.perform(api.context().currentRoom().post(prime1));
 					} catch (Exception e) {
