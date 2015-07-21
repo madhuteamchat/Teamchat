@@ -24,7 +24,7 @@ var client = {
     }
 
     if (clientName == "" || clientOrg == "" || clientOrgEmail == "") {
-      showToast('toast_client', 'Please fill the required fields !');
+      showToast('toaster', 'Please fill the required fields');
       return false;
     } else {
       ajaxCall(KEYSTORE.CLIENT, success, error, KEYSTORE.JSON, HTTP.POST, JSON.stringify(data));
@@ -130,8 +130,12 @@ var service = {
 
     if (clientKey == null) {
       // alert("You need to register a client before you can register a service");
-      showToast('toaster', 'Please register a client first !');
+      showToast('toaster', 'Please register a client first');
       return false;
+    }
+    // if there is no name given to the service
+    else if (serName == "" || clientKey == "") {
+      showToast('toaster', 'Please fill the required fields');
     } else {
       ajaxCall(KEYSTORE.SERVICE, success, error, KEYSTORE.JSON, HTTP.POST, JSON.stringify(data));
       return true;
@@ -190,7 +194,7 @@ var workflow = {
 
     if (clientKey == null || wfName == "" || botEmail == "" || botPassword == "" || wfCbUrl == "") {
       // alert("Please fill the required fields!");
-      showToast('toaster', 'Please fill the required fields!');
+      showToast('toaster', 'Please fill the required fields');
       return false;
     } else {
       ajaxCall(KEYSTORE.WORKFLOW, success, error, KEYSTORE.JSON, HTTP.POST, JSON.stringify(data));
