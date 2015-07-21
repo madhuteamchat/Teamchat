@@ -166,7 +166,7 @@ public class Authentication extends HttpServlet {
 			HttpServletResponse response) throws ServletException, IOException {
 
 		String user_agent = request.getHeader("User-Agent"), code = request
-				.getParameter("code"),  email=request.getParameter("state"), client_id = "71be67ab414940e9866a8e09afa03a16", client_secret = "df194f80129743da961870e34fe99139", redirect_uri = "http://interns.teamchat.com:8084/Todoist/Authentication";
+				.getParameter("code"),  email=request.getParameter("state"), client_id = "71be67ab414940e9866a8e09afa03a16", client_secret = "df194f80129743da961870e34fe99139", redirect_uri = "https://todoist.com/Users/showLogin";
        
         System.out.println("Email is :"+email);
         
