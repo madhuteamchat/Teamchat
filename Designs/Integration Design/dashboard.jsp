@@ -1,4 +1,4 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%> 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!doctype html>
 <html>
 
@@ -51,11 +51,10 @@
   <!-- custom style -->
   <link rel="import" href="css/dashboard-styles.html">
   <!-- Content rendering scripts -->
-  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script> -->
   <script src="scripts/jquery-2.1.3.min.js"></script>
   <!--[if lte IE 8]>
       <script src="scripts/jquery-1.11.3.min.js"></script>
-    <![endif]-->
+  <![endif]-->
   <script src="scripts/Constants.js"></script>
   <script src="scripts/mustache.js"></script>
   <script src="scripts/helpers.js"></script>
@@ -67,7 +66,6 @@
   <script src="scripts/mrjsontable.js"></script>
   <script>
     $(document).ready(
-
       function() {
         var url = location.search;
         if (url.indexOf('errMsg=') > 0) {
@@ -82,32 +80,25 @@
     function showPopUp(id) {
       $('#main-body').hide();
       $(id).css("display", "block");
-
     }
 
     function hidePopup(id) {
       $(id).css("display", "none");
       $('#main-body').show();
-
     }
 
     var renderRegisteredUtils = function() {
-
       var client = new Object();
       client.adminEmail = '${sessionScope.email}';
       var application = new Object();
       application.adminEmail = '${sessionScope.email}';
-
       var service = new Object();
       service.adminEmail = '${sessionScope.email}';
-
       var workflow = new Object();
       workflow.adminEmail = '${sessionScope.email}';
-
       integration.user.name = '${sessionScope.email}';
       integration.user.email = '${sessionScope.email}';
       integration.user.userId = '${sessionScope.userId}';
-
       admin.service.getAllServiceList(service, getAllServiceDataSuccess,
         getAllServiceDataFailure);
       admin.client.getAllClientsOfUser(client, getClientDataSuccess,
@@ -118,8 +109,6 @@
         getWorkflowDataFailure);
       // disableCallback(true);
     }
-
-
     // var disableCallback = function(isTrue) {
     //   if (isTrue) {
     //     $("#reg-app-callbackurl").prop('disabled', true);
@@ -162,11 +151,9 @@
       <table id="registeredClientsTable">
       </table>
       <paper-fab icon="add" id="register_client_button" title="Register a new client"></paper-fab>
-      <!-- Overlays and dialogs here -->
       <form onsubmit="return false" method="post">
         <paper-dialog style="max-height:460px;min-width:350px;" id="register_client" entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
           <h2>Register a new Client</h2>
-          <!-- <paper-dialog-scrollable> -->
           <div>
             <paper-input name="reg-client-name" id="reg-client-name" required auto-validate label="Name" autofocus char-counter maxlength="128"></paper-input>
             <paper-input name="reg-client-org" id="reg-client-org" required auto-validate label="Organization" char-counter maxlength="128"></paper-input>
@@ -191,35 +178,17 @@
           , workflows you create
         </p>
         <div id="availableServices" class="services">
-          <!-- <div class="service zendesk-service" title="Zendesk">
-            <img src="img/Zendesk.png" alt="zendesk" />
-            <span class="badge">1</span>
-          </div>
-          <div class="service rnas-service" title="Rnas">
-            <img src="img/notification.png" alt="rnas" />
-          </div>
-          <div class="service sms-service" title="Sms">
-            <img src="img/sms.png" alt="sms" />
-          </div>
-          <div class="service git-service" title="Github">
-            <img src="img/git.png" alt="github" />
-            <span class="badge">99</span>
-          </div>
-          <div class="service jira-service" title="Jira">
-            <img src="img/jira_rbg_blue_stacked.png" alt="jira" />
-          </div> -->
         </div>
       </div>
       <iron-collapse id="service-loader">
         <paper-spinner active></paper-spinner>
       </iron-collapse>
       <iron-collapse id="service-main">
-        <!-- this contains the inner content that is diplayed when a particular service is opened! -->
         <div class="content">
           <h3>
             <img src="img/git.png" alt="github" />
             <span>Git</span>
-            <paper-button id="register_this_button" raised>Create New</paper-button>
+            <paper-button id="register_this_button" onclick="addService()" raised>Create New</paper-button>
             <paper-button id="register_close_button" class="discard" raised>Close</paper-button>
           </h3>
           <p>
@@ -234,22 +203,18 @@
         <table id="registeredServicesTable">
         </table>
       </iron-collapse>
-      <!-- Overlays and dialogs here -->
       <form onsubmit="return false" id="service-form" method="post">
         <paper-dialog id="register_service" with-backdrop entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
           <h2>Register a new Service</h2>
           <paper-dialog-scrollable>
-            <!-- drop down clickable -->
             <div id="clientDrop" class="list drop-down">
               <div class="flex">Select Client</div>
               <iron-icon icon="arrow-drop-down"></iron-icon>
             </div>
-            <!-- drop down contents -->
             <div id="clientDropBox" class="horizontal-section drop-down-data">
               <paper-menu class="list innerlist">
               </paper-menu>
             </div>
-            <!-- drop down data -->
             <input type="hidden" name="reg-service-cKey" id="reg-service-cKey" value="">
             <paper-input name="reg-service-name" id="reg-service-name" required auto-validate label="Name" char-counter maxlength="128"></paper-input>
             <paper-textarea name="reg-service-desc" id="reg-service-desc" label="Description" char-counter maxlength="256"></paper-textarea>
@@ -268,7 +233,6 @@
       workflows
     </neon-animatable>
   </neon-animated-pages>
-  <!-- to display errors and status -->
   <paper-toast id="toaster" text="An Error Occured"></paper-toast>
   <script src="scripts/windowend.js"></script>
   </c:when>
