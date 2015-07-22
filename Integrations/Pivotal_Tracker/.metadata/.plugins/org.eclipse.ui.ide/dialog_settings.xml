@@ -8,6 +8,13 @@
 		<list key="ENABLED_TRANSFERS">
 		</list>
 	</section>
+	<section name="CleanDialogSettings">
+		<item value="583" key="DIALOG_WIDTH"/>
+		<item value="219" key="DIALOG_Y_ORIGIN"/>
+		<item value="406" key="DIALOG_HEIGHT"/>
+		<item value="471" key="DIALOG_X_ORIGIN"/>
+		<item value="false" key="TOGGLE_SELECTED"/>
+	</section>
 	<section name="NewWizardAction">
 	</section>
 </section>
