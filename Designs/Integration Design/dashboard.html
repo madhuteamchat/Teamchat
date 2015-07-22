@@ -51,11 +51,10 @@
   <!-- custom style -->
   <link rel="import" href="css/dashboard-styles.html">
   <!-- Content rendering scripts -->
-  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script> -->
   <script src="scripts/jquery-2.1.3.min.js"></script>
   <!--[if lte IE 8]>
       <script src="scripts/jquery-1.11.3.min.js"></script>
-    <![endif]-->
+  <![endif]-->
   <script src="scripts/Constants.js"></script>
   <script src="scripts/mustache.js"></script>
   <script src="scripts/helpers.js"></script>
@@ -226,7 +225,7 @@
           <h3>
             <img src="img/git.png" alt="github" />
             <span>Git</span>
-            <paper-button id="register_this_button" raised>Create New</paper-button>
+            <paper-button id="register_this_button" onclick="addService()" raised>Create New</paper-button>
             <paper-button id="register_close_button" class="discard" raised>Close</paper-button>
           </h3>
           <p>
@@ -269,10 +268,12 @@
       </form>
     </neon-animatable>
     <neon-animatable>
-      applications
+      <table id="registeredApplicationsTable">
+      </table>
     </neon-animatable>
     <neon-animatable>
-      workflows
+      <table id="registeredWorkflowsTable">
+      </table>
     </neon-animatable>
   </neon-animated-pages>
   <!-- to display errors and status -->

@@ -1,0 +1,24 @@
+package com.bonusly.bot;
+
+import java.io.IOException;
+
+import com.teamchat.client.annotations.OnAlias;
+import com.teamchat.client.annotations.OnKeyword;
+import com.teamchat.client.sdk.TeamchatAPI;
+import com.teamchat.client.sdk.chatlets.PrimaryChatlet;
+
+public class Bonusly_Main {
+
+	@OnKeyword("help")
+	public void ConnectAndHelp(TeamchatAPI api) throws IOException {
+		api.context().currentRoom().post(new PrimaryChatlet().setQuestionHtml
+				("HI, This is Bonusly Bot.</br> To use your You may proceed to use your <u>Bonusly account</u> after you login. " + "<br />"+"Enter the following commands to use your account"+ "<br />"+""));
+		Authorizer auth = new Authorizer();
+		auth.getCredentials(api);
+		
+	}
+	@OnAlias("oncreds")
+	public void Oncreds(TeamchatAPI api) throws IOException{
+		
+	}
+}

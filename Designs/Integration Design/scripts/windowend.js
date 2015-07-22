@@ -17,19 +17,6 @@ document.getElementById('register_client_button').onclick = function() {
     dialog.open();
   }
 };
-//open dialog for registration
-document.getElementById('register_this_button').onclick = function() {
-  var clientKey = document.getElementById('reg-service-cKey').value;
-  //if no client is registered
-  if (clientKey == null || clientKey == "" || clientKey == undefined) {
-    showToast('toaster', 'Please register a client first');
-  } else {
-    var dialog = document.getElementById('register_service');
-    if (dialog) {
-      dialog.open();
-    }
-  }
-};
 //close dialog for registration
 document.getElementById('register_close_button').onclick = function() {
   findParentById(this, "IRON-COLLAPSE").toggle();
