@@ -5,7 +5,14 @@ This is a [Teamchat](https://teamchat.com/) integration dashboard console redesi
 
 ### Table of contents
 
-  use ghmd toc to generate toc
+  * [Demo](#demo)
+  * [Dependencies](#dependencies)
+  * [Theme and colour](#theme-and-colour)
+  * [Polymer components used](#polymer-components-used)
+    * [Script dependencies](#script-dependencies)
+  * [HTML](#html)
+    * [Inside a Section](#inside-a-section)
+  * [I did'nt understand this js function](#i-didnt-understand-this-js-function)
 
 Demo
 ====
@@ -236,6 +243,208 @@ A client button trigger ( floating button )  is declared as:
 <paper-fab icon="add" id="register_client_button" title="Register a new client"></paper-fab>
 ```
 
-and it looks like ![paper fab](https://raw.githubusercontent.com/madhuteamchat/Teamchat/master/Designs/Integration%20Design/docs/fab.png)
+and it looks like this ![paper fab](https://raw.githubusercontent.com/madhuteamchat/Teamchat/master/Designs/Integration%20Design/docs/fab.png)
+
+All forms which are used for client registration,etc.are declated as
+
+```html
+<form onsubmit="return false" method="post">
+        <paper-dialog style="max-height:460px;min-width:350px;" id="register_client" entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
+          <h2>Register a new Client</h2>
+          <!-- <paper-dialog-scrollable> -->
+          <div>
+            <paper-input name="reg-client-name" id="reg-client-name" required auto-validate label="Name" autofocus char-counter maxlength="128"></paper-input>
+            <paper-input name="reg-client-org" id="reg-client-org" required auto-validate label="Organization" char-counter maxlength="128"></paper-input>
+            <gold-email-input name="reg-client-email" id="reg-client-email" required auto-validate error-message="Please enter a valid email" label="Email"></gold-email-input>
+            <paper-textarea name="reg-client-description" id="reg-client-description" label="Description" char-counter maxlength="256"></paper-textarea>
+          </div>
+          <!-- </paper-dialog-scrollable> -->
+          <div class="buttons">
+            <paper-button class="discard" dialog-dismiss raised>Discard</paper-button>
+            <paper-button id="reg-client-save" onclick="registerClient()" class="submit-button" dialog-confirm raised>Create</paper-button>
+          </div>
+        </paper-dialog>
+      </form>
+```
+
+![A form](https://raw.githubusercontent.com/madhuteamchat/Teamchat/master/Designs/Integration%20Design/docs/form.png)
+
+**Any Error** or **success** status is shown in this:
+```html
+<paper-toast id="toaster" text="An Error Occured"></paper-toast>
+```
+declared at page end before windowend.js and after the closing tag 
+```html
+</neon-animated-pages>
+```
+
+![paper toast](https://raw.githubusercontent.com/madhuteamchat/Teamchat/master/Designs/Integration%20Design/docs/toast.png)
+		*A sample toast*
+
+Custom drop downs are used in lieu of paper dropdown as Polymer 1.0 doesn't have them as of today
+
+They are declared as 
+```html
+  <!-- drop down clickable -->
+            <div id="clientDrop" class="list drop-down">
+              <div class="flex">Select Client</div>
+              <iron-icon icon="arrow-drop-down"></iron-icon>
+            </div>
+            <!-- drop down contents -->
+            <div id="clientDropBox" class="horizontal-section drop-down-data">
+              <paper-menu class="list innerlist">
+              </paper-menu>
+            </div>
+            <!-- drop down data -->
+            <input type="hidden" name="reg-service-cKey" id="reg-service-cKey" value="">
+```
+
+|Element Id|Use| 
+ ----------------- | ---------------------------- |
+|clientDropBox|drop down button|
+|clientDrop|drop down items and inner content|
+|reg-service-cKey|contains the data of the drop down|
+
+A Sample Drop Down
+
+```html
+ <!-- drop down clickable -->
+            <div id="clientDrop" class="list drop-down">
+              <div class="flex" title="fdf ::::: 4f599606-8098-4d69-8d01-f8d140a72182">fdf ::::: 4f599606-8098-4d69-8d01-f8d140a72182</div>
+              <iron-icon icon="arrow-drop-down" class="x-scope iron-icon-0"><svg viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" class="style-scope iron-icon" style="pointer-events: none; display: block; width: 100%; height: 100%;"><g class="style-scope iron-icon"><path d="M7 10l5 5 5-5z" class="style-scope iron-icon"></path></g></svg>
+    <iron-meta id="meta" type="iconset" class="style-scope iron-icon"></iron-meta>
+  </iron-icon>
+            </div>
+            <!-- drop down contents -->
+            <div id="clientDropBox" class="horizontal-section drop-down-data">
+              <paper-menu class="list innerlist x-scope paper-menu-0" role="menu" tabindex="0"><paper-item title="fdf ::::: 4f599606-8098-4d69-8d01-f8d140a72182" role="listitem" class="x-scope paper-item-0 selected-item">
+    fdf ::::: 4f599606-8098-4d69-8d01-f8d140a72182
+  </paper-item><paper-item title="fdf ::::: 7d2a856d-05cc-41d7-b524-cc81293072ee" role="listitem" class="x-scope paper-item-0">
+    fdf ::::: 7d2a856d-05cc-41d7-b524-cc81293072ee
+  </paper-item><paper-item title="fdffdsfxx ::::: 345274f6-e07d-4f5a-abde-cd1513a4e56f" role="listitem" class="x-scope paper-item-0">
+    fdffdsfxx ::::: 345274f6-e07d-4f5a-abde-cd1513a4e56f
+  </paper-item></paper-menu>
+            </div>
+            <!-- drop down data -->
+            <input type="hidden" name="reg-service-cKey" id="reg-service-cKey" value="fdf ::::: 4f599606-8098-4d69-8d01-f8d140a72182">
+```
+
+In both states 
+
+ 1. Closed
+
+	![closed](https://raw.githubusercontent.com/madhuteamchat/Teamchat/master/Designs/Integration%20Design/docs/closeddrop.png)
+ 
+ 2. Open
+ 
+	![open](https://raw.githubusercontent.com/madhuteamchat/Teamchat/master/Designs/Integration%20Design/docs/opendrop.png)
+
+**Notice**
+Each of the drop down's item is declared as
+
+```html
+<paper-item>
+	Some option
+<paper-item>
+```
+
+A custom event handler is attached to a drop down as
+
+```javascript
+  //this function creates the drop down handler for a custom created dropdown
+  //select element so update the value of hidden
+  // e.g
+  // here clientDropBox is container,reg-service-cKey is hidden and clientDrop is inner
+  // <!-- drop down clickable -->
+  // <div id="clientDrop" class="list drop-down">
+  //   <div class="flex">Select Client</div>
+  //   <iron-icon icon="arrow-drop-down"></iron-icon>
+  // </div>
+  // <!-- drop down contents -->
+  // <div id="clientDropBox" class="horizontal-section drop-down-data">
+  //   <paper-menu class="list">
+  //    <paper-item>some option</paper-item>
+  //   </paper-menu>
+  // </div>
+  // <!-- drop down data -->
+  // <input type="hidden" name="reg-service-cKey" id="reg-service-cKey" value="">
+function addDropdownHandler(container, hidden, inner) {
+  var elements = document.querySelectorAll('#' + container + ' .innerlist paper-item');
+  Array.prototype.forEach.call(elements, function(el, i) {
+    el.addEventListener("click", function() {
+      document.getElementById(container).classList.toggle('open');
+      //update the hidden
+      document.getElementById(hidden).value = el.innerHTML.trim();
+      //update the drop down
+      document.querySelector('#' + inner + ' .flex').innerHTML = el.innerHTML.trim();
+      document.querySelector('#' + inner + ' .flex').setAttribute('title', el.innerHTML.trim());
+      //remove selected highlight from wrong item
+      var elementsx = document.querySelectorAll('innerlist paper-item');
+      Array.prototype.forEach.call(elements, function(el, i) {
+        el.classList.remove('selected-item');
+      });
+      // and add it to correct item
+      el.classList.add('selected-item');
+    });
+  });
+}
+```
+
+for more of these events refer to `helpers.js`
+
+
+I did'nt understand this js function
+=======
+
+```javascript
+	for (var item of data)
+	{
+		console.log(item);
+	}
+```
+
+**Q:**So what is this for...of loop ?
+**Q:**Is it same as for...in loop?
+
+**Answer** *is* **NO**
+
+Let's compare them
+
+```javascript
+	console.log("For of loop !");
+	var data = {"A","B","C"};
+	for (var item of data)
+	{
+		console.log(item);
+	}
+	console.log("For in loop !");
+	for (var item in data)
+	{
+		console.log(item);
+	}
+```
+
+The console reads as
+```
+For of loop !
+A
+B
+C
+For in loop !
+1
+2
+3
+```
+
+**Q:** But how can I access each item in for...in loop?
+**Answer** Accessing, each item in data can also be done in for...in by using
+
+```javascript
+console.log("For in loop !");
+	for (var item in data)
+	{
+		console.log(data[item]);
+	}
+```
 
 > Written by [Puranjay Jain](https://github.com/puranjayjain).
