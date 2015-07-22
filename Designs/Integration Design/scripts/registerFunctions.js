@@ -92,6 +92,7 @@ var addWorkflow = function() {
 var getClientDataSuccess = function(data) {
   loadClientDataTable(data, "#registeredClientsTable");
   $("#reg-service-cKey").empty();
+  $("#clientDropBox .list").empty();
   var selectService = document.getElementById("reg-service-cKey");
   for (client of data) {
     $("<paper-item title=\"" + client.cName + ' ::::: ' + client.clientKey + "\">" + client.cName + ' ::::: ' + client.clientKey + "</paper-item>").appendTo('#clientDropBox .list');
