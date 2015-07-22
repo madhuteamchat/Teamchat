@@ -17,7 +17,7 @@ This is a [Teamchat](https://teamchat.com/) integration dashboard console redesi
 Demo
 ====
 
-[Demo](http://madhuteamchat.github.io/Teamchat/Designs/Integration%20Design/dashboard.html)
+[Demo](http://madhuteamchat.github.io/Teamchat/Designs/Integration%20Design/dashboard.html) can be seen here
 
 Dependencies
 ============
@@ -446,5 +446,6 @@ console.log("For in loop !");
 		console.log(data[item]);
 	}
 ```
+
 
 > Written by [Puranjay Jain](https://github.com/puranjayjain).
