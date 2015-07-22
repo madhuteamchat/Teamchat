@@ -219,10 +219,12 @@
       </form>
     </neon-animatable>
     <neon-animatable>
-      applications will be added here
+      <table id="registeredApplicationsTable">
+      </table>
     </neon-animatable>
     <neon-animatable>
-      workflows will be added here
+      <table id="registeredWorkflowsTable">
+      </table>
     </neon-animatable>
   </neon-animated-pages>
   <paper-toast id="toaster" text="An Error Occured"></paper-toast>
