@@ -1,0 +1,2 @@
+use Bot;
+select * from basecamp_authorized where email = 'puranjay.jain@st.niituniversity.in';
