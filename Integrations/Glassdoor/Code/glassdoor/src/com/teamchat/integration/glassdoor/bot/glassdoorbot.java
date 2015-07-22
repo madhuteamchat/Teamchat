@@ -59,9 +59,9 @@ flag=0;
 		PrimaryChatlet prime = new PrimaryChatlet();
 		prime.setQuestionHtml(
 				"<h2><b>Get Hired. Love Your Job.</b></h2>"
-				+ "<a1 style=\"color:#359FD8\";><b>powered by </b></a1><img src='http://www.glassdoor.com/static/img/api/glassdoor_logo_80.png' style=\"padding-bottom: 0.35cm\";/></a>"
+				+ "<a1 style=\"color:#359FD8\";><b>powered by </b></a1><img src='http://www.glassdoor.com/static/img/api/glassdoor_logo_80.png' style=\"padding-bottom: 0.35cm\"; /></a>"
 				+ "<br />"
-				+ "<h5><b>Enter any occupation or job title with the location you want to search for in the reply option.</b><h5>"
+				+ "<h5><b>Enter any occupation or job title with the location you want to search for in the reply option.</b></h5>"
 				+ "<br /><b>Note: </b><a1  style=\"color:#359FD8\";>One field is required.</a1>")
 				.setReplyScreen(f).setReplyLabel("Reply").alias("getdata");
 		api.perform(api.context().currentRoom().post(prime));
@@ -205,6 +205,7 @@ flag=0;
 						c = emdata.getCeo();
 						i = c.getImage();
 						PrimaryChatlet prime1 = new PrimaryChatlet();
+						PrimaryChatlet prime2 = new PrimaryChatlet();
 						prime1.setQuestionHtml("<h2><b>"+emdata.getName()
 								+ "</b></h2>"
 								+ "<img src=\""+emdata.getSquareLogo()+"\" height=\"120\" width=\"120\" />"
@@ -234,25 +235,26 @@ flag=0;
 								+ emdata.getWorkLifeBalanceRating() + "</a10></li>"
 								+"<li><a9 style=\"color:black\";><b>Recommend To Friend Rating - </b></a9><a10 style=\"color:#359FD8\";>"
 								+ emdata.getRecommendToFriendRating() + "</a10></li>"
-								+ "</ul>"
-								+ "<br />"
-								+ "<h3><b>Review Details:</b></h3>"
-								+ "<ul type=\"square\"; style=\"color:#359FD8\";><li><a1 style=\"color:black\";><b>Job Title - </b></a1><a2 style=\"color:#359FD8\";>"
-								+ fr.getJobTitle()
-								+ "</a2></li>"
-								+"<li><a9 style=\"color:black\";><b>Location - </b></a9><a10 style=\"color:#359FD8\";>"
-								+ fr.getLocation() + "</a10></li>"
-								+"<li><a9 style=\"color:black\";><b>Review DateTime - </b></a9><a10 style=\"color:#359FD8\";>"
-								+ fr.getReviewDateTime() + "</a10></li></ul>"
-								+ "<center><h4><b>Review</b></h4></center>"
-								+ "<center><h4><a1 style=\"color:#484848\";>\""+fr.getHeadline()+"\"</a1></h4></center>"
-								+"<ul type=\"square\"; style=\"color:#359FD8\";><li><a9 style=\"color:black\";><b>Pros - </b></a9><a10 style=\"color:#359FD8\"; align=\"justify\";>"
-								+ fr.getPros() + "</a10></li>"
-								+"<li><a9 style=\"color:black\";><b>Cons - </b></a9><a10 style=\"color:#359FD8\"; align=\"justify\";>"
-								+ fr.getCons() + "</a10></li>"
 								+ "</ul>");
 						
 						api.perform(api.context().currentRoom().post(prime1));
+						
+						prime2.setQuestionHtml("<h3><b>Review Details:</b></h3>"
+						+ "<ul type=\"square\"; style=\"color:#359FD8\";><li><a1 style=\"color:black\";><b>Job Title - </b></a1><a2 style=\"color:#359FD8\";>"
+						+ fr.getJobTitle()
+						+ "</a2></li>"
+						+"<li><a9 style=\"color:black\";><b>Location - </b></a9><a10 style=\"color:#359FD8\";>"
+						+ fr.getLocation() + "</a10></li>"
+						+"<li><a9 style=\"color:black\";><b>Review DateTime - </b></a9><a10 style=\"color:#359FD8\";>"
+						+ fr.getReviewDateTime() + "</a10></li></ul>"
+						+ "<center><h4><b>Review</b></h4></center>"
+						+ "<center><h4><a1 style=\"color:#484848\";>\""+fr.getHeadline()+"\"</a1></h4></center>"
+						+"<ul type=\"square\"; style=\"color:#359FD8\";><li><a9 style=\"color:black\";><b>Pros - </b></a9><a10 style=\"color:#359FD8\"; align=\"justify\";>"
+						+ fr.getPros() + "</a10></li>"
+						+"<li><a9 style=\"color:black\";><b>Cons - </b></a9><a10 style=\"color:#359FD8\"; align=\"justify\";>"
+						+ fr.getCons() + "</a10></li>"
+						+ "</ul>");
+						api.perform(api.context().currentRoom().post(prime2));
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -347,6 +349,8 @@ flag=0;
 						i = c.getImage();
 						
 						PrimaryChatlet prime1 = new PrimaryChatlet();
+						PrimaryChatlet prime2 = new PrimaryChatlet();
+
 						prime1.setQuestionHtml("<h2><b>"+emdata.getName()
 								+ "</b></h2>"
 								+ "<img src=\""+emdata.getSquareLogo()+"\" height=\"120\" width=\"120\" />"
@@ -376,9 +380,9 @@ flag=0;
 								+ emdata.getWorkLifeBalanceRating() + "</a10></li>"
 								+"<li><a9 style=\"color:black\";><b>Recommend To Friend Rating - </b></a9><a10 style=\"color:#359FD8\";>"
 								+ emdata.getRecommendToFriendRating() + "</a10></li>"
-								+ "</ul>"
-								+ "<br />"
-								+ "<h3><b>Review Details:</b></h3>"
+								+ "</ul>");
+						
+						prime2.setQuestionHtml("<h3><b>Review Details:</b></h3>"
 								+ "<ul type=\"square\"; style=\"color:#359FD8\";><li><a1 style=\"color:black\";><b>Job Title - </b></a1><a2 style=\"color:#359FD8\";>"
 								+ fr.getJobTitle()
 								+ "</a2></li>"
@@ -393,6 +397,7 @@ flag=0;
 								+"<li><a9 style=\"color:black\";><b>Cons - </b></a9><a10 style=\"color:#359FD8\"; align=\"justify\";>"
 								+ fr.getCons() + "</a10></li>"
 								+ "</ul>");
+								api.perform(api.context().currentRoom().post(prime2));
 						
 						api.perform(api.context().currentRoom().post(prime1));
 					} catch (Exception e) {
