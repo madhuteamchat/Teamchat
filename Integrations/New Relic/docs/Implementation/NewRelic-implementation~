@@ -1,9 +1,0 @@
-Step 1: Create an account with New Relic. Enable API access in Account settings.
-
-Step 2: When the user types help in teamchat, he is provided with an url which is supposed to be entered as a webhook to his New Relic account. The url is appended with the user's teamchat email id which helps the servlet to send notifications to a particular teamchat user.
-
-Step 3: Once the webhook is registered, any alerts to your New Relic account will be sent to the specicified url.
-
-Step 4: In the servlet's doPost() method, the JSON object is retreived and alert messages are posted to teamchat using the email id appended to the servlet's url.
-
-Step 5: Done.
