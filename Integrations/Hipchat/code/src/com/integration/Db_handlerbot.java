@@ -1,10 +1,12 @@
 package com.integration;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.Properties;
 
 public class Db_handlerbot
 {
@@ -12,28 +14,38 @@ public class Db_handlerbot
 	private Statement statement = null;
 	private PreparedStatement preparedStatement = null;
 	private ResultSet resultSet = null;
-
-	private static Config_handler config = new Config_handler();
-	private static String DB_URL = "jdbc:mysql://localhost/Bot?user=tcinterns&password=PakyovBosh7";
+	String fileName = "com/integration/config.properties";
+	public Properties configProps;
+	private static String DB_URL = "";
 
 	Db_handlerbot()
 	{
-		if (config.isEmpty())
+		
+		try
 		{
-			config.init_bot_Properties();
+			configProps = loadPropertyFromClasspath(fileName, this.getClass());
+			DB_URL = "jdbc:mysql://localhost/Bot?user="+configProps.getProperty("sql_username") +"&password="+configProps.getProperty("sql_password");
+		} catch (IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+//		DB_URL="jdbc:mysql://localhost/"+configProps.getProperty("sql_dbname")+"/?user="+configProps.getProperty("sql_username").trim()+"/&password="+configProps.getProperty("sql_password").trim();
 	}
 
 	// get HIpchatapi's basic stuff
 	public Hipchat_basiccheckbot GetBasicStuff(String hipchatemail)
 	{
+//		System.out.println(configProps.getProperty("sql_dbname"));
+//		System.out.println(configProps.getProperty("sql_username"));
+
 		Hipchat_basiccheckbot bb = new Hipchat_basiccheckbot();
 		try
 		{
 			Class.forName("com.mysql.jdbc.Driver");
 			connect = DriverManager.getConnection(DB_URL);
 			statement = connect.createStatement();
-			resultSet = statement.executeQuery("select * from hipchat where hipchatemail = '" + hipchatemail + "'");
+			resultSet = statement.executeQuery("select * from " +configProps.getProperty("dbtablename")+ " where hipchatemail = '" + hipchatemail + "'");
 			resultSet.next();
 			bb.setAccess_token(resultSet.getString("token"));
 			bb.setEmail(resultSet.getObject("email").toString());
@@ -58,13 +70,14 @@ public class Db_handlerbot
 			Class.forName("com.mysql.jdbc.Driver");
 			connect = DriverManager.getConnection(DB_URL);
 			statement = connect.createStatement();
-			resultSet = statement.executeQuery("select email, hipchatemail from hipchat where email ='" + email + "and hipchatemail ='" + hipchatemail + "'");
+			preparedStatement = connect.prepareStatement("select * from "+configProps.getProperty("dbtablename")+" where email = ? and hipchatemail = ?");
+			preparedStatement.setString(1, email);
+			preparedStatement.setString(2, hipchatemail);
+			resultSet = preparedStatement.executeQuery();
 			// check if result set is empty or not
 			while (resultSet.next())
 			{
-
 				return true;
-
 			}
 		} catch (Exception e)
 		{
@@ -77,31 +90,6 @@ public class Db_handlerbot
 		return false;
 	}
 
-	// public boolean isAuthorizeds(String email)
-	// {
-	// try
-	// {
-	// Class.forName("com.mysql.jdbc.Driver");
-	// connect = DriverManager.getConnection(DB_URL);
-	// statement = connect.createStatement();
-	// resultSet =
-	// statement.executeQuery("select notifytoken from hipchat where email='" +
-	// email + "'");
-	// // check if result set is empty or not
-	// while (resultSet.next())
-	// {
-	// return true;
-	// }
-	// } catch (Exception e)
-	// {
-	// e.printStackTrace();
-	// } finally
-	// {
-	// close();
-	// }
-	// // default case
-	// return false;
-	// }
 
 	// You need to close the resultSet
 	private void close()
@@ -150,7 +138,7 @@ public class Db_handlerbot
 			Class.forName("com.mysql.jdbc.Driver");
 			connect = DriverManager.getConnection(DB_URL);
 			statement = connect.createStatement();
-			resultSet = statement.executeQuery("select email from hipchat where email='" + email + "'");
+			resultSet = statement.executeQuery("select email from "+configProps.getProperty("dbtablename")+" where email='" + email + "'");
 			// check if result set is empty or not
 			while (resultSet.next())
 			{
@@ -175,7 +163,7 @@ public class Db_handlerbot
 			Class.forName("com.mysql.jdbc.Driver");
 			connect = DriverManager.getConnection(DB_URL);
 			statement = connect.createStatement();
-			preparedStatement = connect.prepareStatement("insert into hipchat values (default, ?, ?, ?, ?, ?)");
+			preparedStatement = connect.prepareStatement("insert into "+configProps.getProperty("dbtablename")+" values (default, ?, ?, ?, ?, ?)");
 			preparedStatement.setString(1, email);
 			preparedStatement.setString(2, token);
 			preparedStatement.setBoolean(3, true);
@@ -201,7 +189,7 @@ public class Db_handlerbot
 			Class.forName("com.mysql.jdbc.Driver");
 			connect = DriverManager.getConnection(DB_URL);
 			statement = connect.createStatement();
-			preparedStatement = connect.prepareStatement("default, update hipchat set token = ?, state = ?, notifytoken = ?, hipchatemail = ? where email=?");
+			preparedStatement = connect.prepareStatement("default, update "+configProps.getProperty("dbtablename")+" set token = ?, state = ?, notifytoken = ?, hipchatemail = ? where email=?");
 			preparedStatement.setString(1, token);
 			preparedStatement.setBoolean(2, true);
 			preparedStatement.setString(3, notifytoken);
@@ -216,4 +204,33 @@ public class Db_handlerbot
 		}
 	}
 
+	// delete user data
+	public boolean Delete(String email)
+	{
+		try
+		{
+			Class.forName("com.mysql.jdbc.Driver");
+			connect = DriverManager.getConnection(DB_URL);
+			statement = connect.createStatement();
+			preparedStatement = connect.prepareStatement("DELETE FROM "+configProps.getProperty("dbtablename")+" WHERE email = ?");
+			preparedStatement.setString(1, email);
+			preparedStatement.executeUpdate();
+			return true;
+		} catch (Exception e)
+		{
+			e.printStackTrace();
+			return false;
+		} finally
+		{
+			close();
+		}
+	}
+	public static Properties loadPropertyFromClasspath(String fileName, Class<?> type) throws IOException
+	{
+
+		Properties prop = new Properties();
+		prop.load(type.getClassLoader().getResourceAsStream(fileName));
+		return prop;
+
+	}
 }

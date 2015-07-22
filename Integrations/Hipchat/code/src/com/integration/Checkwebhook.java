@@ -21,9 +21,10 @@ public class Checkwebhook
 
 	public boolean check() throws IOException
 	{
+
 		OkHttpClient client = new OkHttpClient();
 		Request request = new Request.Builder().url("http://api.hipchat.com/v2/room/" + id + "/webhook").get().addHeader("authorization", "Bearer " + notify + "").build();
-
+		System.out.println("Its here 1");
 		Response response = client.newCall(request).execute();
 		Gson gson = new Gson();
 		Deletewebhook i = gson.fromJson(response.body().string(), Deletewebhook.class);
@@ -31,6 +32,7 @@ public class Checkwebhook
 		{
 			if (Item.getEvent().equalsIgnoreCase("room_message"))
 			{
+
 				return true;
 			}
 
@@ -40,7 +42,7 @@ public class Checkwebhook
 
 	public Integer getwebhookid() throws IOException
 	{
-		Integer webid=0;
+		Integer webid = 0;
 		OkHttpClient client = new OkHttpClient();
 		Request request = new Request.Builder().url("http://api.hipchat.com/v2/room/" + id + "/webhook").get().addHeader("authorization", "Bearer " + notify + "").build();
 

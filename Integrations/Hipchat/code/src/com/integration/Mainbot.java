@@ -50,11 +50,13 @@ public class Mainbot
 	@OnKeyword("start")
 	public void onstart(TeamchatAPI api)
 	{
+		System.out.println(db.configProps.getProperty("sql_username"));
+		System.out.println(db.configProps.getProperty("sql_dbname"));
+		System.out.println(db.configProps.getProperty("sql_password"));
 		Notifier.api1 = api;
 		Form f = api.objects().form();
 		f.addField(api.objects().input().name("hipchatemail").label("Enter your hipchat email address."));
-		api.perform(api.context().currentRoom()
-				.post(new PrimaryChatlet().setQuestionHtml("Enter you hipchat account email.").setReplyScreen(f).setReplyLabel("Enter").alias("gottoken").alias("starthip")));
+		api.perform(api.context().currentRoom().post(new PrimaryChatlet().setQuestionHtml("Enter you hipchat account email.").setReplyScreen(f).setReplyLabel("Enter").alias("starthip")));
 	}
 
 	@OnAlias("starthip")
@@ -62,7 +64,7 @@ public class Mainbot
 	{
 		email = api.context().currentSender().getEmail();
 		hipchatemail = api.context().currentReply().getField("hipchatemail");
-		if (db.isAuthorized(email,hipchatemail))
+		if (db.isAuthorized(email, hipchatemail))
 		{
 
 		} else
@@ -71,19 +73,18 @@ public class Mainbot
 		}
 	}
 
-	
 	// used to initiate the authentication or if user already authenticated then
 	// log into his account automatically
 	@OnKeyword("hipchat")
 	public void onhipchat(TeamchatAPI api) throws Exception
 	{
-		
+
 		email = api.context().currentSender().getEmail();
-		if(hipchatemail.equalsIgnoreCase(null))
+		if (hipchatemail.equalsIgnoreCase(null))
 		{
 			api.perform(api.context().currentRoom().post(new PrimaryChatlet().setQuestionHtml("To get started you need to tell your Hipchat email. Please ENTER keyword start")));
 		}
-		if (db.isAuthorized(email,hipchatemail))
+		if (db.isAuthorized(email, hipchatemail))
 		{
 			// get the basic info
 			hb = db.GetBasicStuff(hipchatemail);
@@ -94,8 +95,7 @@ public class Mainbot
 			api.perform(api.context().currentRoom()
 					.post(new PrimaryChatlet().setQuestionHtml("HI, YOU HAVE SUCCESSFULLY SIGNED INTO YOUR ACCOUNT. You may proceed to use your <u>hipchat account</u>. " + "<br />")));
 			// welcome message and continue
-		} 
-		else
+		} else
 		{
 			// give instructions to get the access token from hipchat and paste
 			// here just one time
@@ -115,8 +115,6 @@ public class Mainbot
 		}
 	}
 
-	
-
 	@OnKeyword("help")
 	// to tell use of all the keywords
 	public void onhelp(TeamchatAPI api)
@@ -134,7 +132,7 @@ public class Mainbot
 		token = api.context().currentReply().getField("token");
 		notify = api.context().currentReply().getField("notifytoken");
 		hp = new HipChat(token);
-		db.StorageHandler(email,token, notify, hipchatemail);
+		db.StorageHandler(email, token, notify, hipchatemail);
 		api.perform(api.context().currentRoom().post(new PrimaryChatlet().setQuestionHtml("You have been LOGGED IN succesfully.")));
 	}
 
@@ -182,7 +180,7 @@ public class Mainbot
 			if (e.equalsIgnoreCase(user.getEmail()))
 			{
 				owner = user;
-			} 
+			}
 		}
 		hp.createRoom(name, owner.getId(), p, topic, g);
 		api.perform(api.context().currentRoom().post(new PrimaryChatlet().setQuestionHtml("<b>The room " + name + " has been created succesfully</b>")));
@@ -357,29 +355,32 @@ public class Mainbot
 	public void onnotifyme(TeamchatAPI api) throws Exception
 	{
 		String name = api.context().currentReply().getField("name");
-
+		System.out.println(notify+"\n");
 		List<Room> rooms = hp.listRooms();
 		for (Room room : rooms)
 		{
 			if (name.equalsIgnoreCase(room.getName()))
 			{
 				id = room.getId();
-				System.err.println(id);
+	
 				api.perform(api.context().currentRoom().post(new TextChatlet("You have successfully subscribed to notifications for the room-" + room.getName() + "")));
 			}
 		}
+		System.out.println("Its here 2 \n");
 		Checkwebhook cw = new Checkwebhook(notify, id);
-
+		System.out.println(notify);
 		// Creates webhook
 		if (cw.check())
 		{
+			System.out.println("Its here 3");
 			OkHttpClient client = new OkHttpClient();
 			MediaType mediaType = MediaType.parse("application/json");
 			RequestBody body = RequestBody.create(mediaType,
-					"{\n    \"url\":\"http://interns.teamchat.com:8080/Hipchat/Hipchat_webhooks\",\n    \"event\":\"room_message\",\n    \"name\":\"Room_notification\"\n}");
+					"{\n    \"url\":\""+db.configProps.getProperty("redirect_url")+",\n    \"event\":\"room_message\",\n    \"name\":\"Room_notification\"\n}");
 			Request request = new Request.Builder().url("http://api.hipchat.com/v2/room/" + id + "/webhook").post(body).addHeader("authorization", "Bearer " + notify + "")
 					.addHeader("content-type", "application/json").build();
 			Response response = client.newCall(request).execute();
+			System.out.println("Its here 4");
 		}
 	}
 
@@ -394,6 +395,12 @@ public class Mainbot
 		Request request = new Request.Builder().url("http://api.hipchat.com/v2/room/" + id + "/webhook/" + webid + "").delete(null).addHeader("authorization", "Bearer " + notify + "").build();
 
 		Response response = client.newCall(request).execute();
+
+	}
+	@OnKeyword("logout")
+	public void onlogout(TeamchatAPI api){
+		db.Delete(email);
+		api.perform(api.context().currentRoom().post(new TextChatlet("You have successfully logged OUT of your Hipchat Account")));
 
 	}
 }
