@@ -219,10 +219,10 @@
       </form>
     </neon-animatable>
     <neon-animatable>
-      applications
+      applications will be added here
     </neon-animatable>
     <neon-animatable>
-      workflows
+      workflows will be added here
     </neon-animatable>
   </neon-animated-pages>
   <paper-toast id="toaster" text="An Error Occured"></paper-toast>
