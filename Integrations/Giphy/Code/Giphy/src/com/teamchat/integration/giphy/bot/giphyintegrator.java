@@ -17,7 +17,7 @@ public class giphyintegrator {
    	  String err = "Error";
 
 			OkHttpClient client = new OkHttpClient();
-
+//api key = dc6zaTOxFJmzC
 			Request request = new Request.Builder()
 			  .url("http://api.giphy.com/v1/gifs/search?api_key=dc6zaTOxFJmzC&q="+keyword+"&offset="+offset+"&limit="+limit)
 			  .get()
