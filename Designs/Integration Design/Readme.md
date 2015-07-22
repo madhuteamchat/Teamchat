@@ -13,11 +13,12 @@ This is a [Teamchat](https://teamchat.com/) integration dashboard console redesi
   * [HTML](#html)
     * [Inside a Section](#inside-a-section)
   * [I did'nt understand this js function](#i-didnt-understand-this-js-function)
+  * [Production Notes](#Production%20Notes)
 
 Demo
 ====
 
-[Demo](http://madhuteamchat.github.io/Teamchat/Designs/Integration%20Design/dashboard.html) can be seen here
+[Demo](http://madhuteamchat.github.io/Teamchat/Designs/Integration%20Design/dashboard.html)
 
 Dependencies
 ============
@@ -447,5 +448,16 @@ console.log("For in loop !");
 	}
 ```
 
+Production Notes
+=======
+1. uncomment these and remove the jugaad! 
+	```javascript
+		client.adminEmail = '${sessionScope.email}';
+	```
+2. put jsp tags according to register.jsp
+3. map relevent events i.e logout , login , redirects .etc
+4. replace util.js with the original util.js (review changes first!)
+5. add services count registerFunctions.js line 143 - 163
+6. compress code and vulcanise for production app
 
 > Written by [Puranjay Jain](https://github.com/puranjayjain).

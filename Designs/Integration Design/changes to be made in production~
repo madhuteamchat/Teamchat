@@ -1,9 +1,0 @@
-1. uncomment these and remove the jugaad! // client.adminEmail = '${sessionScope.email}';
-2. put jsp tags according to register.jsp
-3. map relevent events i.e logout , login , redirects .etc
-4. replace util.js with the original util.js (review changes first!)
-5. add services count registerFunctions.js line 143 - 163
-
-TODO
-templating karle yaar
-logout button must be made a or onclick event to be added
