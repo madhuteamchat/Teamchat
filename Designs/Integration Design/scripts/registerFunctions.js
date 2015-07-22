@@ -1,10 +1,3 @@
-var toggleForm = function(showForm, showImage, hideForm, hideImage) {
-  $("#" + hideForm).slideUp(50);
-  $("#" + hideImage).slideUp(50);
-  $("#" + showForm).slideDown(500);
-  $("#" + showImage).slideDown(500);
-}
-
 function handleEvents(e) {
   var el = e.currentTarget;
   integration.currentService = integration.services[e.currentTarget.id];
@@ -46,49 +39,67 @@ var loadDetails = function(target) {
   var html = Mustache.to_html(template.serviceHead,
     integration.currentService);
 
-  console.log(html)
+  // console.log(html)
 
-  $('.service_popup_container_head').empty();
   $('#registeredServicesTable').empty();
-  $('.service_popup_container_head').html(html);
 }
 
 var addService = function() {
-  var clientKey = $('#reg-service-cKey').val();
-  if (clientKey == null) {
-    // alert("You need to register a client before registering for a service. Click on close and go to register client section");
-    showToast('toaster', 'Please register a client first !');
+  var clients = $('#clientDropBox paper-menu paper-item').length;
+  //check if clients are registered
+  if (clients > 0) {
+    //set a default value for the hidden
+    updateDropdown('clientDropBox', 'reg-service-cKey', 'clientDrop', 'paper-item:first-of-type');
+    var dialog = document.getElementById('register_service');
+    if (dialog) {
+      dialog.open();
+    }
   } else {
-    // toggleForm("service-form", "regServicesHide", "regServicesShow",
-    //   "registeredServicesTable");
+    showToast('toaster', 'Please register a client first');
   }
 }
 
 var addApplication = function() {
-  var clientKey = $('#reg-app-cKey').val();
-  if (clientKey == null) {
-    // alert("You need to register a client before registering for an application");
-    showToast('toaster', 'Please register a client first !');
+  //   // toggleForm("app-form", "regAppsHide", "regAppsShow",
+  //   //   "registeredApplicationsTable");
+  var clients = $('#clientDropBox paper-menu paper-item').length;
+  //check if clients are registered
+  if (clients > 0) {
+    var dialog = document.getElementById('register_application');
+    if (dialog) {
+      dialog.open();
+    }
   } else {
-    // toggleForm("app-form", "regAppsHide", "regAppsShow",
-    //   "registeredApplicationsTable");
+    showToast('toaster', 'Please register a client first');
   }
 }
 
 var addWorkflow = function() {
-  var clientKey = $('#reg-workflow-cKey').val();
-  if (clientKey == null) {
-    // alert("You need to register a client before registering for a workflow");
-    showToast('toaster', 'Please register a client first !');
+  //   toggleForm("workflow-form", "regWorkflowsHide", "regWorkflowsShow",
+  //     "registeredWorkflowsTable");
+  var clients = $('#clientDropBox paper-menu paper-item').length;
+  //check if clients are registered
+  if (clients > 0) {
+    var dialog = document.getElementById('register_workflow');
+    if (dialog) {
+      dialog.open();
+    }
   } else {
-    toggleForm("workflow-form", "regWorkflowsHide", "regWorkflowsShow",
-      "registeredWorkflowsTable");
+    showToast('toaster', 'Please register a client first');
   }
 }
 
 var getClientDataSuccess = function(data) {
   loadClientDataTable(data, "#registeredClientsTable");
-  //set client key drop down
+  $("#reg-service-cKey").empty();
+  var selectService = document.getElementById("reg-service-cKey");
+  for (client of data) {
+    $("<paper-item title=\"" + client.cName + ' ::::: ' + client.clientKey + "\">" + client.cName + ' ::::: ' + client.clientKey + "</paper-item>").appendTo('#clientDropBox .list');
+  }
+  //add event handler for this drop down
+  addDropdownHandler('clientDropBox', 'reg-service-cKey', 'clientDrop');
+
+  //set application key drop down
   $("#reg-app-cKey").empty();
   var select = document.getElementById("reg-app-cKey");
   // for (var i = 0; i < data.length; i++) {
@@ -98,26 +109,15 @@ var getClientDataSuccess = function(data) {
   //   select.add(option, 0);
   // }
 
-  $("#reg-service-cKey").empty();
-  var selectService = document.getElementById("reg-service-cKey");
-  for (client of data) {
-    $("<paper-item title=\"" + client.cName + ' ::::: ' + client.clientKey + "\">" + client.cName + ' ::::: ' + client.clientKey + "</paper-item>").appendTo('#clientDropBox .list');
-  }
-  //add event handler for this drop down
-  addDropdownHandler('clientDropBox', 'reg-service-cKey', 'clientDrop');
-  //set a default value for the hidden
-  updateDropdown('clientDropBox', 'reg-service-cKey', 'clientDrop', 'paper-item:first-of-type');
-
+  //set workflows drop down
   $("#reg-workflow-cKey").empty();
   var selectWorkflow = document.getElementById("reg-workflow-cKey");
-  for (var i = 0; i < data.length; i++) {
-    var option = document.createElement('option');
-    option.text = data[i].cName + ' ::::: ' + data[i].clientKey;
-    option.value = data[i].clientKey;
-    selectWorkflow.add(option, 0);
-  }
-  // toggleForm("regClientsShow", "registeredClientsTable", "client-form",
-  //   "regClientsHide");
+  // for (var i = 0; i < data.length; i++) {
+  //   var option = document.createElement('option');
+  //   option.text = data[i].cName + ' ::::: ' + data[i].clientKey;
+  //   option.value = data[i].clientKey;
+  //   selectWorkflow.add(option, 0);
+  // }
 }
 
 var getClientDataFailure = function(data) {
@@ -140,8 +140,7 @@ var registerClientFailure = function(data) {
 }
 
 var getApplicationDataSuccess = function(data) {
-  toggleForm("regAppsShow", "registeredApplicationsTable", "app-form",
-    "regAppsHide");
+  // toggleForm("regAppsShow", "registeredApplicationsTable", "app-form",    "regAppsHide");
   loadApplicationDataTable(data, "#registeredApplicationsTable");
 }
 
@@ -203,8 +202,7 @@ var getAllServiceDataFailure = function(data) {
 }
 
 var getWorkflowDataSuccess = function(data) {
-  toggleForm("regWorkflowsShow", "registeredWorkflowsTable", "workflow-form",
-    "regWorkflowsHide");
+  // toggleForm("regWorkflowsShow", "registeredWorkflowsTable", "workflow-form", "regWorkflowsHide");
   loadWorkflowDataTable(data, "#registeredWorkflowsTable");
 }
 
