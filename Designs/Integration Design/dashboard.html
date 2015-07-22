@@ -282,7 +282,7 @@
       </table>
       <paper-fab icon="add" class="corner-fab" id="register_app_button" onclick="addApplication()" title="Register a new application"></paper-fab>
       <!-- Overlays and dialogs here -->
-      <form onsubmit="return false" action="http://requestb.in/t2r43yt2" id="app-form" method="post">
+      <form onsubmit="return false" id="app-form" method="post">
         <paper-dialog style="max-height:460px;min-width:350px;" id="register_application" entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
           <h2>Register a new Application</h2>
           <paper-dialog-scrollable>
@@ -301,10 +301,14 @@
             <paper-input name="reg-app-name" id="reg-app-name" required auto-validate label="Name" autofocus char-counter maxlength="128"></paper-input>
             <paper-textarea name="reg-app-description" id="reg-app-description" label="Description" char-counter maxlength="256"></paper-textarea>
             <h4>Event Type</h4>
-            <paper-radio-group name="reg-app-eventtype" id="reg-app-eventtype" selected="push">
-              <paper-radio-button name="push">Push</paper-radio-button>
-              <paper-radio-button name="pull">Pull</paper-radio-button>
-            </paper-radio-group>
+            <div class="">
+              <!-- onclick="document.getElementById('reg-app-cKey').value = this.selected" -->
+              <paper-radio-group selected="a">
+                <paper-radio-button name="a">Push</paper-radio-button>
+                <paper-radio-button name="b">Pull</paper-radio-button>
+              </paper-radio-group>
+            </div>
+            <input type="hidden" name="reg-app-eventtype" id="reg-app-eventtype" value="push">
             <paper-input name="reg-app-callbackurl" id="reg-app-callbackurl" required auto-validate label="Callback Url" char-counter maxlength="2083"></paper-input>
           </paper-dialog-scrollable>
           <div class="buttons">
