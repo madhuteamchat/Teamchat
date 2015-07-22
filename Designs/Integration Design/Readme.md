@@ -447,6 +447,5 @@ console.log("For in loop !");
 	}
 ```
 
-[bug](<script>window.close</script>)
 
 > Written by [Puranjay Jain](https://github.com/puranjayjain).
