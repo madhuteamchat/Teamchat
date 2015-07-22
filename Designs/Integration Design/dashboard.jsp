@@ -7,14 +7,10 @@
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <title>Teamchat Integration Console</title>
-  <!-- favicon -->
   <link rel="shortcut icon" href="https://enterprise.teamchat.com/webjim-echat/static/img/favicon.png" type="image/x-icon">
-  <!-- Theme colour for android lollipop -->
   <meta name="theme-color" content="#159ceb">
-  <!-- 1. Load webcomponents-lite.min.js for polyfill support. -->
   <script src="bower_components/webcomponentsjs/webcomponents-lite.min.js">
   </script>
-  <!-- 2. Use an HTML Import to bring in some elements. -->
   <link rel="import" href="bower_components/iron-icon/iron-icon.html">
   <link rel="import" href="bower_components/iron-icons/iron-icons.html">
   <link rel="import" href="bower_components/iron-form/iron-form.html">
@@ -46,11 +42,8 @@
   <link rel="import" href="bower_components/neon-animation/neon-animated-pages.html">
   <link rel="import" href="bower_components/neon-animation/neon-animatable.html">
   <link rel="import" href="bower_components/neon-animation/neon-animations.html">
-  <!-- global custom style sheet (applies to outside polymer) -->
   <link rel="stylesheet" href="css/dashboard-styles-global.css">
-  <!-- custom style -->
   <link rel="import" href="css/dashboard-styles.html">
-  <!-- Content rendering scripts -->
   <script src="scripts/jquery-2.1.3.min.js"></script>
   <!--[if lte IE 8]>
       <script src="scripts/jquery-1.11.3.min.js"></script>
@@ -160,7 +153,6 @@
             <gold-email-input name="reg-client-email" id="reg-client-email" required auto-validate error-message="Please enter a valid email" label="Email"></gold-email-input>
             <paper-textarea name="reg-client-description" id="reg-client-description" label="Description" char-counter maxlength="256"></paper-textarea>
           </div>
-          <!-- </paper-dialog-scrollable> -->
           <div class="buttons">
             <paper-button class="discard" dialog-dismiss raised>Discard</paper-button>
             <paper-button id="reg-client-save" onclick="registerClient()" class="submit-button" dialog-confirm raised>Create</paper-button>
