@@ -181,6 +181,13 @@
   }
   /*drop down ka stuff*/
 
+  .drop-down-container {
+    width: 400px;
+    height: 57px;
+    position: relative;
+    margin-top: 12px;
+  }
+
   .drop-down {
     width: 400px;
     height: 57px;
@@ -206,8 +213,8 @@
 
   .drop-down-data {
     position: absolute;
-    left: -12px;
-    top: 50px;
+    left: 0;
+    top: 60px;
     z-index: 1;
     opacity: 0;
     -webkit-transition: 0.3s;
@@ -226,7 +233,7 @@
     background-color: white;
     display: inline-block;
     /*min-width: 240px;*/
-    margin: 12px;
+    /*margin: 12px;*/
     @apply(--shadow-elevation-2dp);
   }
   /*this style only applies to list of items*/

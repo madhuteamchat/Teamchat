@@ -249,18 +249,20 @@
         <paper-dialog id="register_service" with-backdrop entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
           <h2>Register a new Service</h2>
           <paper-dialog-scrollable>
-            <!-- drop down clickable -->
-            <div id="clientDrop" class="list drop-down">
-              <div class="flex">Select Client</div>
-              <iron-icon icon="arrow-drop-down"></iron-icon>
-              <!-- drop down contents -->
-              <div id="clientDropBox" class="horizontal-section drop-down-data">
-                <paper-menu class="list innerlist">
-                </paper-menu>
+            <div class="drop-down-container">
+              <!-- drop down clickable -->
+              <div id="clientDrop" class="list drop-down">
+                <div class="flex">Select Client</div>
+                <iron-icon icon="arrow-drop-down"></iron-icon>
+                <!-- drop down contents -->
+                <div id="clientDropBox" class="horizontal-section drop-down-data">
+                  <paper-menu class="list innerlist">
+                  </paper-menu>
+                </div>
               </div>
+              <!-- drop down data -->
+              <input type="hidden" name="reg-service-cKey" id="reg-service-cKey" value="">
             </div>
-            <!-- drop down data -->
-            <input type="hidden" name="reg-service-cKey" id="reg-service-cKey" value="">
             <paper-input name="reg-service-name" id="reg-service-name" required auto-validate label="Name" char-counter maxlength="128"></paper-input>
             <paper-textarea name="reg-service-desc" id="reg-service-desc" label="Description" char-counter maxlength="256"></paper-textarea>
           </paper-dialog-scrollable>
@@ -288,18 +290,20 @@
         <paper-dialog style="max-height:460px;min-width:350px;" id="register_application" entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
           <h2>Register a new Application</h2>
           <paper-dialog-scrollable>
-            <!-- drop down clickable -->
-            <div id="appDrop" class="list drop-down">
-              <div class="flex">Select Client</div>
-              <iron-icon icon="arrow-drop-down"></iron-icon>
+            <div class="drop-down-container">
+              <!-- drop down clickable -->
+              <div id="appDrop" class="list drop-down">
+                <div class="flex">Select Client</div>
+                <iron-icon icon="arrow-drop-down"></iron-icon>
+              </div>
               <!-- drop down contents -->
               <div id="appDropBox" class="horizontal-section drop-down-data">
                 <paper-menu class="list innerlist">
                 </paper-menu>
               </div>
+              <!-- drop down data -->
+              <input type="hidden" id="reg-app-cKey" name="reg-app-cKey" value="">
             </div>
-            <!-- drop down data -->
-            <input type="hidden" id="reg-app-cKey" name="reg-app-cKey" value="">
             <paper-input name="reg-app-name" id="reg-app-name" required auto-validate label="Name" autofocus char-counter maxlength="128"></paper-input>
             <paper-textarea name="reg-app-description" id="reg-app-description" label="Description" char-counter maxlength="256"></paper-textarea>
             <h4>Event Type</h4>
