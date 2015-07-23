@@ -47,9 +47,14 @@ String.format = function() {
   // </div>
   // <!-- drop down data -->
   // <input type="hidden" name="reg-service-cKey" id="reg-service-cKey" value="">
-function addDropdownHandler(container, hidden, inner) {
+function addDropdownHandler(container, inner, hidden) { //drop down button
+  //open drop down and close it
+  document.getElementById(inner).onclick = function(event) {
+    document.getElementById(container).classList.toggle('open');
+  };
   var elements = document.querySelectorAll('#' + container + ' .innerlist paper-item');
   Array.prototype.forEach.call(elements, function(el, i) {
+    el.classList.remove('selected-item');
     el.addEventListener("click", function() {
       document.getElementById(container).classList.toggle('open');
       //update the hidden
@@ -58,9 +63,9 @@ function addDropdownHandler(container, hidden, inner) {
       document.querySelector('#' + inner + ' .flex').innerHTML = el.innerHTML.trim();
       document.querySelector('#' + inner + ' .flex').setAttribute('title', el.innerHTML.trim());
       //remove selected highlight from wrong item
-      var elementsx = document.querySelectorAll('innerlist paper-item');
+      var elementsx = document.querySelectorAll('#' + container + ' .innerlist paper-item');
       Array.prototype.forEach.call(elements, function(el, i) {
-        el.classList.remove('selected-item');
+
       });
       // and add it to correct item
       el.classList.add('selected-item');

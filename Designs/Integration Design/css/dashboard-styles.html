@@ -16,10 +16,6 @@
     white-space: nowrap;
   }
 
-  paper-icon-item {
-    position: relative;
-  }
-
   .corner-fab {
     position: fixed;
     right: 0;
@@ -73,7 +69,7 @@
     background: #fff;
     /*transitions*/
     -webkit-transition: 0.15s;
-            transition: 0.15s;
+    transition: 0.15s;
     display: inline-block;
     vertical-align: middle;
     position: relative;
@@ -187,6 +183,8 @@
 
   .drop-down {
     width: 400px;
+    height: 57px;
+    position: relative;
   }
 
   .drop-down .flex {
@@ -206,14 +204,14 @@
     float: right;
   }
 
-  .drop-down + .drop-down-data {
+  .drop-down-data {
     position: absolute;
-    left: 24px;
-    top: 53px;
+    left: -12px;
+    top: 50px;
     z-index: 1;
     opacity: 0;
     -webkit-transition: 0.3s;
-            transition: 0.3s;
+    transition: 0.3s;
     pointer-events: none;
     cursor: pointer;
   }
@@ -234,7 +232,7 @@
   /*this style only applies to list of items*/
 
   .innerlist {
-    max-height: 143px;
+    max-height: 145px;
     overflow-x: hidden;
     overflow-y: scroll;
     width: 400px;

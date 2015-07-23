@@ -17,3 +17,14 @@
   left: 0;
   right: 0;
 }
+
+/*right fixed*/
+.right-fixed {
+  position: absolute;
+  right: 5px;
+}
+
+.right-fixed > * {
+  display: inline-block;
+  vertical-align: middle;
+}

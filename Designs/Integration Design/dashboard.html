@@ -146,8 +146,10 @@
   <paper-toolbar class="tall">
     <paper-icon-button id="home_button" icon="extension"></paper-icon-button>
     <span title>Teamchat Integration Console</span>
-    <h4>Puranjay Jain</h4>
-    <paper-icon-button id="logout_button" icon="exit-to-app">Logout</paper-icon-button>
+    <div class="right-fixed">
+      <h4>Puranjay Jain</h4>
+      <paper-icon-button id="logout_button" icon="exit-to-app">Logout</paper-icon-button>
+    </div>
     <paper-tabs id="select_tab" selected="0" class="bottom self-end" style="width: 600px;">
       <paper-tab>PLATFORM CLIENT</paper-tab>
       <paper-tab>SERVICES</paper-tab>
@@ -251,11 +253,11 @@
             <div id="clientDrop" class="list drop-down">
               <div class="flex">Select Client</div>
               <iron-icon icon="arrow-drop-down"></iron-icon>
-            </div>
-            <!-- drop down contents -->
-            <div id="clientDropBox" class="horizontal-section drop-down-data">
-              <paper-menu class="list innerlist">
-              </paper-menu>
+              <!-- drop down contents -->
+              <div id="clientDropBox" class="horizontal-section drop-down-data">
+                <paper-menu class="list innerlist">
+                </paper-menu>
+              </div>
             </div>
             <!-- drop down data -->
             <input type="hidden" name="reg-service-cKey" id="reg-service-cKey" value="">
@@ -290,24 +292,21 @@
             <div id="appDrop" class="list drop-down">
               <div class="flex">Select Client</div>
               <iron-icon icon="arrow-drop-down"></iron-icon>
-            </div>
-            <!-- drop down contents -->
-            <div id="appDropBox" class="horizontal-section drop-down-data">
-              <paper-menu class="list innerlist">
-              </paper-menu>
+              <!-- drop down contents -->
+              <div id="appDropBox" class="horizontal-section drop-down-data">
+                <paper-menu class="list innerlist">
+                </paper-menu>
+              </div>
             </div>
             <!-- drop down data -->
             <input type="hidden" id="reg-app-cKey" name="reg-app-cKey" value="">
             <paper-input name="reg-app-name" id="reg-app-name" required auto-validate label="Name" autofocus char-counter maxlength="128"></paper-input>
             <paper-textarea name="reg-app-description" id="reg-app-description" label="Description" char-counter maxlength="256"></paper-textarea>
             <h4>Event Type</h4>
-            <div class="">
-              <!-- onclick="document.getElementById('reg-app-cKey').value = this.selected" -->
-              <paper-radio-group selected="a">
-                <paper-radio-button name="a">Push</paper-radio-button>
-                <paper-radio-button name="b">Pull</paper-radio-button>
-              </paper-radio-group>
-            </div>
+            <paper-radio-group onclick="document.getElementById('reg-app-eventtype').value = this.selected" selected="push">
+              <paper-radio-button name="push">Push</paper-radio-button>
+              <paper-radio-button name="pull">Pull</paper-radio-button>
+            </paper-radio-group>
             <input type="hidden" name="reg-app-eventtype" id="reg-app-eventtype" value="push">
             <paper-input name="reg-app-callbackurl" id="reg-app-callbackurl" required auto-validate label="Callback Url" char-counter maxlength="2083"></paper-input>
           </paper-dialog-scrollable>
