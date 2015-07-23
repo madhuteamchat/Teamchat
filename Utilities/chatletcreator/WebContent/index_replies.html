@@ -1,0 +1,225 @@
+<!doctype html>
+<html>
+<head>
+  <title>Builder</title>
+  <meta name="description" content="">
+  <link rel="stylesheet" href="vendor/css/vendor.css" />
+  <link rel="stylesheet" href="dist/formbuilder.css" />
+  <style>
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    background-color: #444;
+    font-family: sans-serif;
+  }
+
+  .fb-main {
+    background-color: #fff;
+    border-radius: 5px;
+    min-height: 600px;
+  }
+
+  input[type=text] {
+    height: 26px;
+    margin-bottom: 3px;
+  }
+
+  select {
+    margin-bottom: 5px;
+    font-size: 40px;
+  }
+  </style>
+</head>
+<body>
+
+  <div class='fb-main'>
+ 
+  </div>
+  <div id="back1">
+  <input id="back" value="Go Back" type="Button">
+  </div>
+
+  <script src="vendor/js/vendor.js"></script>
+  <script src="dist/formbuilder.js"></script>
+  <script src="print.js"></script>
+	<script>
+	document.getElementById("back").onclick=function(){
+		window.close();
+	};
+	</script>
+
+  <script>
+	var label;
+    $(function(){
+	var str1,str2,str3,strn;
+
+      fb = new Formbuilder({
+        selector: '.fb-main',
+       
+      });
+
+      fb.on('save', function(payload){
+        var out=JSON.parse(payload);
+	console.log(payload);
+	var array=[];
+	for(var i=0;i<out.fields.length;i++)
+	{
+		array.push(out.fields[i].label);
+	}
+	 
+	var str1="\"detdesc\":{\"fields\":[";
+	var i=0;	
+	for(i=0;i<out.fields.length-1;i++)
+	{
+		str1=str1+"{ \"display\":\""+array[i]+"\", \"key\": \""+"f"+i+"\" },";
+	} 
+	
+	str1=str1+"{ \"display\":\""+array[i]+"\", \"key\": \""+"f"+i+"\" }],";
+
+	str1=str1+"\"label\":\"Replies\",\"showcount\":\"true\"},";
+	
+	var str2="\"actions\":{\"actitem\":[{\"button\":{\"formjson\":\"{\\\"fields\\\":[";
+	
+	for(i=0;i<out.fields.length-1;i++)
+	{
+		var type=out.fields[i].field_type;		
+		var req=out.fields[i].required;
+		//console.log("\\\\\\\\\\\\\\\\\\\\\\\\\\"+req);
+		var num=type.localeCompare("text");
+		if(num==0 && !req)
+		
+		str2=str2+"{\\\"name\\\":\\\""+"ff"+i+"\\\",\\\"type\\\":\\\"label\\\",\\\"value\\\":\\\""+array[i]+"\\\"},{\\\"value\\\":\\\"\\\",\\\"name\\\":\\\""+"f"+i+"\\\",\\\"type\\\":\\\"input\\\"},";
+
+		if(num==0 && req)
+		
+		str2=str2+"{\\\"name\\\":\\\""+"ff"+i+"\\\",\\\"type\\\":\\\"label\\\",\\\"value\\\":\\\""+array[i]+"\\\"},{\\\"value\\\":\\\"\\\",\\\"name\\\":\\\""+"f"+i+"\\\",\\\"type\\\":\\\"input\\\",\\\"validator\\\":[{\\\"regx\\\":\\\".+\\\",\\\"emsg\\\":\\\"Compulsory Field\\\"}]},";
+
+
+
+		num=type.localeCompare("number");		
+		if(num==0 && !req)
+		str2=str2+"{\\\"name\\\":\\\""+"ff"+i+"\\\",\\\"type\\\":\\\"label\\\",\\\"value\\\":\\\""+array[i]+"\\\"},{\\\"value\\\":\\\"\\\",\\\"name\\\":\\\""+"f"+i+"\\\",\\\"type\\\":\\\"input\\\",\\\"validator\\\":[{\\\"regx\\\":\\\"^[0-9.]+$\\\",\\\"emsg\\\":\\\"Numeric values only\\\"}]},";
+
+		num=type.localeCompare("number");		
+		if(num==0 && req)
+		str2=str2+"{\\\"name\\\":\\\""+"ff"+i+"\\\",\\\"type\\\":\\\"label\\\",\\\"value\\\":\\\""+array[i]+"\\\"},{\\\"value\\\":\\\"\\\",\\\"name\\\":\\\""+"f"+i+"\\\",\\\"type\\\":\\\"input\\\",\\\"validator\\\":[{\\\"regx\\\":\\\"^[0-9.]+$\\\",\\\"emsg\\\":\\\"Numeric values only\\\"},{\\\"regx\\\":\\\".+\\\",\\\"emsg\\\":\\\"Compulsory Field\\\"}]},";
+
+
+		num=type.localeCompare("dropdown");
+
+		if(num==0 && !req)
+		{
+			var options_arr=[];			
+			for(var j=0;j<out.fields[i].field_options.options.length;j++){
+					options_arr.push(out.fields[i].field_options.options[j].label)		
+					}
+		
+			str2=str2+"{\\\"name\\\":\\\""+"ff"+i+"\\\",\\\"type\\\":\\\"label\\\",\\\"value\\\":\\\""+array[i]+"\\\"},{\\\"value\\\":\\\"\\\",\\\"name\\\":\\\""+"f"+i+"\\\",\\\"type\\\":\\\"select\\\",\\\"options\\\":[";
+				for(var j=0;j<out.fields[i].field_options.options.length-1;j++)
+					str2=str2+"{\\\"val\\\":\\\""+options_arr[j]+"\\\"},";
+				str2=str2+"{\\\"val\\\":\\\""+options_arr[j]+"\\\"}]},";
+			
+
+		}
+	
+
+		if(num==0 && req)
+		{
+			var options_arr=[];			
+			for(var j=0;j<out.fields[i].field_options.options.length;j++){
+					options_arr.push(out.fields[i].field_options.options[j].label)		
+					}
+		
+			str2=str2+"{\\\"name\\\":\\\""+"ff"+i+"\\\",\\\"type\\\":\\\"label\\\",\\\"value\\\":\\\""+array[i]+"\\\"},{\\\"value\\\":\\\"\\\",\\\"validator\\\":[{\\\"regx\\\":\\\".+\\\",\\\"emsg\\\":\\\"Compulsory Field\\\"}],\\\"name\\\":\\\""+"f"+i+"\\\",\\\"type\\\":\\\"select\\\",\\\"options\\\":[";
+				for(var j=0;j<out.fields[i].field_options.options.length-1;j++)
+					str2=str2+"{\\\"val\\\":\\\""+options_arr[j]+"\\\"},";
+				str2=str2+"{\\\"val\\\":\\\""+options_arr[j]+"\\\"}]},";
+			
+
+		}
+	}
+
+		var last_type=out.fields[i].field_type;
+		var last_req=out.fields[i].required;		
+		
+		var num=last_type.localeCompare("text");
+		if(num==0){
+			
+			if(!last_req){console.log("1");
+			str2=str2+"{\\\"name\\\":\\\""+"ff"+i+"\\\",\\\"type\\\":\\\"label\\\",\\\"value\\\":\\\""+array[i]+"\\\"},{\\\"value\\\":\\\"\\\",\\\"name\\\":\\\""+"f"+i+"\\\",\\\"type\\\":\\\"input\\\"}],\\\"imgUrl\\\":\\\"\\\",\\\"type\\\":\\\"meta\\\"}\",";
+}
+		if(last_req){ console.log("2");
+			str2=str2+"{\\\"name\\\":\\\""+"ff"+i+"\\\",\\\"type\\\":\\\"label\\\",\\\"value\\\":\\\""+array[i]+"\\\"},{\\\"value\\\":\\\"\\\",\\\"name\\\":\\\""+"f"+i+"\\\",\\\"type\\\":\\\"input\\\",\\\"validator\\\":[{\\\"regx\\\":\\\".+\\\",\\\"emsg\\\":\\\"Compulsory Field\\\"}]}],\\\"imgUrl\\\":\\\"\\\",\\\"type\\\":\\\"meta\\\"}\",";}
+		}
+
+
+		num=last_type.localeCompare("number");
+				
+		if(num==0 && !last_req)
+		str2=str2+"{\\\"name\\\":\\\""+"ff"+i+"\\\",\\\"type\\\":\\\"label\\\",\\\"value\\\":\\\""+array[i]+"\\\"},{\\\"value\\\":\\\"\\\",\\\"name\\\":\\\""+"f"+i+"\\\",\\\"type\\\":\\\"input\\\",\\\"validator\\\":[{\\\"regx\\\":\\\"^[0-9.]+$\\\",\\\"emsg\\\":\\\"Numeric values only\\\"}]}],\\\"imgUrl\\\":\\\"\\\",\\\"type\\\":\\\"meta\\\"}\",";
+
+		if(num==0 && last_req)
+		str2=str2+"{\\\"name\\\":\\\""+"ff"+i+"\\\",\\\"type\\\":\\\"label\\\",\\\"value\\\":\\\""+array[i]+"\\\"},{\\\"value\\\":\\\"\\\",\\\"name\\\":\\\""+"f"+i+"\\\",\\\"type\\\":\\\"input\\\",\\\"validator\\\":[{\\\"regx\\\":\\\"^[0-9.]+$\\\",\\\"emsg\\\":\\\"Numeric values only\\\"},{\\\"regx\\\":\\\".+\\\",\\\"emsg\\\":\\\"Compulsory Field\\\"}]}],\\\"imgUrl\\\":\\\"\\\",\\\"type\\\":\\\"meta\\\"}\",";
+
+
+
+		num=last_type.localeCompare("dropdown");
+		if(num==0 && last_req){
+			var options_arr=[];			
+			for(var j=0;j<out.fields[i].field_options.options.length;j++){
+					options_arr.push(out.fields[i].field_options.options[j].label)		
+					}
+		
+			str2=str2+"{\\\"name\\\":\\\""+"ff"+i+"\\\",\\\"type\\\":\\\"label\\\",\\\"value\\\":\\\""+array[i]+"\\\"},{\\\"value\\\":\\\"\\\",\\\"validator\\\":[{\\\"regx\\\":\\\".+\\\",\\\"emsg\\\":\\\"Compulsory Field\\\"}],\\\"name\\\":\\\""+"f"+i+"\\\",\\\"type\\\":\\\"select\\\",\\\"options\\\":[";
+				for(var j=0;j<out.fields[i].field_options.options.length-1;j++)
+					str2=str2+"{\\\"val\\\":\\\""+options_arr[j]+"\\\"},";
+				str2=str2+"{\\\"val\\\":\\\""+options_arr[j]+"\\\"}]}],\\\"imgUrl\\\":\\\"\\\",\\\"type\\\":\\\"meta\\\"}\",";
+			
+			}
+
+		if(num==0 && !last_req){
+			var options_arr=[];			
+			for(var j=0;j<out.fields[i].field_options.options.length;j++){
+					options_arr.push(out.fields[i].field_options.options[j].label)		
+					}
+		
+			str2=str2+"{\\\"name\\\":\\\""+"ff"+i+"\\\",\\\"type\\\":\\\"label\\\",\\\"value\\\":\\\""+array[i]+"\\\"},{\\\"value\\\":\\\"\\\",\\\"name\\\":\\\""+"f"+i+"\\\",\\\"type\\\":\\\"select\\\",,\\\"options\\\":[";
+				for(var j=0;j<out.fields[i].field_options.options.length-1;j++)
+					str2=str2+"{\\\"val\\\":\\\""+options_arr[j]+"\\\"},";
+				str2=str2+"{\\\"val\\\":\\\""+options_arr[j]+"\\\"}]}],\\\"imgUrl\\\":\\\"\\\",\\\"type\\\":\\\"meta\\\"}\",";
+			
+			}
+
+
+	var str_f="";
+	for(var i=0;i<out.fields.length-1;i++)
+	{
+		str_f=str_f+"\\\""+"f"+i+"\\\":\\\"\\\",";
+	}
+
+	str_f=str_f+"\\\""+"f"+i+"\\\":\\\"\\\"";
+
+str2=str2+"\"label\":\"Reply\"," 
+str2=str2+"\"respjson\": \"{\\\"action\\\":\\\"Reply\\\",\\\"formid\\\":\\\"\\\",\\\"maction\\\":\\\"\\\","+str_f+"}\",",
+         str2=str2+"\"resptype\": \"compose\",\"displayname\":\"Reply\""+""+"}}]}}";
+	
+	
+	
+	console.log(str1+str2);
+	//console.log(payload);
+	//download(str1+str2+str3+strn,'chatlet_replies.json','text/plain');	
+	
+	localStorage.setItem("foot",str1+str2);
+ })
+
+ 
+    
+});
+
+	
+</script>
+
+</body>
+</html>
