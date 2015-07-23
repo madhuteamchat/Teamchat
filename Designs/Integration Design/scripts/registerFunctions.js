@@ -91,34 +91,24 @@ var addWorkflow = function() {
 
 var getClientDataSuccess = function(data) {
   loadClientDataTable(data, "#registeredClientsTable");
+  //clear drop down of app,workflows,services
   $("#reg-service-cKey").empty();
   $("#clientDropBox .list").empty();
-  var selectService = document.getElementById("reg-service-cKey");
-  for (client of data) {
-    $("<paper-item title=\"" + client.cName + ' ::::: ' + client.clientKey + "\">" + client.cName + ' ::::: ' + client.clientKey + "</paper-item>").appendTo('#clientDropBox .list');
-  }
-  //add event handler for this drop down
-  addDropdownHandler('clientDropBox', 'reg-service-cKey', 'clientDrop');
-
-  //set application key drop down
   $("#reg-app-cKey").empty();
-  var select = document.getElementById("reg-app-cKey");
-  // for (var i = 0; i < data.length; i++) {
-  //   var option = document.createElement('option');
-  //   option.text = data[i].cName + ' ::::: ' + data[i].clientKey;
-  //   option.value = data[i].clientKey;
-  //   select.add(option, 0);
-  // }
-
-  //set workflows drop down
-  $("#reg-workflow-cKey").empty();
-  var selectWorkflow = document.getElementById("reg-workflow-cKey");
-  // for (var i = 0; i < data.length; i++) {
-  //   var option = document.createElement('option');
-  //   option.text = data[i].cName + ' ::::: ' + data[i].clientKey;
-  //   option.value = data[i].clientKey;
-  //   selectWorkflow.add(option, 0);
-  // }
+  $("#appDropBox .list").empty();
+  // $("#reg-workflow-cKey").empty();
+  // $("#workDropBox .list").empty();
+  for (client of data) {
+    var xitem = "<paper-item title=\"" + client.cName + ' ::::: ' + client.clientKey + "\">" + client.cName + ' ::::: ' + client.clientKey + "</paper-item>";
+    $('#clientDropBox .list').append(xitem);
+    $('#appDropBox .list').append(xitem);
+    // xitem.appendTo('#workDropBox .list');
+  }
+  //add event handler for the drop downs
+  addDropdownHandler('clientDropBox', 'clientDrop', 'reg-service-cKey');
+  addDropdownHandler('appDropBox', 'appDrop', 'reg-app-cKey');
+  // addDropdownHandler('clientDropBox', 'reg-service-cKey', 'clientDrop');
+  // var selectWorkflow = document.getElementById("reg-workflow-cKey");
 }
 
 var getClientDataFailure = function(data) {

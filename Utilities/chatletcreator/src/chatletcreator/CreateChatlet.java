@@ -39,12 +39,13 @@ public class CreateChatlet extends HttpServlet {
 		String output=sb.toString();
 		
 		JSONObject j=new JSONObject(output);
-		JSONObject j1=j.getJSONObject("data");
+		JSONObject data=j.getJSONObject("data");
 		String email=j.getString("email");
+		
 		
 		try
 		{
-			new PrintChatlet().set(j1.toString(),email);
+			new SendChatlet().p2pMessage(email, data.toString(), Token.getAuthEmail(), Token.getAuthPass());
 		} catch (Exception e)
 		{
 			// TODO Auto-generated catch block

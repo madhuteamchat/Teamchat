@@ -35,6 +35,8 @@
   <link rel="import" href="bower_components/paper-menu/paper-menu.html">
   <link rel="import" href="bower_components/paper-item/paper-item.html">
   <link rel="import" href="bower_components/paper-item/paper-icon-item.html">
+  <link rel="import" href="bower_components/paper-radio-button/paper-radio-button.html">
+  <link rel="import" href="bower_components/paper-radio-group/paper-radio-group.html">
   <link rel="import" href="bower_components/paper-ripple/paper-ripple.html">
   <link rel="import" href="bower_components/paper-spinner/paper-spinner.html">
   <link rel="import" href="bower_components/paper-toast/paper-toast.html">
@@ -144,8 +146,10 @@
   <paper-toolbar class="tall">
     <paper-icon-button id="home_button" icon="extension"></paper-icon-button>
     <span title>Teamchat Integration Console</span>
-    <h4>Puranjay Jain</h4>
-    <paper-icon-button id="logout_button" icon="exit-to-app">Logout</paper-icon-button>
+    <div class="right-fixed">
+      <h4>Puranjay Jain</h4>
+      <paper-icon-button id="logout_button" icon="exit-to-app">Logout</paper-icon-button>
+    </div>
     <paper-tabs id="select_tab" selected="0" class="bottom self-end" style="width: 600px;">
       <paper-tab>PLATFORM CLIENT</paper-tab>
       <paper-tab>SERVICES</paper-tab>
@@ -167,9 +171,9 @@
       </div>
       <table id="registeredClientsTable">
       </table>
-      <paper-fab icon="add" id="register_client_button" title="Register a new client"></paper-fab>
+      <paper-fab icon="add" class="corner-fab" id="register_client_button" title="Register a new client"></paper-fab>
       <!-- Overlays and dialogs here -->
-      <form onsubmit="return false" method="post">
+      <form onsubmit="return false" id="client-form" method="post">
         <paper-dialog style="max-height:460px;min-width:350px;" id="register_client" entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
           <h2>Register a new Client</h2>
           <!-- <paper-dialog-scrollable> -->
@@ -245,18 +249,20 @@
         <paper-dialog id="register_service" with-backdrop entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
           <h2>Register a new Service</h2>
           <paper-dialog-scrollable>
-            <!-- drop down clickable -->
-            <div id="clientDrop" class="list drop-down">
-              <div class="flex">Select Client</div>
-              <iron-icon icon="arrow-drop-down"></iron-icon>
+            <div class="drop-down-container">
+              <!-- drop down clickable -->
+              <div id="clientDrop" class="list drop-down">
+                <div class="flex">Select Client</div>
+                <iron-icon icon="arrow-drop-down"></iron-icon>
+                <!-- drop down contents -->
+                <div id="clientDropBox" class="horizontal-section drop-down-data">
+                  <paper-menu class="list innerlist">
+                  </paper-menu>
+                </div>
+              </div>
+              <!-- drop down data -->
+              <input type="hidden" name="reg-service-cKey" id="reg-service-cKey" value="">
             </div>
-            <!-- drop down contents -->
-            <div id="clientDropBox" class="horizontal-section drop-down-data">
-              <paper-menu class="list innerlist">
-              </paper-menu>
-            </div>
-            <!-- drop down data -->
-            <input type="hidden" name="reg-service-cKey" id="reg-service-cKey" value="">
             <paper-input name="reg-service-name" id="reg-service-name" required auto-validate label="Name" char-counter maxlength="128"></paper-input>
             <paper-textarea name="reg-service-desc" id="reg-service-desc" label="Description" char-counter maxlength="256"></paper-textarea>
           </paper-dialog-scrollable>
@@ -268,8 +274,52 @@
       </form>
     </neon-animatable>
     <neon-animatable>
+      <div class="content">
+        <h3>
+          Register Application
+        </h3>
+        <p>
+          This section is used to create an application (app Id) on Teamchat Integration platfrom.
+        </p>
+      </div>
       <table id="registeredApplicationsTable">
       </table>
+      <paper-fab icon="add" class="corner-fab" id="register_app_button" onclick="addApplication()" title="Register a new application"></paper-fab>
+      <!-- Overlays and dialogs here -->
+      <form onsubmit="return false" id="app-form" method="post">
+        <paper-dialog style="max-height:460px;min-width:350px;" id="register_application" entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
+          <h2>Register a new Application</h2>
+          <paper-dialog-scrollable>
+            <div class="drop-down-container">
+              <!-- drop down clickable -->
+              <div id="appDrop" class="list drop-down">
+                <div class="flex">Select Client</div>
+                <iron-icon icon="arrow-drop-down"></iron-icon>
+              </div>
+              <!-- drop down contents -->
+              <div id="appDropBox" class="horizontal-section drop-down-data">
+                <paper-menu class="list innerlist">
+                </paper-menu>
+              </div>
+              <!-- drop down data -->
+              <input type="hidden" id="reg-app-cKey" name="reg-app-cKey" value="">
+            </div>
+            <paper-input name="reg-app-name" id="reg-app-name" required auto-validate label="Name" autofocus char-counter maxlength="128"></paper-input>
+            <paper-textarea name="reg-app-description" id="reg-app-description" label="Description" char-counter maxlength="256"></paper-textarea>
+            <h4>Event Type</h4>
+            <paper-radio-group onclick="document.getElementById('reg-app-eventtype').value = this.selected" selected="push">
+              <paper-radio-button name="push">Push</paper-radio-button>
+              <paper-radio-button name="pull">Pull</paper-radio-button>
+            </paper-radio-group>
+            <input type="hidden" name="reg-app-eventtype" id="reg-app-eventtype" value="push">
+            <paper-input name="reg-app-callbackurl" id="reg-app-callbackurl" required auto-validate label="Callback Url" char-counter maxlength="2083"></paper-input>
+          </paper-dialog-scrollable>
+          <div class="buttons">
+            <paper-button class="discard" dialog-dismiss raised>Discard</paper-button>
+            <paper-button id="reg-app-save" onclick="registerApplication()" class="submit-button" dialog-confirm raised>Create</paper-button>
+          </div>
+        </paper-dialog>
+      </form>
     </neon-animatable>
     <neon-animatable>
       <table id="registeredWorkflowsTable">

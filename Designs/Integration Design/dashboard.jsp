@@ -31,6 +31,8 @@
   <link rel="import" href="bower_components/paper-menu/paper-menu.html">
   <link rel="import" href="bower_components/paper-item/paper-item.html">
   <link rel="import" href="bower_components/paper-item/paper-icon-item.html">
+  <link rel="import" href="bower_components/paper-radio-button/paper-radio-button.html">
+  <link rel="import" href="bower_components/paper-radio-group/paper-radio-group.html">
   <link rel="import" href="bower_components/paper-ripple/paper-ripple.html">
   <link rel="import" href="bower_components/paper-spinner/paper-spinner.html">
   <link rel="import" href="bower_components/paper-toast/paper-toast.html">
@@ -143,7 +145,7 @@
       </div>
       <table id="registeredClientsTable">
       </table>
-      <paper-fab icon="add" id="register_client_button" title="Register a new client"></paper-fab>
+      <paper-fab icon="add" class="corner-fab" id="register_client_button" title="Register a new client"></paper-fab>
       <form onsubmit="return false" method="post">
         <paper-dialog style="max-height:460px;min-width:350px;" id="register_client" entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
           <h2>Register a new Client</h2>
