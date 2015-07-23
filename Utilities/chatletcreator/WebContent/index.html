@@ -78,6 +78,8 @@ jQuery(document).ready(function($){
         });
         return false;
     });
+    
+    
 });
 </script> 
 
@@ -94,7 +96,7 @@ jQuery(document).ready(function($){
 	    
 	    <div id="main">
     
-    <div class="my-form" style="margin-top:5px; margin-left:195px; position:absolute;">
+    <div id="surveyElement" class="my-form" style="margin-top:5px; margin-left:195px; position:absolute;">
         <form role="form" method="post">
             <p class="text-box">
                 <label for="box1">Option<span class="box-number">1</span></label>
@@ -615,10 +617,23 @@ jQuery(document).ready(function($){
 	  
   });  
   
-  document.getElementById("r10").onclick=function(){
+/*  document.getElementById("r10").onclick=function(){
 	  
+	  console.log("r10 pressed");
 	  document.getElementById("button3").style.visibility="visible";
+	  
   };
+  */
+  
+  $("#r10").click(function(){
+	  console.log("r10 pressed jquery");
+	  document.getElementById("button3").style.visibility="visible";
+  });
+  
+  $("#r11").click(function(){
+	  console.log("r11 pressed jquery");
+	  document.getElementById("button3").style.visibility="hidden";
+  });
   
   document.getElementById("r11").onclick=function(){
 	  document.getElementById("button3").style.visibility="hidden";
@@ -640,21 +655,30 @@ $('#box1').bind('input',function(){
 	  $("a1").html(text);
 	  
 	});
-$('#box2').bind('input',function(){ 
-     var text=document.getElementById("box2").value;
-	  $("b1").html(text);
+$('#surveyElement').on('click', '#box2', function (e) {
+	$('#box2').bind('input',function(){ 
+	     var text=document.getElementById("box2").value;
+		  $("b1").html(text);
+		  
+		});
+});
 	  
-	});
-$('#box3').bind('input',function(){ 
-     var text=document.getElementById("box3").value;
-	  $("c1").html(text);
-	  
-	});
-$('#box4').bind('input',function(){ 
-     var text=document.getElementById("box4").value;
-	  $("d1").html(text);
-	  
-	});
+	
+$('#surveyElement').on('click', '#box3', function (e) {
+	$('#box3').bind('input',function(){ 
+	     var text=document.getElementById("box3").value;
+		  $("c1").html(text);
+		  
+		});
+});
+
+$('#surveyElement').on('click', '#box4', function (e) {
+	$('#box4').bind('input',function(){ 
+	     var text=document.getElementById("box4").value;
+		  $("d1").html(text);
+		  
+		});
+});
 
   
   $('#html_input').bind('input',function(){ 
