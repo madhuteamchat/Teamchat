@@ -247,7 +247,7 @@
           </div>
           <table id="registeredWorkflowsTable">
           </table>
-          <paper-fab icon="add" class="corner-fab" id="register_work_button" onclick="addWorkflow()" title="Register a new application"></paper-fab>
+          <paper-fab icon="add" class="corner-fab" id="register_work_button" onclick="addWorkflow()" title="Register a new workflow"></paper-fab>
           <form onsubmit="return false" id="workflow-form" method="post">
             <paper-dialog id="register_workflow" entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
               <h2>Register a new Workflow</h2>
