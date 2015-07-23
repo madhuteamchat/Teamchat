@@ -96,19 +96,18 @@ var getClientDataSuccess = function(data) {
   $("#clientDropBox .list").empty();
   $("#reg-app-cKey").empty();
   $("#appDropBox .list").empty();
-  // $("#reg-workflow-cKey").empty();
-  // $("#workDropBox .list").empty();
+  $("#reg-workflow-cKey").empty();
+  $("#workDropBox .list").empty();
   for (client of data) {
     var xitem = "<paper-item title=\"" + client.cName + ' ::::: ' + client.clientKey + "\">" + client.cName + ' ::::: ' + client.clientKey + "</paper-item>";
     $('#clientDropBox .list').append(xitem);
     $('#appDropBox .list').append(xitem);
-    // xitem.appendTo('#workDropBox .list');
+    $('#workDropBox .list').append(xitem);
   }
   //add event handler for the drop downs
   addDropdownHandler('clientDropBox', 'clientDrop', 'reg-service-cKey');
   addDropdownHandler('appDropBox', 'appDrop', 'reg-app-cKey');
-  // addDropdownHandler('clientDropBox', 'reg-service-cKey', 'clientDrop');
-  // var selectWorkflow = document.getElementById("reg-workflow-cKey");
+  addDropdownHandler('workDropBox', 'workDrop', 'reg-workflow-cKey');
 }
 
 var getClientDataFailure = function(data) {

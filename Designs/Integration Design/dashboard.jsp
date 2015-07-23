@@ -237,8 +237,44 @@
           </form>
         </neon-animatable>
         <neon-animatable>
+          <div class="content">
+            <h3>
+              Register Workflows
+            </h3>
+            <p>
+              This section is used to create a workflow (app Id) on Teamchat Integration platfrom.
+            </p>
+          </div>
           <table id="registeredWorkflowsTable">
           </table>
+          <paper-fab icon="add" class="corner-fab" id="register_work_button" onclick="addWorkflow()" title="Register a new application"></paper-fab>
+          <form onsubmit="return false" id="workflow-form" method="post">
+            <paper-dialog id="register_application" entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop>
+              <h2>Register a new Workflow</h2>
+              <paper-dialog-scrollable>
+                <div class="drop-down-container">
+                  <div id="workDrop" class="list drop-down">
+                    <div class="flex">Select Client</div>
+                    <iron-icon icon="arrow-drop-down"></iron-icon>
+                  </div>
+                  <div id="workDropBox" class="horizontal-section drop-down-data">
+                    <paper-menu class="list innerlist">
+                    </paper-menu>
+                  </div>
+                  <input type="hidden" id="reg-workflow-cKey" name="reg-workflow-cKey" value="">
+                </div>
+                <paper-input name="reg-workflow-name" id="reg-workflow-name" required auto-validate label="Name" autofocus char-counter maxlength="128"></paper-input>
+                <gold-email-input name="reg-workflow-bot-email" id="reg-workflow-bot-email" required auto-validate error-message="Please enter a valid email" label="Bot Email"></gold-email-input>
+                <paper-input name="reg-workflow-bot-password" id="reg-workflow-bot-password" type="password" required auto-validate label="Bot Password"></paper-input>
+                <paper-input name="reg-workflow-callback-url" id="reg-workflow-callback-url" required auto-validate label="Callback Url" char-counter maxlength="2083"></paper-input>
+                <paper-input name="reg-workflow-failmessage" id="reg-workflow-failmessage" label="Failure Url" char-counter maxlength="2083"></paper-input>
+              </paper-dialog-scrollable>
+              <div class="buttons">
+                <paper-button class="discard" dialog-dismiss raised>Discard</paper-button>
+                <paper-button id="reg-app-save" onclick="registerWorkflow()" class="submit-button" dialog-confirm raised>Create</paper-button>
+              </div>
+            </paper-dialog>
+          </form>
         </neon-animatable>
       </neon-animated-pages>
   <paper-toast id="toaster" text="An Error Occured"></paper-toast>
