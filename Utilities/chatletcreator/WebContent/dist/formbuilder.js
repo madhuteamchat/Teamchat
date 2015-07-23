@@ -643,7 +643,7 @@
   }
 
 }).call(this);
-
+/*
 (function() {
   Formbuilder.registerField('address', {
     order: 50,
@@ -653,7 +653,8 @@
   });
 
 }).call(this);
-
+*/
+/*
 (function() {
   Formbuilder.registerField('checkboxes', {
     order: 10,
@@ -675,7 +676,9 @@
   });
 
 }).call(this);
+*/
 
+/*
 (function() {
   Formbuilder.registerField('date', {
     order: 20,
@@ -685,7 +688,7 @@
   });
 
 }).call(this);
-
+*/
 (function() {
   Formbuilder.registerField('dropdown', {
     order: 24,
@@ -708,7 +711,7 @@
   });
 
 }).call(this);
-
+/*
 (function() {
   Formbuilder.registerField('email', {
     order: 40,
@@ -718,7 +721,7 @@
   });
 
 }).call(this);
-
+*/
 (function() {
 
 
@@ -733,7 +736,7 @@
   });
 
 }).call(this);
-
+/*
 (function() {
   Formbuilder.registerField('paragraph', {
     order: 5,
@@ -747,8 +750,8 @@
   });
 
 }).call(this);
-
-(function() {
+*/
+/*(function() {
   Formbuilder.registerField('price', {
     order: 45,
     view: "<div class='input-line'>\n  <span class='above-line'>$</span>\n  <span class='dolars'>\n    <input type='text' />\n    <label>Dollars</label>\n  </span>\n  <span class='above-line'>.</span>\n  <span class='cents'>\n    <input type='text' />\n    <label>Cents</label>\n  </span>\n</div>",
@@ -757,8 +760,8 @@
   });
 
 }).call(this);
-
-(function() {
+*/
+/*(function() {
   Formbuilder.registerField('radio', {
     order: 15,
     view: "<% for (i in (rf.get(Formbuilder.options.mappings.OPTIONS) || [])) { %>\n  <div>\n    <label class='fb-option'>\n      <input type='radio' <%= rf.get(Formbuilder.options.mappings.OPTIONS)[i].checked && 'checked' %> onclick=\"javascript: return false;\" />\n      <%= rf.get(Formbuilder.options.mappings.OPTIONS)[i].label %>\n    </label>\n  </div>\n<% } %>\n\n<% if (rf.get(Formbuilder.options.mappings.INCLUDE_OTHER)) { %>\n  <div class='other-option'>\n    <label class='fb-option'>\n      <input type='radio' />\n      Other\n    </label>\n\n    <input type='text' />\n  </div>\n<% } %>",
@@ -779,7 +782,8 @@
   });
 
 }).call(this);
-
+*/
+/*
 (function() {
   Formbuilder.registerField('section_break', {
     order: 0,
@@ -790,7 +794,7 @@
   });
 
 }).call(this);
-
+*/
 (function() {
   Formbuilder.registerField('text', {
     order: 0,
@@ -804,7 +808,7 @@
   });
 
 }).call(this);
-
+/*
 (function() {
   Formbuilder.registerField('time', {
     order: 25,
@@ -824,7 +828,7 @@
   });
 
 }).call(this);
-
+*/
 this["Formbuilder"] = this["Formbuilder"] || {};
 this["Formbuilder"]["templates"] = this["Formbuilder"]["templates"] || {};
 
@@ -903,12 +907,12 @@ return __p
 this["Formbuilder"]["templates"]["edit/integer_only"] = function(obj) {
 obj || (obj = {});
 var __t, __p = '', __e = _.escape;
-with (obj) {
+/*with (obj) {
 __p += '<div class=\'fb-edit-section-header\'>Integer only</div>\n<label>\n  <input type=\'checkbox\' data-rv-checked=\'model.' +
 ((__t = ( Formbuilder.options.mappings.INTEGER_ONLY )) == null ? '' : __t) +
 '\' />\n  Only accept integers\n</label>\n';
 
-}
+}*/
 return __p
 };
 
@@ -918,10 +922,7 @@ var __t, __p = '', __e = _.escape;
 with (obj) {
 __p += '<input type=\'text\' data-rv-input=\'model.' +
 ((__t = ( Formbuilder.options.mappings.LABEL )) == null ? '' : __t) +
-'\' />\n<textarea data-rv-input=\'model.' +
-((__t = ( Formbuilder.options.mappings.DESCRIPTION )) == null ? '' : __t) +
-'\'\n  placeholder=\'Add a longer description to this field\'></textarea>';
-
+'\' />\n';
 }
 return __p
 };
@@ -929,21 +930,21 @@ return __p
 this["Formbuilder"]["templates"]["edit/min_max"] = function(obj) {
 obj || (obj = {});
 var __t, __p = '', __e = _.escape;
-with (obj) {
+/*with (obj) {
 __p += '<div class=\'fb-edit-section-header\'>Minimum / Maximum</div>\n\nAbove\n<input type="text" data-rv-input="model.' +
 ((__t = ( Formbuilder.options.mappings.MIN )) == null ? '' : __t) +
 '" style="width: 30px" />\n\n&nbsp;&nbsp;\n\nBelow\n<input type="text" data-rv-input="model.' +
 ((__t = ( Formbuilder.options.mappings.MAX )) == null ? '' : __t) +
 '" style="width: 30px" />\n';
 
-}
+}*/
 return __p
 };
 
 this["Formbuilder"]["templates"]["edit/min_max_length"] = function(obj) {
 obj || (obj = {});
 var __t, __p = '', __e = _.escape;
-with (obj) {
+/*with (obj) {
 __p += '<div class=\'fb-edit-section-header\'>Length Limit</div>\n\nMin\n<input type="text" data-rv-input="model.' +
 ((__t = ( Formbuilder.options.mappings.MINLENGTH )) == null ? '' : __t) +
 '" style="width: 30px" />\n\n&nbsp;&nbsp;\n\nMax\n<input type="text" data-rv-input="model.' +
@@ -952,7 +953,7 @@ __p += '<div class=\'fb-edit-section-header\'>Length Limit</div>\n\nMin\n<input 
 ((__t = ( Formbuilder.options.mappings.LENGTH_UNITS )) == null ? '' : __t) +
 '" style="width: auto;">\n  <option value="characters">characters</option>\n  <option value="words">words</option>\n</select>\n';
 
-}
+}*/
 return __p
 };
 
@@ -990,24 +991,24 @@ return __p
 this["Formbuilder"]["templates"]["edit/size"] = function(obj) {
 obj || (obj = {});
 var __t, __p = '', __e = _.escape;
-with (obj) {
+/*with (obj) {
 __p += '<div class=\'fb-edit-section-header\'>Size</div>\n<select data-rv-value="model.' +
 ((__t = ( Formbuilder.options.mappings.SIZE )) == null ? '' : __t) +
 '">\n  <option value="small">Small</option>\n  <option value="medium">Medium</option>\n  <option value="large">Large</option>\n</select>\n';
 
-}
+}*/
 return __p
 };
 
 this["Formbuilder"]["templates"]["edit/units"] = function(obj) {
 obj || (obj = {});
 var __t, __p = '', __e = _.escape;
-with (obj) {
+/*with (obj) {
 __p += '<div class=\'fb-edit-section-header\'>Units</div>\n<input type="text" data-rv-input="model.' +
 ((__t = ( Formbuilder.options.mappings.UNITS )) == null ? '' : __t) +
 '" />\n';
 
-}
+}*/
 return __p
 };
 

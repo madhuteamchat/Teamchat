@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
 <head>
-  <title>Form Builder</title>
+  <title>Builder</title>
   <meta name="description" content="">
   <link rel="stylesheet" href="vendor/css/vendor.css" />
   <link rel="stylesheet" href="dist/formbuilder.css" />
@@ -33,11 +33,22 @@
   </style>
 </head>
 <body>
-  <div class='fb-main'></div>
+
+  <div class='fb-main'>
+ 
+  </div>
+  <div id="back1">
+  <input id="back" value="Go Back" type="Button">
+  </div>
 
   <script src="vendor/js/vendor.js"></script>
   <script src="dist/formbuilder.js"></script>
   <script src="print.js"></script>
+	<script>
+	document.getElementById("back").onclick=function(){
+		window.close();
+	};
+	</script>
 
   <script>
 	var label;
