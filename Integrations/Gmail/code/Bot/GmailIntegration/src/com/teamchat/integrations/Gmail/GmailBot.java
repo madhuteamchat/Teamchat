@@ -32,7 +32,7 @@ import com.teamchat.client.sdk.chatlets.PrimaryChatlet;
 public class GmailBot {
 	public static final String client_id = "70059097404-9hvham50i6s4cvba0u9dpsk82eoe5t6f.apps.googleusercontent.com";
 	public static final String client_secret = "s71rFRtHuj8MrUE3oXkdsvHc";
-	public static final String redirect_uri1 = "http://localhost:8080/GmailIntegration/Servlet";
+	public static final String redirect_uri1 = "http://interns.teamchat.com:8083/GmailIntegration/Servlet";
 	public static String accesstoken;
 	private static final HttpTransport ht = new NetHttpTransport();
 	private static final JsonFactory jf = new JacksonFactory();
@@ -40,11 +40,14 @@ public class GmailBot {
 	@OnKeyword("help")
 	public void Help(TeamchatAPI api) {
 		Servlet.api = api;
-		String msg = "Hey, this is Gmail Bot<br><a href=https://accounts.google.com/o/oauth2/auth?scope=https://mail.google.com/&redirect_uri="
+		String intro = "<b>Hey, this is Gmail Bot!</b><br><img src=http://www.iconarchive.com/download/i98301/dakirby309/simply-styled/Gmail.ico alt=gmail.png style=width:90px;height:90px;><br><i>You can use me to get your unread emails and reply to them through Teamchat.<br>Use the following keywords.</i><table style=width:100%><tr><th>Keywords</th><th>Function</th></tr><tr><td>getmail</td><td>Get unread emails from your Gmail inbox</td></tr><tr><td>help</td><td>Log in to Gmail</td></tr>";
+		String msg = "<a href=https://accounts.google.com/o/oauth2/auth?scope=https://mail.google.com/&redirect_uri="
 				+ redirect_uri1
 				+ "&response_type=code&client_id="
 				+ client_id
 				+ " target=_blank>Click here to login</a>";
+		api.performPostInCurrentRoom(new PrimaryChatlet()
+				.setQuestionHtml(intro));
 		api.performPostInCurrentRoom(new PrimaryChatlet().setQuestionHtml(msg));
 	}
 
@@ -129,6 +132,8 @@ public class GmailBot {
 				replybody);
 		Message message = createMessageWithEmail(email);
 		message = service.users().messages().send(user, message).execute();
+		api.performPostInCurrentRoom(new PrimaryChatlet()
+				.setQuestionHtml("Reply Successful"));
 	}
 
 	public static MimeMessage createEmail(String to, String from,
@@ -137,8 +142,8 @@ public class GmailBot {
 		Session session = Session.getDefaultInstance(props, null);
 
 		MimeMessage email = new MimeMessage(session);
-		InternetAddress tAddress = new InternetAddress(to);
-		InternetAddress fAddress = new InternetAddress(from);
+		// InternetAddress tAddress = new InternetAddress(to);
+		// InternetAddress fAddress = new InternetAddress(from);
 
 		email.setFrom(new InternetAddress(from));
 		email.addRecipient(javax.mail.Message.RecipientType.TO,

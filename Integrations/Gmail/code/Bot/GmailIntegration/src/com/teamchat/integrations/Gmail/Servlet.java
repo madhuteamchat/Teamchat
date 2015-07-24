@@ -3,6 +3,7 @@ package com.teamchat.integrations.Gmail;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,6 +37,8 @@ public class Servlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		String code = request.getParameter("code");
+		PrintWriter writer = response.getWriter();
+		writer.println("<script>window.close();</script>");
 		String url = "https://www.googleapis.com/oauth2/v3/token";
 		HttpClient clt = HttpClientBuilder.create().build();
 		HttpPost req = new HttpPost(url);
