@@ -1,0 +1,9 @@
+botemail = 
+botpass = 
+dbname = Bot
+dbuser = tcinterns
+dbpass = 
+tablename = ticketdata
+zenemail = https://teamchat.zendesk.com
+zenuser = savio.dmello@teamchat.com
+zenpass = 123456
