@@ -41,7 +41,7 @@ public class AuthHandler extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		if (request.getParameter("oauth_problem") != null) {
+		if (request.getParameter("oauth_problem") == null) {
 			if (request.getParameter("oauth_problem").equals("user_refused"))
 				response.sendRedirect("refuse.html");
 		} else {
