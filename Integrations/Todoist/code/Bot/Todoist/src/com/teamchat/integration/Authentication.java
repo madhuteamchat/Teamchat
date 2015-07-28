@@ -11,38 +11,13 @@ import javax.servlet.http.HttpServletResponse;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.URL;
-import java.util.Properties;
-import java.util.Scanner;
 
 import javax.net.ssl.HttpsURLConnection;
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
-import com.teamchat.client.sdk.TeamchatAPI;
-import com.teamchat.client.sdk.chatlets.PrimaryChatlet;
-
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.params.BasicHttpParams;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 
 /**
@@ -165,6 +140,7 @@ public class Authentication extends HttpServlet {
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 
+		@SuppressWarnings("unused")
 		String user_agent = request.getHeader("User-Agent"), code = request
 				.getParameter("code"),  email=request.getParameter("state"), client_id = "71be67ab414940e9866a8e09afa03a16", client_secret = "df194f80129743da961870e34fe99139", redirect_uri = "http://interns.teamchat.com:8084/Todoist/Authentication";
        

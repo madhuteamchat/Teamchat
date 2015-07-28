@@ -8,8 +8,6 @@ import java.net.URL;
 
 import javax.net.ssl.HttpsURLConnection;
 
-import org.json.JSONArray;
-
 public class SendPost {
 	
 

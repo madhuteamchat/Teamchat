@@ -1,43 +1,28 @@
 package com.teamchat.integration;
 
-import java.awt.image.ConvolveOp;
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLEncoder;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
 import java.util.UUID;
-
-import javax.swing.text.html.HTMLDocument.Iterator;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.google.gson.Gson;
 import com.teamchat.client.annotations.OnAlias;
 import com.teamchat.client.annotations.OnKeyword;
 import com.teamchat.client.sdk.Field;
 import com.teamchat.client.sdk.Form;
 import com.teamchat.client.sdk.TeamchatAPI;
 import com.teamchat.client.sdk.chatlets.PrimaryChatlet;
-import com.teamchat.client.sdk.chatlets.TextChatlet;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -90,6 +75,7 @@ public class TodoistIntegration {
 	
 	
 	
+	@SuppressWarnings("static-access")
 	@OnKeyword("todoist")
 	public void onTODOIST(TeamchatAPI api) {		
 		

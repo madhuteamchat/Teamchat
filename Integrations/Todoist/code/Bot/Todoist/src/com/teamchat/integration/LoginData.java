@@ -1,5 +1,6 @@
 package com.teamchat.integration;
 public class LoginData {
+	@SuppressWarnings("unused")
 	private String password;
 	private String  emailId;
 
