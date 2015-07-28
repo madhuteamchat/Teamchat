@@ -174,8 +174,8 @@ public class LinkedInBot {
 		f.addField(api.objects().input().label("Title").addRegexValidation("[^()]", "please enter a value").name("title"));
 		f.addField(api.objects().input().label("Comment").addRegexValidation("[^()]", "please enter a value").name("com"));
 		f.addField(api.objects().input().label("Description").addRegexValidation("[^()]", "please enter a value").name("desc"));
-		f.addField(api.objects().input().label("URL").name("url"));
-		f.addField(api.objects().input().label("Image URL").name("imageUrl"));
+		f.addField(api.objects().input().label("URL").addRegexValidation("[^()]", "please enter a value").name("url"));
+		f.addField(api.objects().input().label("Image URL").addRegexValidation("[^()]", "please enter a value").name("imageUrl"));
 		
 		api.perform(api
 				.context()
