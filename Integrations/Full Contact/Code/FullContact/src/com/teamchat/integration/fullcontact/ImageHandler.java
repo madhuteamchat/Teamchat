@@ -1,0 +1,104 @@
+package com.teamchat.integration.fullcontact;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Iterator;
+import java.util.List;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
+
+import com.fullcontact.api.libs.fullcontact4j.FullContact;
+import com.fullcontact.api.libs.fullcontact4j.FullContactException;
+import com.fullcontact.api.libs.fullcontact4j.http.cardreader.CardReaderUploadConfirmResponse;
+import com.fullcontact.api.libs.fullcontact4j.http.cardreader.CardReaderUploadRequest;
+
+/**
+ * Servlet implementation class ImageHandler
+ */
+@WebServlet("/ImageHandler")
+public class ImageHandler extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+       
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public ImageHandler() {
+        super();
+        // TODO Auto-generated constructor stub
+    }
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String roomId = request.getParameter("room");
+		
+		if (!ServletFileUpload.isMultipartContent(request)) {
+			PrintWriter writer = response.getWriter();
+			writer.println("Request does not contain upload data");
+			writer.flush();
+			return;
+		}
+		
+		DiskFileItemFactory factory = new DiskFileItemFactory();
+		ServletFileUpload upload = new ServletFileUpload(factory);
+		
+		@SuppressWarnings("rawtypes")
+		List formItems = null;
+		try {
+			formItems = upload.parseRequest(request);
+		} catch (FileUploadException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		@SuppressWarnings("rawtypes")
+		Iterator iter = formItems.iterator();
+		String fileName = "";
+
+		// iterates over form's fields
+		while (iter.hasNext()) {
+			FileItem item = (FileItem) iter.next();
+			// processes only fields that are not form fields
+			if (!item.isFormField()) {
+				fileName = new File(item.getName()).getName();
+				System.out.println(fileName);
+				
+				FullContact fullContact = FullContact.withApiKey("").build();
+				CardReaderUploadRequest req = fullContact.buildUploadCardRequest(item.getInputStream())
+						.webhookUrl("http://interns.teamchat.com:8085/FullContact/FullContactCard?room=" + roomId)
+						.build();
+				
+				CardReaderUploadConfirmResponse resp = null;
+				try {
+					resp = fullContact.sendRequest(req);
+				} catch (FullContactException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				System.out.println(resp.getEstimatedWaitTimeMinutes());
+				
+				request.setAttribute("message", "Uploaded Successfully,<br/><b>Your estimated wait time is: </b>" + resp.getEstimatedWaitTimeMinutes() + "minutes<br/>Go to teamchat");
+				getServletContext().getRequestDispatcher("/message.jsp").forward(request, response);
+			}
+		}
+	}
+
+}
