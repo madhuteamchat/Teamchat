@@ -1,0 +1,17 @@
+package com.teamchat.integration.poetry;
+
+public class Utility
+{	
+	public static final String help = "<center><img src='http://integration.teamchat.com/sol/bot-images/poetry.jpg' width='150' /></center><h3 style='color:#159ceb'>Hi, I'm Poetry Bot </h3><div></div><div><p>I'll give your all poems with a specific Title by a specific Author</p></div>";
+	public static final String apiUrlAuthors = "https://thundercomb-poetry-db-v1.p.mashape.com/author";
+	public static final String apiUrlAuthorPoems = "https://thundercomb-poetry-db-v1.p.mashape.com/author/__Author";
+	public static final String apiUrlPoems = "https://thundercomb-poetry-db-v1.p.mashape.com/title/__Poems";
+	public static final String apiKey = "";
+	public static final String image = "<center><img src='http://integration.teamchat.com/sol/bot-images/poetry.jpg' width='150' /></center>";
+	public static final String sorry = "<center><img src='http://integration.teamchat.com/sol/bot-images/poetry.jpg' width='150' /></center>"
+						+ "<div><p style='padding-left:5px; padding-right:5px;align:center; margin-top:5px'>Sorry! no results.</p></div>";
+	
+	public static final String paraStart = "<div><p style='padding-right:5px; padding-left:5px; margin-top:5px;'>";
+	public static final String paraEnd = "</p></div>";
+	public static final String resp = "<center style='color:#159ceb;'>" + paraStart + "<h4><b>__Poetry</h4></b>" + paraEnd + "</center>";
+}
