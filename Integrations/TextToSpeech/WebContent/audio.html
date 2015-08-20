@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width">
+<title>Audio</title>
+<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.11.3.min.js"></script>
+<script>
+	function querystring(key) {
+		var re = new RegExp('(?:\\?|&)' + key + '=(.*?)(?=&|$)', 'gi');
+		var r = [], m;
+		while ((m = re.exec(document.location.search)) != null)
+			r.push(m[1]);
+		return decodeURIComponent(r);
+	}
+
+	$(document).ready(
+			function() {
+				data = "http://www.voicerss.org/controls/speech.ashx?hl="
+						+ querystring("lang") + "&src=" + querystring("text") + "&c=mp3";
+				$('#player').attr('src', data);
+			});
+</script>
+<link rel="shortcut icon" href="https://enterprise.teamchat.com/webjim-echat/static/img/favicon.png" type="image/x-icon">
+</head>
+<body>
+	<center>
+		<div>
+			<img src='https://enterprise.teamchat.com/webjim-echat/static/img/xs-logo.png' />
+		</div>
+		<div>
+			<p style='color:#159ceb'><h3><b>Please click Play button to start</b></h3></p>
+		</div>
+		<div>
+			<audio id="player" controls> audio
+			</audio>
+		</div>
+	</center>
+</body>
+</html>
